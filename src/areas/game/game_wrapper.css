@@ -1,0 +1,31 @@
+
+.game-header {
+    height: 5%;
+    margin-top: 2.5%;
+    border: 1px solid black;
+
+}
+
+.game-body {
+    margin-top: 2.5%;
+    height: 60%;
+    /* border: 1px solid black; */
+}
+
+.game-footer {
+    margin-top: 2.5%;
+    height: 7.5%;
+    border: 1px solid black;
+}
+
+.game {
+    width: 75%;
+    margin-right: 5%;
+    /* border: 1px solid black; */
+
+}
+
+.game-detail {
+    width: 20%;
+    border: 1px solid black;
+}

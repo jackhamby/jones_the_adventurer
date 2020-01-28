@@ -1,0 +1,27 @@
+
+.top-container {
+    height: 4%;
+    text-align: center;
+    margin-top: 3%;
+    margin-bottom: 3%;
+
+}
+
+.body-container {
+    height: 80%;
+    /* border: 1px solid black; */
+}
+
+.bottom-container {
+    height: 10%;
+}
+
+.character-display-container {
+    height:100%;
+    border: 1px solid black; 
+}
+
+.character-select-container{
+    height: 100%;
+    border: 1px solid black; 
+}

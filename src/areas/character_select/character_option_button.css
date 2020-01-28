@@ -1,0 +1,15 @@
+
+.option-button {
+    width: 90%;
+    height: 65%;
+    margin: 5%;
+}
+
+.option-label {
+    width: 90%;
+    margin: 5%;
+    height:15%;
+    font-size: small;
+    font-weight: bolder;
+    height: 20px;
+}
