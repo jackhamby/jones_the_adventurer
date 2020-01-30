@@ -10,7 +10,12 @@ export const KEY_PRESS: string = 'KEY_PRESS'
 // export const CREATE_PLAYER: string = 'CREATE_PLAYER';
 export const CHANGE_STAGE: string = 'CREATE_STAGE';
 export const SETUP_GAME: string = 'SETUP_GAME';
+export const UPDATE_PLAYER_POSITION: string = 'UPDATE_PLAYER_POSITION';
 
+interface UpdatePlayerPositionPayload {
+    x: number;
+    y: number;
+}
 
 interface StartGamePayload {
     startingStage: Stage;
@@ -36,6 +41,12 @@ interface ChangeCharacterPayload {
 // }
 
 
+
+
+interface UpdatePlayerPositionAction {
+    type: typeof UPDATE_PLAYER_POSITION
+    payload: UpdatePlayerPositionPayload;
+}
 
 interface StartGameAction {
     type: typeof SETUP_GAME;
@@ -73,6 +84,15 @@ interface UpdateKeyReleasedAction {
 // }
 
 
+export const updatePlayerPosition = (x: number, y: number): UpdatePlayerPositionAction => {
+    return {
+        type: UPDATE_PLAYER_POSITION,
+        payload: {
+            x,
+            y
+        } as UpdatePlayerPositionPayload
+    }
+}
 
 export const setupGame = (stage: Stage) => {
     return {
@@ -143,4 +163,4 @@ export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
         }
     }
 }
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction;
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction;

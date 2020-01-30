@@ -12,19 +12,14 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
         if (this.props.stage){
             const player = this.props.stage.player
             return (
-                <div className="row">
+                <React.Fragment>
                     <div className="col-6">
-                <div> x: {player.pixiSprite.x}</div>
-
+                        <div> x: {Math.round(player.pixiSprite.x)}</div>
                     </div>
                     <div className="col-6">
-                                     <div> y: {player.pixiSprite.y}</div>
-   
+                        <div> y: {Math.round(player.pixiSprite.y)}</div>
                     </div>
-
-                </div>
-
-
+                </React.Fragment>
             )
         }
         return (

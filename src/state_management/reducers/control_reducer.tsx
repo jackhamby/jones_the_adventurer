@@ -1,10 +1,11 @@
 
 
 
-import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME} from '../actions/control_actions';
+import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, UPDATE_PLAYER_POSITION} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
 import {CHARACTER_ATTRIBUTES} from '../../constants';
 import { Player } from '../../classes/player';
+import { Stage } from '../../classes/game_classes';
 
 
 
@@ -35,7 +36,15 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
 }
 
 export const controlReducer = (state: any, action: ControlAction): any => {
+    const temp = state as AppState;
     switch(action.type){
+        case UPDATE_PLAYER_POSITION:
+            // const player = temp.gameState.currentStage.player;
+            // player.pixiSprite.x = action.payload.x;
+            // player.pixiSprite.y = action.payload.y;
+            return {
+                ...temp                    
+            } as AppState
         case UPDATE_SCREEN:
             return { 
                 ...state,

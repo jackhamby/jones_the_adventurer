@@ -17,6 +17,8 @@ export interface GameStateProps {
     character: Character;
     pixiApplication: PIXI.Application;
     currentStage: Stage;
+    x: number;
+    y: number;
 }
 
 export interface GameDispatchProps {
@@ -42,6 +44,12 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add("kobold_sm_left.png")
             .add("kobold_sm.png")
             .add("platform1.png")
+            .add("images/knight/head/head_helmet1_standing.png")
+            .add("images/knight/head/head_default_standing.png")
+
+            .add("images/knight/body/body_default_standing.png")
+            .add("images/knight/legs/legs_default_standing.png")
+
             // Once textures have loaded, fire this method
             .load(() => {
                 this.setupGame();
@@ -95,7 +103,9 @@ export const mapStateToProps = (state: AppState): GameStateProps => {
         currentKeys: state.controlState.currentKeys,
         character: state.playerState.character,
         pixiApplication: state.gameState.pixiApplication,
-        currentStage: state.gameState.currentStage
+        currentStage: state.gameState.currentStage,
+        x: state.gameState.currentStage ? state.gameState.currentStage.player.pixiSprite.x : 1,
+        y: state.gameState.currentStage ? state.gameState.currentStage.player.pixiSprite.y : 1,
     };
 }
 

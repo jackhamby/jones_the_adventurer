@@ -6,6 +6,9 @@ import { Platform, DefaultPlatform } from './platform';
 import { Sprite } from './sprite'
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
+import {store} from '../state_management/store';
+import { updatePlayerPosition, ControlAction } from '../state_management/actions/control_actions';
+import { act } from 'react-dom/test-utils';
 
 // Wrapper for all items on the screen
 // handle collisions
@@ -55,6 +58,7 @@ export class Stage implements IStage{
 
     private updatePlayerPosition(){
         this.player.pixiSprite.x += this.player.xVelocity;
+
         this.checkPlayerXCollisions();
         this.player.pixiSprite.y += this.player.yVelocity;
         this.checkPlayerYCollisions();
@@ -64,6 +68,11 @@ export class Stage implements IStage{
             width: SCREEN_WIDTH,
             height: SCREEN_HEIGHT,
         } as Container)
+
+        
+        const action = updatePlayerPosition(this.player.pixiSprite.x, this.player.pixiSprite.y) as ControlAction;
+        store.dispatch(action);
+
     }
 
     private updateEnemyPositions(){
@@ -81,7 +90,7 @@ export class Stage implements IStage{
         if (collidePlatform){
             // handle platform collision
             this.handlePlayerCollisionY(this.player, collidePlatform);
-            console.log('collided with paltform in y')
+            // console.log('collided with paltform in y')
         }
 
         if (this.isFalling(this.player)){
@@ -223,7 +232,7 @@ export class StageManager {
         const name = "beginners luck";
         const enemies = [ new Kobold(this.loader) ];
         // const platforms = [ new Platform(sprite) ] // TODO: pass platform sprite
-        const platforms = this.generatePlatforms(STAGE1_LAYOUT);
+        const platforms = this.generatePlatforms(STAGE2_LAYOUT);
         return new Stage(
             level,
             name,

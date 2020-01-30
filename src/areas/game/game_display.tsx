@@ -48,20 +48,30 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         enemies.map((enemy: Enemy) => stage.addChild(enemy.pixiSprite));
         platforms.map((platform: Platform) => stage.addChild(platform.pixiSprite));
         this.props.pixiApplication.ticker.add(delta => this.gameLoop(delta));
-        // platforms.map((plat) => {
-        //     var graphics = new PIXI.Graphics();
-
-        //     graphics.beginFill(0xFFFF00);
-
-        //     // set the line style to have a width of 5 and set the color to red
-        //     graphics.lineStyle(5, 0xFF0000);
-
-        //     // draw a rectangle
-        //     graphics.drawRect(plat.pixiSprite.x, plat.pixiSprite.y, plat.pixiSprite.width, plat.pixiSprite.height);
-
-        //     stage.addChild(graphics);
-        // })
         this.setState({ isStarted: true })
+
+
+
+        // .add("images/knight/head/head_default_standing.png")
+        // .add("images/knight/body/body_default_standing.png")
+        // .add("images/knight/legs/legs_default_standing.png")
+        // playground 
+        const head = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/head/head_helmet1_standing.png'].texture)
+        const body = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/body/body_default_standing.png'].texture)
+        const legs = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/legs/legs_default_standing.png'].texture)
+        head.x = 500;
+        head.y = 500;
+        body.x = head.x - (body.width / 6)
+        body.y = head.y + head.height;
+        legs.x = body.x;
+        legs.y = body.y + body.height;
+        stage.addChild(body)
+        stage.addChild(head)
+        stage.addChild(legs)
+
+
+
+
     }
 
     gameLoop = (delta: any) => {
