@@ -1,6 +1,5 @@
 import { ScreenOptions, CharacterOptions } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
-import { Player } from "../../classes/player";
 
 // export const TEXTURES_LOADED = 'UPDATE_TEXTURES_LOADED';
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'

@@ -4,10 +4,10 @@ import { KeyOptions, Character, AppState } from '../../types/states';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 // import { createPlayer } from '../../state_management/actions/control_actions';
-import { Player } from '../../classes/player';
 import { Stage } from '../../classes/game_classes';
 import { Platform } from '../../classes/platform';
 import { Enemy } from '../../classes/enemy';
+import { SpritePart } from '../../classes/player';
 
 export interface GameDisplayStateProps { 
     pixiApplication: PIXI.Application;
@@ -43,12 +43,19 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         const stage = this.props.pixiApplication.stage;
         const enemies = this.props.currentStage.enemies;
         const platforms = this.props.currentStage.platforms;
-        const player = this.props.currentStage.player;
-        stage.addChild(player.pixiSprite);
+        // const player = this.props.currentStage.player;
+        const newplayer = this.props.currentStage.newPlayer;
+        // stage.addChild(player.pixiSprite);
         enemies.map((enemy: Enemy) => stage.addChild(enemy.pixiSprite));
         platforms.map((platform: Platform) => stage.addChild(platform.pixiSprite));
         this.props.pixiApplication.ticker.add(delta => this.gameLoop(delta));
         this.setState({ isStarted: true })
+
+
+        stage.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+        // newplayer.spriteParts.map((sprite: PIXI.Sprite) => {
+        //     stage.add
+        // })
 
 
 
@@ -56,18 +63,18 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         // .add("images/knight/body/body_default_standing.png")
         // .add("images/knight/legs/legs_default_standing.png")
         // playground 
-        const head = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/head/head_helmet1_standing.png'].texture)
-        const body = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/body/body_default_standing.png'].texture)
-        const legs = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/legs/legs_default_standing.png'].texture)
-        head.x = 500;
-        head.y = 500;
-        body.x = head.x - (body.width / 6)
-        body.y = head.y + head.height;
-        legs.x = body.x;
-        legs.y = body.y + body.height;
-        stage.addChild(body)
-        stage.addChild(head)
-        stage.addChild(legs)
+        // const head = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/head/head_helmet1_standing.png'].texture)
+        // const body = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/body/body_default_standing.png'].texture)
+        // const legs = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/legs/legs_default_standing.png'].texture)
+        // head.x = 500;
+        // head.y = 500;
+        // body.x = head.x - (body.width / 6)
+        // body.y = head.y + head.height;
+        // legs.x = body.x;
+        // legs.y = body.y + body.height;
+        // stage.addChild(body)
+        // stage.addChild(head)
+        // stage.addChild(legs)
 
 
 

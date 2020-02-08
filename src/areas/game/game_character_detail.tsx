@@ -10,14 +10,14 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
         
     render(){
         if (this.props.stage){
-            const player = this.props.stage.player
+            const player = this.props.stage.newPlayer
             return (
                 <React.Fragment>
                     <div className="col-6">
-                        <div> x: {Math.round(player.pixiSprite.x)}</div>
+                        <div> x: {Math.round(player.x)}</div>
                     </div>
                     <div className="col-6">
-                        <div> y: {Math.round(player.pixiSprite.y)}</div>
+                        <div> y: {Math.round(player.y)}</div>
                     </div>
                 </React.Fragment>
             )

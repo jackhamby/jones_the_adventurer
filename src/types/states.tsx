@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { ScreenOptions, CharacterOptions, Attributes } from '../types/enums';
 import { Stage } from '../classes/game_classes';
-import { Player } from '../classes/player';
 import { Platform } from '../classes/platform';
 import { Enemy } from '../classes/enemy';
 
@@ -52,7 +51,7 @@ export interface IStage {
     level: number;
     enemies: Enemy[];
     platforms: Platform[];
-    player: Player;
+    // player: Player;
 }
 
 export interface Character {

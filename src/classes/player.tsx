@@ -1,47 +1,94 @@
-import * as PIXI from 'pixi.js';
-import { KeyOptions, SpriteTextures } from '../types/states';
-import { PlayerStates } from '../types/enums';
-import { Sprite } from '../classes/sprite';
+import { PlayerStates } from "../types/enums";
+import { KeyOptions } from "../types/states";
 
 
-export interface Container {
+export interface SpritePart {
+    offSetX: number;
+    offSetY: number;
+    sprite: PIXI.Sprite;
+}
+
+export class Player  {
+
+    state: PlayerStates;
+    currentKeys: KeyOptions;
+    allowJump: boolean;
+    facingRight: boolean;
+    loader: PIXI.Loader;
+
+    xVelocity: number;
+    yVelocity: number;
     x: number;
     y: number;
     width: number;
     height: number;
 
-}
+    spriteParts: SpritePart[];
 
-export class Player extends Sprite {
-
-    state: PlayerStates;
-    currentKeys: KeyOptions;
-    allowJump: boolean;
 
     constructor(loader: PIXI.Loader){
-        super(loader);
         this.state = PlayerStates.STANDING;
         this.currentKeys = {} as KeyOptions;
         this.allowJump = true;
+        this.facingRight = false;
+        this.loader = loader;
+
+        // Default attributes
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+        this.x = 200;
+        this.y = 500;
+        this.width = 30;
+        this.height = 30;
+
+        this.spriteParts = [];
     }
 
-    initializeTextures(): SpriteTextures{
-        return {
-            standingRight: this.loader.resources["knight_sm_right.png"].texture,
-            standingLeft: this.loader.resources["knight_sm_left.png"].texture,
-            walkingLeft: this.loader.resources["knight_sm_left.png"].texture,
-            walkingRight: this.loader.resources["knight_sm_right.png"].texture, //TODO: Update with correct texture
-            jumpingLeft: this.loader.resources["knight_sm_left.png"].texture,
-            jumpingRight: this.loader.resources["knight_sm_right.png"].texture,
-            fallingLeft: this.loader.resources["knight_sm_left.png"].texture,
-            fallingRight: this.loader.resources["knight_sm_right.png"].texture,
-        } as SpriteTextures;
+
+    updateX(value: number){
+        this.x += value;
+        this.spriteParts.map((spritePart: SpritePart) => {
+            spritePart.sprite.x += value;
+        })
     }
 
-    createPixiSprite(): PIXI.Sprite {
-        const sprite =  new PIXI.Sprite(this.textures.standingLeft); // Default to standing left
-        sprite.x = 300;
-        return sprite;
+    updateY(value: number){
+        this.y += value;
+        this.spriteParts.map((spritePart: SpritePart) => {
+            spritePart.sprite.y += value;
+        })
+    }
+
+    setX(value: number){
+        this.x = value;
+        this.spriteParts.map((spritePart: SpritePart) => {
+            spritePart.sprite.x = value + spritePart.offSetX;
+        })
+    } 
+
+    setY(value: number){
+        this.y = value;
+        this.spriteParts.map((spritePart: SpritePart) => {
+            spritePart.sprite.y = value + spritePart.offSetY;
+        })
+    } 
+
+    setState(state: PlayerStates){
+        this.state = state;
+    }
+
+
+    top(){
+        return this.y;
+    }
+    bottom(){
+        return this.y + this.height;
+    }
+    left(){
+        return this.x;
+    }
+    right(){
+        return this.x + this.width;
     }
 
 
@@ -50,9 +97,9 @@ export class Player extends Sprite {
     update(keyboard: KeyOptions){
         this.currentKeys = keyboard;
         this.handleState();
-        console.log(`xVel: ${this.xVelocity}, yVel ${this.yVelocity}`)
+        // console.log(`xVel: ${this.xVelocity}, yVel ${this.yVelocity}`)
         // console.log(`state ${PlayerStates[this.state]}`)
-        this.flipSprite();
+        this.flipSpriteParts();
         // temporary hack to fly
         // if (this.currentKeys.moveDown){
         //     this.pixiSprite.y += 1;
@@ -63,31 +110,36 @@ export class Player extends Sprite {
     }
 
 
-    flipSprite(){
-        switch(this.state){
-            case(PlayerStates.WALKING):
-                if (this.facingRight){
-                    this.pixiSprite.texture = this.textures.walkingRight;
-                    return;
-                }
-                this.pixiSprite.texture = this.textures.walkingLeft;
-                break;
-            case(PlayerStates.STANDING):
-                if (this.facingRight){
-                    this.pixiSprite.texture = this.textures.standingRight;
-                    return;
-                }
-                this.pixiSprite.texture = this.textures.standingLeft;
-                break;
-            case(PlayerStates.FALLING):
-                if (this.facingRight){
-                    this.pixiSprite.texture = this.textures.fallingRight;
-                    return;
-                }
-                this.pixiSprite.texture = this.textures.fallingLeft;
-                break;
-        }
+    flipSpriteParts(){
+
     }
+
+
+    // flipSprite(){
+    //     switch(this.state){
+    //         case(PlayerStates.WALKING):
+    //             if (this.facingRight){
+    //                 this.pixiSprite.texture = this.textures.walkingRight;
+    //                 return;
+    //             }
+    //             this.pixiSprite.texture = this.textures.walkingLeft;
+    //             break;
+    //         case(PlayerStates.STANDING):
+    //             if (this.facingRight){
+    //                 this.pixiSprite.texture = this.textures.standingRight;
+    //                 return;
+    //             }
+    //             this.pixiSprite.texture = this.textures.standingLeft;
+    //             break;
+    //         case(PlayerStates.FALLING):
+    //             if (this.facingRight){
+    //                 this.pixiSprite.texture = this.textures.fallingRight;
+    //                 return;
+    //             }
+    //             this.pixiSprite.texture = this.textures.fallingLeft;
+    //             break;
+    //     }
+    // }
 
 
 
@@ -134,7 +186,7 @@ export class Player extends Sprite {
         // Reached maximum height of jump, start falling
         if (this.yVelocity > 0){
             // debugger;
-            console.log('tippng pont')
+            // console.log('tippng pont')
             this.state = PlayerStates.FALLING;
         }
 
@@ -226,4 +278,5 @@ export class Player extends Sprite {
                 break;
         }
     }
+
 }

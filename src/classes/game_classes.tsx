@@ -1,7 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
 import { PlayerStates } from '../types/enums';
-import { Player, Container } from './player';
 import { Platform, DefaultPlatform } from './platform';
 import { Sprite } from './sprite'
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
@@ -9,6 +8,15 @@ import { Enemy, Kobold } from './enemy';
 import {store} from '../state_management/store';
 import { updatePlayerPosition, ControlAction } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
+import { Player } from './player';
+
+
+export interface Container {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+}
 
 // Wrapper for all items on the screen
 // handle collisions
@@ -18,17 +26,19 @@ export class Stage implements IStage{
     level: number;
     enemies: Enemy[];
     platforms: Platform[];
-    player: Player;
+    // player: Player;
     currentKeys: KeyOptions;
+    newPlayer: Player;
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], player: Player){
+    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], newPlayer: Player){
         this.level = level;
         this.name = name;
         this.enemies = enemies;
         this.platforms = platforms;
-        this.player = player;
+        // this.player = player;
         this.currentKeys = {} as KeyOptions;
+        this.newPlayer = newPlayer;
     }
 
 
@@ -41,13 +51,17 @@ export class Stage implements IStage{
 
     // Update state of the sprite
     private updateAllSpriteStates(){
-        this.player.update(this.currentKeys);
+        // this.player.update(this.currentKeys);
         this.enemies.forEach((enemy: Enemy) => {
             enemy.update(this.currentKeys);
         })
         this.platforms.forEach((platform: Platform) => {
             platform.update(this.currentKeys);
         })
+
+        // New stuff
+        this.newPlayer.update(this.currentKeys)
+        console.log(PlayerStates[this.newPlayer.state])
     }
 
     // Update all sprite positions
@@ -57,21 +71,31 @@ export class Stage implements IStage{
     }
 
     private updatePlayerPosition(){
-        this.player.pixiSprite.x += this.player.xVelocity;
-
-        this.checkPlayerXCollisions();
-        this.player.pixiSprite.y += this.player.yVelocity;
-        this.checkPlayerYCollisions();
-        this.contain(this.player, {
-            x: 0,
-            y: 0,
-            width: SCREEN_WIDTH,
-            height: SCREEN_HEIGHT,
-        } as Container)
+        // this.player.pixiSprite.x += this.player.xVelocity;        
+        // this.checkPlayerXCollisions();
+        // this.player.pixiSprite.y += this.player.yVelocity;
+        // this.checkPlayerYCollisions();
+        // this.contain(this.player, {
+        //     x: 0,
+        //     y: 0,
+        //     width: SCREEN_WIDTH,
+        //     height: SCREEN_HEIGHT,
+        // } as Container)
 
         
-        const action = updatePlayerPosition(this.player.pixiSprite.x, this.player.pixiSprite.y) as ControlAction;
+        // const action = updatePlayerPosition(this.player.pixiSprite.x, this.player.pixiSprite.y) as ControlAction;
+        // store.dispatch(action);
+
+        // New stuff
+        this.newPlayer.updateX(this.newPlayer.xVelocity);
+        this.checkPlayerXCollisions();
+        this.newPlayer.updateY(this.newPlayer.yVelocity);
+        this.checkPlayerYCollisions();
+
+        const action = updatePlayerPosition(this.newPlayer.x, this.newPlayer.y) as ControlAction;
         store.dispatch(action);
+
+
 
     }
 
@@ -79,31 +103,20 @@ export class Stage implements IStage{
 
     }
 
-    private checkPlayerYCollisions(){
-        const collideEnemy = this.collideAny(this.player, this.enemies);
-        const collidePlatform = this.collideAny(this.player, this.platforms); 
-        
-        if (collideEnemy){
-            // handle enemy collision
-        }
 
-        if (collidePlatform){
-            // handle platform collision
-            this.handlePlayerCollisionY(this.player, collidePlatform);
-            // console.log('collided with paltform in y')
-        }
-
-        if (this.isFalling(this.player)){
-            this.player.state = PlayerStates.FALLING;
-        }
-        else if (this.player.state == PlayerStates.FALLING){
-            this.player.state = PlayerStates.WALKING;
-        }
+    private collideAny(player: Player, spriteGroup: Sprite[]){
+        let collidedSprite;
+        spriteGroup.forEach((sprite: Sprite) => {
+            if (this.collide(player, sprite)){
+                collidedSprite = sprite;
+            }
+        })
+        return collidedSprite;
     }
 
     private checkPlayerXCollisions() {
-        const collideEnemy = this.collideAny(this.player, this.enemies);
-        const collidePlatform = this.collideAny(this.player, this.platforms);
+        const collideEnemy = this.collideAny(this.newPlayer, this.enemies);
+        const collidePlatform = this.collideAny(this.newPlayer, this.platforms);
 
         if (collideEnemy){
             // handle enemy collision
@@ -111,58 +124,50 @@ export class Stage implements IStage{
         }
 
         if (collidePlatform){
-            this.handlePlayerCollisionX(this.player, collidePlatform);
+            this.handlePlayerCollisionX(this.newPlayer, collidePlatform);
 
-            console.log('collided with paltform in x')
+            // console.log('collided with paltform in x')
         }
     }
 
-    private handlePlayerCollisionY(player: Sprite, collider: Sprite){
+
+    private checkPlayerYCollisions(){
+        const collideEnemy = this.collideAny(this.newPlayer, this.enemies);
+        const collidePlatform = this.collideAny(this.newPlayer, this.platforms); 
+        
+        if (collideEnemy){
+            // handle enemy collision
+        }
+
+        if (collidePlatform){
+            // handle platform collision
+            this.handlePlayerCollisionY(this.newPlayer, collidePlatform);
+            // console.log('collided with paltform in y')
+        }
+
+        if (this.isFalling(this.newPlayer)){
+            this.newPlayer.setState(PlayerStates.FALLING);
+        }
+        else if (this.newPlayer.state == PlayerStates.FALLING){
+            this.newPlayer.setState(PlayerStates.WALKING);
+        }
+    }
+
+    private handlePlayerCollisionY(player: Player, collider: Sprite){
         // console.log('handleing y collision')
 
         if (player.yVelocity > 0){
-            player.pixiSprite.y = collider.top() - player.pixiSprite.height;
+            // player.pixiSprite.y = collider.top() - player.pixiSprite.height;
+            this.newPlayer.setY(collider.top() - player.height);
         }
         else if(player.yVelocity < 0){
-            player.pixiSprite.y = collider.bottom();
+            // player.pixiSprite.y = collider.bottom();
+            this.newPlayer.setY(collider.bottom());
         }
 
         player.yVelocity = 0;
     }
 
-
-    private handlePlayerCollisionX(player: Sprite, collider: Sprite){
-        // console.log('handling x collision')
-        if (player.xVelocity > 0){
-            player.pixiSprite.x = collider.left() - player.pixiSprite.width
-        }
-        else if (player.xVelocity < 0){
-            player.pixiSprite.x = collider.right();
-        }
-        player.xVelocity = 0;
-    }
-
-    private collideAny(playerSprite: Sprite, spriteGroup: Sprite[]){
-        let collidedSprite;
-        spriteGroup.forEach((sprite: Sprite) => {
-            if (this.collide(playerSprite, sprite)){
-                collidedSprite = sprite;
-            }
-        })
-        return collidedSprite;
-    }
-
-    private collide(sprite1: Sprite, sprite2: Sprite){
-        if (sprite2.left() >= sprite1.right() ||
-            sprite2.right() <= sprite1.left() ||
-            sprite2.bottom() <= sprite1.top() ||
-            sprite2.top() >= sprite1.bottom()){
-                // console.log('no collide')
-                return false;
-            }
-        return true;
-
-    }
 
     private contain(sprite: Sprite, container: Container){
         // contain right side of container
@@ -183,13 +188,15 @@ export class Stage implements IStage{
 
     }
 
-    private isFalling(sprite: Sprite){
-        sprite.pixiSprite.y += 1;
-        const platformCollision = this.collideAny(sprite, this.platforms);
+    private isFalling(player: Player){
+        // sprite.pixiSprite.y += 1;
+        player.updateY(1);
+        const platformCollision = this.collideAny(player, this.platforms);
         
         // ontop of some platform or jumping
-        if (platformCollision || sprite.state === PlayerStates.JUMPING){
-            sprite.pixiSprite.y -= 1;
+        if (platformCollision || player.state === PlayerStates.JUMPING){
+            // sprite.pixiSprite.y -= 1;
+            player.updateY(-1);
             return false;
         }
         // falling
@@ -197,6 +204,37 @@ export class Stage implements IStage{
             return true;
         }
     }
+
+
+
+
+
+    private handlePlayerCollisionX(player: Player, collider: Sprite){
+        // console.log('handling x collision')
+        if (player.xVelocity > 0){
+            player.setX(collider.left() - player.width);
+            // player.x = collider.left() - player.width
+        }
+        else if (player.xVelocity < 0){
+            // player.x = collider.right();
+            player.setX(collider.right());
+        }
+        player.xVelocity = 0;
+    }
+
+    private collide(player: Player, sprite2: Sprite){
+        // console.log('collide ')
+        // console.log(player.left())
+        if (sprite2.left() >= player.right() ||
+            sprite2.right() <= player.left() ||
+            sprite2.bottom() <= player.top() ||
+            sprite2.top() >= player.bottom()){
+                // console.log('no collide')
+                return false;
+            }
+        return true;
+    }
+
 
 
 
@@ -208,11 +246,11 @@ export class Stage implements IStage{
 export class StageManager {
 
     loader: PIXI.Loader;
-    player: Player;
+    newPlayer: Player;
 
-    constructor(loader: PIXI.Loader, player: Player){
+    constructor(loader: PIXI.Loader, newPlayer: Player){
         this.loader = loader;
-        this.player = player;
+        this.newPlayer  = newPlayer;
     }
 
     // Get a stage by its level
@@ -238,7 +276,7 @@ export class StageManager {
             name,
             enemies,
             platforms,
-            this.player,
+            this.newPlayer,
         )
     }
 
