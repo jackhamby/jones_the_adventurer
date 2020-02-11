@@ -10,7 +10,7 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
         
     render(){
         if (this.props.stage){
-            const player = this.props.stage.newPlayer
+            const player = this.props.stage.player
             return (
                 <React.Fragment>
                     <div className="col-6">

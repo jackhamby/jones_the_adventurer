@@ -4,7 +4,6 @@
 import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, UPDATE_PLAYER_POSITION} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
 import {CHARACTER_ATTRIBUTES} from '../../constants';
-import { Stage } from '../../classes/game_classes';
 
 
 
@@ -95,6 +94,9 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     currentStage: action.payload.stage
                 } as GameState
             } 
+
+
+  
 
         case SETUP_GAME:
             

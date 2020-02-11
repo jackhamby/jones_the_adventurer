@@ -9,6 +9,7 @@ import {store} from '../state_management/store';
 import { updatePlayerPosition, ControlAction } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
 import { Player } from './player';
+import { getCanvasDimensions } from '../helpers/util';
 
 
 export interface Container {
@@ -28,17 +29,17 @@ export class Stage implements IStage{
     platforms: Platform[];
     // player: Player;
     currentKeys: KeyOptions;
-    newPlayer: Player;
+    player: Player;
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], newPlayer: Player){
+    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], player: Player){
         this.level = level;
         this.name = name;
         this.enemies = enemies;
         this.platforms = platforms;
         // this.player = player;
         this.currentKeys = {} as KeyOptions;
-        this.newPlayer = newPlayer;
+        this.player = player;
     }
 
 
@@ -51,7 +52,6 @@ export class Stage implements IStage{
 
     // Update state of the sprite
     private updateAllSpriteStates(){
-        // this.player.update(this.currentKeys);
         this.enemies.forEach((enemy: Enemy) => {
             enemy.update(this.currentKeys);
         })
@@ -60,8 +60,8 @@ export class Stage implements IStage{
         })
 
         // New stuff
-        this.newPlayer.update(this.currentKeys)
-        console.log(PlayerStates[this.newPlayer.state])
+        this.player.update(this.currentKeys)
+        console.log(PlayerStates[this.player.state])
     }
 
     // Update all sprite positions
@@ -71,28 +71,21 @@ export class Stage implements IStage{
     }
 
     private updatePlayerPosition(){
-        // this.player.pixiSprite.x += this.player.xVelocity;        
-        // this.checkPlayerXCollisions();
-        // this.player.pixiSprite.y += this.player.yVelocity;
-        // this.checkPlayerYCollisions();
-        // this.contain(this.player, {
-        //     x: 0,
-        //     y: 0,
-        //     width: SCREEN_WIDTH,
-        //     height: SCREEN_HEIGHT,
-        // } as Container)
-
-        
-        // const action = updatePlayerPosition(this.player.pixiSprite.x, this.player.pixiSprite.y) as ControlAction;
-        // store.dispatch(action);
 
         // New stuff
-        this.newPlayer.updateX(this.newPlayer.xVelocity);
+        this.player.updateX(this.player.xVelocity);
         this.checkPlayerXCollisions();
-        this.newPlayer.updateY(this.newPlayer.yVelocity);
+        this.player.updateY(this.player.yVelocity);
         this.checkPlayerYCollisions();
 
-        const action = updatePlayerPosition(this.newPlayer.x, this.newPlayer.y) as ControlAction;
+        this.contain(this.player, {
+            x: 0,
+            y: 0,
+            width: SCREEN_WIDTH,
+            height: SCREEN_HEIGHT,
+        } as Container)
+
+        const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
         store.dispatch(action);
 
 
@@ -115,8 +108,8 @@ export class Stage implements IStage{
     }
 
     private checkPlayerXCollisions() {
-        const collideEnemy = this.collideAny(this.newPlayer, this.enemies);
-        const collidePlatform = this.collideAny(this.newPlayer, this.platforms);
+        const collideEnemy = this.collideAny(this.player, this.enemies);
+        const collidePlatform = this.collideAny(this.player, this.platforms);
 
         if (collideEnemy){
             // handle enemy collision
@@ -124,7 +117,7 @@ export class Stage implements IStage{
         }
 
         if (collidePlatform){
-            this.handlePlayerCollisionX(this.newPlayer, collidePlatform);
+            this.handlePlayerCollisionX(this.player, collidePlatform);
 
             // console.log('collided with paltform in x')
         }
@@ -132,8 +125,8 @@ export class Stage implements IStage{
 
 
     private checkPlayerYCollisions(){
-        const collideEnemy = this.collideAny(this.newPlayer, this.enemies);
-        const collidePlatform = this.collideAny(this.newPlayer, this.platforms); 
+        const collideEnemy = this.collideAny(this.player, this.enemies);
+        const collidePlatform = this.collideAny(this.player, this.platforms); 
         
         if (collideEnemy){
             // handle enemy collision
@@ -141,15 +134,15 @@ export class Stage implements IStage{
 
         if (collidePlatform){
             // handle platform collision
-            this.handlePlayerCollisionY(this.newPlayer, collidePlatform);
+            this.handlePlayerCollisionY(this.player, collidePlatform);
             // console.log('collided with paltform in y')
         }
 
-        if (this.isFalling(this.newPlayer)){
-            this.newPlayer.setState(PlayerStates.FALLING);
+        if (this.isFalling(this.player)){
+            this.player.setState(PlayerStates.FALLING);
         }
-        else if (this.newPlayer.state == PlayerStates.FALLING){
-            this.newPlayer.setState(PlayerStates.WALKING);
+        else if (this.player.state == PlayerStates.FALLING){
+            this.player.setState(PlayerStates.WALKING);
         }
     }
 
@@ -158,32 +151,36 @@ export class Stage implements IStage{
 
         if (player.yVelocity > 0){
             // player.pixiSprite.y = collider.top() - player.pixiSprite.height;
-            this.newPlayer.setY(collider.top() - player.height);
+            this.player.setY(collider.top() - player.height);
         }
         else if(player.yVelocity < 0){
             // player.pixiSprite.y = collider.bottom();
-            this.newPlayer.setY(collider.bottom());
+            this.player.setY(collider.bottom());
         }
 
         player.yVelocity = 0;
     }
 
 
-    private contain(sprite: Sprite, container: Container){
+    private contain(player: Player, container: Container){
         // contain right side of container
-        if (sprite.left() < container.x){
-            sprite.pixiSprite.x = container.x + 1;
+        if (player.left() < container.x){
+            // sprite.pixiSprite.x = container.x + 1;
+            player.setX(container.x + 1);
         }
         // contain left side of container
-        if (sprite.right() > (container.x + container.width)){
-            sprite.pixiSprite.x = (container.x + container.width) - sprite.pixiSprite.width
+        if (player.right() > (container.x + container.width)){
+            // sprite.pixiSprite.x = (container.x + container.width) - sprite.pixiSprite.width
+            player.setX( (container.x + container.width) - player.width)
         }
         // contain top of container
-        if (sprite.top() < container.y){
-            sprite.pixiSprite.y = container.y + 1;
+        if (player.top() < container.y){
+            // sprite.pixiSprite.y = container.y + 1;
+            player.setY(container.y + 1)
         }
-        if (sprite.bottom() > (container.y + container.height)){
-            sprite.pixiSprite.y = (container.y + container.height) - sprite.pixiSprite.height;
+        if (player.bottom() > (container.y + container.height)){
+            // sprite.pixiSprite.y = (container.y + container.height) - sprite.pixiSprite.height;
+            player.setY((container.y + container.height) - player.height)
         }
 
     }
@@ -246,11 +243,11 @@ export class Stage implements IStage{
 export class StageManager {
 
     loader: PIXI.Loader;
-    newPlayer: Player;
+    player: Player;
 
-    constructor(loader: PIXI.Loader, newPlayer: Player){
+    constructor(loader: PIXI.Loader, player: Player){
         this.loader = loader;
-        this.newPlayer  = newPlayer;
+        this.player  = player;
     }
 
     // Get a stage by its level
@@ -276,7 +273,7 @@ export class StageManager {
             name,
             enemies,
             platforms,
-            this.newPlayer,
+            this.player,
         )
     }
 
@@ -294,12 +291,16 @@ export class StageManager {
         const height = parseInt(measurements[1]);
         let x = 0;
         let y = 0;
-        const xIncrement = SCREEN_WIDTH / width;
-        const yIncrement = SCREEN_HEIGHT / height;
-
+        // const xIncrement = SCREEN_WIDTH / width;
+        // const yIncrement = SCREEN_HEIGHT / height;
+        // const element = document.getElementById('canvas-container')
+        // const elementWidth = element ? element.clientWidth : 500;
+        // const elementHeight = element ? element.clientHeight : 500
+        const canvasDimensions = getCanvasDimensions();
+        const xIncrement = canvasDimensions.width / width;
+        const yIncrement = canvasDimensions.height / height;
         // loop height
         for(var i = 1; i < height + 1; ++i){
-            const row = lines[i];
             x = 0;
             // loop width
             for(var k = 0; k < width; ++k){

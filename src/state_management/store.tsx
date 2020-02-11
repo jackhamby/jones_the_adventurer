@@ -8,6 +8,7 @@ import { ScreenOptions, CharacterOptions } from '../types/enums';
 import { CHARACTER_ATTRIBUTES, SCREEN_WIDTH, SCREEN_HEIGHT} from '../constants';
 
 
+
 const initialState = {
     controlState: {
         currentScreen: ScreenOptions.MAIN_MENU,

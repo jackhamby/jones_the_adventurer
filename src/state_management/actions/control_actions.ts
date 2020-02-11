@@ -35,15 +35,17 @@ interface UpdateScreenPayload {
 interface ChangeCharacterPayload {
     newCharacter: CharacterOptions;
 }
+interface ScreenResizePayload {
+    height: number;
+    width: number;
+}
 // interface CreatePlayerPayload {
 //     sprite: PIXI.Sprite;
 // }
 
 
-
-
 interface UpdatePlayerPositionAction {
-    type: typeof UPDATE_PLAYER_POSITION
+    type: typeof UPDATE_PLAYER_POSITION;
     payload: UpdatePlayerPositionPayload;
 }
 
@@ -77,11 +79,11 @@ interface UpdateKeyReleasedAction {
     type: typeof KEY_RELEASE;
     payload: UpdateKeyPressedPayload;
 }
+
 // interface TexturesLoadedAction {
 //     type: typeof TEXTURES_LOADED;
 
 // }
-
 
 export const updatePlayerPosition = (x: number, y: number): UpdatePlayerPositionAction => {
     return {
@@ -162,4 +164,4 @@ export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
         }
     }
 }
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction;
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction ;

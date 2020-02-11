@@ -1,11 +1,14 @@
 import { PlayerStates } from "../types/enums";
-import { KeyOptions } from "../types/states";
-
+import { KeyOptions, AppState } from "../types/states";
+import * as PIXI from "pixi.js";
+// TODO remove this
+import { store } from "../state_management/store";
 
 export interface SpritePart {
     offSetX: number;
     offSetY: number;
     sprite: PIXI.Sprite;
+    
 }
 
 export class Player  {
@@ -24,7 +27,9 @@ export class Player  {
     height: number;
 
     spriteParts: SpritePart[];
-
+    
+    // TODO remove this
+    graphics?: PIXI.Graphics;
 
     constructor(loader: PIXI.Loader){
         this.state = PlayerStates.STANDING;
@@ -38,10 +43,15 @@ export class Player  {
         this.yVelocity = 0;
         this.x = 200;
         this.y = 500;
-        this.width = 30;
+        this.width = 20;
         this.height = 30;
 
         this.spriteParts = [];
+
+        // TODO remove this
+        this.graphics = undefined;
+        
+
     }
 
 
@@ -112,36 +122,44 @@ export class Player  {
 
     flipSpriteParts(){
 
+        // const state = store.getState() as AppState;
+        // const newgraphic = new PIXI.Graphics();
+
+        // newgraphic.beginFill(0xFFFF00);
+
+        // // // set the line style to have a width of 5 and set the color to red
+        // newgraphic.lineStyle(5, 0xFF0000);
+
+        // // // draw a rectangle
+        // newgraphic.drawRect(this.x, this.y, 5, 5);
+        // newgraphic.drawRect(this.x + this.width, this.y, 5, 5);
+
+
+        // if (this.graphics){
+        //     console.log('removeing graphics')
+        //     state.gameState.pixiApplication.stage.removeChild(this.graphics);
+        // }
+        // this.graphics = newgraphic;
+
+        // state.gameState.pixiApplication.stage.addChild(newgraphic);
+        // // stage.addChild(graphics);
+        // // var rect = new PIXI.Rectangle(this.x, this.y, 5, 5);
+
+
+
+
+        this.spriteParts.forEach((spritePart: SpritePart) => {
+            
+            if (this.facingRight){
+                spritePart.sprite.anchor.x = 0;
+                spritePart.sprite.scale.x = 1;
+            }
+            else{
+                spritePart.sprite.anchor.x = 1;
+                spritePart.sprite.scale.x = -1;
+            }
+        });
     }
-
-
-    // flipSprite(){
-    //     switch(this.state){
-    //         case(PlayerStates.WALKING):
-    //             if (this.facingRight){
-    //                 this.pixiSprite.texture = this.textures.walkingRight;
-    //                 return;
-    //             }
-    //             this.pixiSprite.texture = this.textures.walkingLeft;
-    //             break;
-    //         case(PlayerStates.STANDING):
-    //             if (this.facingRight){
-    //                 this.pixiSprite.texture = this.textures.standingRight;
-    //                 return;
-    //             }
-    //             this.pixiSprite.texture = this.textures.standingLeft;
-    //             break;
-    //         case(PlayerStates.FALLING):
-    //             if (this.facingRight){
-    //                 this.pixiSprite.texture = this.textures.fallingRight;
-    //                 return;
-    //             }
-    //             this.pixiSprite.texture = this.textures.fallingLeft;
-    //             break;
-    //     }
-    // }
-
-
 
     falling(){
         const gravity = 0.5;

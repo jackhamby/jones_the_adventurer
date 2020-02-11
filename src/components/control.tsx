@@ -10,9 +10,11 @@ import { updateScreen, updateKeyPressed, updateKeyReleased } from '../state_mana
 import { store } from '../state_management/store';
 import { AnyAction } from 'redux';
 import { ConnectedGame } from '../areas/game/game_wrapper';
+import { getCanvasDimensions } from '../helpers/util';
 
 export interface ControlStateProps {
     currentScreen: ScreenOptions;
+    pixiApplication: PIXI.Application;
  };
 
 export interface ControlDispatchProps { 
@@ -27,6 +29,7 @@ export class Control extends React.Component<ControlProps, {}> {
 
     componentDidMount(){
         this.handleKeyEvents();
+        this.handleResizeEvents();
     }
 
     renderState = () => {
@@ -61,6 +64,16 @@ export class Control extends React.Component<ControlProps, {}> {
         } )
     }
 
+    handleResizeEvents = () => {
+        window.addEventListener('resize', (event) => {
+            // const element = document.getElementById('canvas-container')
+            // const elementWidth = element ? element.clientWidth : 500;
+            // const elementHeight = element ? element.clientHeight : 500
+            const canvasDimensions = getCanvasDimensions();
+            this.props.pixiApplication.renderer.resize(canvasDimensions.width, canvasDimensions.height)
+        })
+    }
+
     render(){
         return (
             <div className="container" style={{height: "100%", paddingRight: "0px", paddingLeft: "0px"}}>
@@ -74,6 +87,7 @@ export class Control extends React.Component<ControlProps, {}> {
 export const mapStateToProps = (state: AppState): ControlStateProps => {
     return {
         currentScreen: state.controlState.currentScreen,
+        pixiApplication: state.gameState.pixiApplication,
     } as ControlStateProps;
 
 }

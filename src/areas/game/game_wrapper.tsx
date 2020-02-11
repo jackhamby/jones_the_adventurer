@@ -47,12 +47,16 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add("kobold_sm.png")
             .add("platform1.png")
             // Add head textures
-            .add('knight-head-armor1-standing', "images/knight/head/head_helmet1_standing.png")
-            .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
+            .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
+            .add('knight-head-default-standing', "images/knight/head/head_test.png")
             // Add body textures
             .add('knight-body-default-standing', "images/knight/body/body_default_standing.png")
+            .add('knight-body-armor1-standing', "images/knight/body/body_armor1_standing.png")
+
             // Add leg textures
             .add('knight-legs-default-standing', "images/knight/legs/legs_default_standing.png")
+            .add('knight-legs-armor1-standing', "images/knight/legs/legs_armor1_standing.png")
+
 
             // Once textures have loaded, fire this method
             .load(() => {
@@ -70,13 +74,13 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         // const player = new Player(loader);
 
 
-        const newPlayer = this.createPlayer();
+        const player = this.createPlayer();
         // console.log('new player')
-        // console.log(newPlayer);
+        // console.log(player);
         // console.log(this.props.character);
 
         // Create a stage manager using the now ready pixi.loader and new playe
-        this.stageManager = new StageManager(this.props.pixiApplication.loader, newPlayer);
+        this.stageManager = new StageManager(this.props.pixiApplication.loader, player);
 
         // Get stage one
         const stageOne = this.stageManager.getStage(1);

@@ -8,7 +8,7 @@ import { Stage } from '../../classes/game_classes';
 import { Platform } from '../../classes/platform';
 import { Enemy } from '../../classes/enemy';
 import { SpritePart } from '../../classes/player';
-
+import './game_display.css'
 export interface GameDisplayStateProps { 
     pixiApplication: PIXI.Application;
     keyboard: KeyOptions;
@@ -32,7 +32,11 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     private canvasRef = createRef<HTMLDivElement>();
 
     componentDidMount(){
-        this.canvasRef.current?.appendChild(this.props.pixiApplication.view);
+        const canvasHtmlElement = this.canvasRef.current;
+        canvasHtmlElement?.appendChild(this.props.pixiApplication.view);
+        const containerHeight = canvasHtmlElement ? canvasHtmlElement.clientHeight : 1;
+        const containerWidth = canvasHtmlElement ? canvasHtmlElement.clientWidth : 1;
+        this.props.pixiApplication.renderer.resize(containerWidth, containerHeight);
         this.setState({isStarted: false})
     }
 
@@ -44,7 +48,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         const enemies = this.props.currentStage.enemies;
         const platforms = this.props.currentStage.platforms;
         // const player = this.props.currentStage.player;
-        const newplayer = this.props.currentStage.newPlayer;
+        const newplayer = this.props.currentStage.player;
         // stage.addChild(player.pixiSprite);
         enemies.map((enemy: Enemy) => stage.addChild(enemy.pixiSprite));
         platforms.map((platform: Platform) => stage.addChild(platform.pixiSprite));
@@ -87,7 +91,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     render(){
             return (
-                <div ref={this.canvasRef}>
+                <div className="game-container"  id="canvas-container" ref={this.canvasRef}>
 
                 </div>
             )
