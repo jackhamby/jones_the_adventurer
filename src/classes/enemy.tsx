@@ -1,10 +1,11 @@
-import { Sprite } from "./sprite";
 import { SpriteTextures } from "../types/states";
 import * as PIXI from 'pixi.js';
+import { Sprite } from "./sprite";
 
 export class Enemy extends Sprite{
     constructor(loader: PIXI.Loader){
-        super(loader);
+        // x, y, widht, height, xVEl, yVel
+        super(loader, 0, 0, 0, 0, 0, 0);
     }
 }
 
@@ -26,9 +27,9 @@ export class Kobold extends Enemy {
         } as SpriteTextures;
     }
 
-    createPixiSprite(): PIXI.Sprite {
-        return new PIXI.Sprite(this.textures.standingLeft); // Default to standing left
-    }
+    // createPixiSprite(): PIXI.Sprite {
+    //     return new PIXI.Sprite(this.textures.standingLeft); // Default to standing left
+    // }
 
 
 }

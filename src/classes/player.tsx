@@ -1,104 +1,158 @@
-import { PlayerStates } from "../types/enums";
-import { KeyOptions, AppState } from "../types/states";
+import { PlayerStateNames, PlayerArmorNames, PlayerPartNames } from "../types/enums";
+import { KeyOptions, AppState, PlayerAttributes } from "../types/states";
+import { Sprite } from "./sprite";
 import * as PIXI from "pixi.js";
 // TODO remove this
 import { store } from "../state_management/store";
+import { SpritePart } from "./interfaces";
 
-export interface SpritePart {
+
+
+export class Part {
+    texture: PIXI.Texture;
     offSetX: number;
     offSetY: number;
     sprite: PIXI.Sprite;
-    
+    parentSprite: Sprite;
+
+
+
+    constructor(texture: PIXI.Texture, offSetX: number, offSetY: number, parentSprite: Sprite){
+        this.texture = texture;
+        this.offSetX = offSetX;
+        this.offSetY = offSetY;
+        // this.sprite = { } as PIXI.Sprite;
+        this.parentSprite = parentSprite;
+        this.sprite = new PIXI.Sprite(this.texture);
+        this.sprite.x = this.parentSprite.x + this.offSetX;
+        this.sprite.y = this.parentSprite.y + this.offSetY;
+    }
+
+    setSprite(newTexture: PIXI.Texture){
+        this.sprite.texture = newTexture;
+    }
+
+
+
+
+
 }
 
-export class Player  {
 
-    state: PlayerStates;
+
+
+export interface testtreasure {
+    part: PlayerPartNames;
+    armor: PlayerArmorNames;
+}
+// TODO TODO TODO
+//*** on trasure collision  ***/
+
+// newTexture = player.textures[testtreasure.part][testtreasure.armor][player.state]   <--- grab actual palyer state
+// player.spriteParts[testtreasure.part].setTexture(newTexture)
+
+export type PlayerStates = {
+    [key in PlayerStateNames]: any;
+}
+
+export type PlayerArmors = {
+    [key in PlayerArmorNames]: PlayerStates;
+}
+
+export type PlayerParts = {
+    [key in PlayerPartNames]: PlayerArmors;
+}
+
+export type SpriteParts = {
+    [key in PlayerPartNames]: Part;
+}
+
+export class Player extends Sprite  {
+
+    // Player shared attributes
+    state: PlayerStateNames;
     currentKeys: KeyOptions;
     allowJump: boolean;
     facingRight: boolean;
-    loader: PIXI.Loader;
-
-    xVelocity: number;
-    yVelocity: number;
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-
-    spriteParts: SpritePart[];
+    // spriteParts: SpritePart[];
+    spriteParts: SpriteParts;
+    // parts: PlayerParts;
+    attributes: PlayerAttributes;
     
     // TODO remove this
     graphics?: PIXI.Graphics;
+    textures: PlayerParts;
 
-    constructor(loader: PIXI.Loader){
-        this.state = PlayerStates.STANDING;
+    constructor(loader: PIXI.Loader, initialAttributes: PlayerAttributes){
+        // x, y, width, height, xVel, yVel
+        super(loader ,200, 200, 20, 30, 0, 0);
+        this.state = PlayerStateNames.STANDING;
+        this.attributes = initialAttributes;
         this.currentKeys = {} as KeyOptions;
         this.allowJump = true;
         this.facingRight = false;
-        this.loader = loader;
-
-        // Default attributes
-        this.xVelocity = 0;
-        this.yVelocity = 0;
-        this.x = 200;
-        this.y = 500;
-        this.width = 20;
-        this.height = 30;
-
-        this.spriteParts = [];
-
+        // this.spriteParts = [];
+        this.spriteParts = {} as SpriteParts;
+        this.textures = {} as PlayerParts;
         // TODO remove this
         this.graphics = undefined;
-        
-
     }
 
 
     updateX(value: number){
         this.x += value;
-        this.spriteParts.map((spritePart: SpritePart) => {
-            spritePart.sprite.x += value;
+        // this.spriteParts.map((spritePart: SpritePart) => {
+        //     spritePart.sprite.x += value;
+        // })
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as PlayerPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            sprite.x += value;
         })
+        // for (let key in this.spriteParts){
+        //     const sprite = this.spriteParts[key];
+        // }
     }
 
     updateY(value: number){
         this.y += value;
-        this.spriteParts.map((spritePart: SpritePart) => {
-            spritePart.sprite.y += value;
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as PlayerPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            sprite.y += value;
         })
+        // this.spriteParts.map((spritePart: SpritePart) => {
+        //     spritePart.sprite.y += value;
+        // })
     }
 
     setX(value: number){
         this.x = value;
-        this.spriteParts.map((spritePart: SpritePart) => {
-            spritePart.sprite.x = value + spritePart.offSetX;
+        // this.spriteParts.map((spritePart: SpritePart) => {
+        //     spritePart.sprite.x = value + spritePart.offSetX;
+        // })
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as PlayerPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            sprite.x = value + this.spriteParts[playerPartName].offSetX;
         })
     } 
 
     setY(value: number){
         this.y = value;
-        this.spriteParts.map((spritePart: SpritePart) => {
-            spritePart.sprite.y = value + spritePart.offSetY;
+        // this.spriteParts.map((spritePart: SpritePart) => {
+        //     spritePart.sprite.y = value + spritePart.offSetY;
+        // })
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as PlayerPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            sprite.y = value + this.spriteParts[playerPartName].offSetY;
         })
+        
     } 
 
-    setState(state: PlayerStates){
+    setState(state: PlayerStateNames){
         this.state = state;
-    }
-
-
-    top(){
-        return this.y;
-    }
-    bottom(){
-        return this.y + this.height;
-    }
-    left(){
-        return this.x;
-    }
-    right(){
-        return this.x + this.width;
     }
 
 
@@ -108,7 +162,7 @@ export class Player  {
         this.currentKeys = keyboard;
         this.handleState();
         // console.log(`xVel: ${this.xVelocity}, yVel ${this.yVelocity}`)
-        // console.log(`state ${PlayerStates[this.state]}`)
+        // console.log(`state ${PlayerStateNames[this.state]}`)
         this.flipSpriteParts();
         // temporary hack to fly
         // if (this.currentKeys.moveDown){
@@ -147,18 +201,31 @@ export class Player  {
 
 
 
-
-        this.spriteParts.forEach((spritePart: SpritePart) => {
-            
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as PlayerPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            // sprite.x = value + this.spriteParts[playerPartName].offSetX;
             if (this.facingRight){
-                spritePart.sprite.anchor.x = 0;
-                spritePart.sprite.scale.x = 1;
+                sprite.anchor.x = 0;
+                sprite.scale.x = 1;
             }
             else{
-                spritePart.sprite.anchor.x = 1;
-                spritePart.sprite.scale.x = -1;
+                sprite.anchor.x = 1;
+                sprite.scale.x = -1;
             }
-        });
+        })
+
+        // this.spriteParts.forEach((spritePart: SpritePart) => {
+            
+        //     if (this.facingRight){
+        //         spritePart.sprite.anchor.x = 0;
+        //         spritePart.sprite.scale.x = 1;
+        //     }
+        //     else{
+        //         spritePart.sprite.anchor.x = 1;
+        //         spritePart.sprite.scale.x = -1;
+        //     }
+        // });
     }
 
     falling(){
@@ -166,7 +233,7 @@ export class Player  {
         this.yVelocity += gravity;
           // TODO REMOVE THIS TO PREVENT INFINITE JUMP
           if (this.currentKeys.jump){
-            this.state = PlayerStates.JUMPING;  
+            this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -10
         }
         // TODO UNCOMMENT THIS
@@ -193,7 +260,7 @@ export class Player  {
 
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
         if (this.currentKeys.jump){
-            this.state = PlayerStates.JUMPING;  
+            this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -10
         }
         // TODO UNCOMMENT THIS
@@ -205,7 +272,7 @@ export class Player  {
         if (this.yVelocity > 0){
             // debugger;
             // console.log('tippng pont')
-            this.state = PlayerStates.FALLING;
+            this.state = PlayerStateNames.FALLING;
         }
 
         // Move right while jumping
@@ -220,7 +287,7 @@ export class Player  {
         }
         // must be faling
         // if (!this.currentKeys.jump){
-        //     this.state = PlayerStates.FALLING;
+        //     this.state = PlayerStateNames.FALLING;
         // }
 
     }
@@ -229,7 +296,7 @@ export class Player  {
     walking(){
         // console.log('walking')
         if (this.currentKeys.jump){
-            this.state = PlayerStates.JUMPING;  
+            this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -10
         }
         // Move right
@@ -248,8 +315,7 @@ export class Player  {
 
         // doing nothing
         else {
-            this.state = PlayerStates.STANDING;
-            this.facingRight = true;
+            this.state = PlayerStateNames.STANDING;
             this.xVelocity = 0;
         }
 
@@ -258,38 +324,39 @@ export class Player  {
     // Called when player in standing state
     standing(){
         if (this.currentKeys.jump){
-            this.state = PlayerStates.JUMPING;
+            this.state = PlayerStateNames.JUMPING;
             this.yVelocity = -10;
         }
 
         if (this.currentKeys.moveRight){
-            this.state = PlayerStates.WALKING;
+            this.state = PlayerStateNames.WALKING;
         }
 
         // Move left
         else if (this.currentKeys.moveLeft){
-            this.state = PlayerStates.WALKING;
+            this.state = PlayerStateNames.WALKING;
         }
 
         else {
-            this.state = PlayerStates.STANDING
+            this.state = PlayerStateNames.STANDING
         }
+        this.xVelocity = 0;
     }
 
     // Handle player state
     handleState(){
         switch(this.state){
-            case(PlayerStates.STANDING):
+            case(PlayerStateNames.STANDING):
                 this.standing();
                 break;
-            case(PlayerStates.WALKING):
+            case(PlayerStateNames.WALKING):
                 this.walking()
                 // this.pixiSprite.x += this.xVelocity
                 break;
-            case(PlayerStates.FALLING):
+            case(PlayerStateNames.FALLING):
             this.falling()
                 break;
-            case(PlayerStates.JUMPING):
+            case(PlayerStateNames.JUMPING):
             this.jumping()
                 break;
             default:

@@ -4,16 +4,24 @@ import { KeyOptions, Character, AppState } from '../../types/states';
 import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 // import { createPlayer } from '../../state_management/actions/control_actions';
-import { Stage } from '../../classes/game_classes';
+import { Stage, StageManager } from '../../classes/game_classes';
 import { Platform } from '../../classes/platform';
 import { Enemy } from '../../classes/enemy';
-import { SpritePart } from '../../classes/player';
+import { SpritePart } from '../../classes/interfaces';
 import './game_display.css'
+import { Treasure } from '../../classes/treasure';
+import { Viewport } from 'pixi-viewport';
+
+
 export interface GameDisplayStateProps { 
     pixiApplication: PIXI.Application;
     keyboard: KeyOptions;
     currentStage: Stage;
     isReady: boolean;
+}
+
+export interface GameDisplayOwnProps {
+    stageManager: StageManager;
 }
 
 export interface GameDisplayDispatchProps {
@@ -24,8 +32,14 @@ export interface GameDisplayState {
     isStarted: boolean; 
  }
 
+ export const viewport = new Viewport({
+    screenWidth: 1000,
+    screenHeight: 500
+    // interaction: this.props.pixiApplication.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+})
 
-export type GameDisplayProps = GameDisplayDispatchProps & GameDisplayStateProps;
+
+export type GameDisplayProps = GameDisplayDispatchProps & GameDisplayStateProps & GameDisplayOwnProps;
 
 export class GameDisplay extends React.Component<GameDisplayProps, GameDisplayState> {
 
@@ -42,47 +56,36 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     componentDidUpdate(){
         if (!this.props.isReady || this.state.isStarted) return;
+
+        // Set stage background color
         this.props.pixiApplication.renderer.backgroundColor = 0xadd8e6;  
 
-        const stage = this.props.pixiApplication.stage;
-        const enemies = this.props.currentStage.enemies;
-        const platforms = this.props.currentStage.platforms;
-        // const player = this.props.currentStage.player;
-        const newplayer = this.props.currentStage.player;
-        // stage.addChild(player.pixiSprite);
-        enemies.map((enemy: Enemy) => stage.addChild(enemy.pixiSprite));
-        platforms.map((platform: Platform) => stage.addChild(platform.pixiSprite));
+
+        this.props.pixiApplication.stage.addChild(viewport);
+
+        viewport
+            .drag()
+            // .pinch()
+            // .wheel()
+            // .decelerate()
+
+        viewport.on('clicked', (e) => {
+            console.log(e)
+        })
+
+        viewport.on('wheel-scroll', (e) => {
+            console.log('scroll')
+        })
+
+        viewport.zoom(0)
+
+        // Add sprites to canvas
+        this.props.stageManager.loadStage(this.props.currentStage);
+
+
+        // Start game
         this.props.pixiApplication.ticker.add(delta => this.gameLoop(delta));
         this.setState({ isStarted: true })
-
-
-        stage.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-        // newplayer.spriteParts.map((sprite: PIXI.Sprite) => {
-        //     stage.add
-        // })
-
-
-
-        // .add("images/knight/head/head_default_standing.png")
-        // .add("images/knight/body/body_default_standing.png")
-        // .add("images/knight/legs/legs_default_standing.png")
-        // playground 
-        // const head = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/head/head_helmet1_standing.png'].texture)
-        // const body = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/body/body_default_standing.png'].texture)
-        // const legs = new PIXI.Sprite(this.props.pixiApplication.loader.resources['images/knight/legs/legs_default_standing.png'].texture)
-        // head.x = 500;
-        // head.y = 500;
-        // body.x = head.x - (body.width / 6)
-        // body.y = head.y + head.height;
-        // legs.x = body.x;
-        // legs.y = body.y + body.height;
-        // stage.addChild(body)
-        // stage.addChild(head)
-        // stage.addChild(legs)
-
-
-
-
     }
 
     gameLoop = (delta: any) => {
@@ -111,7 +114,7 @@ const mapStateToProps = (state: AppState): GameDisplayStateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
     return {
         createPlayer: (sprite: PIXI.Sprite) => {
-            // dispatch(createPlayer(sprite))
+            // dispatch(createPlayer( sprite))
         }
     }
 }

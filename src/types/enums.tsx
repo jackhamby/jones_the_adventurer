@@ -15,9 +15,20 @@ export enum Attributes {
     SPEED = "speed",
 }
 
-export enum PlayerStates {
-    WALKING,
-    JUMPING,
-    FALLING,
-    STANDING
+export enum PlayerStateNames {
+    WALKING = "walking",
+    JUMPING = "jumping",
+    FALLING = "falling",
+    STANDING = "standing"
+}
+
+export enum PlayerPartNames {
+    HEAD = "head",
+    BODY = "body",
+    LEGS = "legs"
+}
+
+export enum PlayerArmorNames {
+    DEFAULT = "default",
+    ARMOR1 = "armor1"
 }

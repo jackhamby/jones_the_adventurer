@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { AppState, KeyOptions, Character } from '../../types/states';
+import { AppState, KeyOptions, Character, PlayerAttributes } from '../../types/states';
 import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { GameDetail } from './game_detail';
@@ -48,7 +48,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add("platform1.png")
             // Add head textures
             .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
-            .add('knight-head-default-standing', "images/knight/head/head_test.png")
+            .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
             // Add body textures
             .add('knight-body-default-standing', "images/knight/body/body_default_standing.png")
             .add('knight-body-armor1-standing', "images/knight/body/body_armor1_standing.png")
@@ -56,6 +56,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             // Add leg textures
             .add('knight-legs-default-standing', "images/knight/legs/legs_default_standing.png")
             .add('knight-legs-armor1-standing', "images/knight/legs/legs_armor1_standing.png")
+
+            // Add treasures images
+            .add('treasure-base', "images/treasures/treasure_base.png")
 
 
             // Once textures have loaded, fire this method
@@ -75,12 +78,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
 
         const player = this.createPlayer();
-        // console.log('new player')
-        // console.log(player);
-        // console.log(this.props.character);
 
         // Create a stage manager using the now ready pixi.loader and new playe
-        this.stageManager = new StageManager(this.props.pixiApplication.loader, player);
+        this.stageManager = new StageManager(this.props.pixiApplication.loader, player, this.props.pixiApplication.stage);
 
         // Get stage one
         const stageOne = this.stageManager.getStage(1);
@@ -95,11 +95,13 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
     createPlayer(){
         let player: Player;
+        let attributes: PlayerAttributes;
         const loader = this.props.pixiApplication.loader;
 
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
-                player = new Knight(loader);
+                attributes = this.props.character.attributes;
+                player = new Knight(loader, attributes);
                 break;
             default:
                 throw "cant handle kbold yet bitch"
@@ -115,7 +117,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
                 </div>
                 <div className="row game-body">
                     <div className="game">
-                        <ConnectedGameDisplay />
+                        <ConnectedGameDisplay stageManager={this.stageManager} />
                     </div>
                     <div className="game-detail">
                         <GameDetail stage={this.props.currentStage}/>    

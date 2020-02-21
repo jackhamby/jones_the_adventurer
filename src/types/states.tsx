@@ -56,12 +56,17 @@ export interface IStage {
 
 export interface Character {
     name: CharacterOptions;
-    attributes: CharacterAttributes;
+    attributes: PlayerAttributes;
 }
 
-export interface CharacterAttributes {
-    health: number;
-    speed: number;
+export enum PlayerAttributeNames {
+    HEALTH = "health",
+    SPEED = "speed",
+    ARMOR = "armor"
+}
+
+export type PlayerAttributes = {
+    [key in PlayerAttributeNames]: any;
 }
 
 export interface KeyOptions {

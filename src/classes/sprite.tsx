@@ -1,53 +1,54 @@
-import * as PIXI from 'pixi.js';
-import { KeyOptions, SpriteTextures, PlayerState } from '../types/states';
-import { PlayerStates } from '../types/enums';
 
-// Wrapper class for PIXI.Sprite will be extended
-// upon by all sprites in applicaton
-export class Sprite{
-    loader: PIXI.Loader;
-    pixiSprite: PIXI.Sprite;
+
+import * as PIXI from "pixi.js";
+import { SpritePart } from './interfaces';
+
+
+
+
+export class Sprite {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
     xVelocity: number;
     yVelocity: number;
-    facingRight: boolean;
-    textures: SpriteTextures;
-    state: PlayerStates;
+    loader: PIXI.Loader;
+    // textures: any;
+    // spriteParts: SpritePart[];
 
-    constructor(loader: PIXI.Loader){
-        // this.pixiSprite = sprite;
+    
+    constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number, xVelocity: number, yVelocity: number){
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.xVelocity = xVelocity;
+        this.yVelocity = yVelocity;
         this.loader = loader;
-        this.xVelocity = 0;
-        this.yVelocity = 0;
-        this.facingRight = true;
-        this.textures = this.initializeTextures();
-        this.pixiSprite = this.createPixiSprite();
-        this.state = {} as PlayerStates;
-        
+        // this.textures = this.initTextures();
+        // this.spriteParts = this.initSpriteParts();
     }
 
-    createPixiSprite(): PIXI.Sprite {
-        return {} as PIXI.Sprite;
-    }
-
-    initializeTextures(): SpriteTextures{
-        return {} as SpriteTextures;
-    }
-
-    update(keyboard: KeyOptions){
-
-    }
 
     top(){
-        return this.pixiSprite.y;
+        return this.y;
     }
     bottom(){
-        return this.pixiSprite.y + this.pixiSprite.height;
+        return this.y + this.height;
     }
     left(){
-        return this.pixiSprite.x;
+        return this.x;
     }
     right(){
-        return this.pixiSprite.x + this.pixiSprite.width;
+        return this.x + this.width;
     }
 
+    // initSpriteParts(): SpritePart[]{
+    //     throw("intitialze sprite parts")
+    // }
+
+    // initTextures(){
+    //     throw("intitialze textures ")
+    // }
 }

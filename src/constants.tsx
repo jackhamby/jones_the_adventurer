@@ -1,6 +1,6 @@
 import React from 'react';
 import { CharacterOptions } from './types/enums';
-import { CharacterAttributes } from './types/states';
+import { PlayerAttributes } from './types/states';
 
 const SCREEN_HEIGHT = window.screen.width * .4;
 const SCREEN_WIDTH = window.screen.height;
@@ -9,19 +9,22 @@ const CHARACTER_ATTRIBUTES = {} as any;
 
 CHARACTER_ATTRIBUTES[CharacterOptions.KNIGHT] = {
     health: 100,
-    speed: 10
-} as CharacterAttributes;
+    speed: 10,
+    armor: 5
+} as PlayerAttributes;
 
 CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD] = {
     health: 80,
-    speed: 12
-} as CharacterAttributes;
+    speed: 12,
+    armor: 3,
+} as PlayerAttributes;
 
 
 const MAX_ATTRIBUTES = {
     health: 140,
     speed: 15,
-} as CharacterAttributes
+    armor: 10
+} as PlayerAttributes
 
 const STAGE1_LAYOUT = `10 10
 0100010000
