@@ -12,7 +12,8 @@ import { Stage, StageManager } from '../../classes/game_classes';
 import { CharacterOptions } from '../../types/enums';
 import { Player } from '../../classes/player';
 import { Knight } from '../../classes/knight';
-
+import { Viewport } from 'pixi-viewport'
+import { getCanvasDimensions } from '../../helpers/util';
 
 export interface GameStateProps {
     currentKeys: KeyOptions;
@@ -70,17 +71,40 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
 
     setupGame = () => {
-        const loader = this.props.pixiApplication.loader;
-
-        // Create player sprite, update state
-        // const sprite = new PIXI.Sprite(this.props.pixiApplication.loader.resources["knight_sm.png"].texture);
-        // const player = new Player(loader);
-
-
         const player = this.createPlayer();
+        const dimensions = getCanvasDimensions()
+        const viewport = new Viewport({
+            screenWidth: dimensions.width,
+            screenHeight: dimensions.height
+            // interaction: this.props.pixiApplication.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
+        })
+
+        this.props.pixiApplication.stage.addChild(viewport);
+
+        viewport
+            .drag()
+            // .pinch()
+            // .wheel()
+            // .decelerate()
+
+        viewport.on('clicked', (e) => {
+            // console.log(e.screen.x)
+            // console.log()
+            console.log(`x: ${e.screen.x}`);
+            console.log(`y: ${e.screen.y}`);
+        })
+
+        // viewport.on('wheel-scroll', (e) => {
+        //     console.log('scroll')
+        // })
+
+        // viewport.zoom(0)
+
+        // viewport.moveCenter(400, 400)
 
         // Create a stage manager using the now ready pixi.loader and new playe
-        this.stageManager = new StageManager(this.props.pixiApplication.loader, player, this.props.pixiApplication.stage);
+        this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
+
 
         // Get stage one
         const stageOne = this.stageManager.getStage(1);

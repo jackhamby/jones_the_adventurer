@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
 import { PlayerStateNames, PlayerPartNames } from '../types/enums';
 import { Platform, DefaultPlatform } from './platform';
-import { STAGE1_LAYOUT, STAGE2_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
+import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
 import {store} from '../state_management/store';
 import { updatePlayerPosition, ControlAction } from '../state_management/actions/control_actions';
@@ -13,9 +13,6 @@ import { Sprite } from './sprite';
 import { Treasure, Armor1Helmet, Armor1Body } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
-
-import { viewport } from '../areas/game/game_display';
-
 export interface Container {
     x: number;
     y: number;
@@ -27,12 +24,12 @@ export class StageManager {
 
     loader: PIXI.Loader;
     player: Player;
-    canvasView: PIXI.Container;
+    viewport: Viewport;
 
-    constructor(loader: PIXI.Loader, player: Player, canvasView: PIXI.Container){
+    constructor(loader: PIXI.Loader, player: Player, viewport: Viewport){
         this.loader = loader;
         this.player  = player;
-        this.canvasView = canvasView;
+        this.viewport = viewport;
     }
 
     // Get a stage by its level
@@ -56,14 +53,14 @@ export class StageManager {
         // this.clearStage()
 
 
-        platforms.map((platform: Platform) => viewport.addChild(platform.pixiSprite));
+        platforms.map((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
 
         treasures.map((treasure: Treasure) => {
-            viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+            this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
         })
  
-        // this.canvasView.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-        viewport.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
+        // this.viewport.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+        this.viewport.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
             const playerPartName = key as PlayerPartNames;
             return newplayer.spriteParts[playerPartName].sprite
         }))
@@ -72,21 +69,21 @@ export class StageManager {
 
 
 
-        // platforms.map((platform: Platform) => this.canvasView.addChild(platform.pixiSprite));
+        // platforms.map((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
 
         // treasures.map((treasure: Treasure) => {
-        //     this.canvasView.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+        //     this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
         // })
  
-        // // this.canvasView.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-        // this.canvasView.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
+        // // this.viewport.addChild(...newplayer.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+        // this.viewport.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
         //     const playerPartName = key as PlayerPartNames;
         //     return newplayer.spriteParts[playerPartName].sprite
         // }))
     }
 
     clearStage(){
-        this.canvasView.removeChildren(0, this.canvasView.children.length);
+        this.viewport.removeChildren(0, this.viewport.children.length);
     }
 
 
@@ -96,7 +93,7 @@ export class StageManager {
         const name = "beginners luck";
         const enemies = [ new Kobold(this.loader) ];
         // const platforms = [ new Platform(sprite) ] // TODO: pass platform sprite
-        const platforms = this.generatePlatforms(STAGE2_LAYOUT);
+        const platforms = this.generatePlatforms(STAGE3_LAYOUT);
         const tempTreasure = new Armor1Helmet(this.loader);
         tempTreasure.spriteParts[0].sprite.x = 313;
         tempTreasure.x = 313;
@@ -108,7 +105,7 @@ export class StageManager {
             platforms,
             treasures,
             this.player,
-            this.canvasView
+            this.viewport
         )
     }
 
@@ -117,7 +114,7 @@ export class StageManager {
         const name = "beginners luck";
         const enemies = [ new Kobold(this.loader) ];
         // const platforms = [ new Platform(sprite) ] // TODO: pass platform sprite
-        const platforms = this.generatePlatforms(STAGE2_LAYOUT);
+        const platforms = this.generatePlatforms(STAGE3_LAYOUT);
         const treasures = [ new Armor1Body(this.loader) ]
         return new Stage(
             level,
@@ -126,7 +123,7 @@ export class StageManager {
             platforms,
             treasures,
             this.player,
-            this.canvasView
+            this.viewport
         )
     }
 
@@ -145,8 +142,10 @@ export class StageManager {
         let x = 0;
         let y = 0;
         const canvasDimensions = getCanvasDimensions();
-        const xIncrement = canvasDimensions.width / width;
-        const yIncrement = canvasDimensions.height / height;
+        // const xIncrement = canvasDimensions.width / width;
+        // const yIncrement = canvasDimensions.height / height;
+        const xIncrement = 25;
+        const yIncrement = 25;
         // loop height
         for(var i = 1; i < height + 1; ++i){
             x = 0;
@@ -227,10 +226,10 @@ export class Stage implements IStage{
     currentKeys: KeyOptions;
     player: Player;
     treasures: Treasure[];
-    canvasView: PIXI.Container;
+    viewport: Viewport;
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, canvasView: PIXI.Container){
+    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
         this.level = level;
         this.name = name;
         this.enemies = enemies;
@@ -239,7 +238,7 @@ export class Stage implements IStage{
         this.currentKeys = {} as KeyOptions;
         this.player = player;
         this.treasures = treasures;
-        this.canvasView = canvasView;
+        this.viewport = viewport;
     }
 
 
@@ -249,16 +248,43 @@ export class Stage implements IStage{
         // console.log(JSON.stringify(this.treasures))
 
         treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
-            this.canvasView.removeChild(spritePart.sprite);
+            this.viewport.removeChild(spritePart.sprite);
         })
 
     }
 
     update(keys: KeyOptions){
         this.currentKeys = keys;
+        this.updateViewport();
         this.updateAllSpriteStates();
         this.updateAllSpritePositions();
 
+    }
+
+
+    private updateViewport(){
+        console.log(this.viewport.left)
+        console.log(this.viewport.right)
+        const viewportCenter = this.viewport.center;
+        this.viewport.follow(this.player.spriteParts[PlayerPartNames.HEAD].sprite);
+        // const fakeDisplayObj = {
+        //     x: this.player.spriteParts[PlayerPartNames.HEAD].sprite.x,
+        //     y: this.player.spriteParts[PlayerPartNames.HEAD].sprite.y - 150,
+        // } as PIXI.DisplayObject
+        // this.viewport.follow(fakeDisplayObj);
+
+
+
+        // if (this.player.x > viewportCenter.x){
+        //     console.log('shift view port right')
+        // }
+        // else if (this.player.x < viewportCenter.x){
+        //     console.log('shift viewport left')
+        //     this.viewport.
+        // }
+        // else{
+        //     console.log('middle')
+        // }
     }
 
     // Update state of the sprite
@@ -291,12 +317,12 @@ export class Stage implements IStage{
         this.player.updateY(this.player.yVelocity);
         this.checkPlayerYCollisions();
         const canvasDimensions = getCanvasDimensions();
-        this.contain(this.player, {
-            x: 0,
-            y: 0,
-            width: canvasDimensions.width,
-            height: canvasDimensions.height,
-        } as Container)
+        // this.contain(this.player, {
+        //     x: 0,
+        //     y: 0,
+        //     width: canvasDimensions.width,
+        //     height: canvasDimensions.height,
+        // } as Container)
 
         const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
         store.dispatch(action);
@@ -425,10 +451,10 @@ export class Stage implements IStage{
         // console.log(treasure.spriteParts[0].sprite.x)
         // console.log(treasure.spriteParts[1].sprite)
         treasure.apply(player);
-        // this.canvasView.removeChild(treasure.)s
+        // this.viewport.removeChild(treasure.)s
         this.removeTreasure(treasure);
         // treasure.spriteParts.map( (spritePart: SpritePart) => {
-        //     this.canvasView.removeChild(spritePart.sprite);
+        //     this.viewport.removeChild(spritePart.sprite);
         // })
     }
 
@@ -436,7 +462,7 @@ export class Stage implements IStage{
         treasure.apply(player);
 
         treasure.spriteParts.map( (spritePart: SpritePart) => {
-            this.canvasView.removeChild(spritePart.sprite);
+            this.viewport.removeChild(spritePart.sprite);
         })
 
         // this.treasures.map((mTreasure: Treasure) => {

@@ -32,11 +32,7 @@ export interface GameDisplayState {
     isStarted: boolean; 
  }
 
- export const viewport = new Viewport({
-    screenWidth: 1000,
-    screenHeight: 500
-    // interaction: this.props.pixiApplication.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
-})
+
 
 
 export type GameDisplayProps = GameDisplayDispatchProps & GameDisplayStateProps & GameDisplayOwnProps;
@@ -60,28 +56,8 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         // Set stage background color
         this.props.pixiApplication.renderer.backgroundColor = 0xadd8e6;  
 
-
-        this.props.pixiApplication.stage.addChild(viewport);
-
-        viewport
-            .drag()
-            // .pinch()
-            // .wheel()
-            // .decelerate()
-
-        viewport.on('clicked', (e) => {
-            console.log(e)
-        })
-
-        viewport.on('wheel-scroll', (e) => {
-            console.log('scroll')
-        })
-
-        viewport.zoom(0)
-
         // Add sprites to canvas
         this.props.stageManager.loadStage(this.props.currentStage);
-
 
         // Start game
         this.props.pixiApplication.ticker.add(delta => this.gameLoop(delta));
