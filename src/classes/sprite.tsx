@@ -14,8 +14,6 @@ export class Sprite {
     xVelocity: number;
     yVelocity: number;
     loader: PIXI.Loader;
-    // textures: any;
-    // spriteParts: SpritePart[];
 
     
     constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number, xVelocity: number, yVelocity: number){
@@ -26,8 +24,6 @@ export class Sprite {
         this.xVelocity = xVelocity;
         this.yVelocity = yVelocity;
         this.loader = loader;
-        // this.textures = this.initTextures();
-        // this.spriteParts = this.initSpriteParts();
     }
 
 
@@ -43,12 +39,4 @@ export class Sprite {
     right(){
         return this.x + this.width;
     }
-
-    // initSpriteParts(): SpritePart[]{
-    //     throw("intitialze sprite parts")
-    // }
-
-    // initTextures(){
-    //     throw("intitialze textures ")
-    // }
 }

@@ -14,6 +14,7 @@ export class Knight extends Player {
         this.textures = this.initTexturesII();
         // this.spriteParts = this.initSpriteParts();
         this.spriteParts = this.initSpriteParts();
+        this.attributes = initialAttributes;
     }
 
 
@@ -85,47 +86,5 @@ export class Knight extends Player {
             legs
         };
     }
-
-    // initSpriteParts(): SpritePart[] {
-    //     // head
-
-    //     const headSprite = new PIXI.Sprite(this.textures.head.default.standing);
-    //     const headOffsetX = 0;
-    //     const headOffSetY = 0;
-    //     headSprite.x = this.x + headOffsetX;
-    //     headSprite.y = this.y + headOffSetY;
- 
-
-    //     const headSpritePart = {
-    //         offSetX: headOffsetX,
-    //         offSetY: headOffSetY,
-    //         sprite: headSprite,
-    //     } as SpritePart
-
-
-    //     const bodySprite = new PIXI.Sprite(this.textures.body.default.standing);
-    //     const bodyOffsetX = 0;
-    //     const bodyOffsetY = headSprite.height;
-    //     bodySprite.x = this.x + bodyOffsetX;
-    //     bodySprite.y = this.y + bodyOffsetY;
-    //     const bodySpritePart = {
-    //         offSetX: bodyOffsetX,
-    //         offSetY: bodyOffsetY,
-    //         sprite: bodySprite
-    //     }
-
-    //     const legsSprite = new PIXI.Sprite(this.textures.legs.default.standing);
-    //     const legsOffsetX = 0;
-    //     const legsOffsetY = bodySprite.height + headSprite.height;
-    //     legsSprite.x = this.x + legsOffsetX;
-    //     legsSprite.y = this.y + legsOffsetY;
-    //     const legspritePart = {
-    //         offSetX: legsOffsetX,
-    //         offSetY: legsOffsetY,
-    //         sprite: legsSprite
-    //     }
-
-    //     return [ headSpritePart, bodySpritePart, legspritePart ];
-    // }
 
 }

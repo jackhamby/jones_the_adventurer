@@ -20,8 +20,9 @@ export interface GameStateProps {
     character: Character;
     pixiApplication: PIXI.Application;
     currentStage: Stage;
-    // x: number;
-    // y: number;
+    playerAttributes: PlayerAttributes;
+    x: number;
+    y: number;
 }
 
 export interface GameDispatchProps {
@@ -90,8 +91,8 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         viewport.on('clicked', (e) => {
             // console.log(e.screen.x)
             // console.log()
-            console.log(`x: ${e.screen.x}`);
-            console.log(`y: ${e.screen.y}`);
+            // console.log(`x: ${e.screen.x}`);
+            // console.log(`y: ${e.screen.y}`);
         })
 
         // viewport.on('wheel-scroll', (e) => {
@@ -134,6 +135,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     }
 
     render(){
+        console.log('rendering rendering')
         return (
             <div className="container" style={{height: "100%"}}>
                 <div className="row game-header">
@@ -162,8 +164,9 @@ export const mapStateToProps = (state: AppState): GameStateProps => {
         character: state.playerState.character,
         pixiApplication: state.gameState.pixiApplication,
         currentStage: state.gameState.currentStage,
-        // x: state.gameState.currentStage ? state.gameState.currentStage.player.pixiSprite.x : 1,
-        // y: state.gameState.currentStage ? state.gameState.currentStage.player.pixiSprite.y : 1,
+        x: state.gameState.currentStage ? state.gameState.currentStage.player.x : 1,
+        y: state.gameState.currentStage ? state.gameState.currentStage.player.y : 1,
+        playerAttributes: state.gameState.currentStage ? state.gameState.currentStage.player.attributes : {} as PlayerAttributes,
     };
 }
 

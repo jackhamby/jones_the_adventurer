@@ -1,11 +1,9 @@
 
 
 
-import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, UPDATE_PLAYER_POSITION} from '../actions/control_actions';
+import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, UPDATE_PLAYER_POSITION, APPLY_TREASURE} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
 import {CHARACTER_ATTRIBUTES} from '../../constants';
-
-
 
 
 const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
@@ -36,10 +34,8 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
 export const controlReducer = (state: any, action: ControlAction): any => {
     const temp = state as AppState;
     switch(action.type){
+
         case UPDATE_PLAYER_POSITION:
-            // const player = temp.gameState.currentStage.player;
-            // player.pixiSprite.x = action.payload.x;
-            // player.pixiSprite.y = action.payload.y;
             return {
                 ...temp                    
             } as AppState
@@ -77,15 +73,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     currentKeys: mapKeys(action.payload.key, state.controlState.currentKeys, false)
                 } as ControlState
             }
-        // case CREATE_PLAYER:
-        //     var action = action;
-        //     return {
-        //         ...state,
-        //         gameState: {
-        //             ...state.gameState,
-        //             player: new Player(action.payload.loader)
-        //         } as GameState
-        //     }
         case CHANGE_STAGE:
             return {
                 ...state,
@@ -94,10 +81,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     currentStage: action.payload.stage
                 } as GameState
             } 
-
-
-  
-
         case SETUP_GAME:
             
             return {

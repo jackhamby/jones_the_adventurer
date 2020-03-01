@@ -12,20 +12,34 @@ export interface TreasureTextures {
 }
 
 
+export interface TreasureOptions {
+    iconOffsetX: number;
+    iconOffsetY: number;
+    x: number;
+    y: number;
+}
+
 // Wrapper class for PIXI.Sprite will be extended
 // upon by all sprites in applicaton
-
 export class Treasure extends Sprite {
     textures: TreasureTextures;
     spriteParts: SpritePart[];
     effect: Effect;
+    iconOffsetX: number;
+    iconOffsetY: number;
 
-    constructor(loader: PIXI.Loader){
-        // x, y, width, height, xVel, yVel
-        super(loader, 100, 100, 15, 15, 0, 0);
+    constructor(loader: PIXI.Loader, options: TreasureOptions) {
+        // x, y, width, height, xVelaa, yVel
+        
+        super(loader, options.x, options.y, 15, 15, 0, 0);
+        this.x = options.x;
+        this.y = options.y;
+        this.iconOffsetX = options.iconOffsetX;
+        this.iconOffsetY = options.iconOffsetY;
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
         this.effect = {} as Effect;
+  
     }
 
     initTextures(): TreasureTextures{
@@ -33,22 +47,19 @@ export class Treasure extends Sprite {
     }
 
     initSpriteParts(): SpritePart[]{
-        // return []
         const baseIcon = new PIXI.Sprite(this.textures.treasureBody);
-        const baseOffSetX = 0;
-        const baseOffSetY = 0;
-        baseIcon.x = this.x + baseOffSetX;
-        baseIcon.y = this.y + baseOffSetY
+        baseIcon.x = this.x + this.iconOffsetX;
+        baseIcon.y = this.y + this.iconOffsetY
 
         const baseSpritePart = {
-            offSetX: baseOffSetX,
-            offSetY: baseOffSetY,
+            offSetX: this.iconOffsetX,
+            offSetY: this.iconOffsetY,
             sprite: baseIcon
         } as SpritePart;
 
 
         const icon = new PIXI.Sprite(this.textures.treasureIcon);
-        const iconOffSetX = -5;
+        const iconOffSetX = 0;
         const iconOffSetY = 0;
         icon.x = this.x + iconOffSetX;
         icon.y = this.y + iconOffSetY
@@ -67,7 +78,8 @@ export class Treasure extends Sprite {
             const affectedBodyPart = this.effect.textureEffect.bodyPart;
             const newArmorType = this.effect.textureEffect.armorType;
             const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
-            
+            console.log(newArmorType)
+            console.log(affectedBodyPart)
             const spritePart = player.spriteParts[affectedBodyPart].sprite;
             spritePart.texture = newTexture;
         }
@@ -81,19 +93,24 @@ export class Treasure extends Sprite {
 
 
 
+
+
+
+
+
+
 export class Armor1Helmet extends Treasure {
 
-    constructor(loader: PIXI.Loader){
-        super(loader);
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
             attribute: PlayerAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
                 armorType: PlayerArmorNames.ARMOR1,
                 bodyPart: PlayerPartNames.HEAD,
-                
             }
-        } as Effect
+        } as Effect;
     }
 
 
@@ -106,10 +123,21 @@ export class Armor1Helmet extends Treasure {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
 export class Armor1Body extends Treasure {
 
-    constructor(loader: PIXI.Loader){
-        super(loader);
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
             attribute: PlayerAttributeNames.ARMOR,
             value: 5,
@@ -124,6 +152,32 @@ export class Armor1Body extends Treasure {
     initTextures(): TreasureTextures {
         return {
             treasureIcon: this.loader.resources['knight-body-armor1-standing'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+
+
+export class Armor1Legs extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
+        this.effect = {
+            attribute: PlayerAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: PlayerArmorNames.ARMOR1,
+                bodyPart: PlayerPartNames.LEGS,
+                
+            }
+        } as Effect;
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['knight-legs-armor1-standing'].texture,
             treasureBody: this.loader.resources['treasure-base'].texture,
         }
     }

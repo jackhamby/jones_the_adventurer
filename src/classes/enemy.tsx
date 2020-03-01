@@ -26,10 +26,4 @@ export class Kobold extends Enemy {
             fallingRight: this.loader.resources["kobold_sm_left.png"].texture,
         } as SpriteTextures;
     }
-
-    // createPixiSprite(): PIXI.Sprite {
-    //     return new PIXI.Sprite(this.textures.standingLeft); // Default to standing left
-    // }
-
-
 }

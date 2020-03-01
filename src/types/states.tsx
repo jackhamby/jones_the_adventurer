@@ -62,7 +62,8 @@ export interface Character {
 export enum PlayerAttributeNames {
     HEALTH = "health",
     SPEED = "speed",
-    ARMOR = "armor"
+    ARMOR = "armor",
+    ATTACK = "attack"
 }
 
 export type PlayerAttributes = {

@@ -70,7 +70,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     render(){
             return (
-                <div className="game-container"  id="canvas-container" ref={this.canvasRef}>
+                <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 
                 </div>
             )

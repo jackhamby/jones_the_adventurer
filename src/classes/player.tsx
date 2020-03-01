@@ -45,11 +45,6 @@ export interface testtreasure {
     part: PlayerPartNames;
     armor: PlayerArmorNames;
 }
-// TODO TODO TODO
-//*** on trasure collision  ***/
-
-// newTexture = player.textures[testtreasure.part][testtreasure.armor][player.state]   <--- grab actual palyer state
-// player.spriteParts[testtreasure.part].setTexture(newTexture)
 
 export type PlayerStates = {
     [key in PlayerStateNames]: any;
@@ -74,13 +69,8 @@ export class Player extends Sprite  {
     currentKeys: KeyOptions;
     allowJump: boolean;
     facingRight: boolean;
-    // spriteParts: SpritePart[];
     spriteParts: SpriteParts;
-    // parts: PlayerParts;
     attributes: PlayerAttributes;
-    
-    // TODO remove this
-    graphics?: PIXI.Graphics;
     textures: PlayerParts;
 
     constructor(loader: PIXI.Loader, initialAttributes: PlayerAttributes){
@@ -91,27 +81,18 @@ export class Player extends Sprite  {
         this.currentKeys = {} as KeyOptions;
         this.allowJump = true;
         this.facingRight = false;
-        // this.spriteParts = [];
         this.spriteParts = {} as SpriteParts;
         this.textures = {} as PlayerParts;
-        // TODO remove this
-        this.graphics = undefined;
     }
 
 
     updateX(value: number){
         this.x += value;
-        // this.spriteParts.map((spritePart: SpritePart) => {
-        //     spritePart.sprite.x += value;
-        // })
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as PlayerPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
             sprite.x += value;
         })
-        // for (let key in this.spriteParts){
-        //     const sprite = this.spriteParts[key];
-        // }
     }
 
     updateY(value: number){
@@ -121,16 +102,11 @@ export class Player extends Sprite  {
             const sprite = this.spriteParts[playerPartName].sprite;
             sprite.y += value;
         })
-        // this.spriteParts.map((spritePart: SpritePart) => {
-        //     spritePart.sprite.y += value;
-        // })
+
     }
 
     setX(value: number){
         this.x = value;
-        // this.spriteParts.map((spritePart: SpritePart) => {
-        //     spritePart.sprite.x = value + spritePart.offSetX;
-        // })
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as PlayerPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
@@ -140,9 +116,6 @@ export class Player extends Sprite  {
 
     setY(value: number){
         this.y = value;
-        // this.spriteParts.map((spritePart: SpritePart) => {
-        //     spritePart.sprite.y = value + spritePart.offSetY;
-        // })
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as PlayerPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
@@ -161,50 +134,14 @@ export class Player extends Sprite  {
     update(keyboard: KeyOptions){
         this.currentKeys = keyboard;
         this.handleState();
-        // console.log(`xVel: ${this.xVelocity}, yVel ${this.yVelocity}`)
-        // console.log(`state ${PlayerStateNames[this.state]}`)
         this.flipSpriteParts();
-        // temporary hack to fly
-        // if (this.currentKeys.moveDown){
-        //     this.pixiSprite.y += 1;
-        // }
-        // if (this.currentKeys.moveUp){
-        //     this.pixiSprite.y -= 1;
-        // }
     }
 
 
     flipSpriteParts(){
-
-        // const state = store.getState() as AppState;
-        // const newgraphic = new PIXI.Graphics();
-
-        // newgraphic.beginFill(0xFFFF00);
-
-        // // // set the line style to have a width of 5 and set the color to red
-        // newgraphic.lineStyle(5, 0xFF0000);
-
-        // // // draw a rectangle
-        // newgraphic.drawRect(this.x, this.y, 5, 5);
-        // newgraphic.drawRect(this.x + this.width, this.y, 5, 5);
-
-
-        // if (this.graphics){
-        //     console.log('removeing graphics')
-        //     state.gameState.pixiApplication.stage.removeChild(this.graphics);
-        // }
-        // this.graphics = newgraphic;
-
-        // state.gameState.pixiApplication.stage.addChild(newgraphic);
-        // // stage.addChild(graphics);
-        // // var rect = new PIXI.Rectangle(this.x, this.y, 5, 5);
-
-
-
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as PlayerPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
-            // sprite.x = value + this.spriteParts[playerPartName].offSetX;
             if (this.facingRight){
                 sprite.anchor.x = 0;
                 sprite.scale.x = 1;
@@ -214,18 +151,6 @@ export class Player extends Sprite  {
                 sprite.scale.x = -1;
             }
         })
-
-        // this.spriteParts.forEach((spritePart: SpritePart) => {
-            
-        //     if (this.facingRight){
-        //         spritePart.sprite.anchor.x = 0;
-        //         spritePart.sprite.scale.x = 1;
-        //     }
-        //     else{
-        //         spritePart.sprite.anchor.x = 1;
-        //         spritePart.sprite.scale.x = -1;
-        //     }
-        // });
     }
 
     falling(){
@@ -254,7 +179,6 @@ export class Player extends Sprite  {
     }
 
     jumping(){
-        // console.log('calling jumping in player.tsx')
         const gravity = 0.5;
         this.yVelocity += gravity;
 
@@ -270,8 +194,6 @@ export class Player extends Sprite  {
 
         // Reached maximum height of jump, start falling
         if (this.yVelocity > 0){
-            // debugger;
-            // console.log('tippng pont')
             this.state = PlayerStateNames.FALLING;
         }
 
@@ -285,30 +207,23 @@ export class Player extends Sprite  {
             this.facingRight = false;
             this.xVelocity = -3;
         }
-        // must be faling
-        // if (!this.currentKeys.jump){
-        //     this.state = PlayerStateNames.FALLING;
-        // }
 
     }
 
     // Called when player in walking state
     walking(){
-        // console.log('walking')
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -10
         }
         // Move right
         else if (this.currentKeys.moveRight){
-            // debugger;
             this.facingRight = true;
             this.xVelocity = 3;
         }
 
         // Move left
         else if (this.currentKeys.moveLeft){
-            // debugger
             this.facingRight = false;
             this.xVelocity = -3;
         }
@@ -351,7 +266,6 @@ export class Player extends Sprite  {
                 break;
             case(PlayerStateNames.WALKING):
                 this.walking()
-                // this.pixiSprite.x += this.xVelocity
                 break;
             case(PlayerStateNames.FALLING):
             this.falling()

@@ -1,5 +1,6 @@
 import { ScreenOptions, CharacterOptions } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
+import { Effect } from "../../classes/interfaces";
 
 // export const TEXTURES_LOADED = 'UPDATE_TEXTURES_LOADED';
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'
@@ -10,6 +11,14 @@ export const KEY_PRESS: string = 'KEY_PRESS'
 export const CHANGE_STAGE: string = 'CREATE_STAGE';
 export const SETUP_GAME: string = 'SETUP_GAME';
 export const UPDATE_PLAYER_POSITION: string = 'UPDATE_PLAYER_POSITION';
+export const APPLY_TREASURE: string = "APPLY_TREASURE";
+
+
+
+
+interface ApplyTreasurePayload {
+    effect: Effect;
+}
 
 interface UpdatePlayerPositionPayload {
     x: number;
@@ -39,10 +48,16 @@ interface ScreenResizePayload {
     height: number;
     width: number;
 }
-// interface CreatePlayerPayload {
-//     sprite: PIXI.Sprite;
-// }
 
+
+
+
+
+
+interface ApplyTreasureAction {
+    type: typeof APPLY_TREASURE;
+    payload: ApplyTreasurePayload;
+}
 
 interface UpdatePlayerPositionAction {
     type: typeof UPDATE_PLAYER_POSITION;
@@ -59,10 +74,6 @@ interface ChangeStageAction {
     payload: ChangeStagePayload;
 }
 
-// interface CreatePlayerAction {
-//     type: typeof CREATE_PLAYER
-//     payload: CreatePlayerPayload;
-// }
 interface ChangeCharacterAction {
     type: typeof UPDATE_CHARACTER;
     payload: ChangeCharacterPayload;
@@ -80,10 +91,15 @@ interface UpdateKeyReleasedAction {
     payload: UpdateKeyPressedPayload;
 }
 
-// interface TexturesLoadedAction {
-//     type: typeof TEXTURES_LOADED;
+export const applyTreasure = (effect: Effect): ApplyTreasureAction => {
+    return {
+        type: APPLY_TREASURE,
+        payload: {
+            effect: effect
+        }
+    } 
+}
 
-// }
 
 export const updatePlayerPosition = (x: number, y: number): UpdatePlayerPositionAction => {
     return {
@@ -113,15 +129,6 @@ export const changeStage = (stage: Stage): ChangeStageAction => {
     }
 }
 
-// export const createPlayer = (loader: PIXI.Sprite): CreatePlayerAction => {
-//     return {
-//         type: CREATE_PLAYER,
-//         payload: {
-//             loader,
-//         }
-//     };
-// }
-
 export const updateScreen = (nextScreen: ScreenOptions): UpdateScreenAction => {
     return {
         type: UPDATE_SCREEN,
@@ -130,12 +137,6 @@ export const updateScreen = (nextScreen: ScreenOptions): UpdateScreenAction => {
         }
     };
 }
-
-// export const texturesLoaded = (): TexturesLoadedAction => {
-//     return {
-//         type: TEXTURES_LOADED,
-//     }
-// }
 
 export const changeCharacter = (nextCharacter: CharacterOptions): ChangeCharacterAction => {
     return {
@@ -164,4 +165,4 @@ export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
         }
     }
 }
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction ;
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction & ApplyTreasureAction;
