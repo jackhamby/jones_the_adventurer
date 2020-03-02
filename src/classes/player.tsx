@@ -32,10 +32,6 @@ export class Part {
         this.sprite.texture = newTexture;
     }
 
-
-
-
-
 }
 
 
@@ -72,10 +68,11 @@ export class Player extends Sprite  {
     spriteParts: SpriteParts;
     attributes: PlayerAttributes;
     textures: PlayerParts;
+    hpBar: PIXI.Graphics;
 
     constructor(loader: PIXI.Loader, initialAttributes: PlayerAttributes){
         // x, y, width, height, xVel, yVel
-        super(loader ,200, 200, 20, 30, 0, 0);
+        super(loader, 200, 200, 20, 30, 0, 0);
         this.state = PlayerStateNames.STANDING;
         this.attributes = initialAttributes;
         this.currentKeys = {} as KeyOptions;
@@ -83,6 +80,7 @@ export class Player extends Sprite  {
         this.facingRight = false;
         this.spriteParts = {} as SpriteParts;
         this.textures = {} as PlayerParts;
+        this.hpBar = new PIXI.Graphics()
     }
 
 
@@ -102,7 +100,6 @@ export class Player extends Sprite  {
             const sprite = this.spriteParts[playerPartName].sprite;
             sprite.y += value;
         })
-
     }
 
     setX(value: number){
@@ -132,10 +129,57 @@ export class Player extends Sprite  {
     // Called on each game tick
     // Update player state and velocities
     update(keyboard: KeyOptions){
+        //         console.log(this.state)
+        // console.log(this.yVelocity)
+        console.log(this.x)
+        console.log(this.y)
         this.currentKeys = keyboard;
         this.handleState();
+        this.hpBar.clear();
+        this.drawHpBar();
         this.flipSpriteParts();
     }
+
+    // createHpBar(): PIXI.Graphics {
+    //     var graphics = new PIXI.Graphics();
+    //     const marginX = 0;
+    //     const marginY = 5;
+    //     const hpBarHeight = this.height / 10;
+    //     const hpBarWidth = this.width;
+    //     // Fill bar green
+    //     graphics.beginFill(0x00FF00);
+
+    //     // draw a rectangle
+    //     graphics.drawRect(this.x + marginX, this.y + marginY, hpBarWidth, hpBarHeight);
+
+    //     return graphics;
+
+    //     // stage.addChild(graphics);
+    // }
+
+    drawHpBar(){
+        const marginX = -2;
+        const marginY = 5;
+        this.hpBar = new PIXI.Graphics();
+        const hpBarHeight = this.height / 9;
+        const hpBarWidth = this.width;
+        // this.hpBar = new PIXI.Graphics();
+        // this.hpBar.beginFill(0x00FF00);
+        console.log(this.x);
+        console.log(this.y);
+        // console.log(this.spriteParts[PlayerPartNames.HEAD].sprite.x)
+        // console.log
+        // TEMP
+        const temp = store.getState() as AppState;
+
+        temp.gameState.currentStage.viewport.addChild(this.hpBar);
+
+
+        this.hpBar.beginFill(0x00FF00);
+        this.hpBar.drawRect(this.x, this.y, hpBarWidth, hpBarHeight);
+    }
+
+
 
 
     flipSpriteParts(){

@@ -62,6 +62,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             // Add treasures images
             .add('treasure-base', "images/treasures/treasure_base.png")
 
+            // Add enemy images
+            .add('kobold-standing', "images/enemies/kobold/kobold_standing.png")
+
 
             // Once textures have loaded, fire this method
             .load(() => {
@@ -77,31 +80,20 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         const viewport = new Viewport({
             screenWidth: dimensions.width,
             screenHeight: dimensions.height
-            // interaction: this.props.pixiApplication.renderer.plugins.interaction // the interaction module is important for wheel to work properly when renderer.view is placed or scaled
         })
 
         this.props.pixiApplication.stage.addChild(viewport);
 
         viewport
             .drag()
-            // .pinch()
-            // .wheel()
-            // .decelerate()
 
         viewport.on('clicked', (e) => {
             // console.log(e.screen.x)
             // console.log()
             // console.log(`x: ${e.screen.x}`);
             // console.log(`y: ${e.screen.y}`);
+            window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
         })
-
-        // viewport.on('wheel-scroll', (e) => {
-        //     console.log('scroll')
-        // })
-
-        // viewport.zoom(0)
-
-        // viewport.moveCenter(400, 400)
 
         // Create a stage manager using the now ready pixi.loader and new playe
         this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
@@ -111,10 +103,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         const stageOne = this.stageManager.getStage(1);
 
         // DISPATCH ACTION to set currentStage
-        this.props.setupGame(stageOne);
-
-
-    
+        this.props.setupGame(stageOne);    
     }
 
 
@@ -135,7 +124,6 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     }
 
     render(){
-        console.log('rendering rendering')
         return (
             <div className="container" style={{height: "100%"}}>
                 <div className="row game-header">

@@ -61,36 +61,27 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
 
         // Need to copy the sprite parts so we dont share sprite on 2 canvas
         this.spriteParts = this.copySpriteParts();
-        console.log(this.spriteParts)
         let x = (this.appWidth / 2) - (this.props.player.width / 2);
         let y = (this.appHeight / 2) -  (this.props.player.height / 2);
 
         const hs = this.spriteParts[PlayerPartNames.HEAD];
         hs.x = x;
         hs.y = y;
-        // console.log(`lehead y ${hs.y}`)
-
 
         const bs = this.spriteParts[PlayerPartNames.BODY];
         bs.x = x + this.props.player.spriteParts[PlayerPartNames.BODY].offSetX;
         bs.y = y + this.props.player.spriteParts[PlayerPartNames.BODY].offSetY;
-        // console.log(`body y ${bs.y}`)
 
 
         const ls = this.spriteParts[PlayerPartNames.LEGS];
         ls.x = x + this.props.player.spriteParts[PlayerPartNames.LEGS].offSetX;
         ls.y = y + this.props.player.spriteParts[PlayerPartNames.LEGS].offSetY;
-        // console.log(`leg y ${ls.y}`)
 
 
         this.app.stage.addChild(...Object.keys(this.spriteParts).map((key: string) => {
             const playerPartName = key as PlayerPartNames;
-            // const pixiSprite = this.spriteParts[playerPartName];
-            // pixiSprite.x = x;
-            // pixiSprite.y = y;
             return this.spriteParts[playerPartName];
         }))
-  // testApp.renderer.resize(containerWidth, containerHeight);
     }
 
 
@@ -112,15 +103,7 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
             const playerPartName = key as PlayerPartNames;
             const spritePart = this.props.player.spriteParts[playerPartName];
             const copySprite = new PIXI.Sprite(spritePart.sprite.texture);
-            // console.log(copySprite)
-
-
-// 
-            // copySprite.
-
-            newParts[playerPartName] =  copySprite;
-            // return this.props.player.spriteParts[playerPartName].sprite
-            
+            newParts[playerPartName] =  copySprite;            
         })
 
         return newParts;
@@ -144,7 +127,6 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
         graphics.drawRect(0, this.appHeight - margin, this.appWidth, margin);
 
         return graphics;
-        // stage.addChild(graphics);
     }
 
     render(){
@@ -154,7 +136,6 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
                 <div className="h-100 p-1"ref={this.canvasRef}>
 
                 </div>
-                {/* <img src={this.props.imagePath}/> */}
             </React.Fragment>   
         )
     };

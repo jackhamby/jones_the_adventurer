@@ -15,6 +15,14 @@ export enum Attributes {
     SPEED = "speed",
 }
 
+
+export enum EnemyStateNames {
+    WALKING = "walking",
+    JUMPING = "jumping",
+    FALLING = "falling",
+    STANDING = "standing"
+}
+
 export enum PlayerStateNames {
     WALKING = "walking",
     JUMPING = "jumping",
