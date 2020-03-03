@@ -9,21 +9,27 @@ const CHARACTER_ATTRIBUTES = {} as any;
 
 CHARACTER_ATTRIBUTES[CharacterOptions.KNIGHT] = {
     health: 100,
-    speed: 10,
-    armor: 5
+    speed: 3,
+    armor: 5,
+    attack: 10,
+    jump: 10,
 } as PlayerAttributes;
 
 CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD] = {
     health: 80,
-    speed: 12,
+    speed: 3,
     armor: 3,
+    attack: 10,
+    jump: 10,
 } as PlayerAttributes;
 
 
 const MAX_ATTRIBUTES = {
     health: 140,
     speed: 15,
-    armor: 10
+    armor: 10,
+    jump: 20,
+    attack: 20,
 } as PlayerAttributes
 
 const STAGE1_LAYOUT = `10 10

@@ -63,7 +63,8 @@ export enum PlayerAttributeNames {
     HEALTH = "health",
     SPEED = "speed",
     ARMOR = "armor",
-    ATTACK = "attack"
+    ATTACK = "attack",
+    JUMP = "jump",
 }
 
 export type PlayerAttributes = {

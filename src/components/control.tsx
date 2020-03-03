@@ -55,20 +55,15 @@ export class Control extends React.Component<ControlProps, {}> {
             if (event.repeat){
                 return
             }
-            // console.log(event.key);
             this.props.updateKeyPress(event.key)
         } )
         document.addEventListener("keyup", (event: any) => {
-            // console.log(event.key);
             this.props.updateKeyRelease(event.key)
         } )
     }
 
     handleResizeEvents = () => {
         window.addEventListener('resize', (event) => {
-            // const element = document.getElementById('canvas-container')
-            // const elementWidth = element ? element.clientWidth : 500;
-            // const elementHeight = element ? element.clientHeight : 500
             const canvasDimensions = getCanvasDimensions();
             this.props.pixiApplication.renderer.resize(canvasDimensions.width, canvasDimensions.height)
         })

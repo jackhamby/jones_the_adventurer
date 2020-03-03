@@ -268,7 +268,8 @@ export class Stage implements IStage{
         this.checkPlayerXCollisions();
         this.player.updateY(this.player.yVelocity);
         this.checkPlayerYCollisions();
-
+        this.player.hpBar.clear();
+        this.player.drawHpBar();
         const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
         store.dispatch(action);
     }
@@ -394,13 +395,8 @@ export class Stage implements IStage{
 
 
     private handleEnemyPlatformCollisionY(enemy: Enemy, collider: Sprite){
-        // console.log('enemy collided platform')
-        // console.log(enemy.yVelocity)
-        // console.log(enemy.state)
         // Set at the top
         if (enemy.yVelocity > 0){
-            // console.log('set at top')
-            // console.log('asdasd')
             enemy.setY(collider.top() - enemy.height);
         }
         else if(enemy.yVelocity < 0){

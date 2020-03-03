@@ -67,6 +67,7 @@ export class Player extends Sprite  {
     facingRight: boolean;
     spriteParts: SpriteParts;
     attributes: PlayerAttributes;
+    currentAttributes: PlayerAttributes;
     textures: PlayerParts;
     hpBar: PIXI.Graphics;
 
@@ -75,6 +76,9 @@ export class Player extends Sprite  {
         super(loader, 200, 200, 20, 30, 0, 0);
         this.state = PlayerStateNames.STANDING;
         this.attributes = initialAttributes;
+        this.currentAttributes = {
+            ...initialAttributes
+        };
         this.currentKeys = {} as KeyOptions;
         this.allowJump = true;
         this.facingRight = false;
@@ -129,14 +133,11 @@ export class Player extends Sprite  {
     // Called on each game tick
     // Update player state and velocities
     update(keyboard: KeyOptions){
-        //         console.log(this.state)
-        // console.log(this.yVelocity)
-        console.log(this.x)
-        console.log(this.y)
         this.currentKeys = keyboard;
+        // console.log(keyboard.attasckDowh)
         this.handleState();
-        this.hpBar.clear();
-        this.drawHpBar();
+        // this.hpBar.clear();
+        // this.drawHpBar();
         this.flipSpriteParts();
     }
 
@@ -158,17 +159,15 @@ export class Player extends Sprite  {
     // }
 
     drawHpBar(){
-        const marginX = -2;
-        const marginY = 5;
+        const marginX = 2;
+        const marginY = -10;
         this.hpBar = new PIXI.Graphics();
         const hpBarHeight = this.height / 9;
         const hpBarWidth = this.width;
-        // this.hpBar = new PIXI.Graphics();
-        // this.hpBar.beginFill(0x00FF00);
-        console.log(this.x);
-        console.log(this.y);
-        // console.log(this.spriteParts[PlayerPartNames.HEAD].sprite.x)
-        // console.log
+
+        // console.log(this.x);
+        // console.log(this.y);
+
         // TEMP
         const temp = store.getState() as AppState;
 
@@ -176,7 +175,15 @@ export class Player extends Sprite  {
 
 
         this.hpBar.beginFill(0x00FF00);
-        this.hpBar.drawRect(this.x, this.y, hpBarWidth, hpBarHeight);
+        const greenPercent = this.currentAttributes.health / this.attributes.health;
+        const redPercent = 1.0 - greenPercent;
+
+        this.hpBar.drawRect(this.x + marginX, this.y + marginY, hpBarWidth * greenPercent, hpBarHeight);
+
+        this.hpBar.beginFill(0xFF0000);
+        this.hpBar.drawRect(this.x + marginX + (greenPercent * hpBarWidth), this.y + marginY, hpBarWidth * redPercent, hpBarHeight);
+
+
     }
 
 
@@ -203,7 +210,7 @@ export class Player extends Sprite  {
           // TODO REMOVE THIS TO PREVENT INFINITE JUMP
           if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
-            this.yVelocity = -10
+            this.yVelocity = -this.currentAttributes.jump;
         }
         // TODO UNCOMMENT THIS
         // this.allowJump = false;
@@ -211,12 +218,12 @@ export class Player extends Sprite  {
         // Move right while fallig
         if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = 3;
+            this.xVelocity = this.currentAttributes.speed;
         }
         // Move left while falling
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -3;
+            this.xVelocity = -this.currentAttributes.speed;
         }
 
 
@@ -229,7 +236,7 @@ export class Player extends Sprite  {
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
-            this.yVelocity = -10
+            this.yVelocity = -this.currentAttributes.jump
         }
         // TODO UNCOMMENT THIS
         // this.allowJump = false;
@@ -244,12 +251,12 @@ export class Player extends Sprite  {
         // Move right while jumping
         if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = 3;
+            this.xVelocity = this.currentAttributes.speed;
         }
         // Move left while jumping
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -3;
+            this.xVelocity = -this.currentAttributes.speed;
         }
 
     }
@@ -258,18 +265,18 @@ export class Player extends Sprite  {
     walking(){
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
-            this.yVelocity = -10
+            this.yVelocity = this.currentAttributes.jump
         }
         // Move right
         else if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = 3;
+            this.xVelocity = this.currentAttributes.speed;
         }
 
         // Move left
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -3;
+            this.xVelocity = -this.currentAttributes.speed;
         }
 
         // doing nothing
@@ -284,7 +291,7 @@ export class Player extends Sprite  {
     standing(){
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;
-            this.yVelocity = -10;
+            this.yVelocity = -this.currentAttributes.jump;
         }
 
         if (this.currentKeys.moveRight){

@@ -45,12 +45,7 @@ export class Enemy extends Sprite {
     } 
 
     update(){
-        console.log(this.state)
-        // console.log(this.yVelocity)
-        // console.log(`x: ${this.x}, y: ${this.y}`);
-        // console.log(`spriteX: ${this.sprite.x}, spriteY: ${this.sprite.y}`)
-        // console.log(this.y)
-        // console.log(this.sprite.y)
+        // console.log(this.state)
         this.handleState();
         this.flipSpriteParts();
     }

@@ -88,10 +88,6 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .drag()
 
         viewport.on('clicked', (e) => {
-            // console.log(e.screen.x)
-            // console.log()
-            // console.log(`x: ${e.screen.x}`);
-            // console.log(`y: ${e.screen.y}`);
             window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
         })
 

@@ -23,6 +23,14 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
             break;
         case ' ':
             newKeyOptions.jump = toggle;
+        case 'ArrowRight':
+            newKeyOptions.attackRight = toggle;
+        case 'ArrowLeft':
+            newKeyOptions.attackLeft = toggle;
+        case 'ArrowUp':
+            newKeyOptions.attackLeft = toggle;
+        case 'ArrowDown':
+            newKeyOptions.attackDowh = toggle;
         default:
             // unhandled key action
             break;

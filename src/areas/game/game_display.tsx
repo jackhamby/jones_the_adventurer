@@ -11,6 +11,7 @@ import { SpritePart } from '../../classes/interfaces';
 import './game_display.css'
 import { Treasure } from '../../classes/treasure';
 import { Viewport } from 'pixi-viewport';
+import { store } from '../../state_management/store';
 
 
 export interface GameDisplayStateProps { 
@@ -41,6 +42,12 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     private canvasRef = createRef<HTMLDivElement>();
 
+    // TODO REMOVE
+    testOnClick(){
+        const state = store.getState() as AppState;
+        state.gameState.currentStage.player.currentAttributes.jump += 5;
+    }
+
     componentDidMount(){
         const canvasHtmlElement = this.canvasRef.current;
         canvasHtmlElement?.appendChild(this.props.pixiApplication.view);
@@ -70,9 +77,13 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     render(){
             return (
-                <div className="game-container" id="canvas-container" ref={this.canvasRef}>
+                <>
+                    <button style={{position: "absolute"}} onClick={this.testOnClick}>TEST BUTTON</button>
+                    <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 
-                </div>
+                    </div>
+                </>
+        
             )
     }
 } 
