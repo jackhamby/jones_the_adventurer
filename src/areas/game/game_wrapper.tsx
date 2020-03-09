@@ -1,5 +1,5 @@
 import React from 'react'; 
-import { AppState, KeyOptions, Character, PlayerAttributes } from '../../types/states';
+import { AppState, KeyOptions, Character, PlayerAttributes, GameState } from '../../types/states';
 import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { GameDetail } from './game_detail';
@@ -14,15 +14,13 @@ import { Player } from '../../classes/player';
 import { Knight } from '../../classes/knight';
 import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
+import { Treasure } from '../../classes/treasure';
 
 export interface GameStateProps {
-    currentKeys: KeyOptions;
     character: Character;
     pixiApplication: PIXI.Application;
     currentStage: Stage;
-    playerAttributes: PlayerAttributes;
-    x: number;
-    y: number;
+    collectedTreasures: Treasure[];
 }
 
 export interface GameDispatchProps {
@@ -75,7 +73,6 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
 
     setupGame = () => {
-        const player = this.createPlayer();
         const dimensions = getCanvasDimensions()
         const viewport = new Viewport({
             screenWidth: dimensions.width,
@@ -91,18 +88,25 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
         })
 
+
+
+        const player = this.createPlayer();
+
         // Create a stage manager using the now ready pixi.loader and new playe
         this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
-
-
+        
         // Get stage one
         const stageOne = this.stageManager.getStage(1);
 
         // DISPATCH ACTION to set currentStage
-        this.props.setupGame(stageOne);    
+        this.props.setupGame(stageOne);  
+
+
+        player.currentStage = stageOne;
     }
 
 
+    // Creates a player on the given viewport
     createPlayer(){
         let player: Player;
         let attributes: PlayerAttributes;
@@ -111,7 +115,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
                 attributes = this.props.character.attributes;
-                player = new Knight(loader, attributes);
+                player = new Knight(loader, {} as Stage, attributes);
                 break;
             default:
                 throw "cant handle kbold yet bitch"
@@ -120,6 +124,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     }
 
     render(){
+        // console.log('rendering')
         return (
             <div className="container" style={{height: "100%"}}>
                 <div className="row game-header">
@@ -144,13 +149,16 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
 export const mapStateToProps = (state: AppState): GameStateProps => {
     return {
-        currentKeys: state.controlState.currentKeys,
+        // gameState: state.gameState,
+        // currentKeys: state.controlState.currentKeys,
         character: state.playerState.character,
         pixiApplication: state.gameState.pixiApplication,
         currentStage: state.gameState.currentStage,
-        x: state.gameState.currentStage ? state.gameState.currentStage.player.x : 1,
-        y: state.gameState.currentStage ? state.gameState.currentStage.player.y : 1,
-        playerAttributes: state.gameState.currentStage ? state.gameState.currentStage.player.attributes : {} as PlayerAttributes,
+        // TODO: we should init player in the store to have intial stage defined
+        collectedTreasures: state.gameState.currentStage ? state.gameState.currentStage.player.treasures : [],
+        // x: state.gameState.currentStage ? state.gameState.currentStage.player.x : 1,
+        // y: state.gameState.currentStage ? state.gameState.currentStage.player.y : 1,
+        // playerAttributes: state.gameState.currentStage ? state.gameState.currentStage.player.attributes : {} as PlayerAttributes,
     };
 }
 

@@ -1,7 +1,6 @@
 
 import * as React from 'react';
 import * as PIXI from 'pixi.js';
-import { SpriteTextures } from '../types/states';
 import { Sprite } from './sprite';
 
 

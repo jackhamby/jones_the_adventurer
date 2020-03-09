@@ -5,12 +5,7 @@ import { AnyAction } from 'redux';
 import { connect } from 'react-redux';
 // import { createPlayer } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
-import { Platform } from '../../classes/platform';
-import { Enemy } from '../../classes/enemy';
-import { SpritePart } from '../../classes/interfaces';
 import './game_display.css'
-import { Treasure } from '../../classes/treasure';
-import { Viewport } from 'pixi-viewport';
 import { store } from '../../state_management/store';
 
 
@@ -26,7 +21,7 @@ export interface GameDisplayOwnProps {
 }
 
 export interface GameDisplayDispatchProps {
-    createPlayer: (sprite: PIXI.Sprite) => void;
+
 }
 
 export interface GameDisplayState {
@@ -100,9 +95,7 @@ const mapStateToProps = (state: AppState): GameDisplayStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
     return {
-        createPlayer: (sprite: PIXI.Sprite) => {
-            // dispatch(createPlayer( sprite))
-        }
+
     }
 }
 

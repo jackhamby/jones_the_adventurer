@@ -2,6 +2,7 @@ import { Player, PlayerParts, SpriteParts, Part } from "./player";
 import * as PIXI from "pixi.js";
 import { KnightTextures, SpritePart } from "./interfaces";
 import { PlayerAttributes } from "../types/states";
+import { Stage } from "./game_classes";
 
 
 
@@ -9,8 +10,8 @@ import { PlayerAttributes } from "../types/states";
 export class Knight extends Player {
 
 
-    constructor(loader: PIXI.Loader, initialAttributes: PlayerAttributes){
-        super(loader, initialAttributes);
+    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: PlayerAttributes){
+        super(loader, stage, initialAttributes);
         this.textures = this.initTexturesII();
         // this.spriteParts = this.initSpriteParts();
         this.spriteParts = this.initSpriteParts();

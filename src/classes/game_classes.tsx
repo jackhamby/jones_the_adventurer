@@ -5,7 +5,7 @@ import { Platform, DefaultPlatform } from './platform';
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
 import {store} from '../state_management/store';
-import { updatePlayerPosition, ControlAction, applyTreasure } from '../state_management/actions/control_actions';
+import { ControlAction, applyTreasure } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
 import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
@@ -13,6 +13,7 @@ import { Sprite } from './sprite';
 import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
+import { Projectile } from './projectile';
 
 
 
@@ -34,6 +35,8 @@ export class StageManager {
         this.loader = loader;
         this.player  = player;
         this.viewport = viewport;
+        console.log(`init with this player`)
+        console.log(player);
     }
 
     // Get a stage by its level
@@ -71,6 +74,7 @@ export class StageManager {
     clearStage(){
         this.viewport.removeChildren(0, this.viewport.children.length);
     }
+
 
 
     // Stage 1
@@ -211,6 +215,7 @@ export class Stage implements IStage{
     player: Player;
     treasures: Treasure[];
     viewport: Viewport;
+    projectiles: Projectile[];
 
 
     constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
@@ -218,12 +223,12 @@ export class Stage implements IStage{
         this.name = name;
         this.enemies = enemies;
         this.platforms = platforms;
+        this.projectiles = [];
         this.currentKeys = {} as KeyOptions;
         this.player = player;
         this.treasures = treasures;
         this.viewport = viewport;
     }
-
 
     removeTreasure(treasureToRemove: Treasure){
         this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
@@ -231,7 +236,6 @@ export class Stage implements IStage{
         treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
             this.viewport.removeChild(spritePart.sprite);
         })
-
     }
 
     update(keys: KeyOptions){
@@ -239,7 +243,6 @@ export class Stage implements IStage{
         this.updateViewport();
         this.updateAllSpriteStates();
         this.updateAllSpritePositions();
-
     }
 
 
@@ -260,7 +263,16 @@ export class Stage implements IStage{
     private updateAllSpritePositions(){
         this.updatePlayerPosition()
         this.updateEnemyPositions();
+        this.updateAllProjectilePositions();
     }
+
+    private updateAllProjectilePositions(){
+        // console.log(`update projects, count ${this.projectiles.length}`)
+        this.projectiles.forEach((projectile: Projectile) => {
+            projectile.updateX(projectile.xVelocity);
+        })
+    }
+    
 
 
     private updatePlayerPosition(){
@@ -270,8 +282,8 @@ export class Stage implements IStage{
         this.checkPlayerYCollisions();
         this.player.hpBar.clear();
         this.player.drawHpBar();
-        const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
-        store.dispatch(action);
+        // const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
+        // store.dispatch(action);
     }
 
     private updateEnemyPositions(){
@@ -357,17 +369,20 @@ export class Stage implements IStage{
     
 
     private handlePlayerTreasureCollisionX(player: Player, treasure: Treasure){
-        store.dispatch(applyTreasure(treasure.effect) as ControlAction);
-        treasure.apply(player);
+        store.dispatch(applyTreasure(treasure) as ControlAction);
+        // treasure.apply(player);
+        // player.treasures.push(treasure)
+        // console.log(player.treasures)
         this.removeTreasure(treasure);
+        console.log(player.treasures)
     }
 
     private handlePlayerTreasureCollisionY(player: Player, treasure: Treasure){
-        treasure.apply(player);
+        // treasure.apply(player);
 
-        treasure.spriteParts.map( (spritePart: SpritePart) => {
-            this.viewport.removeChild(spritePart.sprite);
-        })
+        // treasure.spriteParts.map( (spritePart: SpritePart) => {
+        //     this.viewport.removeChild(spritePart.sprite);
+        // })
     }
     
 

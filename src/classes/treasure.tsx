@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
-import { KeyOptions, SpriteTextures, PlayerState, PlayerAttributeNames } from '../types/states';
-import { PlayerStateNames, PlayerArmorNames, PlayerPartNames } from '../types/enums';
+import { PlayerAttributeNames } from '../types/states';
+import { PlayerArmorNames, PlayerPartNames } from '../types/enums';
 import { Sprite } from './sprite';
 import { SpritePart, Effect } from './interfaces';
 import { Player } from './player';
@@ -72,15 +72,29 @@ export class Treasure extends Sprite {
     }
 
 
-    apply(player: Player): void {
-        player.attributes[this.effect.attribute] += this.effect.value;
-        if (this.effect.textureEffect){
-            const affectedBodyPart = this.effect.textureEffect.bodyPart;
-            const newArmorType = this.effect.textureEffect.armorType;
+    // static apply(player: Player): void {
+    //     // console.log('appliyng')
+    //     player.attributes[this.effect.attribute] += this.effect.value;
+    //     if (this.effect.textureEffect){
+    //         const affectedBodyPart = this.effect.textureEffect.bodyPart;
+    //         const newArmorType = this.effect.textureEffect.armorType;
+    //         const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
+    //         const spritePart = player.spriteParts[affectedBodyPart].sprite;
+    //         spritePart.texture = newTexture;
+    //     }
+    //     player.treasures.push(this);
+    // }
+
+    static apply(player: Player, treasure: Treasure): void {
+        player.attributes[treasure.effect.attribute] += treasure.effect.value;
+        if (treasure.effect.textureEffect){
+            const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
+            const newArmorType = treasure.effect.textureEffect.armorType;
             const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
             const spritePart = player.spriteParts[affectedBodyPart].sprite;
             spritePart.texture = newTexture;
         }
+        player.treasures = [...player.treasures, treasure];
     }
 }
 

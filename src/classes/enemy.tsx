@@ -1,4 +1,3 @@
-import { SpriteTextures } from "../types/states";
 import * as PIXI from 'pixi.js';
 import { Sprite } from "./sprite";
 import { EnemyStateNames } from "../types/enums";
@@ -76,7 +75,7 @@ export class Enemy extends Sprite {
 
 
     standing(){
-        console.log()
+        // console.log()
         // Need to start to walk right 
         if (this.x < this.player.x){
             this.setState(EnemyStateNames.WALKING);

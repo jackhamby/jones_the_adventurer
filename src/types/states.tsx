@@ -33,19 +33,6 @@ export interface ControlState {
 
 
 
-
-
-export interface SpriteTextures {
-    standingRight: PIXI.Texture;
-    standingLeft: PIXI.Texture;
-    walkingRight: PIXI.Texture;
-    walkingLeft: PIXI.Texture;
-    jumpingLeft: PIXI.Texture;
-    jumpingRight: PIXI.Texture;
-    fallingRight: PIXI.Texture;
-    fallingLeft: PIXI.Texture;
-}
-
 export interface IStage {
     name: string;
     level: number;

@@ -40,3 +40,10 @@ export enum PlayerArmorNames {
     DEFAULT = "default",
     ARMOR1 = "armor1"
 }
+
+
+export enum PlayerStatisticNames {
+    PROJECTILES_FIRED = "projectiles",
+    DAMAGE_DEALT = "damage",
+    ENEMIES_KILLED = "killed",
+}

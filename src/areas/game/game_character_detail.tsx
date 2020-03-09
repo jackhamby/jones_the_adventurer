@@ -12,7 +12,8 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
     render(){
         if (this.props.stage){
             const player = this.props.stage.player
-        
+            console.log('rerender')
+            console.log(player)
             return (
                 <React.Fragment>
                     <div className="col-2 h-100 p-0">
@@ -61,8 +62,8 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         
                     </div>
                     <div className="col-5">
-
-
+                        {/* {this.props.pla} */}
+                        {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0} 
                         other stats here
                     </div>
 

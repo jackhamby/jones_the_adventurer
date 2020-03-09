@@ -1,6 +1,7 @@
-import { ScreenOptions, CharacterOptions } from "../../types/enums";
+import { ScreenOptions, CharacterOptions, PlayerStatisticNames } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
+import { Treasure } from "../../classes/treasure";
 
 // export const TEXTURES_LOADED = 'UPDATE_TEXTURES_LOADED';
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'
@@ -10,19 +11,19 @@ export const KEY_PRESS: string = 'KEY_PRESS'
 // export const CREATE_PLAYER: string = 'CREATE_PLAYER';
 export const CHANGE_STAGE: string = 'CREATE_STAGE';
 export const SETUP_GAME: string = 'SETUP_GAME';
-export const UPDATE_PLAYER_POSITION: string = 'UPDATE_PLAYER_POSITION';
 export const APPLY_TREASURE: string = "APPLY_TREASURE";
+export const UPDATE_STATS: string = "UPDATE_STATISTICS";
 
 
 
 
-interface ApplyTreasurePayload {
-    effect: Effect;
+interface UpdateStatisticPayload {
+    statistic: PlayerStatisticNames;
+    value: number;
 }
 
-interface UpdatePlayerPositionPayload {
-    x: number;
-    y: number;
+interface ApplyTreasurePayload {
+    treasure: Treasure;
 }
 
 interface StartGamePayload {
@@ -52,16 +53,14 @@ interface ScreenResizePayload {
 
 
 
-
+interface UpdateStatisticAction {
+    type: typeof UPDATE_STATS;
+    payload: UpdateStatisticPayload;
+}
 
 interface ApplyTreasureAction {
     type: typeof APPLY_TREASURE;
     payload: ApplyTreasurePayload;
-}
-
-interface UpdatePlayerPositionAction {
-    type: typeof UPDATE_PLAYER_POSITION;
-    payload: UpdatePlayerPositionPayload;
 }
 
 interface StartGameAction {
@@ -91,24 +90,25 @@ interface UpdateKeyReleasedAction {
     payload: UpdateKeyPressedPayload;
 }
 
-export const applyTreasure = (effect: Effect): ApplyTreasureAction => {
+
+
+export const updateStatistic = (statistic: PlayerStatisticNames, value: number): UpdateStatisticAction => {
+    return {
+        type: UPDATE_STATS,
+        payload: {
+            statistic,
+            value
+        } as UpdateStatisticPayload
+    }
+}
+
+export const applyTreasure = (treasure: Treasure): ApplyTreasureAction => {
     return {
         type: APPLY_TREASURE,
         payload: {
-            effect: effect
+            treasure,
         }
     } 
-}
-
-
-export const updatePlayerPosition = (x: number, y: number): UpdatePlayerPositionAction => {
-    return {
-        type: UPDATE_PLAYER_POSITION,
-        payload: {
-            x,
-            y
-        } as UpdatePlayerPositionPayload
-    }
 }
 
 export const setupGame = (stage: Stage) => {
@@ -165,4 +165,4 @@ export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
         }
     }
 }
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction & UpdatePlayerPositionAction & ApplyTreasureAction;
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction  & ApplyTreasureAction & UpdateStatisticAction
