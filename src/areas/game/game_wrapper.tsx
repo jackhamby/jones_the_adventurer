@@ -124,7 +124,6 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     }
 
     render(){
-        // console.log('rendering')
         return (
             <div className="container" style={{height: "100%"}}>
                 <div className="row game-header">

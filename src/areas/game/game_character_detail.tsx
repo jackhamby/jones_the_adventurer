@@ -12,18 +12,12 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
     render(){
         if (this.props.stage){
             const player = this.props.stage.player
-            console.log('rerender')
-            console.log(player)
             return (
                 <React.Fragment>
                     <div className="col-2 h-100 p-0">
-                        {/* image goes here */}
                         <CharacterIcon player={player} imagePath="fuck"/>
                     </div>
                     <div className="col-5">
-                        {/* <div className="progress">
-                            <div className="progress-bar bg-danger" role="progressbar" aria-valuenow={100} aria-valuemin={0} aria-valuemax={100} style={ {width: "75%" }}></div>
-                        </div> */}
                         <table className="attribute-table">
                             <thead>
                                 <th> Player Attributes </th>
@@ -62,9 +56,8 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         
                     </div>
                     <div className="col-5">
-                        {/* {this.props.pla} */}
+                        Treasures:   
                         {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0} 
-                        other stats here
                     </div>
 
                 </React.Fragment>

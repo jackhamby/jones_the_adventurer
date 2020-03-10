@@ -13,6 +13,7 @@ CHARACTER_ATTRIBUTES[CharacterOptions.KNIGHT] = {
     armor: 5,
     attack: 10,
     jump: 10,
+    attack_speed: 5,
 } as PlayerAttributes;
 
 CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD] = {
@@ -21,6 +22,7 @@ CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD] = {
     armor: 3,
     attack: 10,
     jump: 10,
+    attack_speed: 5
 } as PlayerAttributes;
 
 
@@ -30,6 +32,7 @@ const MAX_ATTRIBUTES = {
     armor: 10,
     jump: 20,
     attack: 20,
+    attack_speed: 15
 } as PlayerAttributes
 
 const STAGE1_LAYOUT = `10 10

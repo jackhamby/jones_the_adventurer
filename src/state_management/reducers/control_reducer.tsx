@@ -36,7 +36,7 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
             break;
 
         case 'ArrowDown':
-            newKeyOptions.attackDowh = toggle;
+            newKeyOptions.attackDown = toggle;
             break;
         default:
             // unhandled key action
@@ -51,7 +51,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
     switch(action.type){
 
         case UPDATE_STATS:
-            // console.log('updating')
             return {
                 ...temp
             };
@@ -67,7 +66,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
             //     spritePart.texture = newTexture;
             // }
             // player.treasures.push(this);
-            // console.log('apply')
             // temp.gameState.currentStage.player.treasures = []
             // temp.gameState.currentStage.player.treasures.push(action.payload.)
 

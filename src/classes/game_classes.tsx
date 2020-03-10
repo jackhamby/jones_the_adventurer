@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
-import { PlayerStateNames, PlayerPartNames, EnemyStateNames } from '../types/enums';
+import { PlayerStateNames, PlayerPartNames, EnemyStateNames, ProjectileStateNames } from '../types/enums';
 import { Platform, DefaultPlatform } from './platform';
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
@@ -35,8 +35,6 @@ export class StageManager {
         this.loader = loader;
         this.player  = player;
         this.viewport = viewport;
-        console.log(`init with this player`)
-        console.log(player);
     }
 
     // Get a stage by its level
@@ -52,6 +50,7 @@ export class StageManager {
     }
 
     loadStage(stage: Stage){
+        this.viewport.zoom(150)
         const platforms = stage.platforms;
         const newplayer = stage.player;
         const treasures = stage.treasures;
@@ -245,7 +244,8 @@ export class Stage implements IStage{
         this.updateAllSpritePositions();
     }
 
-
+    // TODO: call this once
+    // 
     private updateViewport(){
         const viewportCenter = this.viewport.center;
         this.viewport.follow(this.player.spriteParts[PlayerPartNames.HEAD].sprite);
@@ -257,24 +257,32 @@ export class Stage implements IStage{
         this.enemies.forEach((enemy: Enemy) => {
             enemy.update();
         })
+        this.projectiles.forEach((projectile: Projectile) => {
+            projectile.update();
+        })
     }
 
     // Update all sprite positions
     private updateAllSpritePositions(){
         this.updatePlayerPosition()
         this.updateEnemyPositions();
-        this.updateAllProjectilePositions();
+        this.updateProjectilePositions();
     }
 
-    private updateAllProjectilePositions(){
-        // console.log(`update projects, count ${this.projectiles.length}`)
+
+
+
+
+
+    private updateProjectilePositions(){
         this.projectiles.forEach((projectile: Projectile) => {
             projectile.updateX(projectile.xVelocity);
+            this.checkProjectileXCollisions(projectile);
+            projectile.updateY(projectile.yVelocity);
+            this.checkProjectileYCollisions(projectile);
         })
     }
     
-
-
     private updatePlayerPosition(){
         this.player.updateX(this.player.xVelocity);
         this.checkPlayerXCollisions();
@@ -282,8 +290,6 @@ export class Stage implements IStage{
         this.checkPlayerYCollisions();
         this.player.hpBar.clear();
         this.player.drawHpBar();
-        // const action = updatePlayerPosition(this.player.x, this.player.y) as ControlAction;
-        // store.dispatch(action);
     }
 
     private updateEnemyPositions(){
@@ -323,6 +329,17 @@ export class Stage implements IStage{
     }
 
 
+    private checkProjectileXCollisions(projectile: Projectile){
+        const collidePlatform = this.collideAny(projectile, this.platforms);
+        // const collideTreasures = this.collideAny(this.player, this.treasures)
+
+        if (collidePlatform){
+            this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
+        }
+    }
+
+
+
 
 
 
@@ -352,12 +369,31 @@ export class Stage implements IStage{
         }
 
         if (this.isFallingEnemy(enemy)){
-            // console.log('enemy is falling');
             enemy.setState(EnemyStateNames.FALLING);
         }
         else if (enemy.state == EnemyStateNames.FALLING){
             enemy.setState(EnemyStateNames.WALKING);
         }
+    }
+
+    private checkProjectileYCollisions(projectile: Projectile){
+        const collidePlatform = this.collideAny(projectile, this.platforms);
+
+        if (collidePlatform){
+            this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
+        }
+
+        if (this.isFallingProjectile(projectile)){
+            // console.log(s'falling')
+            projectile.setState(ProjectileStateNames.FALLING);
+        }
+        else if(projectile.state == ProjectileStateNames.FALLING){
+            projectile.setState(ProjectileStateNames.STANDING);
+        }
+
+
+
+
     }
 
 
@@ -366,15 +402,13 @@ export class Stage implements IStage{
 
 
 
-    
+
 
     private handlePlayerTreasureCollisionX(player: Player, treasure: Treasure){
         store.dispatch(applyTreasure(treasure) as ControlAction);
         // treasure.apply(player);
         // player.treasures.push(treasure)
-        // console.log(player.treasures)
         this.removeTreasure(treasure);
-        console.log(player.treasures)
     }
 
     private handlePlayerTreasureCollisionY(player: Player, treasure: Treasure){
@@ -421,6 +455,21 @@ export class Stage implements IStage{
     }
 
 
+    private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
+        // console.log('collide y')
+        if (projectile.yVelocity > 0){
+            projectile.setY(collider.top() - projectile.height);
+        }
+
+        else if (projectile.yVelocity < 0){
+            projectile.setY(collider.bottom());
+        }
+
+        projectile.yVelocity = 0;
+        projectile.xVelocity = 0;
+        // console.log('collide in the y')
+    }
+
 
 
 
@@ -446,6 +495,21 @@ export class Stage implements IStage{
         enemy.xVelocity = 0;
     }
 
+
+    private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
+        // console.log('projectile collided platform')
+        if (projectile.xVelocity < 0){
+            projectile.setX(collider.right());
+        }
+
+        if (projectile.xVelocity > 0){
+            projectile.setX(collider.left() - projectile.width)
+        }
+        // console.log('collide in the x')
+
+        projectile.xVelocity = 0;
+        projectile.yVelocity = 0;
+    }
 
 
     
@@ -479,6 +543,24 @@ export class Stage implements IStage{
         // ontop of some platform or jumping
         if (platformCollision || enemy.state === EnemyStateNames.JUMPING){
             enemy.updateY(-1);
+            return false;
+        }
+        // falling
+        else{
+            return true;
+        }
+    }
+
+
+
+    private isFallingProjectile(projectile: Projectile){
+        projectile.updateY(1);
+        
+        const platformCollision = this.collideAny(projectile, this.platforms);
+        // console.log(platformCollision)
+        // ontop of some platform or jumping
+        if (platformCollision){
+            projectile.updateY(-1);
             return false;
         }
         // falling

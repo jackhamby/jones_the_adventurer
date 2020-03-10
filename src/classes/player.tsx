@@ -76,6 +76,10 @@ export class Player extends Sprite  {
     treasures: Treasure[];
     statistics: PlayerStatistics;
 
+    //temp 
+    timeSinceLastProjectileFired: number;
+    projectileCooldown: number;
+
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: PlayerAttributes){
         // x, y, width, height, xVel, yVel
         super(loader, 200, 200, 20, 30, 0, 0);
@@ -84,6 +88,7 @@ export class Player extends Sprite  {
         this.currentAttributes = {
             ...initialAttributes
         };
+        this.currentAttributes.health -= 50;
         this.currentKeys = {} as KeyOptions;
         this.allowJump = true;
         this.facingRight = false;
@@ -95,6 +100,11 @@ export class Player extends Sprite  {
         // Game stats
         this.treasures = [];
         this.statistics = {} as PlayerStatistics;
+        
+        // temp
+        this.timeSinceLastProjectileFired = 0;
+        this.projectileCooldown = 10 * this.attributes.attack_speed;
+
     }
 
 
@@ -143,13 +153,20 @@ export class Player extends Sprite  {
     // Called on each game tick
     // Update player state and velocities
     update(keyboard: KeyOptions){
-        // console.log(`x: ${this.x}, y: ${this.y}`)
+        console.log(this.timeSinceLastProjectileFired)
         this.currentKeys = keyboard;
-        // console.log(keyboard.attasckDowh)
         this.handleState();
+        this.updateCooldowns();
         // this.hpBar.clear();
         // this.drawHpBar();
         this.flipSpriteParts();
+    }
+
+    updateCooldowns(){
+        if (this.timeSinceLastProjectileFired > 0){
+            this.timeSinceLastProjectileFired -= 1;
+            return;
+        }
     }
 
     // createHpBar(): PIXI.Graphics {
@@ -213,6 +230,8 @@ export class Player extends Sprite  {
     }
 
     falling(){
+        this.fireProjectile();
+
         const gravity = 0.5;
         this.yVelocity += gravity;
           // TODO REMOVE THIS TO PREVENT INFINITE JUMP
@@ -238,6 +257,8 @@ export class Player extends Sprite  {
     }
 
     jumping(){
+        this.fireProjectile();
+
         const gravity = 0.5;
         this.yVelocity += gravity;
 
@@ -271,6 +292,8 @@ export class Player extends Sprite  {
 
     // Called when player in walking state
     walking(){
+        this.fireProjectile();
+
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = this.currentAttributes.jump
@@ -319,19 +342,51 @@ export class Player extends Sprite  {
     }
 
 
-    fireProjectile(){
+    
 
+
+    fireProjectile(){
+        // TODO, cleanup this whole method
+
+        if (this.currentKeys.attackDown ||
+            this.currentKeys.attackLeft ||
+            this.currentKeys.attackUp || 
+            this.currentKeys.attackRight){
+                if (this.timeSinceLastProjectileFired > 0){
+                    return;
+                }
+                this.timeSinceLastProjectileFired = this.projectileCooldown;
+            }
 
         if (this.currentKeys.attackRight){
-
-        const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
-        store.dispatch(test as ControlAction);
+            const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
+            store.dispatch(test as ControlAction);
             const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
             projectile.xVelocity = 15;
         }
+        else if (this.currentKeys.attackLeft){
+            const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
+            store.dispatch(test as ControlAction);
+            const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
+            
+            this.currentStage.viewport.addChild(projectile.sprite);
+            this.currentStage.projectiles.push(projectile);
+            projectile.xVelocity = -15;
+        }
+        else if(this.currentKeys.attackDown){
+            const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
+            store.dispatch(test as ControlAction);
+            const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
+            
+            this.currentStage.viewport.addChild(projectile.sprite);
+            this.currentStage.projectiles.push(projectile);
+            projectile.yVelocity = 15;
+            
+        }
+
     }
 
     // Handle player state

@@ -52,6 +52,7 @@ export enum PlayerAttributeNames {
     ARMOR = "armor",
     ATTACK = "attack",
     JUMP = "jump",
+    ATTACK_SPEED = "attack_speed"
 }
 
 export type PlayerAttributes = {
@@ -62,7 +63,7 @@ export interface KeyOptions {
     attackRight: boolean;
     attackLeft: boolean;
     attackUp: boolean;
-    attackDowh: boolean;
+    attackDown: boolean;
     moveRight: boolean;
     moveLeft: boolean;
     moveUp: boolean;

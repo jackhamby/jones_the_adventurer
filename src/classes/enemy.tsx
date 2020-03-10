@@ -44,7 +44,6 @@ export class Enemy extends Sprite {
     } 
 
     update(){
-        // console.log(this.state)
         this.handleState();
         this.flipSpriteParts();
     }
@@ -75,7 +74,6 @@ export class Enemy extends Sprite {
 
 
     standing(){
-        // console.log()
         // Need to start to walk right 
         if (this.x < this.player.x){
             this.setState(EnemyStateNames.WALKING);

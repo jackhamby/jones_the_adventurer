@@ -71,20 +71,6 @@ export class Treasure extends Sprite {
         return [ baseSpritePart, iconSpritePart ];
     }
 
-
-    // static apply(player: Player): void {
-    //     // console.log('appliyng')
-    //     player.attributes[this.effect.attribute] += this.effect.value;
-    //     if (this.effect.textureEffect){
-    //         const affectedBodyPart = this.effect.textureEffect.bodyPart;
-    //         const newArmorType = this.effect.textureEffect.armorType;
-    //         const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
-    //         const spritePart = player.spriteParts[affectedBodyPart].sprite;
-    //         spritePart.texture = newTexture;
-    //     }
-    //     player.treasures.push(this);
-    // }
-
     static apply(player: Player, treasure: Treasure): void {
         player.attributes[treasure.effect.attribute] += treasure.effect.value;
         if (treasure.effect.textureEffect){

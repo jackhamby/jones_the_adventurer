@@ -1,7 +1,6 @@
 
 
 import * as PIXI from "pixi.js";
-import { SpritePart } from './interfaces';
 
 
 
