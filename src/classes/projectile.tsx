@@ -8,12 +8,14 @@ export class Projectile extends Sprite {
 
     sprite: PIXI.Sprite;
     state: ProjectileStateNames;
+    sticky: boolean;
 
     constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number){
         // x, y, width, height, xVel, yVel
         super(loader, x, y, width, height, 0, 0);
         this.state = ProjectileStateNames.FLYING;
         this.sprite = {} as PIXI.Sprite;
+        this.sticky = false;
     }
 
     setState(state: ProjectileStateNames){
@@ -42,9 +44,8 @@ export class Projectile extends Sprite {
     } 
 
     update(){
+        console.log(this.state)
         this.handleState();
-        // console.log(this.state)
-        // console.log(`xVel: ${this.xVelocity}, yVel: ${this.yVelocity}`);
     }
 
     handleState(){
@@ -70,12 +71,15 @@ export class Projectile extends Sprite {
     }
 
     standing(){
-
+        this.xVelocity = 0;
+        this.yVelocity = 0;
+        debugger;
     }
 
     falling(){
         const gravity = 0.5;
         this.yVelocity += gravity;
+        debugger;
     }
 
 
@@ -96,6 +100,7 @@ export class Rock extends Projectile {
         super(loader, x, y, width, height);
         // console.log('building rock');
         this.sprite = this.createSprite();
+        this.sticky = true;
     }
 
 

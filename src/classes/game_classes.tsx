@@ -50,7 +50,6 @@ export class StageManager {
     }
 
     loadStage(stage: Stage){
-        this.viewport.zoom(150)
         const platforms = stage.platforms;
         const newplayer = stage.player;
         const treasures = stage.treasures;
@@ -336,6 +335,8 @@ export class Stage implements IStage{
         if (collidePlatform){
             this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
         }
+
+
     }
 
 
@@ -383,11 +384,14 @@ export class Stage implements IStage{
             this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
         }
 
-        if (this.isFallingProjectile(projectile)){
-            // console.log(s'falling')
+        if (this.isFallingProjectile(projectile) && projectile.state != ProjectileStateNames.STANDING){
+            console.log('falling')
+            debugger;
+
             projectile.setState(ProjectileStateNames.FALLING);
         }
         else if(projectile.state == ProjectileStateNames.FALLING){
+            debugger;
             projectile.setState(ProjectileStateNames.STANDING);
         }
 
@@ -465,6 +469,11 @@ export class Stage implements IStage{
             projectile.setY(collider.bottom());
         }
 
+        
+        if (projectile.sticky){
+            debugger;
+            projectile.setState(ProjectileStateNames.STANDING);
+        }
         projectile.yVelocity = 0;
         projectile.xVelocity = 0;
         // console.log('collide in the y')
@@ -505,10 +514,15 @@ export class Stage implements IStage{
         if (projectile.xVelocity > 0){
             projectile.setX(collider.left() - projectile.width)
         }
+
+        if (projectile.sticky){
+            debugger;
+            projectile.setState(ProjectileStateNames.STANDING);
+        }
+    
         // console.log('collide in the x')
 
         projectile.xVelocity = 0;
-        projectile.yVelocity = 0;
     }
 
 

@@ -153,12 +153,9 @@ export class Player extends Sprite  {
     // Called on each game tick
     // Update player state and velocities
     update(keyboard: KeyOptions){
-        console.log(this.timeSinceLastProjectileFired)
         this.currentKeys = keyboard;
         this.handleState();
         this.updateCooldowns();
-        // this.hpBar.clear();
-        // this.drawHpBar();
         this.flipSpriteParts();
     }
 
@@ -169,22 +166,6 @@ export class Player extends Sprite  {
         }
     }
 
-    // createHpBar(): PIXI.Graphics {
-    //     var graphics = new PIXI.Graphics();
-    //     const marginX = 0;
-    //     const marginY = 5;
-    //     const hpBarHeight = this.height / 10;
-    //     const hpBarWidth = this.width;
-    //     // Fill bar green
-    //     graphics.beginFill(0x00FF00);
-
-    //     // draw a rectangle
-    //     graphics.drawRect(this.x + marginX, this.y + marginY, hpBarWidth, hpBarHeight);
-
-    //     return graphics;
-
-    //     // stage.addChild(graphics);
-    // }
 
     drawHpBar(){
         const marginX = 2;
@@ -193,11 +174,7 @@ export class Player extends Sprite  {
         const hpBarHeight = this.height / 9;
         const hpBarWidth = this.width;
 
-        // console.log(this.x);
-        // console.log(this.y);
-
         this.currentStage.viewport.addChild(this.hpBar);
-
 
         this.hpBar.beginFill(0x00FF00);
         const greenPercent = this.currentAttributes.health / this.attributes.health;
@@ -347,7 +324,6 @@ export class Player extends Sprite  {
 
     fireProjectile(){
         // TODO, cleanup this whole method
-
         if (this.currentKeys.attackDown ||
             this.currentKeys.attackLeft ||
             this.currentKeys.attackUp || 
