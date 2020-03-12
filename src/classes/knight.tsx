@@ -26,13 +26,15 @@ export class Knight extends Player {
                     standing: this.loader.resources['knight-body-armor1-standing'].texture, // TODO update these to use corrct state
                     falling: this.loader.resources['knight-body-armor1-standing'].texture,
                     jumping: this.loader.resources['knight-body-armor1-standing'].texture,
-                    walking: this.loader.resources['knight-body-armor1-standing'].texture
+                    walking: this.loader.resources['knight-body-armor1-standing'].texture,
+                    knockback: this.loader.resources['knight-body-armor1-standing'].texture
                 },
                 default: {
                     standing:this.loader.resources['knight-body-default-standing'].texture,
                     falling: this.loader.resources['knight-body-default-standing'].texture,
                     jumping: this.loader.resources['knight-body-default-standing'].texture,
-                    walking: this.loader.resources['knight-body-default-standing'].texture
+                    walking: this.loader.resources['knight-body-default-standing'].texture,
+                    knockback: this.loader.resources['knight-body-default-standing'].texture
                 }
             },
             head: {
@@ -41,12 +43,16 @@ export class Knight extends Player {
                     falling: this.loader.resources['knight-head-default-standing'].texture,
                     jumping: this.loader.resources['knight-head-default-standing'].texture,
                     walking: this.loader.resources['knight-head-default-standing'].texture,
+                    knockback: this.loader.resources['knight-head-default-standing'].texture
+
                 },
                 armor1: {
                     standing: this.loader.resources['knight-head-armor1-standing'].texture,
                     falling: this.loader.resources['knight-head-armor1-standing'].texture,
                     jumping: this.loader.resources['knight-head-armor1-standing'].texture,
                     walking: this.loader.resources['knight-head-armor1-standing'].texture,
+                    knockback: this.loader.resources['knight-head-armor1-standing'].texture
+
                 }
             },
             legs: {
@@ -55,12 +61,14 @@ export class Knight extends Player {
                     falling: this.loader.resources['knight-legs-default-standing'].texture,
                     jumping: this.loader.resources['knight-legs-default-standing'].texture,
                     walking: this.loader.resources['knight-legs-default-standing'].texture,
+                    knockback: this.loader.resources['knight-legs-default-standing'].texture
                 },
                 armor1: {
                     standing: this.loader.resources['knight-legs-armor1-standing'].texture,
                     falling: this.loader.resources['knight-legs-armor1-standing'].texture,
                     jumping: this.loader.resources['knight-legs-armor1-standing'].texture,
                     walking: this.loader.resources['knight-legs-armor1-standing'].texture,
+                    knockback: this.loader.resources['knight-legs-armor1-standing'].texture
                 }
             }
         }

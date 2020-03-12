@@ -44,23 +44,19 @@ export class Projectile extends Sprite {
     } 
 
     update(){
-        console.log(this.state)
         this.handleState();
     }
 
     handleState(){
         switch(this.state){
             case ProjectileStateNames.FLYING:
-                // console.log('flying')
                 this.flying();
                 break;
             case ProjectileStateNames.FALLING:
                 this.falling();
-                // console.log('falling');
                 break;
             case ProjectileStateNames.STANDING:
                 this.standing();
-                // console.log('standing')
                 break;
         }
     }
@@ -71,22 +67,16 @@ export class Projectile extends Sprite {
     }
 
     standing(){
+        // Projectile is stuck 
         this.xVelocity = 0;
         this.yVelocity = 0;
-        debugger;
+        this.decay -= 1;
     }
 
     falling(){
         const gravity = 0.5;
         this.yVelocity += gravity;
-        debugger;
     }
-
-
-
-
-
-
 }
 
 
@@ -98,9 +88,8 @@ export class Rock extends Projectile {
 
     constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number){
         super(loader, x, y, width, height);
-        // console.log('building rock');
         this.sprite = this.createSprite();
-        this.sticky = true;
+        this.sticky = false;
     }
 
 

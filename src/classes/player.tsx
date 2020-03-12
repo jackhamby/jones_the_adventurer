@@ -25,7 +25,6 @@ export class Part {
         this.texture = texture;
         this.offSetX = offSetX;
         this.offSetY = offSetY;
-        // this.sprite = { } as PIXI.Sprite;
         this.parentSprite = parentSprite;
         this.sprite = new PIXI.Sprite(this.texture);
         this.sprite.x = this.parentSprite.x + this.offSetX;
@@ -69,16 +68,13 @@ export class Player extends Sprite  {
     attributes: PlayerAttributes;
     currentAttributes: PlayerAttributes;
     textures: PlayerParts;
-    hpBar: PIXI.Graphics;
     currentStage: Stage;
-
-    // Game stats
+    hpBar: PIXI.Graphics;
     treasures: Treasure[];
     statistics: PlayerStatistics;
-
-    //temp 
     timeSinceLastProjectileFired: number;
     projectileCooldown: number;
+    inKnockBack: boolean;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: PlayerAttributes){
         // x, y, width, height, xVel, yVel
@@ -96,14 +92,11 @@ export class Player extends Sprite  {
         this.textures = {} as PlayerParts;
         this.hpBar = new PIXI.Graphics();
         this.currentStage = currentStage;
-
-        // Game stats
         this.treasures = [];
         this.statistics = {} as PlayerStatistics;
-        
-        // temp
         this.timeSinceLastProjectileFired = 0;
         this.projectileCooldown = 10 * this.attributes.attack_speed;
+        this.inKnockBack = false;
 
     }
 
@@ -157,6 +150,10 @@ export class Player extends Sprite  {
         this.handleState();
         this.updateCooldowns();
         this.flipSpriteParts();
+        // console.log('\n')
+        // console.log(this.inKnockBack)
+        // console.log(this.state)
+        // console.log('\n')
     }
 
     updateCooldowns(){
@@ -211,8 +208,13 @@ export class Player extends Sprite  {
 
         const gravity = 0.5;
         this.yVelocity += gravity;
+
+        if (this.inKnockBack){
+            return;
+        }
+
           // TODO REMOVE THIS TO PREVENT INFINITE JUMP
-          if (this.currentKeys.jump){
+        if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -this.currentAttributes.jump;
         }
@@ -239,6 +241,10 @@ export class Player extends Sprite  {
         const gravity = 0.5;
         this.yVelocity += gravity;
 
+        // Prevent movement if in knockback
+        if (this.inKnockBack){
+            return;
+        }
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
@@ -271,6 +277,11 @@ export class Player extends Sprite  {
     walking(){
         this.fireProjectile();
 
+        // Prevent movement if in knockback
+        if (this.inKnockBack){
+            return;
+        }
+
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = this.currentAttributes.jump
@@ -298,6 +309,15 @@ export class Player extends Sprite  {
     // Called when player in standing state
     standing(){
         this.fireProjectile();
+
+        this.inKnockBack =  false;
+
+
+        // Prevent movement if in knockback
+        if (this.inKnockBack){
+            return;
+        }
+
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;
             this.yVelocity = -this.currentAttributes.jump;
@@ -376,11 +396,14 @@ export class Player extends Sprite  {
                 this.walking()
                 break;
             case(PlayerStateNames.FALLING):
-            this.falling()
+                this.falling()
                 break;
             case(PlayerStateNames.JUMPING):
-            this.jumping()
+                this.jumping()
                 break;
+            // case(PlayerStateNames.KNOCKBACK):
+            //     this.knockback();                
+            //     break;
             default:
                 break;
         }

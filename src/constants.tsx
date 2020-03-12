@@ -7,6 +7,8 @@ const SCREEN_WIDTH = window.screen.height;
 
 const CHARACTER_ATTRIBUTES = {} as any;
 
+const SPRITE_DECAY = 1000;
+
 CHARACTER_ATTRIBUTES[CharacterOptions.KNIGHT] = {
     health: 100,
     speed: 3,
@@ -121,6 +123,7 @@ export {
     STAGE2_LAYOUT,
     SCREEN_HEIGHT,
     SCREEN_WIDTH,
+    SPRITE_DECAY,
 
 }
 

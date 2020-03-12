@@ -32,7 +32,8 @@ export enum PlayerStateNames {
     WALKING = "walking",
     JUMPING = "jumping",
     FALLING = "falling",
-    STANDING = "standing"
+    STANDING = "standing",
+    KNOCKBACK = "knockback"
 }
 
 export enum PlayerPartNames {
