@@ -18,7 +18,8 @@ export enum Attributes {
 export enum ProjectileStateNames {
     FLYING = "flying",
     FALLING = "falling",
-    STANDING = "standing"
+    STANDING = "standing",
+    ROLLING = "rolling"
 }
 
 export enum EnemyStateNames {

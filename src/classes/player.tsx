@@ -209,15 +209,17 @@ export class Player extends Sprite  {
         const gravity = 0.5;
         this.yVelocity += gravity;
 
-        if (this.inKnockBack){
-            return;
-        }
-
-          // TODO REMOVE THIS TO PREVENT INFINITE JUMP
+        // TODO REMOVE THIS TO PREVENT INFINITE JUMP
         if (this.currentKeys.jump){
             this.state = PlayerStateNames.JUMPING;  
             this.yVelocity = -this.currentAttributes.jump;
         }
+
+        if (this.inKnockBack){
+            return;
+        }
+
+    
         // TODO UNCOMMENT THIS
         // this.allowJump = false;
 
@@ -243,7 +245,8 @@ export class Player extends Sprite  {
 
         // Prevent movement if in knockback
         if (this.inKnockBack){
-            return;
+            // return;
+            this.inKnockBack = false;
         }
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
         if (this.currentKeys.jump){
@@ -277,15 +280,17 @@ export class Player extends Sprite  {
     walking(){
         this.fireProjectile();
 
+        if (this.currentKeys.jump){
+            this.state = PlayerStateNames.JUMPING;  
+            this.yVelocity = this.currentAttributes.jump
+        }
+
         // Prevent movement if in knockback
         if (this.inKnockBack){
             return;
         }
 
-        if (this.currentKeys.jump){
-            this.state = PlayerStateNames.JUMPING;  
-            this.yVelocity = this.currentAttributes.jump
-        }
+
         // Move right
         else if (this.currentKeys.moveRight){
             this.facingRight = true;
@@ -312,15 +317,14 @@ export class Player extends Sprite  {
 
         this.inKnockBack =  false;
 
+        if (this.currentKeys.jump){
+            this.state = PlayerStateNames.JUMPING;
+            this.yVelocity = -this.currentAttributes.jump;
+        }
 
         // Prevent movement if in knockback
         if (this.inKnockBack){
             return;
-        }
-
-        if (this.currentKeys.jump){
-            this.state = PlayerStateNames.JUMPING;
-            this.yVelocity = -this.currentAttributes.jump;
         }
 
         if (this.currentKeys.moveRight){
@@ -357,7 +361,7 @@ export class Player extends Sprite  {
         if (this.currentKeys.attackRight){
             const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -366,7 +370,7 @@ export class Player extends Sprite  {
         else if (this.currentKeys.attackLeft){
             const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -375,7 +379,7 @@ export class Player extends Sprite  {
         else if(this.currentKeys.attackDown){
             const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 15, 15)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);

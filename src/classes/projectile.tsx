@@ -9,6 +9,7 @@ export class Projectile extends Sprite {
     sprite: PIXI.Sprite;
     state: ProjectileStateNames;
     sticky: boolean;
+    
 
     constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number){
         // x, y, width, height, xVel, yVel
@@ -45,6 +46,9 @@ export class Projectile extends Sprite {
 
     update(){
         this.handleState();
+        console.log(this.state)
+        console.log(this.xVelocity)
+        // debugger;
     }
 
     handleState(){
@@ -58,7 +62,20 @@ export class Projectile extends Sprite {
             case ProjectileStateNames.STANDING:
                 this.standing();
                 break;
+            case ProjectileStateNames.ROLLING:
+                this.rolling();
+                break;
         }
+    }
+
+    rolling(){
+        if (this.xVelocity < 0){
+            this.xVelocity += .25;
+        }
+        else if (this.xVelocity > 0){
+            this.xVelocity -= .25;
+        }
+
     }
 
     flying(){
@@ -94,7 +111,7 @@ export class Rock extends Projectile {
 
 
     createSprite(){
-        const sprite = new PIXI.Sprite(this.loader.resources['kobold-standing'].texture);
+        const sprite = new PIXI.Sprite(this.loader.resources['rock'].texture);
         sprite.x = this.x;
         sprite.y = this.y;
         // TODO: use right sprite

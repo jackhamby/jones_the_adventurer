@@ -63,6 +63,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             // Add enemy images
             .add('kobold-standing', "images/enemies/kobold/kobold_standing.png")
 
+            // Add projectile images
+            .add('rock', 'images/projectiles/rock.png')
+
 
             // Once textures have loaded, fire this method
             .load(() => {

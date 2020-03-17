@@ -348,6 +348,11 @@ export class Stage implements IStage{
             this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
         }
 
+        else if(projectile.state == ProjectileStateNames.FALLING){
+            projectile.setState(ProjectileStateNames.ROLLING)
+            // projectile.setState(ProjectileStateNames.STANDING);
+        }
+
 
     }
 
@@ -405,7 +410,8 @@ export class Stage implements IStage{
             projectile.setState(ProjectileStateNames.FALLING);
         }
         else if(projectile.state == ProjectileStateNames.FALLING){
-            projectile.setState(ProjectileStateNames.STANDING);
+            projectile.setState(ProjectileStateNames.ROLLING)
+            // projectile.setState(ProjectileStateNames.STANDING);
         }
 
     }
@@ -434,28 +440,20 @@ export class Stage implements IStage{
 
 
     private handlePlayerEnemyCollisionX(player: Player, collider: Sprite){
-        // player.xVelocity = -3;
-        // player.yVelocity = -3;
         player.yVelocity = -3;
+        
+        // Set knockback right
         if (collider.xVelocity > 0){
             player.xVelocity = 3;
             // player.yVelocity = -3;
         }
+        // Set kockback left
         if (collider.xVelocity < 0){
             player.xVelocity = -3;
             // player.yVelocity = -3;
         }
-        if (collider.xVelocity === 0){
-            if (player.xVelocity > 0){
-                player.xVelocity = -3;
-            }
-            if (player.xVelocity < 0){
-                player.xVelocity = 3
-            }
-        }
-        // player.setState(PlayerStateNames.KNOCKBACK);
-        player.inKnockBack =  true;
 
+        player.inKnockBack =  true;
     }
 
 
@@ -501,8 +499,10 @@ export class Stage implements IStage{
         if (projectile.sticky){
             projectile.setState(ProjectileStateNames.STANDING);
         }
+
+        
         projectile.yVelocity = 0;
-        projectile.xVelocity = 0;
+        // projectile.xVelocity = 0;
     }
 
 
@@ -545,8 +545,14 @@ export class Stage implements IStage{
         if (projectile.sticky){
             projectile.setState(ProjectileStateNames.STANDING);
         }
+        if (projectile.xVelocity < 0){
+            projectile.xVelocity = 6;
+        }
+        else if (projectile.xVelocity > 0){
+            projectile.xVelocity = -6;
+        }
     
-        projectile.xVelocity = 0;
+        // projectile.xVelocity = 0;
     }
 
 
