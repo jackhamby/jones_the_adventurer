@@ -27,6 +27,7 @@ export class Treasure extends Sprite {
     effect: Effect;
     iconOffsetX: number;
     iconOffsetY: number;
+    name: string;
 
     constructor(loader: PIXI.Loader, options: TreasureOptions) {
         // x, y, width, height, xVelaa, yVel
@@ -39,6 +40,7 @@ export class Treasure extends Sprite {
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
         this.effect = {} as Effect;
+        this.name = "";
   
     }
 
@@ -109,6 +111,7 @@ export class Armor1Helmet extends Treasure {
                 bodyPart: PlayerPartNames.HEAD,
             }
         } as Effect;
+        this.name = "iron helmet"
     }
 
 
@@ -145,6 +148,8 @@ export class Armor1Body extends Treasure {
                 
             }
         } as Effect
+        this.name = "iron breast plate"
+
     }
 
     initTextures(): TreasureTextures {
@@ -170,6 +175,8 @@ export class Armor1Legs extends Treasure {
                 
             }
         } as Effect;
+        this.name = "iron plate legs"
+
     }
 
 

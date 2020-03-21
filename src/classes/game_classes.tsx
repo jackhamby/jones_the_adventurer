@@ -84,7 +84,17 @@ export class StageManager {
         // loader, x, y
         const tempTreasure = new Armor1Helmet(this.loader, 300, 200);
         const tempTreasure2 = new Armor1Legs(this.loader, 500, 200)
-        const treasures = [ new Armor1Body(this.loader, 100, 100), tempTreasure, tempTreasure2 ]
+        const tempTreasure3 = new Armor1Legs(this.loader, 250, 150)
+        const tempTreasure5 = new Armor1Legs(this.loader, 120, 120)
+        const tempTreasure9 = new Armor1Legs(this.loader, 120, 120)
+        const tempTreasure10 = new Armor1Legs(this.loader, 120, 120)
+        const tempTreasure11 = new Armor1Legs(this.loader, 120, 120)
+
+        const tempTreasur6 = new Armor1Legs(this.loader, 90, 90)
+        const tempTreasure7 = new Armor1Legs(this.loader, 130, 130)
+        const tempTreasure8 = new Armor1Legs(this.loader, 140, 140)
+
+        const treasures = [ new Armor1Body(this.loader, 100, 100), tempTreasure, tempTreasure2, tempTreasure5, tempTreasure3, tempTreasur6, tempTreasure7, tempTreasure8, tempTreasure9, tempTreasure10, tempTreasure11 ]
         return new Stage(
             level,
             name,

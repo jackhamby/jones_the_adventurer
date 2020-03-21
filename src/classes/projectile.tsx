@@ -46,8 +46,6 @@ export class Projectile extends Sprite {
 
     update(){
         this.handleState();
-        console.log(this.state)
-        console.log(this.xVelocity)
         // debugger;
     }
 

@@ -3,6 +3,7 @@ import React from 'react';
 import { Stage } from '../../classes/game_classes';
 import { CharacterIcon } from './character_icon';
 import './game_character_detail.css';
+import { TreasureDetail } from './treasure_detail';
 export interface GameCharacterDetailProps {
     stage: Stage;
 }
@@ -11,13 +12,14 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
         
     render(){
         if (this.props.stage){
-            const player = this.props.stage.player
+            const player = this.props.stage.player;
+            const treasures = this.props.stage.player.treasures;
             return (
                 <React.Fragment>
                     <div className="col-2 h-100 p-0">
                         <CharacterIcon player={player} imagePath="fuck"/>
                     </div>
-                    <div className="col-5">
+                    <div className="col-5 h-100">
                         <table className="attribute-table">
                             <thead>
                                 <th> Player Attributes </th>
@@ -55,9 +57,13 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         </table>
                         
                     </div>
-                    <div className="col-5">
-                        Treasures:   
-                        {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0} 
+                    <div className="col-5 h-100" style={{overflow: "scroll"}}>
+                         Treasures:   
+                        <div className="row" style={{overflow: "scroll"}}>
+                            {/* {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0}  */}
+                            {this.props.stage.player.treasures.map(treasure => <TreasureDetail treasure={treasure}/>)}
+                        </div>
+                       
                     </div>
 
                 </React.Fragment>

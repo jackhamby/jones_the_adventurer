@@ -11,7 +11,7 @@ import { store } from '../state_management/store';
 import { AnyAction } from 'redux';
 import { ConnectedGame } from '../areas/game/game_wrapper';
 import { getCanvasDimensions } from '../helpers/util';
-
+import './global.css';
 export interface ControlStateProps {
     currentScreen: ScreenOptions;
     pixiApplication: PIXI.Application;
