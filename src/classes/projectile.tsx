@@ -23,7 +23,6 @@ export class Projectile extends Sprite {
         this.state = state;
     }
 
-
     updateX(value: number){
         this.x += value;
         this.sprite.x += value;
@@ -73,6 +72,9 @@ export class Projectile extends Sprite {
         else if (this.xVelocity > 0){
             this.xVelocity -= .25;
         }
+        else{
+            this.setState(ProjectileStateNames.STANDING);
+        }
 
     }
 
@@ -89,6 +91,12 @@ export class Projectile extends Sprite {
     }
 
     falling(){
+        if (this.xVelocity > 0){
+            this.xVelocity += -.25;
+        }
+        else if (this.xVelocity < 0){
+            this.xVelocity += .25;
+        }
         const gravity = 0.5;
         this.yVelocity += gravity;
     }

@@ -10,6 +10,10 @@ export enum CharacterOptions {
     KOBOLD = "kobold"
 }
 
+export enum ProjectileNames {
+    ROCK = "rock",
+}
+
 export enum Attributes {
     HEALTH = "health",
     SPEED = "speed",

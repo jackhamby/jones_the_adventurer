@@ -32,7 +32,7 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
             newKeyOptions.attackLeft = toggle;
             break;
         case 'ArrowUp':
-            newKeyOptions.attackLeft = toggle;
+            newKeyOptions.attackUp = toggle;
             break;
 
         case 'ArrowDown':

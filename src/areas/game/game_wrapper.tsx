@@ -10,11 +10,12 @@ import './game_wrapper.css';
 import { changeStage, setupGame } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
 import { CharacterOptions } from '../../types/enums';
-import { Player } from '../../classes/player';
+// import { Player } from '../../classes/player';
 import { Knight } from '../../classes/knight';
 import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
 import { Treasure } from '../../classes/treasure';
+import { PlayerII } from '../../classes/playerII';
 
 export interface GameStateProps {
     character: Character;
@@ -111,19 +112,21 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
     // Creates a player on the given viewport
     createPlayer(){
-        let player: Player;
+        // let player: Player;
+        let newPlayer: PlayerII;
         let attributes: PlayerAttributes;
         const loader = this.props.pixiApplication.loader;
 
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
                 attributes = this.props.character.attributes;
-                player = new Knight(loader, {} as Stage, attributes);
+                newPlayer = new Knight(loader, {} as Stage, attributes);
+                
                 break;
             default:
                 throw "cant handle kbold yet bitch"
         }
-        return player
+        return newPlayer
     }
 
     render(){

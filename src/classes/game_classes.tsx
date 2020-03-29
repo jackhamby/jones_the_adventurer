@@ -1,19 +1,21 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
-import { PlayerStateNames, PlayerPartNames, EnemyStateNames, ProjectileStateNames } from '../types/enums';
+import {  PlayerPartNames, EnemyStateNames, ProjectileStateNames } from '../types/enums';
 import { Platform, DefaultPlatform } from './platform';
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
 import {store} from '../state_management/store';
 import { ControlAction, applyTreasure } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
-import { Player } from './player';
+// import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
 import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
+import { PlayerII } from './playerII';
+import { UnitStateNames, Unit } from './unit';
 
 
 
@@ -28,10 +30,10 @@ export interface Container {
 export class StageManager {
 
     loader: PIXI.Loader;
-    player: Player;
+    player: PlayerII;
     viewport: Viewport;
 
-    constructor(loader: PIXI.Loader, player: Player, viewport: Viewport){
+    constructor(loader: PIXI.Loader, player: PlayerII, viewport: Viewport){
         this.loader = loader;
         this.player  = player;
         this.viewport = viewport;
@@ -220,13 +222,13 @@ export class Stage implements IStage{
     enemies: Enemy[];
     platforms: Platform[];
     currentKeys: KeyOptions;
-    player: Player;
+    player: PlayerII;
     treasures: Treasure[];
     viewport: Viewport;
     projectiles: Projectile[];
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
+    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: PlayerII, viewport: Viewport){
         this.level = level;
         this.name = name;
         this.enemies = enemies;
@@ -347,6 +349,7 @@ export class Stage implements IStage{
         }
         if (collidePlatform){
             this.handlePlayerPlatformCollisionX(this.player, collidePlatform);
+            console.log('collided in x with platform')
         }
     }
 
@@ -387,10 +390,10 @@ export class Stage implements IStage{
         }
 
         if (this.isFalling(this.player)){
-            this.player.setState(PlayerStateNames.FALLING);
+            this.player.setState(UnitStateNames.FALLING);
         }
-        else if (this.player.state == PlayerStateNames.FALLING){
-            this.player.setState(PlayerStateNames.STANDING);
+        else if (this.player.state == UnitStateNames.FALLING){
+            this.player.setState(UnitStateNames.STANDING);
         }
     }
 
@@ -434,12 +437,12 @@ export class Stage implements IStage{
 
 
 
-    private handlePlayerTreasureCollisionX(player: Player, treasure: Treasure){
+    private handlePlayerTreasureCollisionX(player: Unit, treasure: Treasure){
         store.dispatch(applyTreasure(treasure) as ControlAction);
         this.removeTreasure(treasure);
     }
 
-    private handlePlayerTreasureCollisionY(player: Player, treasure: Treasure){
+    private handlePlayerTreasureCollisionY(player: Unit, treasure: Treasure){
         store.dispatch(applyTreasure(treasure) as ControlAction);
         this.removeTreasure(treasure);
     }
@@ -449,7 +452,7 @@ export class Stage implements IStage{
 
 
 
-    private handlePlayerEnemyCollisionX(player: Player, collider: Sprite){
+    private handlePlayerEnemyCollisionX(player: Unit, collider: Sprite){
         player.yVelocity = -3;
         
         // Set knockback right
@@ -473,7 +476,7 @@ export class Stage implements IStage{
 
 
 
-    private handlePlayerPlatformCollisionY(player: Player, collider: Sprite){
+    private handlePlayerPlatformCollisionY(player: Unit, collider: Sprite){
         if (player.yVelocity > 0){
             player.setY(collider.top() - player.height);
         }
@@ -522,7 +525,7 @@ export class Stage implements IStage{
 
 
 
-    private handlePlayerPlatformCollisionX(player: Player, collider: Sprite){
+    private handlePlayerPlatformCollisionX(player: Unit, collider: Sprite){
         if (player.xVelocity > 0){
             player.setX(collider.left() - player.width);
         }
@@ -556,10 +559,10 @@ export class Stage implements IStage{
             projectile.setState(ProjectileStateNames.STANDING);
         }
         if (projectile.xVelocity < 0){
-            projectile.xVelocity = 6;
+            projectile.xVelocity = projectile.xVelocity * -1;
         }
         else if (projectile.xVelocity > 0){
-            projectile.xVelocity = -6;
+            projectile.xVelocity = -projectile.xVelocity;
         }
     
         // projectile.xVelocity = 0;
@@ -574,12 +577,12 @@ export class Stage implements IStage{
 
 
 
-    private isFalling(player: Player){
+    private isFalling(player: Unit){
         player.updateY(1);
         const platformCollision = this.collideAny(player, this.platforms);
         
         // ontop of some platform or jumping
-        if (platformCollision || player.state === PlayerStateNames.JUMPING){
+        if (platformCollision || player.state === UnitStateNames.JUMPING){
             player.updateY(-1);
             return false;
         }
@@ -648,7 +651,7 @@ export class Stage implements IStage{
     }
 
 
-    private contain(player: Player, container: Container){
+    private contain(player: Unit, container: Container){
         // contain right side of container
         if (player.left() < container.x){
             player.setX(container.x + 1);
@@ -666,8 +669,8 @@ export class Stage implements IStage{
         if (player.bottom() > (container.y + container.height)){
             player.setY((container.y + container.height) - player.height)
             player.yVelocity = 0;
-            if (this.player.state == PlayerStateNames.FALLING){
-                player.setState(PlayerStateNames.WALKING);
+            if (this.player.state == UnitStateNames.FALLING){
+                player.setState(UnitStateNames.WALKING);
             }
 
         }

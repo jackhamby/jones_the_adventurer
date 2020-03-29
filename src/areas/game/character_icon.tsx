@@ -2,13 +2,14 @@
 
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
-import { Player, PlayerParts } from '../../classes/player';
+// import { Player, PlayerParts } from '../../classes/player';
 import { PlayerPartNames } from '../../types/enums';
+import { PlayerII } from '../../classes/playerII';
 
 
 interface CharacterIconProps {
     imagePath: string;
-    player: Player;
+    player: PlayerII;
 }
 
 

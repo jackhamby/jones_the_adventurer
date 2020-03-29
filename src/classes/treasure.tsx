@@ -3,7 +3,8 @@ import { PlayerAttributeNames } from '../types/states';
 import { PlayerArmorNames, PlayerPartNames } from '../types/enums';
 import { Sprite } from './sprite';
 import { SpritePart, Effect } from './interfaces';
-import { Player } from './player';
+// import { Player } from './player';
+import { PlayerII } from './playerII';
 
 
 export interface TreasureTextures {
@@ -73,7 +74,7 @@ export class Treasure extends Sprite {
         return [ baseSpritePart, iconSpritePart ];
     }
 
-    static apply(player: Player, treasure: Treasure): void {
+    static apply(player: PlayerII, treasure: Treasure): void {
         player.attributes[treasure.effect.attribute] += treasure.effect.value;
         if (treasure.effect.textureEffect){
             const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
