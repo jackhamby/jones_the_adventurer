@@ -1,8 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Sprite } from "./sprite";
 import { EnemyStateNames } from "../types/enums";
-// import { Player } from "./player";
-import { PlayerII } from './playerII';
+import { Player } from './player';
 
 export type EnemyTextures = {
     [key in EnemyStateNames]: PIXI.Texture;
@@ -13,9 +12,9 @@ export class Enemy extends Sprite {
     sprite: PIXI.Sprite;
     state: EnemyStateNames;
     textures: EnemyTextures;
-    player: PlayerII;
+    player: Player;
 
-    constructor(loader: PIXI.Loader, width: number, height: number, player: PlayerII){
+    constructor(loader: PIXI.Loader, width: number, height: number, player: Player){
         // x, y, widht, height, xVEl, yVel
         super(loader, 200, 300, width, height, 0, 0);
         this.textures = {} as EnemyTextures;
@@ -219,7 +218,7 @@ export class Enemy extends Sprite {
 
 
 export class Kobold extends Enemy {
-    constructor(loader: PIXI.Loader, player: PlayerII){
+    constructor(loader: PIXI.Loader, player: Player){
         super(loader, 20, 20, player);
         this.textures = this.initializeTextures();
         this.sprite = this.createSprite();

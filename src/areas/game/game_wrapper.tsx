@@ -15,7 +15,7 @@ import { Knight } from '../../classes/knight';
 import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
 import { Treasure } from '../../classes/treasure';
-import { PlayerII } from '../../classes/playerII';
+import { Player } from '../../classes/player';
 
 export interface GameStateProps {
     character: Character;
@@ -113,7 +113,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     // Creates a player on the given viewport
     createPlayer(){
         // let player: Player;
-        let newPlayer: PlayerII;
+        let newPlayer: Player;
         let attributes: PlayerAttributes;
         const loader = this.props.pixiApplication.loader;
 

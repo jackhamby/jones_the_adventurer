@@ -1,4 +1,4 @@
-import { ScreenOptions, CharacterOptions, PlayerStatisticNames } from "../../types/enums";
+import { ScreenOptions, CharacterOptions, UnitStatisticNames } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
 import { Treasure } from "../../classes/treasure";
@@ -18,7 +18,7 @@ export const UPDATE_STATS: string = "UPDATE_STATISTICS";
 
 
 interface UpdateStatisticPayload {
-    statistic: PlayerStatisticNames;
+    statistic: UnitStatisticNames;
     value: number;
 }
 
@@ -92,7 +92,7 @@ interface UpdateKeyReleasedAction {
 
 
 
-export const updateStatistic = (statistic: PlayerStatisticNames, value: number): UpdateStatisticAction => {
+export const updateStatistic = (statistic: UnitStatisticNames, value: number): UpdateStatisticAction => {
     return {
         type: UPDATE_STATS,
         payload: {

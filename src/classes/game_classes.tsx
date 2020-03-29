@@ -1,6 +1,6 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
-import {  PlayerPartNames, EnemyStateNames, ProjectileStateNames } from '../types/enums';
+import { EnemyStateNames, ProjectileStateNames, UnitPartNames, UnitStateNames } from '../types/enums';
 import { Platform, DefaultPlatform } from './platform';
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Kobold } from './enemy';
@@ -14,8 +14,8 @@ import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
-import { PlayerII } from './playerII';
-import { UnitStateNames, Unit } from './unit';
+import { Player } from './player';
+import { Unit } from './unit';
 
 
 
@@ -30,10 +30,10 @@ export interface Container {
 export class StageManager {
 
     loader: PIXI.Loader;
-    player: PlayerII;
+    player: Player;
     viewport: Viewport;
 
-    constructor(loader: PIXI.Loader, player: PlayerII, viewport: Viewport){
+    constructor(loader: PIXI.Loader, player: Player, viewport: Viewport){
         this.loader = loader;
         this.player  = player;
         this.viewport = viewport;
@@ -65,7 +65,7 @@ export class StageManager {
             this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
         })
         this.viewport.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
-            const playerPartName = key as PlayerPartNames;
+            const playerPartName = key as UnitPartNames;
             return newplayer.spriteParts[playerPartName].sprite
         }))
         this.viewport.addChild(this.player.hpBar);
@@ -222,13 +222,13 @@ export class Stage implements IStage{
     enemies: Enemy[];
     platforms: Platform[];
     currentKeys: KeyOptions;
-    player: PlayerII;
+    player: Player;
     treasures: Treasure[];
     viewport: Viewport;
     projectiles: Projectile[];
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: PlayerII, viewport: Viewport){
+    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
         this.level = level;
         this.name = name;
         this.enemies = enemies;
@@ -264,7 +264,7 @@ export class Stage implements IStage{
     // 
     private updateViewport(){
         const viewportCenter = this.viewport.center;
-        this.viewport.follow(this.player.spriteParts[PlayerPartNames.HEAD].sprite);
+        this.viewport.follow(this.player.spriteParts[UnitPartNames.HEAD].sprite);
     }
 
     // Update state of the sprite

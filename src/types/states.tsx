@@ -10,9 +10,6 @@ export interface AppState {
     gameState: GameState;
 }
 
-
-
-
 export interface PlayerState {
     character: Character;
 }
@@ -38,7 +35,6 @@ export interface IStage {
     level: number;
     enemies: Enemy[];
     platforms: Platform[];
-    // player: Player;
 }
 
 export interface Character {

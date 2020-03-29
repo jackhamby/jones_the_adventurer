@@ -1,10 +1,10 @@
 import * as PIXI from 'pixi.js';
 import { PlayerAttributeNames } from '../types/states';
-import { PlayerArmorNames, PlayerPartNames } from '../types/enums';
 import { Sprite } from './sprite';
 import { SpritePart, Effect } from './interfaces';
 // import { Player } from './player';
-import { PlayerII } from './playerII';
+import { Player } from './player';
+import { UnitArmorNames, UnitPartNames } from '../types/enums';
 
 
 export interface TreasureTextures {
@@ -74,7 +74,7 @@ export class Treasure extends Sprite {
         return [ baseSpritePart, iconSpritePart ];
     }
 
-    static apply(player: PlayerII, treasure: Treasure): void {
+    static apply(player: Player, treasure: Treasure): void {
         player.attributes[treasure.effect.attribute] += treasure.effect.value;
         if (treasure.effect.textureEffect){
             const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
@@ -108,8 +108,8 @@ export class Armor1Helmet extends Treasure {
             attribute: PlayerAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
-                armorType: PlayerArmorNames.ARMOR1,
-                bodyPart: PlayerPartNames.HEAD,
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.HEAD,
             }
         } as Effect;
         this.name = "iron helmet"
@@ -144,8 +144,8 @@ export class Armor1Body extends Treasure {
             attribute: PlayerAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
-                armorType: PlayerArmorNames.ARMOR1,
-                bodyPart: PlayerPartNames.BODY,
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.BODY,
                 
             }
         } as Effect
@@ -171,8 +171,8 @@ export class Armor1Legs extends Treasure {
             attribute: PlayerAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
-                armorType: PlayerArmorNames.ARMOR1,
-                bodyPart: PlayerPartNames.LEGS,
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.LEGS,
                 
             }
         } as Effect;

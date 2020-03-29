@@ -2,19 +2,18 @@
 
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
-// import { Player, PlayerParts } from '../../classes/player';
-import { PlayerPartNames } from '../../types/enums';
-import { PlayerII } from '../../classes/playerII';
+import { Player } from '../../classes/player';
+import { UnitPartNames } from '../../types/enums';
 
 
 interface CharacterIconProps {
     imagePath: string;
-    player: PlayerII;
+    player: Player;
 }
 
 
 type TOCHANGE = {
-    [key in PlayerPartNames] : PIXI.Sprite;
+    [key in UnitPartNames] : PIXI.Sprite;
 }
 
 export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
@@ -65,22 +64,22 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
         let x = (this.appWidth / 2) - (this.props.player.width / 2);
         let y = (this.appHeight / 2) -  (this.props.player.height / 2);
 
-        const hs = this.spriteParts[PlayerPartNames.HEAD];
+        const hs = this.spriteParts[UnitPartNames.HEAD];
         hs.x = x;
         hs.y = y;
 
-        const bs = this.spriteParts[PlayerPartNames.BODY];
-        bs.x = x + this.props.player.spriteParts[PlayerPartNames.BODY].offSetX;
-        bs.y = y + this.props.player.spriteParts[PlayerPartNames.BODY].offSetY;
+        const bs = this.spriteParts[UnitPartNames.BODY];
+        bs.x = x + this.props.player.spriteParts[UnitPartNames.BODY].offSetX;
+        bs.y = y + this.props.player.spriteParts[UnitPartNames.BODY].offSetY;
 
 
-        const ls = this.spriteParts[PlayerPartNames.LEGS];
-        ls.x = x + this.props.player.spriteParts[PlayerPartNames.LEGS].offSetX;
-        ls.y = y + this.props.player.spriteParts[PlayerPartNames.LEGS].offSetY;
+        const ls = this.spriteParts[UnitPartNames.LEGS];
+        ls.x = x + this.props.player.spriteParts[UnitPartNames.LEGS].offSetX;
+        ls.y = y + this.props.player.spriteParts[UnitPartNames.LEGS].offSetY;
 
 
         this.app.stage.addChild(...Object.keys(this.spriteParts).map((key: string) => {
-            const playerPartName = key as PlayerPartNames;
+            const playerPartName = key as UnitPartNames;
             return this.spriteParts[playerPartName];
         }))
     }
@@ -101,7 +100,7 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
         
 
         Object.keys(this.props.player.spriteParts).map((key: string) => {
-            const playerPartName = key as PlayerPartNames;
+            const playerPartName = key as UnitPartNames;
             const spritePart = this.props.player.spriteParts[playerPartName];
             const copySprite = new PIXI.Sprite(spritePart.sprite.texture);
             newParts[playerPartName] =  copySprite;            

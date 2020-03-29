@@ -1,27 +1,22 @@
-// import { Player, PlayerParts, SpriteParts, Part } from "./player";
 import * as PIXI from "pixi.js";
-import { KnightTextures, SpritePart } from "./interfaces";
 import { PlayerAttributes } from "../types/states";
 import { Stage } from "./game_classes";
-import { Unit, SpriteParts, Part, UnitParts } from "./unit";
-import { PlayerII } from "./playerII";
+import { Player } from "./player";
+import { UnitParts, SpriteParts } from "../types/types";
+import { Part } from "./part";
 
 
-
-
-export class Knight extends PlayerII {
-
+export class Knight extends Player {
 
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: PlayerAttributes){
         super(loader, stage, initialAttributes);
         this.textures = this.initTexturesII();
-        // this.spriteParts = this.initSpriteParts();
         this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
     }
 
 
-    initTexturesII(): UnitParts {
+    initTexturesII(): UnitParts {  
         return {
             body:{
                 armor1: {

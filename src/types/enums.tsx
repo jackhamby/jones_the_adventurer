@@ -33,7 +33,35 @@ export enum EnemyStateNames {
     STANDING = "standing"
 }
 
-export enum PlayerStateNames {
+// export enum PlayerStateNames {
+//     WALKING = "walking",
+//     JUMPING = "jumping",
+//     FALLING = "falling",
+//     STANDING = "standing",
+//     KNOCKBACK = "knockback"
+// }
+
+// export enum PlayerPartNames {
+//     HEAD = "head",
+//     BODY = "body",
+//     LEGS = "legs"
+// }
+
+// export enum PlayerArmorNames {
+//     DEFAULT = "default",
+//     ARMOR1 = "armor1"
+// }
+
+
+
+
+// export enum PlayerStatisticNames {
+//     PROJECTILES_FIRED = "projectiles",
+//     DAMAGE_DEALT = "damage",
+//     ENEMIES_KILLED = "killed",
+// }
+
+export enum UnitStateNames {
     WALKING = "walking",
     JUMPING = "jumping",
     FALLING = "falling",
@@ -41,20 +69,27 @@ export enum PlayerStateNames {
     KNOCKBACK = "knockback"
 }
 
-export enum PlayerPartNames {
+export enum UnitPartNames {
     HEAD = "head",
     BODY = "body",
     LEGS = "legs"
 }
 
-export enum PlayerArmorNames {
+export enum UnitArmorNames {
     DEFAULT = "default",
     ARMOR1 = "armor1"
 }
 
-
-export enum PlayerStatisticNames {
+export enum UnitStatisticNames {
     PROJECTILES_FIRED = "projectiles",
     DAMAGE_DEALT = "damage",
     ENEMIES_KILLED = "killed",
+}
+export enum UnitAttributeNames {
+    HEALTH = "health",
+    SPEED = "speed",
+    ARMOR = "armor",
+    ATTACK = "attack",
+    JUMP = "jump",
+    ATTACK_SPEED = "attack_speed"
 }
