@@ -26,12 +26,12 @@ export enum ProjectileStateNames {
     ROLLING = "rolling"
 }
 
-export enum EnemyStateNames {
-    WALKING = "walking",
-    JUMPING = "jumping",
-    FALLING = "falling",
-    STANDING = "standing"
-}
+// export enum EnemyStateNames {
+//     WALKING = "walking",
+//     JUMPING = "jumping",
+//     FALLING = "falling",
+//     STANDING = "standing"
+// }
 
 // export enum PlayerStateNames {
 //     WALKING = "walking",
@@ -66,7 +66,10 @@ export enum UnitStateNames {
     JUMPING = "jumping",
     FALLING = "falling",
     STANDING = "standing",
-    KNOCKBACK = "knockback"
+    KNOCKBACK = "knockback",
+    DEAD = "dead",
+    PATROLLING = 'patrolling',
+    ATTACKING = 'attacking'
 }
 
 export enum UnitPartNames {
@@ -77,7 +80,8 @@ export enum UnitPartNames {
 
 export enum UnitArmorNames {
     DEFAULT = "default",
-    ARMOR1 = "armor1"
+    ARMOR1 = "armor1",
+    ARMOR2 = "armor2"
 }
 
 export enum UnitStatisticNames {
@@ -92,4 +96,9 @@ export enum UnitAttributeNames {
     ATTACK = "attack",
     JUMP = "jump",
     ATTACK_SPEED = "attack_speed"
+}
+
+
+export enum ProjectileAttributeNames {
+    DAMAGE = "damage"
 }

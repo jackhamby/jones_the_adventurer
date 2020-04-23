@@ -22,7 +22,9 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                     <div className="col-5 h-100">
                         <table className="attribute-table">
                             <thead>
-                                <th> Player Attributes </th>
+                                <tr>
+                                    <th> Player Attributes </th>    
+                                </tr>
                             </thead>
                             <tbody>
                                 <tr>

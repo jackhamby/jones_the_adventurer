@@ -79,7 +79,7 @@ export class Treasure extends Sprite {
         if (treasure.effect.textureEffect){
             const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
             const newArmorType = treasure.effect.textureEffect.armorType;
-            const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
+            const newTexture = player.textures[affectedBodyPart][newArmorType];
             const spritePart = player.spriteParts[affectedBodyPart].sprite;
             spritePart.texture = newTexture;
         }
@@ -123,6 +123,32 @@ export class Armor1Helmet extends Treasure {
         }
     }
 }
+
+
+export class Armor2Helmet extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
+        this.effect = {
+            attribute: PlayerAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR2,
+                bodyPart: UnitPartNames.HEAD,
+            }
+        } as Effect;
+        this.name = "a hat"
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['knight-head-armor2-standing'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
 
 
 

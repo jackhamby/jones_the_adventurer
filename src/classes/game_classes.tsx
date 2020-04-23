@@ -1,23 +1,22 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
-import { EnemyStateNames, ProjectileStateNames, UnitPartNames, UnitStateNames } from '../types/enums';
+import { ProjectileStateNames, UnitPartNames, UnitStateNames } from '../types/enums';
 import { Platform, DefaultPlatform } from './platform';
 import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
-import { Enemy, Kobold } from './enemy';
+import { Enemy, Kobold, Kobold2 } from './enemy';
 import {store} from '../state_management/store';
 import { ControlAction, applyTreasure } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
 import { Player } from './player';
 import { Unit } from './unit';
-
-
+import { UnitAttributes } from '../types/types';
 
 
 export interface Container {
@@ -56,19 +55,17 @@ export class StageManager {
         const newplayer = stage.player;
         const treasures = stage.treasures;
         const enemies = stage.enemies;
-
-        enemies.forEach((enemy: Enemy) => this.viewport.addChild(enemy.sprite));
+        
+        enemies.forEach((enemy: Enemy) => {
+            this.viewport.addChild(...enemy.getSprites());
+        });
 
         platforms.forEach((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
 
         treasures.forEach((treasure: Treasure) => {
             this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
         })
-        this.viewport.addChild(...Object.keys(newplayer.spriteParts).map((key: string) => {
-            const playerPartName = key as UnitPartNames;
-            return newplayer.spriteParts[playerPartName].sprite
-        }))
-        this.viewport.addChild(this.player.hpBar);
+        this.viewport.addChild(...newplayer.getSprites())
     }
 
     clearStage(){
@@ -81,38 +78,29 @@ export class StageManager {
     private buildStageOne(): Stage{
         const level = 1;
         const name = "beginners luck";
-        const enemies = [ new Kobold(this.loader, this.player) ];
         const platforms = this.generatePlatforms(STAGE3_LAYOUT);
-        // loader, x, y
         const tempTreasure = new Armor1Helmet(this.loader, 300, 200);
         const tempTreasure2 = new Armor1Legs(this.loader, 500, 200)
-        const tempTreasure3 = new Armor1Legs(this.loader, 250, 150)
-        const tempTreasure5 = new Armor1Legs(this.loader, 120, 120)
-        const tempTreasure9 = new Armor1Legs(this.loader, 120, 120)
-        const tempTreasure10 = new Armor1Legs(this.loader, 120, 120)
-        const tempTreasure11 = new Armor1Legs(this.loader, 120, 120)
-
-        const tempTreasur6 = new Armor1Legs(this.loader, 90, 90)
-        const tempTreasure7 = new Armor1Legs(this.loader, 130, 130)
-        const tempTreasure8 = new Armor1Legs(this.loader, 140, 140)
-
-        const treasures = [ new Armor1Body(this.loader, 100, 100), tempTreasure, tempTreasure2, tempTreasure5, tempTreasure3, tempTreasur6, tempTreasure7, tempTreasure8, tempTreasure9, tempTreasure10, tempTreasure11 ]
-        return new Stage(
+        const tempTreasure12 = new Armor2Helmet(this.loader, 150, 700);
+        const treasures = [ new Armor1Body(this.loader, 100, 100), tempTreasure, tempTreasure2, tempTreasure12 ]
+        const stage = new Stage(
             level,
             name,
-            enemies,
+            [],
             platforms,
             treasures,
             this.player,
             this.viewport
         )
+        const enemies = [ new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Kobold2(this.loader, stage, {} as UnitAttributes, 250, 200),  new Kobold2(this.loader, stage, {} as UnitAttributes, 600, 250),  new Kobold2(this.loader, stage, {} as UnitAttributes, 800, 220)];
+        stage.enemies = enemies;
+        return stage;
     }
 
     private buildStageTwo(): Stage{
         const level = 1;
         const name = "beginners luck";
-        const enemies = [ new Kobold(this.loader, this.player) ];
-        // const platforms = [ new Platform(sprite) ] // TODO: pass platform sprite
+        const enemies = [] as Enemy[];
         const platforms = this.generatePlatforms(STAGE3_LAYOUT);
         const treasures = [ new Armor1Body(this.loader, 100, 200) ]
         return new Stage(
@@ -143,8 +131,6 @@ export class StageManager {
         const canvasDimensions = getCanvasDimensions();
         const xIncrement = canvasDimensions.width / 20;
         const yIncrement = canvasDimensions.height / 20;
-        // const xIncrement = 25;
-        // const yIncrement = 25;
         // loop height
         for(var i = 1; i < height + 1; ++i){
             x = 0;
@@ -248,10 +234,10 @@ export class Stage implements IStage{
         })
     }
 
-    removeProjectile(projectileToRemove: Projectile){
-        this.projectiles = this.projectiles.filter((projectile: Projectile) => projectile != projectileToRemove);
-        this.viewport.removeChild(projectileToRemove.sprite);
-    }
+    // removeProjectile(projectileToRemove: Projectile){
+    //     this.projectiles = this.projectiles.filter((projectile: Projectile) => projectile != projectileToRemove);
+    //     this.viewport.removeChild(projectileToRemove.sprite);
+    // }
 
     update(keys: KeyOptions){
         this.currentKeys = keys;
@@ -271,13 +257,10 @@ export class Stage implements IStage{
     private updateAllSpriteStates(){
         this.player.update(this.currentKeys)
         this.enemies.forEach((enemy: Enemy) => {
-            enemy.update();
+            enemy.update(this.currentKeys);
         })
         this.projectiles.forEach((projectile: Projectile) => {
             projectile.update();
-            if (projectile.decay <= 0) {
-                this.removeProjectile(projectile);
-            }
         })
     }
 
@@ -317,6 +300,8 @@ export class Stage implements IStage{
             this.checkEnemyXCollisions(enemy);
             enemy.updateY(enemy.yVelocity);
             this.checkEnemyYCollisions(enemy)
+            enemy.hpBar.clear();
+            enemy.drawHpBar()
         })
     }
 
@@ -325,16 +310,8 @@ export class Stage implements IStage{
 
 
 
-
-
-    private checkEnemyXCollisions(enemy: Enemy){
-        const collidePlatform = this.collideAny(enemy, this.platforms);
-
-        if (collidePlatform){
-            this.handleEnemyPlatformCollisionX(enemy, collidePlatform);
-        }
-    }
-
+    // ================================== Player collisions ===========================================================
+    // ===============================================================================================================   
     private checkPlayerXCollisions() {
         const collidePlatform = this.collideAny(this.player, this.platforms);
         const collideTreasures = this.collideAny(this.player, this.treasures);
@@ -349,33 +326,8 @@ export class Stage implements IStage{
         }
         if (collidePlatform){
             this.handlePlayerPlatformCollisionX(this.player, collidePlatform);
-            console.log('collided in x with platform')
         }
     }
-
-
-    private checkProjectileXCollisions(projectile: Projectile){
-        const collidePlatform = this.collideAny(projectile, this.platforms);
-
-        if (collidePlatform){
-            this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
-        }
-
-        else if(projectile.state == ProjectileStateNames.FALLING){
-            projectile.setState(ProjectileStateNames.ROLLING)
-            // projectile.setState(ProjectileStateNames.STANDING);
-        }
-
-
-    }
-
-
-
-
-
-
-
-
 
     private checkPlayerYCollisions(){
         const collidePlatform = this.collideAny(this.player, this.platforms); 
@@ -397,46 +349,6 @@ export class Stage implements IStage{
         }
     }
 
-    private checkEnemyYCollisions(enemy: Enemy){
-        const collidePlatform = this.collideAny(enemy, this.platforms); 
-
-        if (collidePlatform){
-            this.handleEnemyPlatformCollisionY(enemy, collidePlatform);
-        }
-
-        if (this.isFallingEnemy(enemy)){
-            enemy.setState(EnemyStateNames.FALLING);
-        }
-        else if (enemy.state == EnemyStateNames.FALLING){
-            enemy.setState(EnemyStateNames.WALKING);
-        }
-    }
-
-    private checkProjectileYCollisions(projectile: Projectile){
-        const collidePlatform = this.collideAny(projectile, this.platforms);
-
-        if (collidePlatform){
-            this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
-        }
-
-        if (projectile.state != ProjectileStateNames.STANDING && this.isFallingProjectile(projectile) ) {
-            projectile.setState(ProjectileStateNames.FALLING);
-        }
-        else if(projectile.state == ProjectileStateNames.FALLING){
-            projectile.setState(ProjectileStateNames.ROLLING)
-            // projectile.setState(ProjectileStateNames.STANDING);
-        }
-
-    }
-
-
-
-
-
-
-
-
-
     private handlePlayerTreasureCollisionX(player: Unit, treasure: Treasure){
         store.dispatch(applyTreasure(treasure) as ControlAction);
         this.removeTreasure(treasure);
@@ -446,11 +358,6 @@ export class Stage implements IStage{
         store.dispatch(applyTreasure(treasure) as ControlAction);
         this.removeTreasure(treasure);
     }
-    
-
-
-
-
 
     private handlePlayerEnemyCollisionX(player: Unit, collider: Sprite){
         player.yVelocity = -3;
@@ -469,13 +376,6 @@ export class Stage implements IStage{
         player.inKnockBack =  true;
     }
 
-
-
-
-
-
-
-
     private handlePlayerPlatformCollisionY(player: Unit, collider: Sprite){
         if (player.yVelocity > 0){
             player.setY(collider.top() - player.height);
@@ -486,6 +386,46 @@ export class Stage implements IStage{
         player.yVelocity = 0;
     }
 
+    private handlePlayerPlatformCollisionX(player: Unit, collider: Sprite){
+        if (player.xVelocity > 0){
+            player.setX(collider.left() - player.width);
+        }
+        else if (player.xVelocity < 0){
+            player.setX(collider.right());
+        }
+        player.xVelocity = 0;
+    }
+
+
+
+
+
+
+
+    // ================================== Enemy collisions ===========================================================
+    // ===============================================================================================================
+    private checkEnemyXCollisions(enemy: Enemy){
+        const collidePlatform = this.collideAny(enemy, this.platforms);
+
+        if (collidePlatform){
+            this.handleEnemyPlatformCollisionX(enemy, collidePlatform);
+        }
+    }
+
+    private checkEnemyYCollisions(enemy: Enemy){
+        const collidePlatform = this.collideAny(enemy, this.platforms); 
+
+        if (collidePlatform){
+            this.handleEnemyPlatformCollisionY(enemy, collidePlatform);
+        }
+
+        if (this.isFallingEnemy(enemy)){
+            enemy.setState(UnitStateNames.FALLING);
+        }
+        else if (enemy.state == UnitStateNames.FALLING){
+            enemy.setState(UnitStateNames.WALKING);
+        }
+    }
 
     private handleEnemyPlatformCollisionY(enemy: Enemy, collider: Sprite){
         // Set at the top
@@ -498,6 +438,72 @@ export class Stage implements IStage{
         enemy.yVelocity = 0;
     }
 
+    private handleEnemyPlatformCollisionX(enemy: Enemy, collider: Sprite){
+        if (enemy.xVelocity > 0){
+            enemy.setX(collider.left() - enemy.width);
+        }
+        else if (enemy.xVelocity < 0){
+            enemy.setX(collider.right());
+        }
+
+        if (enemy.state === UnitStateNames.PATROLLING){
+            enemy.xVelocity *= -1;
+
+        } else {
+            enemy.xVelocity = 0;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // ================================== Projectile collisions ===========================================================
+    // ===============================================================================================================
+    private checkProjectileXCollisions(projectile: Projectile){
+        const collidePlatform = this.collideAny(projectile, this.platforms);
+        const collidePlayer = this.collideAny(projectile, this.enemies);
+
+        if (collidePlatform){
+            this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
+        }
+        if (collidePlayer){
+            this.handleProjectileEnemyCollisionX(projectile, collidePlayer)
+        }
+
+        else if(projectile.state == ProjectileStateNames.FALLING){
+            projectile.setState(ProjectileStateNames.ROLLING)
+        }
+    }
+
+    private checkProjectileYCollisions(projectile: Projectile){
+        const collidePlatform = this.collideAny(projectile, this.platforms);
+        const collidePlayer = this.collideAny(projectile, this.enemies);
+
+        if (collidePlatform){
+            this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
+        }
+        if (collidePlayer){
+            this.handleProjectileEnemyCollisionY(projectile, collidePlayer);
+        }
+
+        if (projectile.state != ProjectileStateNames.STANDING && this.isFallingProjectile(projectile) ) {
+            projectile.setState(ProjectileStateNames.FALLING);
+        }
+        else if(projectile.state == ProjectileStateNames.FALLING){
+            projectile.setState(ProjectileStateNames.ROLLING)
+        }
+
+    }
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
         if (projectile.yVelocity > 0){
@@ -512,39 +518,8 @@ export class Stage implements IStage{
         if (projectile.sticky){
             projectile.setState(ProjectileStateNames.STANDING);
         }
-
-        
         projectile.yVelocity = 0;
-        // projectile.xVelocity = 0;
     }
-
-
-
-
-
-
-
-
-    private handlePlayerPlatformCollisionX(player: Unit, collider: Sprite){
-        if (player.xVelocity > 0){
-            player.setX(collider.left() - player.width);
-        }
-        else if (player.xVelocity < 0){
-            player.setX(collider.right());
-        }
-        player.xVelocity = 0;
-    }
-
-    private handleEnemyPlatformCollisionX(enemy: Enemy, collider: Sprite){
-        if (enemy.xVelocity > 0){
-            enemy.setX(collider.left() - enemy.width);
-        }
-        else if (enemy.xVelocity < 0){
-            enemy.setX(collider.right());
-        }
-        enemy.xVelocity = 0;
-    }
-
 
     private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
         if (projectile.xVelocity < 0){
@@ -564,9 +539,30 @@ export class Stage implements IStage{
         else if (projectile.xVelocity > 0){
             projectile.xVelocity = -projectile.xVelocity;
         }
-    
-        // projectile.xVelocity = 0;
     }
+
+
+    private handleProjectileEnemyCollisionY(projectile: Projectile, enemy: Unit){
+        if ((projectile.state == ProjectileStateNames.FLYING ||
+            projectile.state == ProjectileStateNames.FALLING) && 
+            enemy.state != UnitStateNames.DEAD){
+                projectile.remove();
+                enemy.applyDamage(projectile.attributes.damage);
+            
+        }
+    }
+
+    private handleProjectileEnemyCollisionX(projectile: Projectile, enemy: Unit){
+        if ((projectile.state == ProjectileStateNames.FLYING ||
+            projectile.state == ProjectileStateNames.FALLING) && 
+            enemy.state != UnitStateNames.DEAD){    
+                projectile.remove();
+        }
+    }
+
+
+
+
 
 
     
@@ -597,7 +593,7 @@ export class Stage implements IStage{
 
         const platformCollision = this.collideAny(enemy, this.platforms);
         // ontop of some platform or jumping
-        if (platformCollision || enemy.state === EnemyStateNames.JUMPING){
+        if (platformCollision || enemy.state === UnitStateNames.JUMPING){
             enemy.updateY(-1);
             return false;
         }

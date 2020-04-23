@@ -6,6 +6,8 @@ import { Rock } from './projectile';
 import * as PIXI from 'pixi.js';
 import { UnitAttributes, UnitStatistics, SpriteParts, UnitParts } from '../types/types';
 import { UnitStateNames, UnitPartNames } from '../types/enums';
+import { SpritePart } from './interfaces';
+import { SPRITE_DECAY_FADE_TIME } from '../constants';
 
 export class Unit extends Sprite{
     // Player attributes/data
@@ -31,9 +33,14 @@ export class Unit extends Sprite{
     currentStage: Stage;
     currentKeys: KeyOptions;
 
-    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes){    
+    // Debugging
+    debugPartLocation: boolean;
+    debugUnitRadius: boolean;
+    debugGraphics: PIXI.Graphics;
+
+    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){    
         // x, y, width, height, xVel, yVel
-        super(loader, 200, 200, 20, 30, 0, 0);    
+        super(loader, x, y, width, height, 0, 0);    
         this.attributes = initialAttributes;
         this.currentAttributes = {
             ...initialAttributes            
@@ -54,16 +61,81 @@ export class Unit extends Sprite{
 
         this.currentStage = currentStage;
         this.currentKeys = {} as KeyOptions;
+
+        // Debuggin
+        this.debugGraphics = new PIXI.Graphics();
+        this.debugPartLocation = false;
+        this.debugUnitRadius = false;
     }
 
     update(keyboard: KeyOptions){
         this.currentKeys = keyboard;
-        // console.log(this.state)
-        console.log(`x: ${this.x}, y: ${this.y}`)
-        console.log(`xVel: ${this.xVelocity}, yVel: ${this.yVelocity}`)
         this.handleState();
         this.updateCooldowns();
         this.flipSpriteParts();
+        if (this.decay <= 0) {
+            this.remove();
+        };
+
+        this.debugging();
+
+        var tSprite = new PIXI.Sprite(this.loader.resources['kobold-head-default'].texture)
+        tSprite.x = 280;
+        tSprite.y = 130;
+        this.currentStage.viewport.addChild(tSprite)
+    }
+
+    isInsideRadius(sprite: Sprite, radius: number): boolean {
+        const targetCenterX = sprite.x + (sprite.width / 2);
+        const targetCenterY = sprite.y + (sprite.height / 2);
+
+        const circleCenterX = this.x + (this.width / 2);
+        const circleCenterY = this.y + (this.height / 2);
+
+        if ( ( Math.pow((targetCenterX - circleCenterX), 2) + Math.pow((targetCenterY - circleCenterY), 2) )  < Math.pow(radius, 2) ){
+            return true;
+        }
+
+        return false;
+    }
+
+    debugging(){
+        this.debugGraphics.clear()
+        // this.debugGraphics.beginFill(0xFFFF00);
+        this.debugGraphics.lineStyle(5, 0xFF0000);
+        if (this.debugPartLocation){
+            this.currentStage.viewport.removeChild(this.debugGraphics);
+            this.debugGraphics.lineStyle(5, 0xFF0000);
+            // Object.keys(this.spriteParts).forEach((key: string) => {
+            //     const partName = key as UnitPartNames;
+            //     const part = this.spriteParts[partName];
+            //     this.debugGraphics.drawRect(part.sprite.x, part.sprite.y , part.sprite.width + part.offSetX, part.sprite.height + part.offSetY);
+
+            // })
+            const part = this.spriteParts[UnitPartNames.HEAD];
+            this.debugGraphics.drawRect(part.sprite.x + part.offSetX, part.sprite.y + part.offSetX, part.sprite.width - part.offSetX, part.sprite.height - part.offSetY);
+            // this.currentStage.viewport.addChild(this.debugGraphics);
+        }
+
+        if (this.debugUnitRadius){
+            const centerX = this.x + (this.width / 2);
+            const centerY = this.y + (this.height / 2);
+            this.debugGraphics.drawCircle(centerX, centerY, 100);
+        }
+
+        this.currentStage.viewport.addChild(this.debugGraphics);
+    }
+
+    remove(){
+        this.currentStage.viewport.removeChild(this.hpBar);
+    }
+
+    getSprites(){
+        const unitBodyParts = Object.keys(this.spriteParts).map((key: string) => {
+            const partName = key as UnitPartNames;
+            return this.spriteParts[partName].sprite
+        })
+        return [ ...unitBodyParts, this.hpBar ];
     }
 
     setState(state: UnitStateNames){
@@ -80,7 +152,6 @@ export class Unit extends Sprite{
     }
 
     setX(value: number){
-        console.log(`setting x ${value}`)
         this.x = value;
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as UnitPartNames;
@@ -107,6 +178,13 @@ export class Unit extends Sprite{
         })
     }
 
+    applyDamage(value: number){
+        this.currentAttributes.health -= value;
+        if (this.currentAttributes.health <= 0){
+            this.setState(UnitStateNames.DEAD);
+        }
+    }
+
     // Handle unit state
     handleState(){
         switch(this.state){
@@ -122,6 +200,8 @@ export class Unit extends Sprite{
             case(UnitStateNames.JUMPING):
                 this.jumping()
                 break;
+            case (UnitStateNames.DEAD):
+                this.dying()
             default:
                 break;
         }
@@ -135,6 +215,11 @@ export class Unit extends Sprite{
     }
 
     flipSpriteParts(){
+        if (this.xVelocity > 0){
+            this.facingRight = true;
+        } else {
+            this.facingRight = false;
+        }
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as UnitPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
@@ -147,6 +232,44 @@ export class Unit extends Sprite{
                 sprite.scale.x = -1;
             }
         })
+
+        if (this.state === UnitStateNames.DEAD){
+            this.y = this.y + (this.height - this.width)
+            this.width = this.height;
+            this.height = this.width;
+            this.xVelocity = 0;
+            this.yVelocity = 0;
+            this.setState(UnitStateNames.DEAD)
+            Object.keys(this.spriteParts).forEach((key: string) => {
+                const partName = key as UnitPartNames;
+                const spritePart = this.spriteParts[partName];
+                spritePart.sprite.rotation = -1.5708; // 90degress in rads
+            })
+
+            const head = this.spriteParts.head;
+            const headOffsetX =  0
+            const headOffsetY = head.sprite.height/4;
+            head.offSetX = headOffsetX;
+            head.offSetY = headOffsetY;
+            head.sprite.x = this.x + headOffsetX;
+            head.sprite.y = (this.y + this.height) + headOffsetY;
+
+            const body = this.spriteParts.body;
+            const bodyOffsetX = head.sprite.height;;
+            const bodyOffsetY = 0;
+            body.offSetX = bodyOffsetX;
+            body.offSetY = bodyOffsetY;
+            body.sprite.x = this.x + bodyOffsetX;
+            body.sprite.y = (this.y + this.height) + bodyOffsetY;
+
+            const legs = this.spriteParts.legs;
+            const legsOffsetX = head.sprite.height + body.sprite.height;
+            const legsOffsetY = 0;
+            legs.offSetX = legsOffsetX;
+            legs.offSetY = legsOffsetY;
+            legs.sprite.x = this.x + legsOffsetX;
+            legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+        }
     }
 
     drawHpBar(){
@@ -183,7 +306,7 @@ export class Unit extends Sprite{
         if (this.currentKeys.attackRight){
             // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -193,7 +316,7 @@ export class Unit extends Sprite{
         else if (this.currentKeys.attackLeft){
             // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -204,7 +327,7 @@ export class Unit extends Sprite{
         else if(this.currentKeys.attackDown){
             // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -213,7 +336,7 @@ export class Unit extends Sprite{
         else if(this.currentKeys.attackUp){
             // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
             // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10)
+            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
             
             this.currentStage.viewport.addChild(projectile.sprite);
             this.currentStage.projectiles.push(projectile);
@@ -245,5 +368,17 @@ export class Unit extends Sprite{
 
     falling(){
 
+    }
+
+    dying(){
+        this.decay -= 1;
+   
+        if (this.decay < SPRITE_DECAY_FADE_TIME){
+            Object.keys(this.spriteParts).forEach((partName: string) => {
+                const tempPartName: UnitPartNames = partName as UnitPartNames;
+                const part: SpritePart = this.spriteParts[tempPartName];
+                part.sprite.alpha -= 1 / SPRITE_DECAY_FADE_TIME;    
+            })
+        }
     }
 }

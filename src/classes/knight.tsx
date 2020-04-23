@@ -8,65 +8,34 @@ import { Part } from "./part";
 
 export class Knight extends Player {
 
-    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: PlayerAttributes){
-        super(loader, stage, initialAttributes);
-        this.textures = this.initTexturesII();
+    static width = 20;
+    static height = 30;
+
+    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: PlayerAttributes, x: number, y: number){
+        super(loader, stage, initialAttributes, Knight.width, Knight.height, x, y);
+        this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
     }
 
 
-    initTexturesII(): UnitParts {  
+    initTextures(): UnitParts {  
         return {
             body:{
-                armor1: {
-                    standing: this.loader.resources['knight-body-armor1-standing'].texture, // TODO update these to use corrct state
-                    falling: this.loader.resources['knight-body-armor1-standing'].texture,
-                    jumping: this.loader.resources['knight-body-armor1-standing'].texture,
-                    walking: this.loader.resources['knight-body-armor1-standing'].texture,
-                    knockback: this.loader.resources['knight-body-armor1-standing'].texture
-                },
-                default: {
-                    standing:this.loader.resources['knight-body-default-standing'].texture,
-                    falling: this.loader.resources['knight-body-default-standing'].texture,
-                    jumping: this.loader.resources['knight-body-default-standing'].texture,
-                    walking: this.loader.resources['knight-body-default-standing'].texture,
-                    knockback: this.loader.resources['knight-body-default-standing'].texture
-                }
+                armor1: this.loader.resources['knight-body-armor1-standing'].texture,
+                default: this.loader.resources['knight-body-default-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+
             },
             head: {
-                default: {
-                    standing: this.loader.resources['knight-head-default-standing'].texture, // TODO update to use correct state
-                    falling: this.loader.resources['knight-head-default-standing'].texture,
-                    jumping: this.loader.resources['knight-head-default-standing'].texture,
-                    walking: this.loader.resources['knight-head-default-standing'].texture,
-                    knockback: this.loader.resources['knight-head-default-standing'].texture
-
-                },
-                armor1: {
-                    standing: this.loader.resources['knight-head-armor1-standing'].texture,
-                    falling: this.loader.resources['knight-head-armor1-standing'].texture,
-                    jumping: this.loader.resources['knight-head-armor1-standing'].texture,
-                    walking: this.loader.resources['knight-head-armor1-standing'].texture,
-                    knockback: this.loader.resources['knight-head-armor1-standing'].texture
-
-                }
+                default: this.loader.resources['knight-head-default-standing'].texture,
+                armor1: this.loader.resources['knight-head-armor1-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
             },
             legs: {
-                default: {
-                    standing: this.loader.resources['knight-legs-default-standing'].texture, // TODO update to use correct state
-                    falling: this.loader.resources['knight-legs-default-standing'].texture,
-                    jumping: this.loader.resources['knight-legs-default-standing'].texture,
-                    walking: this.loader.resources['knight-legs-default-standing'].texture,
-                    knockback: this.loader.resources['knight-legs-default-standing'].texture
-                },
-                armor1: {
-                    standing: this.loader.resources['knight-legs-armor1-standing'].texture,
-                    falling: this.loader.resources['knight-legs-armor1-standing'].texture,
-                    jumping: this.loader.resources['knight-legs-armor1-standing'].texture,
-                    walking: this.loader.resources['knight-legs-armor1-standing'].texture,
-                    knockback: this.loader.resources['knight-legs-armor1-standing'].texture
-                }
+                default: this.loader.resources['knight-legs-default-standing'].texture,
+                armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
             }
         }
     }
@@ -74,18 +43,16 @@ export class Knight extends Player {
 
     initSpriteParts(): SpriteParts {
         const headOffsetX = 0;
-        const headOffSetY = 0;
-        const head = new Part(this.textures.head.default.standing, headOffsetX, headOffSetY, this);
+        const headOffSetY = -5;
+        const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
 
         const bodyOffsetX = 0;
-        const bodyOffsetY = head.sprite.height;
-        const body = new Part(this.textures.body.default.standing, bodyOffsetX, bodyOffsetY, this);
+        const bodyOffsetY = head.sprite.height + headOffSetY;
+        const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
 
         const legsOffsetX = 0;
-        const legsOffsetY = body.sprite.height + head.sprite.height;
-        const legs = new Part(this.textures.legs.default.standing, legsOffsetX, legsOffsetY, this);;
-
-
+        const legsOffsetY = body.sprite.height + bodyOffsetY;
+        const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);;
         return {
             head,
             body,

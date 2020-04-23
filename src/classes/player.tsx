@@ -5,9 +5,8 @@ import { UnitAttributes } from "../types/types";
 
 
 export class Player extends Unit {
-    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes){
-        // x, y, width, height, xVel, yVel
-        super(loader, currentStage, initialAttributes);
+    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
+        super(loader, currentStage, initialAttributes, width, height, x, y);
     };
 
     falling(){

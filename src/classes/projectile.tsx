@@ -2,6 +2,10 @@ import React from 'react';
 import { Sprite } from './sprite';
 import * as PIXI from 'pixi.js';
 import { ProjectileStateNames } from '../types/enums';
+import { Unit } from './unit';
+import { Stage } from './game_classes';
+import { ProjectileAttributes } from '../types/types';
+import { SPRITE_DECAY_FADE_TIME } from '../constants';
 
 
 export class Projectile extends Sprite {
@@ -9,14 +13,20 @@ export class Projectile extends Sprite {
     sprite: PIXI.Sprite;
     state: ProjectileStateNames;
     sticky: boolean;
+    unit: Unit;
+    currentStage: Stage;
+    attributes: ProjectileAttributes;
     
 
-    constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number){
+    constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number ,unit: Unit){
         // x, y, width, height, xVel, yVel
         super(loader, x, y, width, height, 0, 0);
         this.state = ProjectileStateNames.FLYING;
         this.sprite = {} as PIXI.Sprite;
         this.sticky = false;
+        this.unit = unit;
+        this.currentStage = unit.currentStage;
+        this.attributes = {} as ProjectileAttributes;
     }
 
     setState(state: ProjectileStateNames){
@@ -43,9 +53,16 @@ export class Projectile extends Sprite {
         this.sprite.y = value;        
     } 
 
+    remove(){        
+        this.currentStage.viewport.removeChild(this.sprite);
+        this.currentStage.projectiles = this.currentStage.projectiles.filter(projectile => projectile != this)
+    }
+
     update(){
         this.handleState();
-        // debugger;
+        if (this.decay <= 0) {
+            this.remove();
+        };
     }
 
     handleState(){
@@ -88,6 +105,9 @@ export class Projectile extends Sprite {
         this.xVelocity = 0;
         this.yVelocity = 0;
         this.decay -= 1;
+        if (this.decay < SPRITE_DECAY_FADE_TIME){
+            this.sprite.alpha -= 1 / SPRITE_DECAY_FADE_TIME;    
+        }
     }
 
     falling(){
@@ -109,10 +129,13 @@ export class Projectile extends Sprite {
 
 export class Rock extends Projectile {
 
-    constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number){
-        super(loader, x, y, width, height);
+    constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number, unit: Unit){
+        super(loader, x, y, width, height, unit);
         this.sprite = this.createSprite();
         this.sticky = false;
+        this.attributes = {
+            damage: 100
+        }
     }
 
 

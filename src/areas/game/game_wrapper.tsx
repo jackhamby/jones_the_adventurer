@@ -41,15 +41,17 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     componentDidMount(){
 
         this.props.pixiApplication.loader
-            .add("knight_sm.png")
-            .add("knight_sm_left.png")
-            .add("knight_sm_right.png")
-            .add("kobold_sm_left.png")
-            .add("kobold_sm.png")
+            // .add("knight_sm.png")
+            // .add("knight_sm_left.png")
+            // .add("knight_sm_right.png")
+            // .add("kobold_sm_left.png")
+            // .add("kobold_sm.png")
             .add("platform1.png")
             // Add head textures
             .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
             .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
+            .add('knight-head-armor2-standing', "images/knight/head/head_armor2.png")
+
             // Add body textures
             .add('knight-body-default-standing', "images/knight/body/body_default_standing.png")
             .add('knight-body-armor1-standing', "images/knight/body/body_armor1_standing.png")
@@ -66,6 +68,11 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
             // Add projectile images
             .add('rock', 'images/projectiles/rock.png')
+
+            // Kobold
+            .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
+            .add('kobold-body-default', "images/kobold/body/body_default.png")
+            .add('kobold-head-default', "images/kobold/head/head_default.png")
 
 
             // Once textures have loaded, fire this method
@@ -84,6 +91,8 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         })
 
         this.props.pixiApplication.stage.addChild(viewport);
+
+        viewport.sortableChildren = true;
 
         viewport
             .drag()
@@ -120,7 +129,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
                 attributes = this.props.character.attributes;
-                newPlayer = new Knight(loader, {} as Stage, attributes);
+                newPlayer = new Knight(loader, {} as Stage, attributes, 0, 0);
                 
                 break;
             default:

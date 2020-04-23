@@ -1,216 +1,110 @@
 import * as PIXI from 'pixi.js';
-import { Sprite } from "./sprite";
-import { EnemyStateNames } from "../types/enums";
-import { Player } from './player';
+import { UnitStateNames, UnitPartNames } from "../types/enums";
+import { Unit } from './unit';
+import { Stage } from './game_classes';
+import { UnitParts, SpriteParts, UnitAttributes } from '../types/types';
+import { Part } from './part';
+import { SpritePart } from './interfaces';
+import { KeyOptions } from '../types/states';
 
-export type EnemyTextures = {
-    [key in EnemyStateNames]: PIXI.Texture;
-}
 
-export class Enemy extends Sprite {
+export class Enemy extends Unit {
 
-    sprite: PIXI.Sprite;
-    state: EnemyStateNames;
-    textures: EnemyTextures;
-    player: Player;
+    isPlayerInRange: boolean;
+    patrolRadius: number;
 
-    constructor(loader: PIXI.Loader, width: number, height: number, player: Player){
-        // x, y, widht, height, xVEl, yVel
-        super(loader, 200, 300, width, height, 0, 0);
-        this.textures = {} as EnemyTextures;
-        this.state = EnemyStateNames.STANDING;
-        this.sprite = {} as PIXI.Sprite;
-        this.player = player;
+    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
+        super(loader, currentStage, initialAttributes, width, height, x, y);
+        this.isPlayerInRange = false;
+        this.patrolRadius = 100;
     }
 
-    updateX(value: number){
-        this.x += value;
-        this.sprite.x += value;
-    }
-
-    updateY(value: number){
-        this.y += value;
-        this.sprite.y += value;
-    }
-
-    setX(value: number){
-        this.x = value;
-        this.sprite.x = value;
-    } 
-
-    setY(value: number){
-        this.y = value;
-        this.sprite.y = value;        
-    } 
-
-    update(){
-        this.handleState();
-        this.flipSpriteParts();
-    }
-
-    setState(state: EnemyStateNames){
-        this.state = state;
-    }
-
-
+    // Handle enemy specific states here
     handleState(){
+        super.handleState();
         switch(this.state){
-            case(EnemyStateNames.STANDING):
-            this.standing();
-            break;
-        case(EnemyStateNames.WALKING):
-            this.walking()
-            break;
-        case(EnemyStateNames.FALLING):
-            this.falling()
-            break;
-        case(EnemyStateNames.JUMPING):
-            this.jumping()
-            break;
-        default:
-            break;
+            case (UnitStateNames.ATTACKING):
+                this.attacking();
+                break;
+            case(UnitStateNames.PATROLLING):
+                this.patrolling();
+                break;
+            default:
+                break;
         }
     }
 
+    update(keyboard: KeyOptions){
+        super.update(keyboard);
+        this.flipSpriteParts();
+        // console.log(this.state)
+        // console.log(this.xVelocity)
+    }
+
+    checkIfPlayerInAttackRange(){
+        return this.isInsideRadius(this.currentStage.player, this.patrolRadius);
+    }
+
+    remove(){
+        super.remove()
+        Object.keys(this.spriteParts).forEach((partName: string) => {
+            const tempPartName: UnitPartNames = partName as UnitPartNames;
+            const part: SpritePart = this.spriteParts[tempPartName];
+            this.currentStage.viewport.removeChild(part.sprite);
+        })
+        this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy != this);
+    }
 
     standing(){
-        // Need to start to walk right 
-        if (this.x < this.player.x){
-            this.setState(EnemyStateNames.WALKING);
-        }
-        // Need to start to walk left
-        else if (this.x > this.player.x){
-            this.setState(EnemyStateNames.WALKING);
-        }
-        // Matching x coord
-        else {
-            // Do nothing
-            // this.state = EnemyStateNames.STANDING;
-            this.xVelocity = 0;
-        }
-        
-
-        // if (this.currentKeys.jump){
-        //     this.state = PlayerStateNames.JUMPING;
-        //     this.yVelocity = -10;
-        // }
-
-        // if (this.currentKeys.moveRight){
-        //     this.state = PlayerStateNames.WALKING;
-        // }
-
-        // // Move left
-        // else if (this.currentKeys.moveLeft){
-        //     this.state = PlayerStateNames.WALKING;
-        // }
-
-        // else {
-        //     this.state = PlayerStateNames.STANDING
-        // }
-
+        this.setState(UnitStateNames.PATROLLING);
     }
 
     walking(){
-        // Walk right
-        if (this.x < this.player.x){
-            // this.setState(EnemyStateNames.WALKING);
+        this.setState(UnitStateNames.PATROLLING);
+    }
+
+    attacking(){
+        if (this.x < this.currentStage.player.x){
             this.xVelocity = 1;
         }
         // walk left
-        else if (this.x > this.player.x){
+        else if (this.x > this.currentStage.player.x){
             this.xVelocity = -1;
-            // this.setState(EnemyStateNames.WALKING);
         }
-        // Matching x coord
-        else {
-            // Do nothing
-            this.state = EnemyStateNames.STANDING;
-            this.xVelocity = 0;
+        if (this.checkIfPlayerInAttackRange()){
+            this.setState(UnitStateNames.ATTACKING);
         }
-        // if (this.currentKeys.jump){
-        //     this.state = PlayerStateNames.JUMPING;  
-        //     this.yVelocity = -10
-        // }
-        // // Move right
-        // else if (this.currentKeys.moveRight){
-        //     this.facingRight = true;
-        //     this.xVelocity = 3;
-        // }
+        else{
+            this.setState(UnitStateNames.PATROLLING);
+        }
+    }
 
-        // // Move left
-        // else if (this.currentKeys.moveLeft){
-        //     this.facingRight = false;
-        //     this.xVelocity = -3;
-        // }
-
-        // // doing nothing
-        // else {
-       
-        // }
+    patrolling(){
+        // If enemy not moving, start them moving right
+        if (this.xVelocity == 0){
+            this.xVelocity = 1;
+        }
+        if (this.checkIfPlayerInAttackRange()){
+            this.setState(UnitStateNames.ATTACKING);
+        }
+        else{
+            this.setState(UnitStateNames.PATROLLING);
+        }
     }
 
     falling(){
         const gravity = 0.5;
         this.yVelocity += gravity;
-          // TODO REMOVE THIS TO PREVENT INFINITE JUMP
-        //   if (this.currentKeys.jump){
-        //     this.state = PlayerStateNames.JUMPING;  
-        //     this.yVelocity = -10
-        // }
-        // TODO UNCOMMENT THIS
-        // this.allowJump = false;
-
-        // Move right while fallig
-        // if (this.currentKeys.moveRight){
-        //     this.facingRight = true;
-        //     this.xVelocity = 3;
-        // }
-        // // Move left while falling
-        // else if (this.currentKeys.moveLeft){
-        //     this.facingRight = false;
-        //     this.xVelocity = -3;
-        // }
-        // if (this.yVelocity == 0){
-        //     this.state = EnemyStateNames.STANDING;
-        // }
     }
 
     jumping(){
         const gravity = 0.5;
         this.yVelocity += gravity;
-
-        // // TODO REMOVE THIS TO PREVENT INFINITE JUMP
-        // if (this.currentKeys.jump){
-        //     this.state = PlayerStateNames.JUMPING;  
-        //     this.yVelocity = -10
-        // }
-        // TODO UNCOMMENT THIS
-        // this.allowJump = false;
-
-
-
-        // Reached maximum height of jump, start falling
-        // if (this.yVelocity > 0){
-        //     this.state = PlayerStateNames.FALLING;
-        // }
-
-        // Move right while jumping
-        // if (this.currentKeys.moveRight){
-        //     this.facingRight = true;
-        //     this.xVelocity = 3;
-        // }
-        // // Move left while jumping
-        // else if (this.currentKeys.moveLeft){
-        //     this.facingRight = false;
-        //     this.xVelocity = -3;
-        // }
     }
 
-    flipSpriteParts(){
-
+    dying(){
+        super.dying()    
     }
-
-
 }
 
 
@@ -218,26 +112,142 @@ export class Enemy extends Sprite {
 
 
 export class Kobold extends Enemy {
-    constructor(loader: PIXI.Loader, player: Player){
-        super(loader, 20, 20, player);
+
+    static baseAttributes = {
+        attack: 5,
+        attack_speed: 5,
+        health: 100,
+        speed: 10,
+        jump: 3,
+        armor: 2
+    } as UnitAttributes
+
+    static width = 20;
+    static height = 30;
+
+    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
+        super(loader, currentStage, Kobold.baseAttributes, Kobold.width, Kobold.height, x, y);
         this.textures = this.initializeTextures();
-        this.sprite = this.createSprite();
+        this.spriteParts = this.createSpriteParts();
+        
     }
 
-    initializeTextures(): EnemyTextures {
+    initializeTextures(): UnitParts {
         return {
-            standing: this.loader.resources['kobold-standing'].texture, // TODO: use actual state textures
-            walking: this.loader.resources['kobold-standing'].texture,
-            falling: this.loader.resources['kobold-standing'].texture,
-            jumping: this.loader.resources['kobold-standing'].texture
-        } as EnemyTextures
+            body:{
+                armor1: this.loader.resources['knight-body-armor1-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                default: this.loader.resources['knight-body-default-standing'].texture,
+
+            },
+            head: {
+                default: this.loader.resources['knight-head-default-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor1: this.loader.resources['knight-head-armor1-standing'].texture,
+            },
+            legs: {
+                default: this.loader.resources['knight-legs-default-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
+            }
+        }
     }
 
-    createSprite(): PIXI.Sprite {
-        const sprite = new PIXI.Sprite(this.textures.standing);
-        sprite.x = this.x;
-        sprite.y = this.y;
-        return sprite;
+    createSpriteParts(): SpriteParts {
+        const headOffsetX = 0;
+        const headOffSetY = -5;
+        const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
+
+        const bodyOffsetX = 0;
+        const bodyOffsetY = head.sprite.height + headOffSetY;
+        const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
+
+        const legsOffsetX = 0;
+        const legsOffsetY = body.sprite.height + bodyOffsetY;
+        const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);;
+        return {
+            head,
+            body,
+            legs
+        };
+    }
+}
+
+
+
+
+export class Kobold2 extends Enemy {
+
+    static baseAttributes = {
+        attack: 5,
+        attack_speed: 5,
+        health: 100,
+        speed: 10,
+        jump: 3,
+        armor: 2
+    } as UnitAttributes
+
+    static width = 15;
+    static height = 20;
+
+    constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
+        super(loader, currentStage, Kobold2.baseAttributes, Kobold2.width, Kobold2.height, x, y);
+        this.textures = this.initializeTextures();
+        this.spriteParts = this.createSpriteParts();
+        this.facingRight = true;
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as UnitPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            sprite.anchor.x = 1;
+            sprite.scale.x = -1;
+            
+        })
     }
 
+    initializeTextures(): UnitParts {
+        return {
+            body:{
+                armor1: this.loader.resources['kobold-body-default'].texture,
+                armor2: this.loader.resources['kobold-body-default'].texture,
+                default: this.loader.resources['kobold-body-default'].texture,
+
+            },
+            head: {
+                default: this.loader.resources['kobold-head-default'].texture,
+                armor2: this.loader.resources['kobold-head-default'].texture,
+                armor1: this.loader.resources['kobold-head-default'].texture,
+            },
+            legs: {
+                default: this.loader.resources['kobold-legs-default'].texture,
+                armor2: this.loader.resources['kobold-legs-default'].texture,
+                armor1: this.loader.resources['kobold-legs-default'].texture,
+            }
+        }
+    }
+
+    createSpriteParts(): SpriteParts {
+        const headOffsetX = 0;
+        // const headOffSetY = 0;
+        const headOffSetY = -7;
+        const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
+        head.sprite.zIndex = 99999999999;
+
+        const bodyOffsetX = 0;
+        // const bodyOffsetY = 0;
+        const bodyOffsetY = head.sprite.height + headOffSetY - 3;
+        const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
+
+        const legsOffsetX = 0;
+        // const legsOffsetY = 0;
+        const legsOffsetY = body.sprite.height + bodyOffsetY;
+        const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);
+
+        // console.log(legs.sprite.x)
+        // console.log(legs.sprite.y)
+        return {
+            head,
+            body,
+            legs
+        };
+    }
 }
