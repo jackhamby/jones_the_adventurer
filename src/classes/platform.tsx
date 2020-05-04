@@ -48,7 +48,38 @@ export class DefaultPlatform extends Platform {
 
     initializeTextures(): PlatformTextures{
         return {
-            default: this.loader.resources["platform1.png"].texture,
+            default: this.loader.resources["default-platform"].texture,
+        } as PlatformTextures;
+    }
+}
+
+export class DirtPlatform extends Platform {
+    constructor(loader: PIXI.Loader, x: number, y:number, width: number, height: number){
+        super(loader, x, y, width, height);
+    }
+
+    createPixiSprite(): PIXI.Sprite {
+        return new PIXI.Sprite(this.textures.default); 
+    }
+
+    initializeTextures(): PlatformTextures{
+        return {
+            default: this.loader.resources["dirt-platform"].texture,
+        } as PlatformTextures;
+    }
+}
+export class GrassPlatform extends Platform {
+    constructor(loader: PIXI.Loader, x: number, y:number, width: number, height: number){
+        super(loader, x, y, width, height);
+    }
+
+    createPixiSprite(): PIXI.Sprite {
+        return new PIXI.Sprite(this.textures.default); 
+    }
+
+    initializeTextures(): PlatformTextures{
+        return {
+            default: this.loader.resources["grass-platform"].texture,
         } as PlatformTextures;
     }
 }

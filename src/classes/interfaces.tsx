@@ -5,7 +5,6 @@ export interface SpritePart {
     offSetX: number;
     offSetY: number;
     sprite: PIXI.Sprite;
-    
 }
 
 export interface Effect {
@@ -16,6 +15,7 @@ export interface Effect {
         armorType: UnitArmorNames;
     }
 }
+
 
 export interface KnightTextures {
     body: {

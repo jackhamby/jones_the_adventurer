@@ -29,6 +29,9 @@ export class Enemy extends Unit {
             case(UnitStateNames.PATROLLING):
                 this.patrolling();
                 break;
+            case(UnitStateNames.DEAD):
+                this.dying();
+                break;
             default:
                 break;
         }
@@ -36,9 +39,7 @@ export class Enemy extends Unit {
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        this.flipSpriteParts();
-        // console.log(this.state)
-        // console.log(this.xVelocity)
+        // this.flipSpriteParts();
     }
 
     checkIfPlayerInAttackRange(){
@@ -80,6 +81,7 @@ export class Enemy extends Unit {
     }
 
     patrolling(){
+
         // If enemy not moving, start them moving right
         if (this.xVelocity == 0){
             this.xVelocity = 1;
@@ -103,7 +105,7 @@ export class Enemy extends Unit {
     }
 
     dying(){
-        super.dying()    
+        super.dying();  
     }
 }
 
@@ -111,7 +113,7 @@ export class Enemy extends Unit {
 
 
 
-export class Kobold extends Enemy {
+export class Man extends Enemy {
 
     static baseAttributes = {
         attack: 5,
@@ -126,10 +128,9 @@ export class Kobold extends Enemy {
     static height = 30;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
-        super(loader, currentStage, Kobold.baseAttributes, Kobold.width, Kobold.height, x, y);
+        super(loader, currentStage, Man.baseAttributes, Man.width, Man.height, x, y);
         this.textures = this.initializeTextures();
         this.spriteParts = this.createSpriteParts();
-        
     }
 
     initializeTextures(): UnitParts {
@@ -171,6 +172,8 @@ export class Kobold extends Enemy {
             legs
         };
     }
+
+    
 }
 
 
@@ -179,7 +182,7 @@ export class Kobold extends Enemy {
 export class Kobold2 extends Enemy {
 
     static baseAttributes = {
-        attack: 5,
+        attack: 25,
         attack_speed: 5,
         health: 100,
         speed: 10,
@@ -227,27 +230,83 @@ export class Kobold2 extends Enemy {
 
     createSpriteParts(): SpriteParts {
         const headOffsetX = 0;
-        // const headOffSetY = 0;
         const headOffSetY = -7;
         const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
         head.sprite.zIndex = 99999999999;
 
         const bodyOffsetX = 0;
-        // const bodyOffsetY = 0;
         const bodyOffsetY = head.sprite.height + headOffSetY - 3;
         const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
 
         const legsOffsetX = 0;
-        // const legsOffsetY = 0;
         const legsOffsetY = body.sprite.height + bodyOffsetY;
         const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);
 
-        // console.log(legs.sprite.x)
-        // console.log(legs.sprite.y)
         return {
             head,
             body,
             legs
         };
+    }
+
+    flipSpriteParts(){
+        if (this.xVelocity > 0){
+            this.facingRight = false;
+        } else {
+            this.facingRight = true;
+        }
+        Object.keys(this.spriteParts).forEach((key) => {
+            const playerPartName = key as UnitPartNames;
+            const sprite = this.spriteParts[playerPartName].sprite;
+            if (this.facingRight){
+                sprite.anchor.x = 0;
+                sprite.scale.x = 1;
+            }
+            else{
+                sprite.anchor.x = 1;
+                sprite.scale.x = -1;
+            }
+        })
+
+
+        if (this.state === UnitStateNames.DEAD){
+            this.y = this.y + (this.height - this.width)
+            this.width = this.height;
+            this.height = this.width;
+            this.xVelocity = 0;
+            this.yVelocity = 0;
+            // this.setState(UnitStateNames.DEAD)
+            Object.keys(this.spriteParts).forEach((key: string) => {
+                const partName = key as UnitPartNames;
+                const spritePart = this.spriteParts[partName];
+                spritePart.sprite.rotation = -1.5708; // 90degress in rads
+            })
+
+            // TODO remove this fro here and in Kobold in enemy.tsx
+            const head = this.spriteParts.head;
+            const headOffsetX =  0
+            const headOffsetY = head.sprite.height/4;
+            head.offSetX = headOffsetX;
+            head.offSetY = headOffsetY;
+            head.sprite.x = this.x + headOffsetX;
+            head.sprite.y = (this.y + this.height) + headOffsetY;
+
+            const body = this.spriteParts.body;
+            const bodyOffsetX = head.sprite.height;;
+            const bodyOffsetY = 0;
+            body.offSetX = bodyOffsetX;
+            body.offSetY = bodyOffsetY;
+            body.sprite.x = this.x + bodyOffsetX;
+            body.sprite.y = (this.y + this.height) + bodyOffsetY;
+
+            const legs = this.spriteParts.legs;
+            const legsOffsetX = head.sprite.height + body.sprite.height;
+            const legsOffsetY = 0;
+            legs.offSetX = legsOffsetX;
+            legs.offSetY = legsOffsetY;
+            legs.sprite.x = this.x + legsOffsetX;
+            legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+        }
+
     }
 }

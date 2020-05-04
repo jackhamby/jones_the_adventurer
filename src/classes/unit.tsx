@@ -2,7 +2,7 @@ import { Sprite } from './sprite';
 import { Treasure } from './treasure';
 import { Stage } from './game_classes';
 import { KeyOptions } from '../types/states';
-import { Rock } from './projectile';
+import { Rock, Projectile, Arrow } from './projectile';
 import * as PIXI from 'pixi.js';
 import { UnitAttributes, UnitStatistics, SpriteParts, UnitParts } from '../types/types';
 import { UnitStateNames, UnitPartNames } from '../types/enums';
@@ -15,10 +15,12 @@ export class Unit extends Sprite{
     currentAttributes: UnitAttributes;
     treasures: Treasure[];
     statistics: UnitStatistics;
+    projectile: typeof Projectile;
+    maxJumps: number;
+    currentJumps: number;
 
     // Sprite management
     state: UnitStateNames;
-    allowJump: boolean;
     facingRight: boolean;
     inKnockBack: boolean;
     timeSinceLastProjectileFired: number;
@@ -47,9 +49,11 @@ export class Unit extends Sprite{
         };
         this.treasures = [];
         this.statistics = {} as UnitStatistics;
+        this.projectile = Arrow;
+        this.maxJumps = 2;
+        this.currentJumps = this.maxJumps;;
 
         this.state = {} as UnitStateNames;
-        this.allowJump = true;
         this.facingRight = false;
         this.inKnockBack = false;
         this.timeSinceLastProjectileFired = 0;
@@ -78,12 +82,16 @@ export class Unit extends Sprite{
         };
 
         this.debugging();
-
-        var tSprite = new PIXI.Sprite(this.loader.resources['kobold-head-default'].texture)
-        tSprite.x = 280;
-        tSprite.y = 130;
-        this.currentStage.viewport.addChild(tSprite)
     }
+
+    isJumpAvailable(): boolean {
+        if (this.currentJumps > 0){
+            return true
+        }
+        return false;
+    }
+
+
 
     isInsideRadius(sprite: Sprite, radius: number): boolean {
         const targetCenterX = sprite.x + (sprite.width / 2);
@@ -179,10 +187,21 @@ export class Unit extends Sprite{
     }
 
     applyDamage(value: number){
+        if (this.state === UnitStateNames.DEAD){
+            return;
+        }
         this.currentAttributes.health -= value;
         if (this.currentAttributes.health <= 0){
             this.setState(UnitStateNames.DEAD);
         }
+    }
+
+    dealDamage(target: Unit){
+        let damage = 0;
+        if (this.state != UnitStateNames.DEAD){
+            damage = this.projectile.baseAttributes.damage + Math.round( this.currentAttributes.attack * .25 );
+        }
+        target.applyDamage(damage)
     }
 
     // Handle unit state
@@ -202,6 +221,7 @@ export class Unit extends Sprite{
                 break;
             case (UnitStateNames.DEAD):
                 this.dying()
+                break;
             default:
                 break;
         }
@@ -232,20 +252,20 @@ export class Unit extends Sprite{
                 sprite.scale.x = -1;
             }
         })
-
         if (this.state === UnitStateNames.DEAD){
             this.y = this.y + (this.height - this.width)
             this.width = this.height;
             this.height = this.width;
             this.xVelocity = 0;
             this.yVelocity = 0;
-            this.setState(UnitStateNames.DEAD)
+            // this.setState(UnitStateNames.DEAD)
             Object.keys(this.spriteParts).forEach((key: string) => {
                 const partName = key as UnitPartNames;
                 const spritePart = this.spriteParts[partName];
                 spritePart.sprite.rotation = -1.5708; // 90degress in rads
             })
 
+            // TODO remove this fro here and in Kobold in enemy.tsx
             const head = this.spriteParts.head;
             const headOffsetX =  0
             const headOffsetY = head.sprite.height/4;
@@ -273,17 +293,22 @@ export class Unit extends Sprite{
     }
 
     drawHpBar(){
+        this.hpBar.clear()
         const marginX = 2;
         const marginY = -10;
-        this.hpBar = new PIXI.Graphics();
         const hpBarHeight = this.height / 9;
         const hpBarWidth = this.width;
 
         this.currentStage.viewport.addChild(this.hpBar);
 
         this.hpBar.beginFill(0x00FF00);
-        const greenPercent = this.currentAttributes.health / this.attributes.health;
-        const redPercent = 1.0 - greenPercent;
+        let greenPercent = this.currentAttributes.health / this.attributes.health;
+        let redPercent = 1.0 - greenPercent;
+        // Temp hack to fix neg percent
+        if ((greenPercent) < 0){
+            redPercent = 1.0;
+            greenPercent = 0;
+        }
 
         this.hpBar.drawRect(this.x + marginX, this.y + marginY, hpBarWidth * greenPercent, hpBarHeight);
 
@@ -291,7 +316,34 @@ export class Unit extends Sprite{
         this.hpBar.drawRect(this.x + marginX + (greenPercent * hpBarWidth), this.y + marginY, hpBarWidth * redPercent, hpBarHeight);
     }
 
-    fireProjectile(){
+
+    fireProjectile(xVelocity: number, yVelocity: number){
+        const projectile = new this.projectile(this.loader, this.x, this.y, this)
+        projectile.xVelocity = xVelocity;
+        projectile.yVelocity = yVelocity;
+
+        if (projectile.xVelocity > 0){
+            // flip sprite 180
+            projectile.sprite.rotation = 3.14159;
+            projectile.sprite.anchor.x = 1;
+            projectile.sprite.anchor.y = 1;
+
+        } else if (projectile.xVelocity < 0) {
+            // leave as is
+        }
+
+        else if (projectile.yVelocity > 0){
+            projectile.sprite.rotation = -1.5708;
+        } else {
+            projectile.sprite.rotation = 1.5708;
+        }
+        this.currentStage.viewport.addChild(projectile.sprite);
+        this.currentStage.projectiles.push(projectile);
+        this.statistics.projectiles += 1;
+    }
+
+
+    tryAttack(){
         // TODO, cleanup this whole method
         if (this.currentKeys.attackDown ||
             this.currentKeys.attackLeft ||
@@ -304,50 +356,20 @@ export class Unit extends Sprite{
             }
 
         if (this.currentKeys.attackRight){
-            // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
-            // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
-            
-            this.currentStage.viewport.addChild(projectile.sprite);
-            this.currentStage.projectiles.push(projectile);
-            projectile.xVelocity = 15;
-            projectile.yVelocity = 0;
+            this.fireProjectile(15, 0);
         }
         else if (this.currentKeys.attackLeft){
-            // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
-            // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
-            
-            this.currentStage.viewport.addChild(projectile.sprite);
-            this.currentStage.projectiles.push(projectile);
-            projectile.xVelocity = -15;
-            projectile.yVelocity = 0;
-
+            this.fireProjectile(-15, 0);
         }
-        else if(this.currentKeys.attackDown){
-            // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
-            // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
-            
-            this.currentStage.viewport.addChild(projectile.sprite);
-            this.currentStage.projectiles.push(projectile);
-            projectile.yVelocity = 15;        
+        else if(this.currentKeys.attackDown){  
+            this.fireProjectile(0, 15);
         }
         else if(this.currentKeys.attackUp){
-            // const test = updateStatistic(PlayerStatisticNames.PROJECTILES_FIRED, 1);
-            // store.dispatch(test as ControlAction);
-            const projectile = new Rock(this.loader, this.x, this.y, 10, 10, this)
-            
-            this.currentStage.viewport.addChild(projectile.sprite);
-            this.currentStage.projectiles.push(projectile);
-            // projectile.yVelocity = 15; 
-            projectile.yVelocity = -5
-
             if (this.facingRight){
-                projectile.xVelocity = 15;
+                this.fireProjectile(15, -5);
             }   
             else {
-                projectile.xVelocity = -15;
+                this.fireProjectile(-15, -5);
             }    
         }
 
@@ -371,8 +393,8 @@ export class Unit extends Sprite{
     }
 
     dying(){
+        this.xVelocity = 0;
         this.decay -= 1;
-   
         if (this.decay < SPRITE_DECAY_FADE_TIME){
             Object.keys(this.spriteParts).forEach((partName: string) => {
                 const tempPartName: UnitPartNames = partName as UnitPartNames;

@@ -40,7 +40,10 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     // TODO REMOVE
     testOnClick(){
         const state = store.getState() as AppState;
-        state.gameState.currentStage.player.currentAttributes.jump += 5;
+        console.log(`x: ${state.gameState.currentStage.player.x}`)
+        console.log(`y: ${state.gameState.currentStage.player.y}`)
+
+        // state.gameState.currentStage.player.currentAttributes.jump += 5;
     }
 
     componentDidMount(){

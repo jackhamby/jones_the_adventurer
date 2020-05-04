@@ -1,3 +1,5 @@
+import { Rock } from "../classes/projectile";
+
 export enum ScreenOptions {
     MAIN_MENU,
     SINGLE_PLAYER_MENU,
@@ -8,10 +10,6 @@ export enum ScreenOptions {
 export enum CharacterOptions {
     KNIGHT = "knight",
     KOBOLD = "kobold"
-}
-
-export enum ProjectileNames {
-    ROCK = "rock",
 }
 
 export enum Attributes {
@@ -25,41 +23,6 @@ export enum ProjectileStateNames {
     STANDING = "standing",
     ROLLING = "rolling"
 }
-
-// export enum EnemyStateNames {
-//     WALKING = "walking",
-//     JUMPING = "jumping",
-//     FALLING = "falling",
-//     STANDING = "standing"
-// }
-
-// export enum PlayerStateNames {
-//     WALKING = "walking",
-//     JUMPING = "jumping",
-//     FALLING = "falling",
-//     STANDING = "standing",
-//     KNOCKBACK = "knockback"
-// }
-
-// export enum PlayerPartNames {
-//     HEAD = "head",
-//     BODY = "body",
-//     LEGS = "legs"
-// }
-
-// export enum PlayerArmorNames {
-//     DEFAULT = "default",
-//     ARMOR1 = "armor1"
-// }
-
-
-
-
-// export enum PlayerStatisticNames {
-//     PROJECTILES_FIRED = "projectiles",
-//     DAMAGE_DEALT = "damage",
-//     ENEMIES_KILLED = "killed",
-// }
 
 export enum UnitStateNames {
     WALKING = "walking",
@@ -95,10 +58,21 @@ export enum UnitAttributeNames {
     ARMOR = "armor",
     ATTACK = "attack",
     JUMP = "jump",
-    ATTACK_SPEED = "attack_speed"
+    ATTACK_SPEED = "attack_speed",
 }
 
+export enum ProjectileNames {
+    ROCK = 'rock',
+}
 
 export enum ProjectileAttributeNames {
-    DAMAGE = "damage"
+    DAMAGE = "damage",
+    SPEED = "speed",
+}
+
+export enum Directions {
+    UP = 'up',
+    DOWN = 'down',
+    RIGHT = 'right',
+    LEFT = 'left'
 }

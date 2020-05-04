@@ -65,8 +65,8 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
         let y = (this.appHeight / 2) -  (this.props.player.height / 2);
 
         const hs = this.spriteParts[UnitPartNames.HEAD];
-        hs.x = x;
-        hs.y = y;
+        hs.x = x + this.props.player.spriteParts[UnitPartNames.HEAD].offSetX;
+        hs.y = y + this.props.player.spriteParts[UnitPartNames.HEAD].offSetY;
 
         const bs = this.spriteParts[UnitPartNames.BODY];
         bs.x = x + this.props.player.spriteParts[UnitPartNames.BODY].offSetX;

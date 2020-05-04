@@ -2,6 +2,7 @@ import { Unit,} from "./unit";
 import { Stage } from "./game_classes";
 import { UnitStateNames } from "../types/enums";
 import { UnitAttributes } from "../types/types";
+import { KeyOptions } from "../types/states";
 
 
 export class Player extends Unit {
@@ -9,23 +10,35 @@ export class Player extends Unit {
         super(loader, currentStage, initialAttributes, width, height, x, y);
     };
 
+    update(keyboard: KeyOptions){
+        super.update(keyboard);
+        // console.log('\n');
+        // console.log(`state ${this.state}`);
+        // console.log(`current jumps ${this.currentJumps}`);
+        // console.log('\n');
+
+    }
+
+    handleState(){
+        super.handleState();
+    }
+
     falling(){
-        this.fireProjectile();
+        this.tryAttack();
         const gravity = 0.5;
         this.yVelocity += gravity;
 
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
-        if (this.currentKeys.jump){
+        if (this.currentKeys.jump && this.isJumpAvailable()){
             this.state = UnitStateNames.JUMPING;  
             this.yVelocity = -this.currentAttributes.jump;
+            console.log('decrement jump while falling')
+            this.currentJumps -= 1;
         }
 
         if (this.inKnockBack){
             return;
         }
-
-        // TODO UNCOMMENT THIS
-        // this.allowJump = false;
 
         // Move right while fallig
         if (this.currentKeys.moveRight){
@@ -40,7 +53,7 @@ export class Player extends Unit {
     }
 
     jumping(){
-        this.fireProjectile();
+        this.tryAttack();
 
         const gravity = 0.5;
         this.yVelocity += gravity;
@@ -51,12 +64,14 @@ export class Player extends Unit {
             this.inKnockBack = false;
         }
         // TODO REMOVE THIS TO PREVENT INFINITE JUMP
-        if (this.currentKeys.jump){
-            this.state = UnitStateNames.JUMPING;  
-            this.yVelocity = -this.currentAttributes.jump
+        console.log(this.currentKeys.jump)
+        if (this.currentKeys.jump && this.isJumpAvailable()){
+            // this.state = UnitStateNames.JUMPING;  
+            // this.yVelocity = -this.currentAttributes.jump;
+            // this.currentJumps -= 1;
+            // console.log('decrement jump while jumping')
+
         }
-        // TODO UNCOMMENT THIS
-        // this.allowJump = false;
 
         // Reached maximum height of jump, start falling
         if (this.yVelocity > 0){
@@ -78,8 +93,8 @@ export class Player extends Unit {
 
     // Called when player in walking state
     walking(){
-        this.fireProjectile();
-
+        this.tryAttack();
+        this.currentJumps = this.maxJumps;
         if (this.currentKeys.jump){
             this.state = UnitStateNames.JUMPING;  
             this.yVelocity = this.currentAttributes.jump
@@ -113,9 +128,10 @@ export class Player extends Unit {
 
     // Called when player in standing state
     standing(){
-        this.fireProjectile();
+        this.tryAttack();
 
         this.inKnockBack =  false;
+        this.currentJumps = this.maxJumps;
 
         if (this.currentKeys.jump){
             this.state = UnitStateNames.JUMPING;

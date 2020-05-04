@@ -1,9 +1,9 @@
 import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
 import { ProjectileStateNames, UnitPartNames, UnitStateNames } from '../types/enums';
-import { Platform, DefaultPlatform } from './platform';
-import { STAGE1_LAYOUT, STAGE2_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
-import { Enemy, Kobold, Kobold2 } from './enemy';
+import { Platform, DefaultPlatform, GrassPlatform, DirtPlatform } from './platform';
+import { STAGE1_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
+import { Enemy, Man, Kobold2 } from './enemy';
 import {store} from '../state_management/store';
 import { ControlAction, applyTreasure } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
@@ -78,11 +78,11 @@ export class StageManager {
     private buildStageOne(): Stage{
         const level = 1;
         const name = "beginners luck";
-        const platforms = this.generatePlatforms(STAGE3_LAYOUT);
-        const tempTreasure = new Armor1Helmet(this.loader, 300, 200);
-        const tempTreasure2 = new Armor1Legs(this.loader, 500, 200)
-        const tempTreasure12 = new Armor2Helmet(this.loader, 150, 700);
-        const treasures = [ new Armor1Body(this.loader, 100, 100), tempTreasure, tempTreasure2, tempTreasure12 ]
+        const platforms = this.generatePlatforms(STAGE1_LAYOUT);
+        // const tempTreasure = new Armor1Helmet(this.loader, 300, 200);
+        // const tempTreasure2 = new Armor1Legs(this.loader, 500, 200)
+        const hatTreasure = new Armor2Helmet(this.loader, 367, 896);
+        const treasures = [ hatTreasure ];
         const stage = new Stage(
             level,
             name,
@@ -92,7 +92,8 @@ export class StageManager {
             this.player,
             this.viewport
         )
-        const enemies = [ new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Kobold2(this.loader, stage, {} as UnitAttributes, 250, 200),  new Kobold2(this.loader, stage, {} as UnitAttributes, 600, 250),  new Kobold2(this.loader, stage, {} as UnitAttributes, 800, 220)];
+        // const enemies = [ new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Kobold2(this.loader, stage, {} as UnitAttributes, 250, 200),  new Kobold2(this.loader, stage, {} as UnitAttributes, 600, 250),  new Kobold2(this.loader, stage, {} as UnitAttributes, 800, 220)];
+        const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554)]
         stage.enemies = enemies;
         return stage;
     }
@@ -156,6 +157,12 @@ export class StageManager {
         switch(delimeter){
             case("1"):
                 platform = new DefaultPlatform(this.loader, x, y, width, height);
+                break;
+            case("G"):
+                platform = new GrassPlatform(this.loader, x, y, width, height);
+                break;
+            case("D"):
+                platform = new DirtPlatform(this.loader, x, y, width, height);
                 break;
             default:
                 throw('unhandled delimter in stage manager');
@@ -234,23 +241,10 @@ export class Stage implements IStage{
         })
     }
 
-    // removeProjectile(projectileToRemove: Projectile){
-    //     this.projectiles = this.projectiles.filter((projectile: Projectile) => projectile != projectileToRemove);
-    //     this.viewport.removeChild(projectileToRemove.sprite);
-    // }
-
     update(keys: KeyOptions){
         this.currentKeys = keys;
-        this.updateViewport();
         this.updateAllSpriteStates();
         this.updateAllSpritePositions();
-    }
-
-    // TODO: call this once
-    // 
-    private updateViewport(){
-        const viewportCenter = this.viewport.center;
-        this.viewport.follow(this.player.spriteParts[UnitPartNames.HEAD].sprite);
     }
 
     // Update state of the sprite
@@ -313,6 +307,9 @@ export class Stage implements IStage{
     // ================================== Player collisions ===========================================================
     // ===============================================================================================================   
     private checkPlayerXCollisions() {
+        if(this.player.state === UnitStateNames.DEAD){
+            return;
+        }
         const collidePlatform = this.collideAny(this.player, this.platforms);
         const collideTreasures = this.collideAny(this.player, this.treasures);
         const collideEnemies = this.collideAny(this.player, this.enemies);
@@ -330,6 +327,9 @@ export class Stage implements IStage{
     }
 
     private checkPlayerYCollisions(){
+        if(this.player.state === UnitStateNames.DEAD){
+            return;
+        }
         const collidePlatform = this.collideAny(this.player, this.platforms); 
         const collideTreasures = this.collideAny(this.player, this.treasures)
 
@@ -359,7 +359,7 @@ export class Stage implements IStage{
         this.removeTreasure(treasure);
     }
 
-    private handlePlayerEnemyCollisionX(player: Unit, collider: Sprite){
+    private handlePlayerEnemyCollisionX(player: Unit, collider: Enemy){
         player.yVelocity = -3;
         
         // Set knockback right
@@ -372,7 +372,7 @@ export class Stage implements IStage{
             player.xVelocity = -3;
             // player.yVelocity = -3;
         }
-
+        collider.dealDamage(player);
         player.inKnockBack =  true;
     }
 
@@ -547,8 +547,7 @@ export class Stage implements IStage{
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){
                 projectile.remove();
-                enemy.applyDamage(projectile.attributes.damage);
-            
+                projectile.unit.dealDamage(enemy);            
         }
     }
 
@@ -556,6 +555,7 @@ export class Stage implements IStage{
         if ((projectile.state == ProjectileStateNames.FLYING ||
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){    
+                projectile.unit.dealDamage(enemy);
                 projectile.remove();
         }
     }

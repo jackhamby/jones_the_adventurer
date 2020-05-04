@@ -9,7 +9,7 @@ import * as PIXI from 'pixi.js';
 import './game_wrapper.css';
 import { changeStage, setupGame } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
-import { CharacterOptions } from '../../types/enums';
+import { CharacterOptions, UnitPartNames } from '../../types/enums';
 // import { Player } from '../../classes/player';
 import { Knight } from '../../classes/knight';
 import { Viewport } from 'pixi-viewport'
@@ -41,12 +41,11 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     componentDidMount(){
 
         this.props.pixiApplication.loader
-            // .add("knight_sm.png")
-            // .add("knight_sm_left.png")
-            // .add("knight_sm_right.png")
-            // .add("kobold_sm_left.png")
-            // .add("kobold_sm.png")
-            .add("platform1.png")
+            // add platform tetures
+            .add('default-platform', 'images/plaftorms/platform1.png')
+            .add('dirt-platform', 'images/platforms/dirt.png')
+            .add('grass-platform', 'images/platforms/grass.png')
+
             // Add head textures
             .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
             .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
@@ -68,6 +67,8 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
             // Add projectile images
             .add('rock', 'images/projectiles/rock.png')
+            .add('arrow', 'images/projectiles/dart.png')
+
 
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
@@ -101,10 +102,10 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
         })
 
-
-
         const player = this.createPlayer();
 
+        viewport.follow(player.spriteParts[UnitPartNames.HEAD].sprite);
+        
         // Create a stage manager using the now ready pixi.loader and new playe
         this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
         
@@ -129,8 +130,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
                 attributes = this.props.character.attributes;
-                newPlayer = new Knight(loader, {} as Stage, attributes, 0, 0);
-                
+                newPlayer = new Knight(loader, {} as Stage, attributes, 100, 100);
                 break;
             default:
                 throw "cant handle kbold yet bitch"
@@ -149,7 +149,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
                         <ConnectedGameDisplay stageManager={this.stageManager} />
                     </div>
                     <div className="game-detail">
-                        <GameDetail stage={this.props.currentStage}/>    
+                        <GameDetail stage={this.props.currentStage} statistics={this.props.currentStage?.player.statistics}/>    
                     </div>
                 </div>
                 <div className="row game-footer">
