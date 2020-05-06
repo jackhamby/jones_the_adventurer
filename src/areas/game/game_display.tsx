@@ -46,6 +46,20 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         // state.gameState.currentStage.player.currentAttributes.jump += 5;
     }
 
+    toggleMusic(){
+        const music = document.getElementById("music") as HTMLAudioElement;
+        const speakerImage = document.getElementById("speakerImage") as HTMLImageElement;
+        if(music && speakerImage){
+            if(music.paused){
+                speakerImage.src = 'images/audio/audioOn.png';
+                music.play();                
+            }else{
+                speakerImage.src = 'images/audio/audioOff.png'
+                music.pause();                
+            }               
+        }
+    }
+
     componentDidMount(){
         const canvasHtmlElement = this.canvasRef.current;
         canvasHtmlElement?.appendChild(this.props.pixiApplication.view);
@@ -77,6 +91,8 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
             return (
                 <>
                     <button style={{position: "absolute"}} onClick={this.testOnClick}>TEST BUTTON</button>
+                    <button style={{position:"absolute",left:"69%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
+                    <audio src={"audio/music/game.mp3"} id={"music"} loop/>
                     <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 
                     </div>
