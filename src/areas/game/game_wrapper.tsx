@@ -16,12 +16,14 @@ import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
 import { Treasure } from '../../classes/treasure';
 import { Player } from '../../classes/player';
+import { UnitStatistics } from '../../types/types';
 
 export interface GameStateProps {
     character: Character;
     pixiApplication: PIXI.Application;
     currentStage: Stage;
     collectedTreasures: Treasure[];
+    statistics: UnitStatistics;
 }
 
 export interface GameDispatchProps {
@@ -170,6 +172,7 @@ export const mapStateToProps = (state: AppState): GameStateProps => {
         currentStage: state.gameState.currentStage,
         // TODO: we should init player in the store to have intial stage defined
         collectedTreasures: state.gameState.currentStage ? state.gameState.currentStage.player.treasures : [],
+        statistics: state.gameState.currentStage ? state.gameState.currentStage.player.statistics : {} as UnitStatistics,
         // x: state.gameState.currentStage ? state.gameState.currentStage.player.x : 1,
         // y: state.gameState.currentStage ? state.gameState.currentStage.player.y : 1,
         // playerAttributes: state.gameState.currentStage ? state.gameState.currentStage.player.attributes : {} as PlayerAttributes,

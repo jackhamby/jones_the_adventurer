@@ -23,6 +23,7 @@ export class Player extends Unit {
         super.handleState();
     }
 
+
     falling(){
         this.tryAttack();
         const gravity = 0.5;

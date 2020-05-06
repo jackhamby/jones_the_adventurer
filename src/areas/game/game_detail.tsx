@@ -4,6 +4,7 @@ import * as PIXI from 'pixi.js';
 import { Stage } from '../../classes/game_classes';
 import './game_detail.css'
 import { UnitStatistics } from '../../types/types';
+import { UnitStatisticNames } from '../../types/enums';
 
 export interface GameDetailProps {
     stage: Stage;
@@ -14,10 +15,27 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
 
 
     renderStatistics(): JSX.Element {
-        return <></>;
+        const tableRows: JSX.Element[] = [];
+        Object.keys(this.props.statistics).forEach((statisticName: string) => {
+            const stat = this.props.statistics[statisticName as UnitStatisticNames];
+            const row = (<tr>
+                <td>
+                    {statisticName}:
+                </td>
+                <td className='ml-2'>
+                    {stat}
+                </td>
+            </tr>)
+            tableRows.push(row);
+        })
+        return (<table>
+                {tableRows}
+                </table>);
     }
 
+
     render(){
+        console.log(this.props.statistics)
         if (this.props.stage){
             return (
                 <div className="col-12">
@@ -27,27 +45,10 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
                     <h4 className="stage-name-text">
                         {this.props.stage.name }
                     </h4>
-
                     <div>
-                        <ul>
-                            <li>
-                               damage dealt: {this.props.statistics.damage}
-                            </li>
-                            <li>
-                               projectiles fired: {this.props.statistics.projectiles}
-                            </li>
-                            <li>
-                               enemies slain: {this.props.statistics.killed}
-                            </li>
-                        </ul>
-
-
+                        {this.renderStatistics()}
                     </div>
                 </div>
-                // <React.Fragment>
-                //     <div> Stage {this.props.stage.level}</div>
-                //     <div> {this.props.stage.name }</div>
-                // </React.Fragment>
             )
         }
         return (

@@ -47,13 +47,19 @@ const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyO
 }
 
 export const controlReducer = (state: any, action: ControlAction): any => {
-    const temp = state as AppState;
+    const typedState = state as AppState;
     switch(action.type){
 
         case UPDATE_STATS:
+            const newStatstics = {
+                ...typedState.gameState.currentStage.player.statistics,
+            }
+            newStatstics[action.payload.statistic] = action.payload.value;
+            typedState.gameState.currentStage.player.statistics = newStatstics;
             return {
-                ...temp
-            };
+                ...typedState,
+                
+            } as AppState;
 
 
         case APPLY_TREASURE:
@@ -61,36 +67,36 @@ export const controlReducer = (state: any, action: ControlAction): any => {
             // if (this.effect.textureEffect){
             //     const affectedBodyPart = this.effect.textureEffect.bodyPart;
             //     const newArmorType = this.effect.textureEffect.armorType;
-            //     const newTexture = player.textures[affectedBodyPart][newArmorType][player.state];
+            //     const newTexture = player.textures[affectedBodyPart][newArmorType][player.typedState];
             //     const spritePart = player.spriteParts[affectedBodyPart].sprite;
             //     spritePart.texture = newTexture;
             // }
             // player.treasures.push(this);
-            // temp.gameState.currentStage.player.treasures = []
-            // temp.gameState.currentStage.player.treasures.push(action.payload.)
+            // typedState.gameState.currentStage.player.treasures = []
+            // typedState.gameState.currentStage.player.treasures.push(action.payload.)
 
-            const player = temp.gameState.currentStage.player;
+            const player = typedState.gameState.currentStage.player;
             Treasure.apply(player, action.payload.treasure);
 
             
             return {
-                ...state,
+                ...typedState,
                 gameState: {
-                    ...temp.gameState
+                    ...typedState.gameState
                 }
             };
 
         case UPDATE_SCREEN:
             return { 
-                ...state,
+                ...typedState,
                 controlState: {
-                    ...state.controlState,
+                    ...typedState.controlState,
                     currentScreen: action.payload.newScreen
                 } as ControlState
             };
         case UPDATE_CHARACTER:
             return {
-                ...state,
+                ...typedState,
                 playerState: {
                     character: {
                         name: action.payload.newCharacter,
@@ -100,39 +106,39 @@ export const controlReducer = (state: any, action: ControlAction): any => {
             };
         case KEY_PRESS:
             return {
-                ...state,
+                ...typedState,
                 controlState: {
-                    ...state.controlState,
-                    currentKeys: mapKeys(action.payload.key, state.controlState.currentKeys, true)
+                    ...typedState.controlState,
+                    currentKeys: mapKeys(action.payload.key, typedState.controlState.currentKeys, true)
                 } as ControlState
             }
         case KEY_RELEASE:
             return {
-                ...state,
+                ...typedState,
                 controlState: {
-                    ...state.controlState,
-                    currentKeys: mapKeys(action.payload.key, state.controlState.currentKeys, false)
+                    ...typedState.controlState,
+                    currentKeys: mapKeys(action.payload.key, typedState.controlState.currentKeys, false)
                 } as ControlState
             }
         case CHANGE_STAGE:
             return {
-                ...state,
+                ...typedState,
                 gameState : {
-                    ...state.gameState,
+                    ...typedState.gameState,
                     currentStage: action.payload.stage
                 } as GameState
             } 
         case SETUP_GAME:
             
             return {
-                ...state,
+                ...typedState,
                 gameState: {
-                    ...state.gameState,
+                    ...typedState.gameState,
                     gameReady: true,
                     currentStage: action.payload.startingStage,
                 } as GameState
             }
         default:
-            return state;
+            return typedState;
     }
 }

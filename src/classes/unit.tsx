@@ -5,9 +5,11 @@ import { KeyOptions } from '../types/states';
 import { Rock, Projectile, Arrow } from './projectile';
 import * as PIXI from 'pixi.js';
 import { UnitAttributes, UnitStatistics, SpriteParts, UnitParts } from '../types/types';
-import { UnitStateNames, UnitPartNames } from '../types/enums';
+import { UnitStateNames, UnitPartNames, UnitStatisticNames } from '../types/enums';
 import { SpritePart } from './interfaces';
 import { SPRITE_DECAY_FADE_TIME } from '../constants';
+import { store } from '../state_management/store';
+import { updateStatistic, ControlAction } from '../state_management/actions/control_actions';
 
 export class Unit extends Sprite{
     // Player attributes/data
@@ -48,7 +50,11 @@ export class Unit extends Sprite{
             ...initialAttributes            
         };
         this.treasures = [];
-        this.statistics = {} as UnitStatistics;
+        this.statistics = {
+            projectiles: 0,
+            killed: 0,
+            damage: 0
+        } as UnitStatistics;
         this.projectile = Arrow;
         this.maxJumps = 2;
         this.currentJumps = this.maxJumps;;
@@ -339,7 +345,10 @@ export class Unit extends Sprite{
         }
         this.currentStage.viewport.addChild(projectile.sprite);
         this.currentStage.projectiles.push(projectile);
-        this.statistics.projectiles += 1;
+        // this.statistics.projectiles += 1;
+        const updateStatsAction = updateStatistic(UnitStatisticNames.PROJECTILES_FIRED, this.statistics.projectiles + 1)
+        store.dispatch(updateStatsAction as ControlAction);
+        
     }
 
 

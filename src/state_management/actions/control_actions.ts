@@ -16,7 +16,6 @@ export const UPDATE_STATS: string = "UPDATE_STATISTICS";
 
 
 
-
 interface UpdateStatisticPayload {
     statistic: UnitStatisticNames;
     value: number;
