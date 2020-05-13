@@ -35,7 +35,6 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
 
 
     render(){
-        console.log(this.props.statistics)
         if (this.props.stage){
             return (
                 <div className="col-12">

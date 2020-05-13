@@ -1,5 +1,5 @@
 import { PlayerAttributeNames } from "../types/states";
-import { UnitArmorNames, UnitPartNames } from "../types/enums";
+import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from "../types/enums";
 
 export interface SpritePart {
     offSetX: number;
@@ -8,7 +8,7 @@ export interface SpritePart {
 }
 
 export interface Effect {
-    attribute: PlayerAttributeNames;
+    attribute: UnitAttributeNames;
     value: number;
     textureEffect?: {
         bodyPart: UnitPartNames;

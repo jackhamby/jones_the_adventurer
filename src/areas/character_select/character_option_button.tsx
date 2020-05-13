@@ -19,7 +19,7 @@ export class CharacterOptionButton extends React.Component<CharacterOptionButton
     render(){
         return(
             <React.Fragment>
-                <div className="col-4">
+                <div className="col-4" style={{maxHeight: '100px'}}>
                     <button className='option-button' onClick={this.onClick}>
                         <input type="image" src={`${this.props.character}_sm.png`}></input> 
                     </button>

@@ -4,7 +4,7 @@ import { Sprite } from './sprite';
 import { SpritePart, Effect } from './interfaces';
 // import { Player } from './player';
 import { Player } from './player';
-import { UnitArmorNames, UnitPartNames } from '../types/enums';
+import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
 
 
 export interface TreasureTextures {
@@ -105,7 +105,7 @@ export class Armor1Helmet extends Treasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
-            attribute: PlayerAttributeNames.ARMOR,
+            attribute: UnitAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
                 armorType: UnitArmorNames.ARMOR1,
@@ -130,7 +130,7 @@ export class Armor2Helmet extends Treasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
-            attribute: PlayerAttributeNames.ARMOR,
+            attribute: UnitAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
                 armorType: UnitArmorNames.ARMOR2,
@@ -148,6 +148,32 @@ export class Armor2Helmet extends Treasure {
         }
     }
 }
+
+export class KoboldArmor1 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: 0, iconOffsetY: 0});
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.HEAD,
+            }
+        } as Effect;
+        this.name = "iron helmet"
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['kobold-head-armor1'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+
 
 
 
@@ -167,7 +193,7 @@ export class Armor1Body extends Treasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
-            attribute: PlayerAttributeNames.ARMOR,
+            attribute: UnitAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
                 armorType: UnitArmorNames.ARMOR1,
@@ -194,7 +220,7 @@ export class Armor1Legs extends Treasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
         this.effect = {
-            attribute: PlayerAttributeNames.ARMOR,
+            attribute: UnitAttributeNames.ARMOR,
             value: 5,
             textureEffect: {
                 armorType: UnitArmorNames.ARMOR1,

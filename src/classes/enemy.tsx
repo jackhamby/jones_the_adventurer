@@ -120,8 +120,9 @@ export class Man extends Enemy {
         attack_speed: 5,
         health: 100,
         speed: 10,
-        jump: 3,
-        armor: 2
+        jump_height: 3,
+        jump_count: 1,
+        armor: 2,
     } as UnitAttributes
 
     static width = 20;
@@ -186,7 +187,8 @@ export class Kobold2 extends Enemy {
         attack_speed: 5,
         health: 100,
         speed: 10,
-        jump: 3,
+        jump_height: 3,
+        jump_count: 1,
         armor: 2
     } as UnitAttributes
 
@@ -307,6 +309,5 @@ export class Kobold2 extends Enemy {
             legs.sprite.x = this.x + legsOffsetX;
             legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
         }
-
     }
 }

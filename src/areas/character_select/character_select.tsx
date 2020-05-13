@@ -24,12 +24,6 @@ export class CharacterSelect extends React.Component<CharacterSelectProps, {}> {
                 <div className="row mt-5 ml-5" style={{height: "100%"}}> 
                     <CharacterOptionButton character={CharacterOptions.KNIGHT} changeCharacter={this.props.changeCharacter}/>
                     <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
-
                 </div>
             </React.Fragment>
             

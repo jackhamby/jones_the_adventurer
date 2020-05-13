@@ -4,19 +4,19 @@ import { Dispatch, AnyAction } from 'redux';
 import { connect } from 'react-redux';
 import { GameDetail } from './game_detail';
 import { GameCharacterDetail } from './game_character_detail';
-import { GameDisplay, ConnectedGameDisplay } from './game_display';
+import { ConnectedGameDisplay } from './game_display';
 import * as PIXI from 'pixi.js'; 
 import './game_wrapper.css';
-import { changeStage, setupGame } from '../../state_management/actions/control_actions';
+import { setupGame } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
 import { CharacterOptions, UnitPartNames } from '../../types/enums';
-// import { Player } from '../../classes/player';
 import { Knight } from '../../classes/knight';
+import { Kobold } from '../../classes/kobold';
 import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
 import { Treasure } from '../../classes/treasure';
 import { Player } from '../../classes/player';
-import { UnitStatistics } from '../../types/types';
+import { UnitStatistics, UnitAttributes } from '../../types/types';
 
 export interface GameStateProps {
     character: Character;
@@ -71,11 +71,12 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add('rock', 'images/projectiles/rock.png')
             .add('arrow', 'images/projectiles/dart.png')
 
-
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
             .add('kobold-body-default', "images/kobold/body/body_default.png")
             .add('kobold-head-default', "images/kobold/head/head_default.png")
+
+            .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")
 
 
             // Once textures have loaded, fire this method
@@ -100,9 +101,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         viewport
             .drag()
 
-        viewport.on('clicked', (e) => {
-            window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
-        })
+        // viewport.on('clicked', (e) => {
+        //     window.alert(`x: ${e.screen.x} y: ${e.screen.y}`)
+        // })
 
         const player = this.createPlayer();
 
@@ -112,7 +113,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
         
         // Get stage one
-        const stageOne = this.stageManager.getStage(1);
+    const stageOne = this.stageManager.getStage(1);
 
         // DISPATCH ACTION to set currentStage
         this.props.setupGame(stageOne);  
@@ -126,13 +127,17 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     createPlayer(){
         // let player: Player;
         let newPlayer: Player;
-        let attributes: PlayerAttributes;
+        let attributes: UnitAttributes;
         const loader = this.props.pixiApplication.loader;
 
         switch(this.props.character.name){
             case(CharacterOptions.KNIGHT):
                 attributes = this.props.character.attributes;
                 newPlayer = new Knight(loader, {} as Stage, attributes, 100, 100);
+                break;
+            case(CharacterOptions.KOBOLD):
+                attributes = this.props.character.attributes;
+                newPlayer = new Kobold(loader, {} as Stage, attributes, 100, 100);
                 break;
             default:
                 throw "cant handle kbold yet bitch"

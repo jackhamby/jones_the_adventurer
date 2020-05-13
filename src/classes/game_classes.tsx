@@ -10,13 +10,15 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1 } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
 import { Player } from './player';
 import { Unit } from './unit';
 import { UnitAttributes } from '../types/types';
+import { Knight } from './knight';
+import { Kobold } from './kobold';
 
 
 export interface Container {
@@ -73,16 +75,13 @@ export class StageManager {
     }
 
 
-
     // Stage 1
     private buildStageOne(): Stage{
         const level = 1;
         const name = "beginners luck";
         const platforms = this.generatePlatforms(STAGE1_LAYOUT);
-        // const tempTreasure = new Armor1Helmet(this.loader, 300, 200);
-        // const tempTreasure2 = new Armor1Legs(this.loader, 500, 200)
-        const hatTreasure = new Armor2Helmet(this.loader, 367, 896);
-        const treasures = [ hatTreasure ];
+        // const hatTreasure = new Armor2Helmet(this.loader, 334, 1045);
+        const treasures = this.generateTreasures();
         const stage = new Stage(
             level,
             name,
@@ -115,6 +114,26 @@ export class StageManager {
         )
     }
 
+    private generateTreasures(): Treasure[]{
+        // TODO: how do we dynamically generate treasures on each level
+        // procedural generation
+        const treasures = [];
+
+        if (this.player instanceof Knight){
+            treasures.push(new Armor2Helmet(this.loader, 334, 1045));
+            // render knight treasures
+        }
+        else if (this.player instanceof Kobold){
+            treasures.push(new KoboldArmor1(this.loader, 334, 1045));
+            // render kobold treasuress
+        }
+        else {
+            // do something
+        }
+
+        return treasures;
+    }
+
     // TODO
     // Other stages
 
@@ -129,9 +148,11 @@ export class StageManager {
         const height = parseInt(measurements[1]);
         let x = 0;
         let y = 0;
-        const canvasDimensions = getCanvasDimensions();
-        const xIncrement = canvasDimensions.width / 20;
-        const yIncrement = canvasDimensions.height / 20;
+        // const canvasDimensions = getCanvasDimensions();
+        // const xIncrement = canvasDimensions.width / 20;
+        // const yIncrement = canvasDimensions.height / 20;
+        const xIncrement = 25;
+        const yIncrement = 25;
         // loop height
         for(var i = 1; i < height + 1; ++i){
             x = 0;

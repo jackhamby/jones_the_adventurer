@@ -27,6 +27,8 @@ export class Unit extends Sprite{
     inKnockBack: boolean;
     timeSinceLastProjectileFired: number;
     projectileCooldown: number;
+    distinctJump: boolean; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
+
 
     // Textures/sprites
     textures: UnitParts;
@@ -64,6 +66,8 @@ export class Unit extends Sprite{
         this.inKnockBack = false;
         this.timeSinceLastProjectileFired = 0;
         this.projectileCooldown = 10 * this.attributes.attack_speed;
+        this.distinctJump = true; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
+
         
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
@@ -83,15 +87,11 @@ export class Unit extends Sprite{
         this.handleState();
         this.updateCooldowns();
         this.flipSpriteParts();
-        if (this.decay <= 0) {
-            this.remove();
-        };
-
         this.debugging();
     }
 
     isJumpAvailable(): boolean {
-        if (this.currentJumps > 0){
+        if (this.currentJumps > 0 && this.distinctJump){
             return true
         }
         return false;
@@ -234,10 +234,23 @@ export class Unit extends Sprite{
     }
 
     updateCooldowns(){
+        // projectile cooldowns
         if (this.timeSinceLastProjectileFired > 0){
             this.timeSinceLastProjectileFired -= 1;
-            return;
         }
+
+        // jump cooldowns
+        if (this.currentKeys.jump && this.distinctJump){
+            this.distinctJump = false;
+        } else if (!this.currentKeys.jump && !this.distinctJump){
+            this.distinctJump = true;
+        }
+
+        // decay
+        if (this.decay <= 0) {
+            this.remove();
+        };
+
     }
 
     flipSpriteParts(){
@@ -349,6 +362,14 @@ export class Unit extends Sprite{
         const updateStatsAction = updateStatistic(UnitStatisticNames.PROJECTILES_FIRED, this.statistics.projectiles + 1)
         store.dispatch(updateStatsAction as ControlAction);
         
+    }
+
+    tryJump(){
+        if (this.currentKeys.jump && this.isJumpAvailable()){
+            this.state = UnitStateNames.JUMPING;
+            this.yVelocity = -this.currentAttributes.jump_height;
+            this.currentJumps -= 1;
+        }
     }
 
 

@@ -16,8 +16,8 @@ const initialState = {
     } as ControlState,
     playerState: {
         character: {
-            name: CharacterOptions.KNIGHT,
-            attributes: CHARACTER_ATTRIBUTES[CharacterOptions.KNIGHT]
+            name: CharacterOptions.KOBOLD,
+            attributes: CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD]
         } as Character
     } as PlayerState,
     gameState: {

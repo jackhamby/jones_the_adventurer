@@ -2,7 +2,7 @@ import * as PIXI from "pixi.js";
 import { PlayerAttributes } from "../types/states";
 import { Stage } from "./game_classes";
 import { Player } from "./player";
-import { UnitParts, SpriteParts } from "../types/types";
+import { UnitParts, SpriteParts, UnitAttributes } from "../types/types";
 import { Part } from "./part";
 
 
@@ -11,7 +11,7 @@ export class Knight extends Player {
     static width = 20;
     static height = 30;
 
-    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: PlayerAttributes, x: number, y: number){
+    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
         super(loader, stage, initialAttributes, Knight.width, Knight.height, x, y);
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();

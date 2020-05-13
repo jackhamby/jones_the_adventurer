@@ -57,7 +57,8 @@ export enum UnitAttributeNames {
     SPEED = "speed",
     ARMOR = "armor",
     ATTACK = "attack",
-    JUMP = "jump",
+    JUMP_HEIGHT = "jump_height",
+    JUMP_COUNT = "jump_count",
     ATTACK_SPEED = "attack_speed",
 }
 

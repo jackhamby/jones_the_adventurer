@@ -3,6 +3,7 @@ import { ScreenOptions, CharacterOptions, Attributes } from '../types/enums';
 import { Stage } from '../classes/game_classes';
 import { Platform } from '../classes/platform';
 import { Enemy } from '../classes/enemy';
+import { UnitAttributes } from './types';
 
 export interface AppState {
     controlState: ControlState;
@@ -39,7 +40,7 @@ export interface IStage {
 
 export interface Character {
     name: CharacterOptions;
-    attributes: PlayerAttributes;
+    attributes: UnitAttributes;
 }
 
 export enum PlayerAttributeNames {

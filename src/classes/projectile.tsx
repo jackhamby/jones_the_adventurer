@@ -173,7 +173,7 @@ export class Rock extends Projectile {
 export class Arrow extends Projectile {
 
     static baseAttributes = {
-        damage: 5000,
+        damage: 30,
         speed: 15
     }
 
