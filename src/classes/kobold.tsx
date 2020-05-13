@@ -4,6 +4,7 @@ import { Player } from "./player";
 import { UnitParts, SpriteParts, UnitAttributes } from "../types/types";
 import { Part } from "./part";
 import { UnitPartNames, UnitStateNames } from "../types/enums";
+import { Rock } from "./projectile";
 
 
 export class Kobold extends Player {
@@ -16,6 +17,7 @@ export class Kobold extends Player {
         this.textures = this.initializeTextures();
         this.spriteParts = this.createSpriteParts();
         this.attributes = initialAttributes;
+        this.projectile = Rock;
     }
 
     initializeTextures(): UnitParts {

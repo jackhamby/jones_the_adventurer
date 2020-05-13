@@ -152,7 +152,7 @@ export class Armor2Helmet extends Treasure {
 export class KoboldArmor1 extends Treasure {
 
     constructor(loader: PIXI.Loader, x: number, y: number){
-        super(loader, {x, y, iconOffsetX: 0, iconOffsetY: 0});
+        super(loader, {x, y, iconOffsetX: -6, iconOffsetY: 0});
         this.effect = {
             attribute: UnitAttributeNames.ARMOR,
             value: 5,
