@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Sprite } from './sprite';
 import * as PIXI from 'pixi.js';
 import { ProjectileStateNames } from '../types/enums';
@@ -16,6 +16,7 @@ export class Projectile extends Sprite {
     unit: Unit;
     currentStage: Stage;
     attributes: ProjectileAttributes;
+    hasDealtDamage: boolean;
     
     static width = 10;
     static height = 10;
@@ -35,8 +36,8 @@ export class Projectile extends Sprite {
         this.unit = unit;
         this.currentStage = unit.currentStage;
         this.attributes = {} as ProjectileAttributes;
+        this.hasDealtDamage = false;
     }
-
 
     setState(state: ProjectileStateNames){
         this.state = state;

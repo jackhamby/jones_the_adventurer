@@ -55,6 +55,13 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                                     </td>
                                     <td> {player.attributes.attack} </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        <img className="pr-1" src="images/attributes/sword.png"/>
+                                        Gold
+                                    </td>
+                                    <td> {player.currentGold} </td>
+                                </tr>
                             </tbody>
                         </table>
                         

@@ -9,7 +9,7 @@ import * as PIXI from 'pixi.js';
 import './game_wrapper.css';
 import { setupGame } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
-import { CharacterOptions, UnitPartNames } from '../../types/enums';
+import { UnitPartNames, PlayerOptionNames } from '../../types/enums';
 import { Knight } from '../../classes/knight';
 import { Kobold } from '../../classes/kobold';
 import { Viewport } from 'pixi-viewport'
@@ -48,6 +48,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add('dirt-platform', 'images/platforms/dirt.png')
             .add('grass-platform', 'images/platforms/grass.png')
 
+            // coin textures
+            .add('coins-small', 'images/coins/coins.png')
+
             // Add head textures
             .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
             .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
@@ -75,7 +78,6 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
             .add('kobold-body-default', "images/kobold/body/body_default.png")
             .add('kobold-head-default', "images/kobold/head/head_default.png")
-
             .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")
 
 
@@ -131,11 +133,11 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         const loader = this.props.pixiApplication.loader;
 
         switch(this.props.character.name){
-            case(CharacterOptions.KNIGHT):
+            case(PlayerOptionNames.KNIGHT):
                 attributes = this.props.character.attributes;
                 newPlayer = new Knight(loader, {} as Stage, attributes, 100, 100);
                 break;
-            case(CharacterOptions.KOBOLD):
+            case(PlayerOptionNames.KOBOLD):
                 attributes = this.props.character.attributes;
                 newPlayer = new Kobold(loader, {} as Stage, attributes, 100, 100);
                 break;

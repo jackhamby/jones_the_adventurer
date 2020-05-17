@@ -1,5 +1,5 @@
 import * as PIXI from 'pixi.js';
-import { ScreenOptions, CharacterOptions, Attributes } from '../types/enums';
+import { ScreenOptions, Attributes, PlayerOptionNames } from '../types/enums';
 import { Stage } from '../classes/game_classes';
 import { Platform } from '../classes/platform';
 import { Enemy } from '../classes/enemy';
@@ -39,7 +39,7 @@ export interface IStage {
 }
 
 export interface Character {
-    name: CharacterOptions;
+    name: PlayerOptionNames;
     attributes: UnitAttributes;
 }
 

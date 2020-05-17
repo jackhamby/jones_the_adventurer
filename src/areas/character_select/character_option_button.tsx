@@ -1,12 +1,12 @@
 
 import React from 'react';
-import { CharacterOptions } from '../../types/enums';
 import './character_option_button.css';
+import { PlayerOptionNames } from '../../types/enums';
 
 
 export interface CharacterOptionButtonProps {
-    character: CharacterOptions;
-    changeCharacter: (character: CharacterOptions) => void;
+    character: PlayerOptionNames;
+    changeCharacter: (character: PlayerOptionNames) => void;
 }
 
 export class CharacterOptionButton extends React.Component<CharacterOptionButtonProps, {}> {

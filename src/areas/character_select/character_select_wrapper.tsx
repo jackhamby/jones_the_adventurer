@@ -4,7 +4,7 @@ import { CharacterDisplay } from './character_display';
 import { AppState, Character } from '../../types/states';
 import { AnyAction } from 'redux';
 import { changeCharacter, updateScreen } from '../../state_management/actions/control_actions';
-import { CharacterOptions, ScreenOptions } from '../../types/enums';
+import { ScreenOptions, PlayerOptionNames } from '../../types/enums';
 import { connect } from 'react-redux';
 import { ConnectedCharacterSelect } from './character_select';
 
@@ -12,7 +12,7 @@ export interface CharacterSelectStateProps {
     currentCharacter: Character;
 };
 export interface CharacterSelectDispatchProps { 
-    changeCharacter: (character: CharacterOptions) => void
+    changeCharacter: (character: PlayerOptionNames) => void
     updateScreen: (screenName: ScreenOptions) => void;
 
 
@@ -67,7 +67,7 @@ export const mapStateToProps = (appState: AppState): CharacterSelectStateProps =
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>) => {
     return {
-        changeCharacter: (character: CharacterOptions) => {
+        changeCharacter: (character: PlayerOptionNames) => {
             dispatch(changeCharacter(character));
         },
         updateScreen: (screenName: ScreenOptions) => {

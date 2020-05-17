@@ -10,6 +10,7 @@ import { SpritePart } from './interfaces';
 import { SPRITE_DECAY_FADE_TIME } from '../constants';
 import { store } from '../state_management/store';
 import { updateStatistic, ControlAction } from '../state_management/actions/control_actions';
+import { FloatingText } from './floating_text';
 
 export class Unit extends Sprite{
     // Player attributes/data
@@ -18,7 +19,6 @@ export class Unit extends Sprite{
     treasures: Treasure[];
     statistics: UnitStatistics;
     projectile: typeof Projectile;
-    maxJumps: number;
     currentJumps: number;
 
     // Sprite management
@@ -28,6 +28,12 @@ export class Unit extends Sprite{
     timeSinceLastProjectileFired: number;
     projectileCooldown: number;
     distinctJump: boolean; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
+    isImmune: boolean;
+    immuneTime: number;
+    maxImmuneTime: number;
+    immuneFadeInterval: number;
+    currentFadeIncrement: number;
+    currentImmuneFadeInterval: number;
 
 
     // Textures/sprites
@@ -44,6 +50,10 @@ export class Unit extends Sprite{
     debugUnitRadius: boolean;
     debugGraphics: PIXI.Graphics;
 
+    static baseAttributes = {
+
+    } as UnitAttributes;
+
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){    
         // x, y, width, height, xVel, yVel
         super(loader, x, y, width, height, 0, 0);    
@@ -58,8 +68,7 @@ export class Unit extends Sprite{
             damage: 0
         } as UnitStatistics;
         this.projectile = Arrow;
-        this.maxJumps = 2;
-        this.currentJumps = this.maxJumps;;
+        this.currentJumps = this.attributes.jump_count;
 
         this.state = {} as UnitStateNames;
         this.facingRight = false;
@@ -67,7 +76,12 @@ export class Unit extends Sprite{
         this.timeSinceLastProjectileFired = 0;
         this.projectileCooldown = 10 * this.attributes.attack_speed;
         this.distinctJump = true; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
-
+        this.isImmune = false;
+        this.immuneTime = 0;
+        this.maxImmuneTime = 50;
+        this.immuneFadeInterval = 5;
+        this.currentFadeIncrement = 1
+        this.currentImmuneFadeInterval = 0;
         
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
@@ -193,10 +207,13 @@ export class Unit extends Sprite{
     }
 
     applyDamage(value: number){
-        if (this.state === UnitStateNames.DEAD){
+        if (this.state === UnitStateNames.DEAD || this.isImmune){
             return;
         }
         this.currentAttributes.health -= value;
+        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${value}`);
+        this.currentStage.floatingTexts.push(floatingText);
+        this.currentStage.viewport.addChild(floatingText.displayObject);
         if (this.currentAttributes.health <= 0){
             this.setState(UnitStateNames.DEAD);
         }
@@ -204,10 +221,18 @@ export class Unit extends Sprite{
 
     dealDamage(target: Unit){
         let damage = 0;
-        if (this.state != UnitStateNames.DEAD){
+        if (this.state !== UnitStateNames.DEAD){
             damage = this.projectile.baseAttributes.damage + Math.round( this.currentAttributes.attack * .25 );
+            // TODO, can we dispatch ONE action for this?
+            const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damage)
+            // debugger;
+            store.dispatch(updateStatsAction as ControlAction);
         }
-        target.applyDamage(damage)
+        target.applyDamage(damage);
+        if (target.state === UnitStateNames.DEAD){
+            const updateStatsAction = updateStatistic(UnitStatisticNames.ENEMIES_KILLED, this.statistics.killed + 1)
+            store.dispatch(updateStatsAction as ControlAction);
+        }
     }
 
     // Handle unit state
@@ -251,6 +276,15 @@ export class Unit extends Sprite{
             this.remove();
         };
 
+        // immunity
+        if (this.isImmune){
+            this.immuneTime += 1;
+            if (this.immuneTime >= this.maxImmuneTime){
+                this.isImmune = false;
+                this.immuneTime = 0;
+            }
+        }
+
     }
 
     flipSpriteParts(){
@@ -259,9 +293,32 @@ export class Unit extends Sprite{
         } else {
             this.facingRight = false;
         }
+
+        let alphaToSet = 1;
+        if (this.isImmune){
+            console.log(this.currentImmuneFadeInterval)
+            this.currentImmuneFadeInterval += this.currentFadeIncrement;
+            // Reverse alpha
+            if (this.currentImmuneFadeInterval === 0 || this.currentImmuneFadeInterval === this.immuneFadeInterval){
+                this.currentFadeIncrement *= -1;
+                this.currentImmuneFadeInterval += this.currentFadeIncrement;
+            }
+            if (this.currentFadeIncrement === -1){
+                alphaToSet = 0.5
+            } else {
+                alphaToSet = 1;
+            }
+        }
+
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as UnitPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
+
+            // fade for immunity
+            sprite.alpha = alphaToSet;
+
+            
+            // flip facing right/left
             if (this.facingRight){
                 sprite.anchor.x = 0;
                 sprite.scale.x = 1;
@@ -271,6 +328,8 @@ export class Unit extends Sprite{
                 sprite.scale.x = -1;
             }
         })
+
+        // Flip parts 90 for death
         if (this.state === UnitStateNames.DEAD){
             this.y = this.y + (this.height - this.width)
             this.width = this.height;

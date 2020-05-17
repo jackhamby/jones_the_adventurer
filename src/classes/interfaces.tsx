@@ -13,6 +13,9 @@ export interface Effect {
     textureEffect?: {
         bodyPart: UnitPartNames;
         armorType: UnitArmorNames;
+    },
+    goldEffect?: {
+        amount: number;
     }
 }
 

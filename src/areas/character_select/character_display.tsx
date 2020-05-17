@@ -1,7 +1,6 @@
 
 import React from 'react';
 import './character_display.css';
-import { CharacterOptions } from '../../types/enums';
 import { CharacterAttributeDisplay } from './character_attribute_display';
 import { Character } from '../../types/states';
 import { MAX_ATTRIBUTES } from '../../constants';
@@ -45,5 +44,7 @@ export class CharacterDisplay extends React.Component<CharacterDisplayProps, {}>
         )
     }
 }
+
+
 
 export default CharacterDisplay;

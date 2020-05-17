@@ -11,6 +11,15 @@ export class Knight extends Player {
     static width = 20;
     static height = 30;
 
+    static baseAttributes = {
+        health: 100,
+        speed: 3,
+        armor: 4,
+        attack: 10,
+        jump_height: 10,
+        jump_count: 2,
+        attack_speed: 5
+    }
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
         super(loader, stage, initialAttributes, Knight.width, Knight.height, x, y);
         this.textures = this.initTextures();

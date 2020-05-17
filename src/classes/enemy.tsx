@@ -116,7 +116,7 @@ export class Enemy extends Unit {
 export class Man extends Enemy {
 
     static baseAttributes = {
-        attack: 5,
+        attack: 3,
         attack_speed: 5,
         health: 100,
         speed: 10,
@@ -183,7 +183,7 @@ export class Man extends Enemy {
 export class Kobold2 extends Enemy {
 
     static baseAttributes = {
-        attack: 25,
+        attack: 5,
         attack_speed: 5,
         health: 100,
         speed: 10,

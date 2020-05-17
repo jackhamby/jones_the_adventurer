@@ -1,4 +1,4 @@
-import { Unit,} from "./unit";
+import { Unit} from "./unit";
 import { Stage } from "./game_classes";
 import { UnitStateNames } from "../types/enums";
 import { UnitAttributes } from "../types/types";
@@ -7,19 +7,26 @@ import { KeyOptions } from "../types/states";
 
 export class Player extends Unit {
 
+    currentGold: number;
+
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
         super(loader, currentStage, initialAttributes, width, height, x, y);
+        this.currentGold = 0;
     };
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        console.log(`current jumps ${this.currentJumps}`);
+        // console.log(this.currentImmuneFadeInterval);
     }
 
     handleState(){
         super.handleState();
     }
 
+    applyDamage(value: number){
+        super.applyDamage(value);
+        this.isImmune = true;
+    }
 
     falling(){
         this.tryAttack();
@@ -75,7 +82,7 @@ export class Player extends Unit {
 
     // Called when player in walking state
     walking(){
-        this.currentJumps = this.maxJumps;
+        this.currentJumps = this.attributes.jump_count;
         this.tryAttack();
         this.tryJump();
 
@@ -107,7 +114,7 @@ export class Player extends Unit {
     // Called when player in standing state
     standing(){
         this.inKnockBack =  false;
-        this.currentJumps = this.maxJumps;
+        this.currentJumps = this.attributes.jump_count;
 
         this.tryAttack();
         this.tryJump();

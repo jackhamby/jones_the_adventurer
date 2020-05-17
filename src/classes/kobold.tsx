@@ -12,6 +12,16 @@ export class Kobold extends Player {
     static width = 15;
     static height = 20;
 
+    static baseAttributes = {
+        health: 80,
+        speed: 4,
+        armor: 2,
+        attack: 10,
+        jump_height: 10,
+        jump_count: 3,
+        attack_speed: 10
+    }
+
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
         super(loader, stage, initialAttributes, Kobold.width, Kobold.height, x, y);
         this.textures = this.initializeTextures();
@@ -81,44 +91,44 @@ export class Kobold extends Player {
         })
 
 
-        // if (this.state === UnitStateNames.DEAD){
-        //     this.y = this.y + (this.height - this.width)
-        //     this.width = this.height;
-        //     this.height = this.width;
-        //     this.xVelocity = 0;
-        //     this.yVelocity = 0;
-        //     // this.setState(UnitStateNames.DEAD)
-        //     Object.keys(this.spriteParts).forEach((key: string) => {
-        //         const partName = key as UnitPartNames;
-        //         const spritePart = this.spriteParts[partName];
-        //         spritePart.sprite.rotation = -1.5708; // 90degress in rads
-        //     })
+        if (this.state === UnitStateNames.DEAD){
+            this.y = this.y + (this.height - this.width)
+            this.width = this.height;
+            this.height = this.width;
+            this.xVelocity = 0;
+            this.yVelocity = 0;
+            // this.setState(UnitStateNames.DEAD)
+            Object.keys(this.spriteParts).forEach((key: string) => {
+                const partName = key as UnitPartNames;
+                const spritePart = this.spriteParts[partName];
+                spritePart.sprite.rotation = -1.5708; // 90degress in rads
+            })
 
-        //     // TODO remove this fro here and in Kobold in enemy.tsx
-        //     const head = this.spriteParts.head;
-        //     const headOffsetX =  0
-        //     const headOffsetY = head.sprite.height/4;
-        //     head.offSetX = headOffsetX;
-        //     head.offSetY = headOffsetY;
-        //     head.sprite.x = this.x + headOffsetX;
-        //     head.sprite.y = (this.y + this.height) + headOffsetY;
+            // TODO remove this fro here and in Kobold in enemy.tsx
+            const head = this.spriteParts.head;
+            const headOffsetX =  0
+            const headOffsetY = head.sprite.height/4;
+            head.offSetX = headOffsetX;
+            head.offSetY = headOffsetY;
+            head.sprite.x = this.x + headOffsetX;
+            head.sprite.y = (this.y + this.height) + headOffsetY;
 
-        //     const body = this.spriteParts.body;
-        //     const bodyOffsetX = head.sprite.height;;
-        //     const bodyOffsetY = 0;
-        //     body.offSetX = bodyOffsetX;
-        //     body.offSetY = bodyOffsetY;
-        //     body.sprite.x = this.x + bodyOffsetX;
-        //     body.sprite.y = (this.y + this.height) + bodyOffsetY;
+            const body = this.spriteParts.body;
+            const bodyOffsetX = head.sprite.height;;
+            const bodyOffsetY = 0;
+            body.offSetX = bodyOffsetX;
+            body.offSetY = bodyOffsetY;
+            body.sprite.x = this.x + bodyOffsetX;
+            body.sprite.y = (this.y + this.height) + bodyOffsetY;
 
-        //     const legs = this.spriteParts.legs;
-        //     const legsOffsetX = head.sprite.height + body.sprite.height;
-        //     const legsOffsetY = 0;
-        //     legs.offSetX = legsOffsetX;
-        //     legs.offSetY = legsOffsetY;
-        //     legs.sprite.x = this.x + legsOffsetX;
-        //     legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
-        // }
+            const legs = this.spriteParts.legs;
+            const legsOffsetX = head.sprite.height + body.sprite.height;
+            const legsOffsetY = 0;
+            legs.offSetX = legsOffsetX;
+            legs.offSetY = legsOffsetY;
+            legs.sprite.x = this.x + legsOffsetX;
+            legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+        }
     }
 
 }

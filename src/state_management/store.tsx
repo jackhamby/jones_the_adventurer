@@ -1,11 +1,12 @@
 
 import * as PIXI from 'pixi.js';
-import { controlReducer } from './reducers/control_reducer';
+import { controlReducer, PLAYER_OPTIONS } from './reducers/control_reducer';
 import { createStore } from 'redux'
 import { create } from 'istanbul-reports';
 import { AppState, ControlState, PlayerState, Character, KeyOptions } from '../types/states';
-import { ScreenOptions, CharacterOptions } from '../types/enums';
-import { CHARACTER_ATTRIBUTES, SCREEN_WIDTH, SCREEN_HEIGHT} from '../constants';
+import { ScreenOptions, PlayerOptionNames } from '../types/enums';
+import { SCREEN_WIDTH, SCREEN_HEIGHT} from '../constants';
+import { Kobold2 } from '../classes/enemy';
 
 
 
@@ -15,9 +16,14 @@ const initialState = {
         currentKeys: {} as KeyOptions
     } as ControlState,
     playerState: {
+        // default charater
+        // character: {
+        //     name: PlayerOptionNames.KOBOLD,  // Default to kobold 
+        //     attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
+        // } as Character
         character: {
-            name: CharacterOptions.KOBOLD,
-            attributes: CHARACTER_ATTRIBUTES[CharacterOptions.KOBOLD]
+            name: PlayerOptionNames.KNIGHT,  // Default to kobold 
+            attributes: PLAYER_OPTIONS[PlayerOptionNames.KNIGHT].baseAttributes,
         } as Character
     } as PlayerState,
     gameState: {

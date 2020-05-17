@@ -1,4 +1,4 @@
-import { ScreenOptions, CharacterOptions, UnitStatisticNames } from "../../types/enums";
+import { ScreenOptions, PlayerOptionNames, UnitStatisticNames } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
 import { Treasure } from "../../classes/treasure";
@@ -42,7 +42,7 @@ interface UpdateScreenPayload {
     newScreen: ScreenOptions;
 }
 interface ChangeCharacterPayload {
-    newCharacter: CharacterOptions;
+    newCharacter: PlayerOptionNames;
 }
 interface ScreenResizePayload {
     height: number;
@@ -137,7 +137,7 @@ export const updateScreen = (nextScreen: ScreenOptions): UpdateScreenAction => {
     };
 }
 
-export const changeCharacter = (nextCharacter: CharacterOptions): ChangeCharacterAction => {
+export const changeCharacter = (nextCharacter: PlayerOptionNames): ChangeCharacterAction => {
     return {
         type: UPDATE_CHARACTER,
         payload: {

@@ -35,14 +35,14 @@ export class Control extends React.Component<ControlProps, {}> {
     renderState = () => {
         const props = {} as any;
         switch(this.props.currentScreen){
-            case(ScreenOptions.MAIN_MENU):
-                return <ConnectedMainMenu/>
-            case(ScreenOptions.CHARACTER_SELECT):
-                return <ConnectedCharacterSelectWrapper {...props}/>
-            case(ScreenOptions.SINGLE_PLAYER_MENU):
-                return <SinglePlayerMenuWrapper/>
-            case(ScreenOptions.GAME):
-                return <ConnectedGame/>
+            // case(ScreenOptions.MAIN_MENU):
+            //     return <ConnectedMainMenu/>
+            // case(ScreenOptions.CHARACTER_SELECT):
+            //     return <ConnectedCharacterSelectWrapper {...props}/>
+            // case(ScreenOptions.SINGLE_PLAYER_MENU):
+            //     return <SinglePlayerMenuWrapper/>
+            // case(ScreenOptions.GAME):
+            //     return <ConnectedGame/>
             // default:
             //     return (<div> There was an error </div>)
             default:
@@ -56,8 +56,14 @@ export class Control extends React.Component<ControlProps, {}> {
                 return
             }
             this.props.updateKeyPress(event.key)
+            // let state: AppState = store.getState();
+            // state.controlState.currentKeys = mapKeys(event.key, state.controlState.currentKeys, true);
+
         } )
         document.addEventListener("keyup", (event: any) => {
+            // let state: AppState = store.getState();
+            // state.controlState.currentKeys = mapKeys(event.key, state.controlState.currentKeys, false);
+            
             this.props.updateKeyRelease(event.key)
         } )
     }

@@ -1,4 +1,7 @@
 import { Rock } from "../classes/projectile";
+import { Knight } from "../classes/knight";
+import { Kobold } from "../classes/kobold";
+import { Kobold2 } from "../classes/enemy";
 
 export enum ScreenOptions {
     MAIN_MENU,
@@ -7,9 +10,9 @@ export enum ScreenOptions {
     GAME,
 }
 
-export enum CharacterOptions {
+export enum PlayerOptionNames {
     KNIGHT = "knight",
-    KOBOLD = "kobold"
+    KOBOLD = "kobold",
 }
 
 export enum Attributes {

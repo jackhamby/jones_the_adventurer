@@ -3,8 +3,16 @@
 
 import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
-import {CHARACTER_ATTRIBUTES} from '../../constants';
 import { Treasure } from '../../classes/treasure';
+import { PlayerOptionNames } from '../../types/enums';
+import { PlayerOptions } from '../../types/types';
+import { Kobold } from '../../classes/kobold';
+import { Knight } from '../../classes/knight';
+
+export const PLAYER_OPTIONS = {
+    knight: Knight,
+    kobold: Kobold,
+} as PlayerOptions;
 
 
 const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
@@ -74,9 +82,10 @@ export const controlReducer = (state: any, action: ControlAction): any => {
             // player.treasures.push(this);
             // typedState.gameState.currentStage.player.treasures = []
             // typedState.gameState.currentStage.player.treasures.push(action.payload.)
-
+            // debugger;
             const player = typedState.gameState.currentStage.player;
             Treasure.apply(player, action.payload.treasure);
+            // debugger;
 
             
             return {
@@ -100,7 +109,7 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                 playerState: {
                     character: {
                         name: action.payload.newCharacter,
-                        attributes: CHARACTER_ATTRIBUTES[action.payload.newCharacter]
+                        attributes: PLAYER_OPTIONS[action.payload.newCharacter].baseAttributes,
                     } as Character
                 } as PlayerState
             };

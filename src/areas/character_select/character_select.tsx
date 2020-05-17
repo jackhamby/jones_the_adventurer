@@ -1,5 +1,5 @@
 import React from 'react';
-import { CharacterOptions, ScreenOptions } from '../../types/enums';
+import { PlayerOptionNames, ScreenOptions } from '../../types/enums';
 import { AppState } from '../../types/states';
 import { CharacterOptionButton } from './character_option_button';
 import { AnyAction, Dispatch } from 'redux';
@@ -7,10 +7,10 @@ import { changeCharacter } from '../../state_management/actions/control_actions'
 import { connect } from 'react-redux';
 
 export interface CharacterSelectStateProps {
-    currentCharacter: CharacterOptions;
+    currentCharacter: PlayerOptionNames;
 }
 export interface CharacterSelectDispatchProps {
-    changeCharacter: (character: CharacterOptions) => void;
+    changeCharacter: (character: PlayerOptionNames) => void;
 }
 
 export type CharacterSelectProps = CharacterSelectStateProps & CharacterSelectDispatchProps;
@@ -22,8 +22,8 @@ export class CharacterSelect extends React.Component<CharacterSelectProps, {}> {
         return (
             <React.Fragment>
                 <div className="row mt-5 ml-5" style={{height: "100%"}}> 
-                    <CharacterOptionButton character={CharacterOptions.KNIGHT} changeCharacter={this.props.changeCharacter}/>
-                    <CharacterOptionButton character={CharacterOptions.KOBOLD} changeCharacter={this.props.changeCharacter}/>
+                    <CharacterOptionButton character={PlayerOptionNames.KNIGHT} changeCharacter={this.props.changeCharacter}/>
+                    <CharacterOptionButton character={PlayerOptionNames.KOBOLD} changeCharacter={this.props.changeCharacter}/>
                 </div>
             </React.Fragment>
             
@@ -40,7 +40,7 @@ export const mapStateToProps = (state: AppState): CharacterSelectStateProps => {
 
 export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): CharacterSelectDispatchProps=> {
     return {
-        changeCharacter: (character: CharacterOptions) => {dispatch(changeCharacter(character))}
+        changeCharacter: (character: PlayerOptionNames) => {dispatch(changeCharacter(character))}
     }
 }
 

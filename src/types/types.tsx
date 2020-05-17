@@ -1,6 +1,8 @@
-import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames } from "./enums"
+import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlayerOptionNames } from "./enums"
 import { Part } from "../classes/part"
 import { Projectile } from "../classes/projectile"
+import { Player } from "../classes/player"
+import { Unit } from "../classes/unit"
 
 export type UnitStates = {
     [key in UnitStateNames]: any;
@@ -32,4 +34,8 @@ export type ProjectileAttributes = {
 
 export type ProjectileTypes = {
     [key in ProjectileNames] : Projectile;
+}
+
+export type PlayerOptions = {
+    [key in PlayerOptionNames] : typeof Unit;
 }

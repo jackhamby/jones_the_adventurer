@@ -6,12 +6,10 @@ import { SpritePart, Effect } from './interfaces';
 import { Player } from './player';
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
 
-
 export interface TreasureTextures {
-    treasureBody: PIXI.Texture;
+    treasureBody?: PIXI.Texture;
     treasureIcon: PIXI.Texture;
 }
-
 
 export interface TreasureOptions {
     iconOffsetX: number;
@@ -50,16 +48,18 @@ export class Treasure extends Sprite {
     }
 
     initSpriteParts(): SpritePart[]{
-        const baseIcon = new PIXI.Sprite(this.textures.treasureBody);
-        baseIcon.x = this.x + this.iconOffsetX;
-        baseIcon.y = this.y + this.iconOffsetY
-
-        const baseSpritePart = {
-            offSetX: this.iconOffsetX,
-            offSetY: this.iconOffsetY,
-            sprite: baseIcon
-        } as SpritePart;
-
+        const spriteParts = [];
+        if (this.textures.treasureBody){
+            const baseIcon = new PIXI.Sprite(this.textures.treasureBody);
+            baseIcon.x = this.x + this.iconOffsetX;
+            baseIcon.y = this.y + this.iconOffsetY
+            const baseSpritePart = {
+                offSetX: this.iconOffsetX,
+                offSetY: this.iconOffsetY,
+                sprite: baseIcon
+            } as SpritePart;
+            spriteParts.push(baseSpritePart);
+        }
 
         const icon = new PIXI.Sprite(this.textures.treasureIcon);
         const iconOffSetX = 0;
@@ -71,17 +71,23 @@ export class Treasure extends Sprite {
             offSetY: iconOffSetY,
             sprite: icon,
         }
-        return [ baseSpritePart, iconSpritePart ];
+        spriteParts.push(iconSpritePart);
+        return spriteParts;
     }
 
     static apply(player: Player, treasure: Treasure): void {
-        player.attributes[treasure.effect.attribute] += treasure.effect.value;
         if (treasure.effect.textureEffect){
-            const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
-            const newArmorType = treasure.effect.textureEffect.armorType;
-            const newTexture = player.textures[affectedBodyPart][newArmorType];
-            const spritePart = player.spriteParts[affectedBodyPart].sprite;
-            spritePart.texture = newTexture;
+            player.attributes[treasure.effect.attribute] += treasure.effect.value;
+            if (treasure.effect.textureEffect){
+                const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
+                const newArmorType = treasure.effect.textureEffect.armorType;
+                const newTexture = player.textures[affectedBodyPart][newArmorType];
+                const spritePart = player.spriteParts[affectedBodyPart].sprite;
+                spritePart.texture = newTexture;
+            }
+        }
+        if (treasure.effect.goldEffect){
+            player.currentGold += treasure.effect.goldEffect.amount;
         }
         player.treasures = [...player.treasures, treasure];
     }
@@ -90,12 +96,27 @@ export class Treasure extends Sprite {
 
 
 
+export class SmallCoins extends Treasure {
 
+    constructor(loader: PIXI.Loader, x: number, y: number, amount: number){
+        super(loader, {x, y, iconOffsetX: 5, iconOffsetY: -5});
+        this.effect = {
+            goldEffect: {
+                amount,
+            }
+     
+        } as Effect;
+        this.name = "small coin"
+    }
 
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['coins-small'].texture,
+            treasureBody: undefined,
+        }
+    }
 
-
-
-
+}
 
 
 

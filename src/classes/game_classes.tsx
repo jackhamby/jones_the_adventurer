@@ -2,7 +2,7 @@ import * as PIXI from 'pixi.js';
 import { KeyOptions, IStage } from '../types/states';
 import { ProjectileStateNames, UnitPartNames, UnitStateNames } from '../types/enums';
 import { Platform, DefaultPlatform, GrassPlatform, DirtPlatform } from './platform';
-import { STAGE1_LAYOUT, STAGE3_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
+import { STAGE1_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT } from '../constants';
 import { Enemy, Man, Kobold2 } from './enemy';
 import {store} from '../state_management/store';
 import { ControlAction, applyTreasure } from '../state_management/actions/control_actions';
@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1 } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
@@ -19,6 +19,7 @@ import { Unit } from './unit';
 import { UnitAttributes } from '../types/types';
 import { Knight } from './knight';
 import { Kobold } from './kobold';
+import { FloatingText } from './floating_text';
 
 
 export interface Container {
@@ -101,7 +102,7 @@ export class StageManager {
         const level = 1;
         const name = "beginners luck";
         const enemies = [] as Enemy[];
-        const platforms = this.generatePlatforms(STAGE3_LAYOUT);
+        const platforms = this.generatePlatforms(STAGE1_LAYOUT);
         const treasures = [ new Armor1Body(this.loader, 100, 200) ]
         return new Stage(
             level,
@@ -118,6 +119,8 @@ export class StageManager {
         // TODO: how do we dynamically generate treasures on each level
         // procedural generation
         const treasures = [];
+
+        treasures.push(new SmallCoins(this.loader, 536, 805, 4))
 
         if (this.player instanceof Knight){
             treasures.push(new Armor2Helmet(this.loader, 334, 1045));
@@ -240,6 +243,7 @@ export class Stage implements IStage{
     treasures: Treasure[];
     viewport: Viewport;
     projectiles: Projectile[];
+    floatingTexts: FloatingText[];
 
 
     constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
@@ -252,6 +256,7 @@ export class Stage implements IStage{
         this.player = player;
         this.treasures = treasures;
         this.viewport = viewport;
+        this.floatingTexts = [];
     }
 
     removeTreasure(treasureToRemove: Treasure){
@@ -276,6 +281,9 @@ export class Stage implements IStage{
         })
         this.projectiles.forEach((projectile: Projectile) => {
             projectile.update();
+        })
+        this.floatingTexts.forEach((text: FloatingText) => {
+            text.update();
         })
     }
 
@@ -568,7 +576,10 @@ export class Stage implements IStage{
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){
                 projectile.remove();
-                projectile.unit.dealDamage(enemy);            
+                if (!projectile.hasDealtDamage){
+                    projectile.unit.dealDamage(enemy);  
+                    projectile.hasDealtDamage = true;
+                }
         }
     }
 
@@ -576,8 +587,11 @@ export class Stage implements IStage{
         if ((projectile.state == ProjectileStateNames.FLYING ||
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){    
-                projectile.unit.dealDamage(enemy);
                 projectile.remove();
+                if (!projectile.hasDealtDamage){
+                    projectile.unit.dealDamage(enemy);
+                    projectile.hasDealtDamage = true;
+                }
         }
     }
 
