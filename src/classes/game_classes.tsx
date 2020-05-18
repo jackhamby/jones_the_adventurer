@@ -93,7 +93,7 @@ export class StageManager {
             this.viewport
         )
         // const enemies = [ new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Kobold2(this.loader, stage, {} as UnitAttributes, 250, 200),  new Kobold2(this.loader, stage, {} as UnitAttributes, 600, 250),  new Kobold2(this.loader, stage, {} as UnitAttributes, 800, 220)];
-        const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554)]
+        const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new Kobold2(this.loader, stage, {} as UnitAttributes, 83, 700)]
         stage.enemies = enemies;
         return stage;
     }
@@ -497,16 +497,20 @@ export class Stage implements IStage{
 
 
     // ================================== Projectile collisions ===========================================================
-    // ===============================================================================================================
+    // ====================================================================================================================
     private checkProjectileXCollisions(projectile: Projectile){
         const collidePlatform = this.collideAny(projectile, this.platforms);
-        const collidePlayer = this.collideAny(projectile, this.enemies);
+        const collideEnemy = this.collideAny(projectile, this.enemies);
+        const collidePlayer = this.collide(projectile, this.player);
 
         if (collidePlatform){
             this.handleProjectilePlatformCollisionX(projectile, collidePlatform);
         }
+        if (collideEnemy){
+            this.handleProjectileEnemyCollisionX(projectile, collideEnemy)
+        }
         if (collidePlayer){
-            this.handleProjectileEnemyCollisionX(projectile, collidePlayer)
+            this.handleProjectilePlayerCollisionX(projectile, this.player);
         }
 
         else if(projectile.state == ProjectileStateNames.FALLING){
@@ -516,13 +520,17 @@ export class Stage implements IStage{
 
     private checkProjectileYCollisions(projectile: Projectile){
         const collidePlatform = this.collideAny(projectile, this.platforms);
-        const collidePlayer = this.collideAny(projectile, this.enemies);
+        const collideEnemy = this.collideAny(projectile, this.enemies);
+        const collidePlayer = this.collide(projectile, this.player);
 
         if (collidePlatform){
             this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
         }
+        if (collideEnemy){
+            this.handleProjectileEnemyCollisionY(projectile, collideEnemy);
+        }
         if (collidePlayer){
-            this.handleProjectileEnemyCollisionY(projectile, collidePlayer);
+            this.handleProjectilePlayerCollisionY(projectile, this.player);
         }
 
         if (projectile.state != ProjectileStateNames.STANDING && this.isFallingProjectile(projectile) ) {
@@ -531,7 +539,6 @@ export class Stage implements IStage{
         else if(projectile.state == ProjectileStateNames.FALLING){
             projectile.setState(ProjectileStateNames.ROLLING)
         }
-
     }
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
@@ -543,7 +550,6 @@ export class Stage implements IStage{
             projectile.setY(collider.bottom());
         }
 
-        
         if (projectile.sticky){
             projectile.setState(ProjectileStateNames.STANDING);
         }
@@ -570,8 +576,10 @@ export class Stage implements IStage{
         }
     }
 
-
     private handleProjectileEnemyCollisionY(projectile: Projectile, enemy: Unit){
+        if (projectile.unit === enemy){
+            return;
+        }
         if ((projectile.state == ProjectileStateNames.FLYING ||
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){
@@ -584,6 +592,9 @@ export class Stage implements IStage{
     }
 
     private handleProjectileEnemyCollisionX(projectile: Projectile, enemy: Unit){
+        if (projectile.unit === enemy){
+            return;
+        }
         if ((projectile.state == ProjectileStateNames.FLYING ||
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){    
@@ -593,6 +604,49 @@ export class Stage implements IStage{
                     projectile.hasDealtDamage = true;
                 }
         }
+    }
+
+
+    private handleProjectilePlayerCollisionY(projectile: Projectile, player: Unit){
+        if (projectile.unit === player){
+            return;
+        }
+        if ((projectile.state == ProjectileStateNames.FLYING ||
+            projectile.state == ProjectileStateNames.FALLING) && 
+            player.state != UnitStateNames.DEAD){
+                projectile.remove();
+                if (!projectile.hasDealtDamage){
+                    projectile.unit.dealDamage(player);  
+                    projectile.hasDealtDamage = true;
+                }
+        }
+    }
+
+    private handleProjectilePlayerCollisionX(projectile: Projectile, player: Unit){
+        if (projectile.unit === player){
+            return;
+        }
+        if ((projectile.state == ProjectileStateNames.FLYING ||
+            projectile.state == ProjectileStateNames.FALLING) && 
+            player.state != UnitStateNames.DEAD){
+                projectile.remove();
+                if (!projectile.hasDealtDamage){
+                    projectile.unit.dealDamage(player);  
+                    projectile.hasDealtDamage = true;
+                }
+        }
+        // if (projectile.unit === enemy){
+        //     return;
+        // }
+        // if ((projectile.state == ProjectileStateNames.FLYING ||
+        //     projectile.state == ProjectileStateNames.FALLING) && 
+        //     enemy.state != UnitStateNames.DEAD){    
+        //         projectile.remove();
+        //         if (!projectile.hasDealtDamage){
+        //             projectile.unit.dealDamage(enemy);
+        //             projectile.hasDealtDamage = true;
+        //         }
+        // }
     }
 
 

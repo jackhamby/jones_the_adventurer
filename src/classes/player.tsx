@@ -28,6 +28,31 @@ export class Player extends Unit {
         this.isImmune = true;
     }
 
+    tryAttack(){
+
+        const projectileVelocity = this.projectile.baseAttributes.speed;
+        if (!this.canAttack()){
+            return;
+        }
+        if (this.currentKeys.attackRight){
+            this.fireProjectile(projectileVelocity, 0);
+        }
+        else if (this.currentKeys.attackLeft){
+            this.fireProjectile(-projectileVelocity, 0);
+        }
+        else if(this.currentKeys.attackDown){  
+            this.fireProjectile(0, projectileVelocity);
+        }
+        else if(this.currentKeys.attackUp){
+            if (this.facingRight){
+                this.fireProjectile(15, -projectileVelocity);
+            }   
+            else {
+                this.fireProjectile(-15, -projectileVelocity);
+            }    
+        }
+    }
+
     falling(){
         this.tryAttack();
         this.tryJump();

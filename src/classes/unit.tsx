@@ -396,6 +396,7 @@ export class Unit extends Sprite{
 
 
     fireProjectile(xVelocity: number, yVelocity: number){
+        this.timeSinceLastProjectileFired = this.projectileCooldown;
         const projectile = new this.projectile(this.loader, this.x, this.y, this)
         projectile.xVelocity = xVelocity;
         projectile.yVelocity = yVelocity;
@@ -432,39 +433,18 @@ export class Unit extends Sprite{
     }
 
 
-    tryAttack(){
-        // TODO, cleanup this whole method
-        if (this.currentKeys.attackDown ||
-            this.currentKeys.attackLeft ||
-            this.currentKeys.attackUp || 
-            this.currentKeys.attackRight){
-                if (this.timeSinceLastProjectileFired > 0){
-                    return;
-                }
-                this.timeSinceLastProjectileFired = this.projectileCooldown;
-            }
-
-        if (this.currentKeys.attackRight){
-            this.fireProjectile(15, 0);
+    canAttack(): boolean{
+        if (this.timeSinceLastProjectileFired > 0){
+            return false;
         }
-        else if (this.currentKeys.attackLeft){
-            this.fireProjectile(-15, 0);
-        }
-        else if(this.currentKeys.attackDown){  
-            this.fireProjectile(0, 15);
-        }
-        else if(this.currentKeys.attackUp){
-            if (this.facingRight){
-                this.fireProjectile(15, -5);
-            }   
-            else {
-                this.fireProjectile(-15, -5);
-            }    
-        }
-
+        return true;
     }
 
     // These need to be overloaded
+    tryAttack(){
+        
+    }
+
     standing(){
 
     }

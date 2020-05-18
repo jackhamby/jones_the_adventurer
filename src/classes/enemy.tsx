@@ -46,6 +46,22 @@ export class Enemy extends Unit {
         return this.isInsideRadius(this.currentStage.player, this.patrolRadius);
     }
 
+    tryAttack(){
+        if (!this.canAttack()){
+            return;
+        }
+        let projectileXVelocity = 0;
+        if (this.x < this.currentStage.player.x){
+            projectileXVelocity = this.projectile.baseAttributes.speed;
+        }
+        // walk left
+        else if (this.x > this.currentStage.player.x){
+            projectileXVelocity = -this.projectile.baseAttributes.speed;
+        }
+        
+        this.fireProjectile(projectileXVelocity, 0)
+    }
+
     remove(){
         super.remove()
         Object.keys(this.spriteParts).forEach((partName: string) => {
@@ -65,6 +81,7 @@ export class Enemy extends Unit {
     }
 
     attacking(){
+        this.tryAttack()
         if (this.x < this.currentStage.player.x){
             this.xVelocity = 1;
         }
