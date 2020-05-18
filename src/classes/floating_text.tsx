@@ -28,7 +28,7 @@ export class FloatingText {
     }
 
     initializeText(): PIXI.DisplayObject{
-        const displayObject =  new PIXI.Text(this.text, this.style);
+        const displayObject =  new PIXI.Text("peter is a bich", this.style);
         displayObject.x = this.x;
         displayObject.y = this.y;
         return displayObject;
