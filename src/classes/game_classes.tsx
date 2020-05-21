@@ -424,7 +424,12 @@ export class Stage implements IStage{
             return;
         }
         const collidePlatform = this.collideAny(this.player, this.platforms); 
-        const collideTreasures = this.collideAny(this.player, this.treasures)
+        const collideTreasures = this.collideAny(this.player, this.treasures);
+        const collideEnemies = this.collideAny(this.player, this.enemies);
+
+        if (collideEnemies){
+            this.handlePlayerEnemyCollisionY(this.player, collideEnemies);
+        }
 
         if (collidePlatform){
             this.handlePlayerPlatformCollisionY(this.player, collidePlatform);
@@ -453,8 +458,10 @@ export class Stage implements IStage{
     }
 
     private handlePlayerEnemyCollisionX(player: Unit, collider: Enemy){
+        if (collider.state === UnitStateNames.DEAD){
+            return;
+        }
         player.yVelocity = -3;
-        
         // Set knockback right
         if (collider.xVelocity > 0){
             player.xVelocity = 3;
@@ -468,6 +475,26 @@ export class Stage implements IStage{
         collider.dealDamage(player);
         player.inKnockBack =  true;
     }
+
+    private handlePlayerEnemyCollisionY(player: Unit, collider: Enemy){
+        // if (collider.state === UnitStateNames.DEAD){
+        //     return;
+        // }
+        // player.yVelocity = -3;
+        // // Set knockback right
+        // if (collider.xVelocity > 0){
+        //     player.xVelocity = 3;
+        //     // player.yVelocity = -3;
+        // }
+        // // Set kockback left
+        // if (collider.xVelocity < 0){
+        //     player.xVelocity = -3;
+        //     // player.yVelocity = -3;
+        // }
+        // collider.dealDamage(player);
+        // player.inKnockBack =  true;
+    }
+
 
     private handlePlayerPlatformCollisionY(player: Unit, collider: Sprite){
         if (player.yVelocity > 0){
