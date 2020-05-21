@@ -210,8 +210,9 @@ export class Unit extends Sprite{
         if (this.state === UnitStateNames.DEAD || this.isImmune){
             return;
         }
-        this.currentAttributes.health -= value;
-        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${value}`);
+        const damageToApply = Math.round(value - (this.currentAttributes.armor * .50));
+        this.currentAttributes.health -= damageToApply;
+        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${damageToApply}`);
         this.currentStage.floatingTexts.push(floatingText);
         this.currentStage.viewport.addChild(floatingText.displayObject);
         if (this.currentAttributes.health <= 0){
@@ -296,7 +297,7 @@ export class Unit extends Sprite{
 
         let alphaToSet = 1;
         if (this.isImmune){
-            console.log(this.currentImmuneFadeInterval)
+            // console.log(this.currentImmuneFadeInterval)
             this.currentImmuneFadeInterval += this.currentFadeIncrement;
             // Reverse alpha
             if (this.currentImmuneFadeInterval === 0 || this.currentImmuneFadeInterval === this.immuneFadeInterval){

@@ -78,6 +78,8 @@ export class Treasure extends Sprite {
     static apply(player: Player, treasure: Treasure): void {
         if (treasure.effect.textureEffect){
             player.attributes[treasure.effect.attribute] += treasure.effect.value;
+            player.currentAttributes[treasure.effect.attribute] += treasure.effect.value;
+
             if (treasure.effect.textureEffect){
                 const affectedBodyPart = treasure.effect.textureEffect.bodyPart;
                 const newArmorType = treasure.effect.textureEffect.armorType;
@@ -189,6 +191,30 @@ export class KoboldArmor1 extends Treasure {
     initTextures(): TreasureTextures {
         return {
             treasureIcon: this.loader.resources['kobold-head-armor1'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+export class KoboldArmorLegs1 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, {x, y, iconOffsetX: -6, iconOffsetY: -10});
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.LEGS,
+            }
+        } as Effect;
+        this.name = "loin cloth"
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['kobold-legs-armor1'].texture,
             treasureBody: this.loader.resources['treasure-base'].texture,
         }
     }

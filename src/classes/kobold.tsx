@@ -57,7 +57,7 @@ export class Kobold extends Player {
         head.sprite.zIndex = 999999;
 
         const bodyOffsetX = 0;
-        const bodyOffsetY = head.sprite.height + headOffSetY - 3;
+        const bodyOffsetY = head.sprite.height + headOffSetY - 4;
         const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
 
         const legsOffsetX = 0;

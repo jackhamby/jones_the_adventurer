@@ -76,6 +76,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
+            .add('kobold-legs-armor1', "images/kobold/legs/legs_armor1.png")
             .add('kobold-body-default', "images/kobold/body/body_default.png")
             .add('kobold-head-default', "images/kobold/head/head_default.png")
             .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")

@@ -20,7 +20,7 @@ export class FloatingText {
         this.style = style 
             ? style 
             : {
-                fontSize: '8px',
+                fontSize: '12px',
                 fill: '#FF0000',
             } as PIXI.TextStyle
         this.displayObject = this.initializeText();
@@ -28,7 +28,7 @@ export class FloatingText {
     }
 
     initializeText(): PIXI.DisplayObject{
-        const displayObject =  new PIXI.Text("peter is a bich", this.style);
+        const displayObject =  new PIXI.Text(this.text, this.style);
         displayObject.x = this.x;
         displayObject.y = this.y;
         return displayObject;

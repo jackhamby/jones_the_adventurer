@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1 } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
@@ -20,6 +20,7 @@ import { UnitAttributes } from '../types/types';
 import { Knight } from './knight';
 import { Kobold } from './kobold';
 import { FloatingText } from './floating_text';
+import { Timer } from './timer';
 
 
 export interface Container {
@@ -68,6 +69,8 @@ export class StageManager {
         treasures.forEach((treasure: Treasure) => {
             this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
         })
+
+        this.viewport.addChild(stage.timer.displayObject);
         this.viewport.addChild(...newplayer.getSprites())
     }
 
@@ -82,7 +85,7 @@ export class StageManager {
         const name = "beginners luck";
         const platforms = this.generatePlatforms(STAGE1_LAYOUT);
         // const hatTreasure = new Armor2Helmet(this.loader, 334, 1045);
-        const treasures = this.generateTreasures();
+        const treasures = this.generateTreasures(level);
         const stage = new Stage(
             level,
             name,
@@ -92,15 +95,14 @@ export class StageManager {
             this.player,
             this.viewport
         )
-        // const enemies = [ new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Kobold2(this.loader, stage, {} as UnitAttributes, 250, 200),  new Kobold2(this.loader, stage, {} as UnitAttributes, 600, 250),  new Kobold2(this.loader, stage, {} as UnitAttributes, 800, 220)];
         const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new Kobold2(this.loader, stage, {} as UnitAttributes, 83, 700)]
         stage.enemies = enemies;
         return stage;
     }
 
     private buildStageTwo(): Stage{
-        const level = 1;
-        const name = "beginners luck";
+        const level = 2;
+        const name = "stage fucking 2";
         const enemies = [] as Enemy[];
         const platforms = this.generatePlatforms(STAGE1_LAYOUT);
         const treasures = [ new Armor1Body(this.loader, 100, 200) ]
@@ -115,26 +117,88 @@ export class StageManager {
         )
     }
 
-    private generateTreasures(): Treasure[]{
+    private generateTreasures(stage: number): Treasure[]{
         // TODO: how do we dynamically generate treasures on each level
         // procedural generation
-        const treasures = [];
-
-        treasures.push(new SmallCoins(this.loader, 536, 805, 4))
-
+        let treasures: Treasure[] = this.generateGenericTreasures(stage);
         if (this.player instanceof Knight){
-            treasures.push(new Armor2Helmet(this.loader, 334, 1045));
-            // render knight treasures
+            treasures = this.generateRandomKnightTreasures(stage);
+        } else if (this.player instanceof Kobold){
+            treasures = this.generateRandomKoboldTreasures(stage);
         }
-        else if (this.player instanceof Kobold){
-            treasures.push(new KoboldArmor1(this.loader, 334, 1045));
-            // render kobold treasuress
-        }
-        else {
+        else{
             // do something
         }
 
+        treasures.push(new SmallCoins(this.loader, 536, 805, 4))
         return treasures;
+    }
+
+
+    // if (this.player instanceof Knight){
+    //     treasures.push(new Armor2Helmet(this.loader, 334, 1045));
+    //     // render knight treasures
+    // }
+    // else if (this.player instanceof Kobold){
+    //     treasures.push(new KoboldArmor1(this.loader, 334, 1045));
+    //     // render kobold treasuress
+    // }
+
+    private generateGenericTreasures(stage: number): Treasure[] {
+        const genericTreasures: Treasure[] = [];
+        switch(stage){
+            case(1):
+                genericTreasures.push(new SmallCoins(this.loader, 536, 805, 4))
+                break;
+            default:
+                break;
+        }
+        return genericTreasures;
+    }
+
+    private generateRandomKnightTreasures(stage: number): Treasure[]{
+        const knightTreasures: Treasure[] = [];
+        switch(stage){
+            case(1):
+                let treasureOptions = [Armor2Helmet, Armor1Helmet, Armor1Legs, Armor1Body];
+                let randomIndex = Math.floor(Math.random() * treasureOptions.length);
+                const randomTreasureType1 = treasureOptions[randomIndex];
+                treasureOptions = treasureOptions.filter(option => option != randomTreasureType1);
+                randomIndex = Math.floor(Math.random() * treasureOptions.length);
+                const randomTreasureType2 = treasureOptions[randomIndex];
+                knightTreasures.push(new randomTreasureType1(this.loader, 334, 1045));
+                knightTreasures.push(new randomTreasureType2(this.loader, 223, 70));
+                break;
+            default:
+                break;
+        }
+        return knightTreasures;
+    }
+
+    private generateRandomKoboldTreasures(stage: number): Treasure[]{
+        const koboldTreasures: Treasure[] = [];
+        switch(stage){
+
+            // TODO: clean this up so treasures in same spot for each stage
+            case(1):
+                let treasureOptions = [KoboldArmor1, KoboldArmorLegs1];
+                let randomIndex = Math.floor(Math.random() * treasureOptions.length)
+                const randomTreasureType1 = treasureOptions[randomIndex];
+                console.log(randomIndex)
+                console.log(treasureOptions[randomIndex])
+                treasureOptions = treasureOptions.filter(option => option != randomTreasureType1);
+
+                randomIndex = Math.floor(Math.random() * treasureOptions.length)
+                console.log(randomIndex)
+                console.log(treasureOptions[randomIndex])
+                const randomTreasureType2 = treasureOptions[randomIndex];
+                koboldTreasures.push(new randomTreasureType1(this.loader, 334, 1045));
+                koboldTreasures.push(new randomTreasureType2(this.loader, 223, 70));
+                break;
+            default:
+                break;
+        }
+        return koboldTreasures;
     }
 
     // TODO
@@ -151,9 +215,6 @@ export class StageManager {
         const height = parseInt(measurements[1]);
         let x = 0;
         let y = 0;
-        // const canvasDimensions = getCanvasDimensions();
-        // const xIncrement = canvasDimensions.width / 20;
-        // const yIncrement = canvasDimensions.height / 20;
         const xIncrement = 25;
         const yIncrement = 25;
         // loop height
@@ -244,6 +305,7 @@ export class Stage implements IStage{
     viewport: Viewport;
     projectiles: Projectile[];
     floatingTexts: FloatingText[];
+    timer: Timer;
 
 
     constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport){
@@ -257,6 +319,7 @@ export class Stage implements IStage{
         this.treasures = treasures;
         this.viewport = viewport;
         this.floatingTexts = [];
+        this.timer = new Timer(this, 100, 100);
     }
 
     removeTreasure(treasureToRemove: Treasure){
@@ -271,6 +334,7 @@ export class Stage implements IStage{
         this.currentKeys = keys;
         this.updateAllSpriteStates();
         this.updateAllSpritePositions();
+        this.timer.update();
     }
 
     // Update state of the sprite
