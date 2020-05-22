@@ -16,7 +16,6 @@ export class Player extends Unit {
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        // console.log(this.currentImmuneFadeInterval);
     }
 
     handleState(){
@@ -118,6 +117,8 @@ export class Player extends Unit {
 
         // Move right
         else if (this.currentKeys.moveRight){
+            // console.log('here')
+            // console.log(this.currentKeys.moveRight)
             this.facingRight = true;
             this.xVelocity = this.currentAttributes.speed;
         }
@@ -162,6 +163,21 @@ export class Player extends Unit {
             this.state = UnitStateNames.STANDING
         }
         this.xVelocity = 0;
+    }
+
+
+    dying(){
+        super.dying();
+
+        const resp = window.confirm('sorry you suck. restart?')
+        if (resp){
+            this.currentStage.restart();
+            this.currentStage.player.setX(100);
+            this.currentStage.player.setY(100);
+            this.currentStage.player.revive();
+        } else {
+            window.location.reload();
+        }
     }
 
 

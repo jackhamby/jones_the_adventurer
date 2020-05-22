@@ -86,6 +86,7 @@ export class Treasure extends Sprite {
                 const newTexture = player.textures[affectedBodyPart][newArmorType];
                 const spritePart = player.spriteParts[affectedBodyPart].sprite;
                 spritePart.texture = newTexture;
+                player.currentArmorSet[affectedBodyPart] = newArmorType;
             }
         }
         if (treasure.effect.goldEffect){

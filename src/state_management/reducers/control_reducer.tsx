@@ -114,6 +114,7 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                 } as PlayerState
             };
         case KEY_PRESS:
+            console.log('still here')
             return {
                 ...typedState,
                 controlState: {

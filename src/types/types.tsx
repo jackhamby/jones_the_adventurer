@@ -16,6 +16,10 @@ export type UnitParts = {
     [key in UnitPartNames]: UnitArmors;
 }
 
+export type SpriteArmors = {
+    [key in UnitPartNames] : UnitArmorNames
+}
+
 export type SpriteParts = {
     [key in UnitPartNames]: Part;
 }

@@ -61,12 +61,31 @@ export class Knight extends Player {
 
         const legsOffsetX = 0;
         const legsOffsetY = body.sprite.height + bodyOffsetY;
-        const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);;
+        const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);
         return {
             head,
             body,
             legs
         };
     }
+
+    // initSpriteParts(): SpriteParts {
+    //     const headOffsetX = 0;
+    //     const headOffSetY = -5;
+    //     const head = new Part(this.textures.head[this.currentArmorSet.head], headOffsetX, headOffSetY, this);
+
+    //     const bodyOffsetX = 0;
+    //     const bodyOffsetY = head.sprite.height + headOffSetY;
+    //     const body = new Part(this.textures.body[this.currentArmorSet.body], bodyOffsetX, bodyOffsetY, this);
+
+    //     const legsOffsetX = 0;
+    //     const legsOffsetY = body.sprite.height + bodyOffsetY;
+    //     const legs = new Part(this.textures.legs[this.currentArmorSet.legs], legsOffsetX, legsOffsetY, this);;
+    //     return {
+    //         head,
+    //         body,
+    //         legs
+    //     };
+    // }
 
 }

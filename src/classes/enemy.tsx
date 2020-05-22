@@ -42,6 +42,11 @@ export class Enemy extends Unit {
         // this.flipSpriteParts();
     }
 
+    drawHpBar(){
+        super.drawHpBar();
+
+    }
+
     checkIfPlayerInAttackRange(){
         return this.isInsideRadius(this.currentStage.player, this.patrolRadius);
     }

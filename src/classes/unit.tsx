@@ -4,13 +4,14 @@ import { Stage } from './game_classes';
 import { KeyOptions } from '../types/states';
 import { Rock, Projectile, Arrow } from './projectile';
 import * as PIXI from 'pixi.js';
-import { UnitAttributes, UnitStatistics, SpriteParts, UnitParts } from '../types/types';
-import { UnitStateNames, UnitPartNames, UnitStatisticNames } from '../types/enums';
+import { UnitAttributes, UnitStatistics, SpriteParts, UnitParts, UnitArmors, SpriteArmors } from '../types/types';
+import { UnitStateNames, UnitPartNames, UnitStatisticNames, UnitArmorNames } from '../types/enums';
 import { SpritePart } from './interfaces';
 import { SPRITE_DECAY_FADE_TIME } from '../constants';
 import { store } from '../state_management/store';
 import { updateStatistic, ControlAction } from '../state_management/actions/control_actions';
 import { FloatingText } from './floating_text';
+import { Part } from './part';
 
 export class Unit extends Sprite{
     // Player attributes/data
@@ -20,6 +21,7 @@ export class Unit extends Sprite{
     statistics: UnitStatistics;
     projectile: typeof Projectile;
     currentJumps: number;
+    currentArmorSet: SpriteArmors;
 
     // Sprite management
     state: UnitStateNames;
@@ -34,6 +36,7 @@ export class Unit extends Sprite{
     immuneFadeInterval: number;
     currentFadeIncrement: number;
     currentImmuneFadeInterval: number;
+    fallingTimer: number;
 
 
     // Textures/sprites
@@ -69,6 +72,11 @@ export class Unit extends Sprite{
         } as UnitStatistics;
         this.projectile = Arrow;
         this.currentJumps = this.attributes.jump_count;
+        this.currentArmorSet = {
+            head: UnitArmorNames.DEFAULT,
+            legs: UnitArmorNames.DEFAULT,
+            body: UnitArmorNames.DEFAULT
+        }
 
         this.state = {} as UnitStateNames;
         this.facingRight = false;
@@ -82,6 +90,7 @@ export class Unit extends Sprite{
         this.immuneFadeInterval = 5;
         this.currentFadeIncrement = 1
         this.currentImmuneFadeInterval = 0;
+        this.fallingTimer = 0;
         
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
@@ -110,6 +119,7 @@ export class Unit extends Sprite{
         }
         return false;
     }
+    
 
 
 
@@ -156,6 +166,8 @@ export class Unit extends Sprite{
 
     remove(){
         this.currentStage.viewport.removeChild(this.hpBar);
+        this.hpBar.clear();
+        this.hpBar.destroy();
     }
 
     getSprites(){
@@ -236,6 +248,35 @@ export class Unit extends Sprite{
         }
     }
 
+    revive(){
+        this.currentAttributes = { ...this.attributes };
+        this.setState(UnitStateNames.STANDING);
+        this.fallingTimer = 0;
+        this.projectileCooldown = 0;
+            
+        // TODO lets abstract this into a shared method. the same is used in Enemy.tsx dying()
+        Object.keys(this.spriteParts).forEach((partName: string) => {
+            const tempPartName: UnitPartNames = partName as UnitPartNames;
+            const part: SpritePart = this.spriteParts[tempPartName];
+            this.currentStage.viewport.removeChild(part.sprite);
+        })
+
+        this.spriteParts = this.initSpriteParts();
+        
+        // TODO: another hack, we need to address this asap
+        // without this palyer keeps moving the in direction they
+        // were when they died. ie. if you die moving right, 
+        // the player still thinks the right key is pressed
+        this.currentKeys.moveRight = false;
+        this.currentKeys.moveLeft = false;
+        // -------------------------------------------------------
+
+
+        this.currentStage.viewport.addChild(...this.getSprites())
+        this.currentStage.viewport.follow(this.spriteParts.head.sprite);
+        
+    }
+
     // Handle unit state
     handleState(){
         switch(this.state){
@@ -286,6 +327,15 @@ export class Unit extends Sprite{
             }
         }
 
+        //  falling
+        if (this.fallingTimer === 150){
+            this.setState(UnitStateNames.DEAD);
+        } else if (this.state === UnitStateNames.FALLING){
+            this.fallingTimer += 1;
+        } else {
+            this.fallingTimer = 0;
+        }
+
     }
 
     flipSpriteParts(){
@@ -297,7 +347,6 @@ export class Unit extends Sprite{
 
         let alphaToSet = 1;
         if (this.isImmune){
-            // console.log(this.currentImmuneFadeInterval)
             this.currentImmuneFadeInterval += this.currentFadeIncrement;
             // Reverse alpha
             if (this.currentImmuneFadeInterval === 0 || this.currentImmuneFadeInterval === this.immuneFadeInterval){
@@ -371,6 +420,25 @@ export class Unit extends Sprite{
         }
     }
 
+    initSpriteParts(): SpriteParts {
+        const headOffsetX = 0;
+        const headOffSetY = -5;
+        const head = new Part(this.textures.head[this.currentArmorSet.head], headOffsetX, headOffSetY, this);
+
+        const bodyOffsetX = 0;
+        const bodyOffsetY = head.sprite.height + headOffSetY;
+        const body = new Part(this.textures.body[this.currentArmorSet.body], bodyOffsetX, bodyOffsetY, this);
+
+        const legsOffsetX = 0;
+        const legsOffsetY = body.sprite.height + bodyOffsetY;
+        const legs = new Part(this.textures.legs[this.currentArmorSet.legs], legsOffsetX, legsOffsetY, this);;
+        return {
+            head,
+            body,
+            legs
+        };
+    }
+
     drawHpBar(){
         this.hpBar.clear()
         const marginX = 2;
@@ -378,7 +446,6 @@ export class Unit extends Sprite{
         const hpBarHeight = this.height / 9;
         const hpBarWidth = this.width;
 
-        this.currentStage.viewport.addChild(this.hpBar);
 
         this.hpBar.beginFill(0x00FF00);
         let greenPercent = this.currentAttributes.health / this.attributes.health;

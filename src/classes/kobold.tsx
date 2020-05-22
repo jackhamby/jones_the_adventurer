@@ -71,6 +71,30 @@ export class Kobold extends Player {
         };
     }
 
+
+    // createSpriteParts(): SpriteParts {
+    //     const headOffsetX = 0;
+    //     const headOffSetY = -7;
+    //     const head = new Part(this.textures.head[this.currentArmorSet.head], headOffsetX, headOffSetY, this);
+    //     head.sprite.zIndex = 999999;
+
+    //     const bodyOffsetX = 0;
+    //     const bodyOffsetY = head.sprite.height + headOffSetY - 4;
+    //     const body = new Part(this.textures.body[this.currentArmorSet.body], bodyOffsetX, bodyOffsetY, this);
+
+    //     const legsOffsetX = 0;
+    //     const legsOffsetY = body.sprite.height + bodyOffsetY;
+    //     const legs = new Part(this.textures.legs[this.currentArmorSet.head], legsOffsetX, legsOffsetY, this);
+
+    //     return {
+    //         head,
+    //         body,
+    //         legs
+    //     };
+    // }
+
+
+
     flipSpriteParts(){
         if (this.xVelocity > 0){
             this.facingRight = false;

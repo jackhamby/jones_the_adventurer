@@ -44,7 +44,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
         this.props.pixiApplication.loader
             // add platform tetures
-            .add('default-platform', 'images/plaftorms/platform1.png')
+            .add('default-platform', 'images/platforms/platform1.png')
             .add('dirt-platform', 'images/platforms/dirt.png')
             .add('grass-platform', 'images/platforms/grass.png')
 
@@ -116,7 +116,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         this.stageManager = new StageManager(this.props.pixiApplication.loader, player, viewport);
         
         // Get stage one
-    const stageOne = this.stageManager.getStage(1);
+        const stageOne = this.stageManager.getStage(1);
 
         // DISPATCH ACTION to set currentStage
         this.props.setupGame(stageOne);  

@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import { Stage, StageManager } from '../../classes/game_classes';
 import './game_display.css'
 import { store } from '../../state_management/store';
+import { changeStage } from '../../state_management/actions/control_actions';
 
 
 export interface GameDisplayStateProps { 
@@ -21,11 +22,12 @@ export interface GameDisplayOwnProps {
 }
 
 export interface GameDisplayDispatchProps {
-
+    changeStage: (stage: Stage) => void; 
 }
 
 export interface GameDisplayState {
     isStarted: boolean; 
+    keepPlaying: boolean;
  }
 
 
@@ -66,7 +68,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         const containerHeight = canvasHtmlElement ? canvasHtmlElement.clientHeight : 1;
         const containerWidth = canvasHtmlElement ? canvasHtmlElement.clientWidth : 1;
         this.props.pixiApplication.renderer.resize(containerWidth, containerHeight);
-        this.setState({isStarted: false})
+        this.setState({isStarted: false, keepPlaying: false})
     }
 
     componentDidUpdate(){
@@ -85,14 +87,28 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     gameLoop = (delta: any) => {
         this.props.currentStage.update(this.props.keyboard);
+        if (this.props.currentStage.isCleared && !this.state.keepPlaying){
+            // TODO clean this up into another method
+            const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.props.currentStage.level} in ${this.props.currentStage.timer.timerText}. continue to the next stage?`);
+            if (response){
+                this.props.stageManager.clearStage();
+                const nextStage = this.props.stageManager.getStage(this.props.currentStage.level + 1);
+                this.props.currentStage.player.currentStage = nextStage;
+                this.props.stageManager.loadStage(nextStage);
+                this.props.changeStage(nextStage);
+            } else {
+                this.setState({...this.setState, keepPlaying: true})
+            }
+        }
+
     }
 
     render(){
             return (
                 <>
                     <button style={{position: "absolute"}} onClick={this.testOnClick}>TEST BUTTON</button>
-                    <button style={{position:"absolute",left:"69%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
-                    <audio src={"audio/music/game.mp3"} id={"music"} loop/>
+                    {/* <button style={{position:"absolute",left:"69%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
+                    <audio src={"audio/music/game.mp3"} id={"music"} loop/> */}
                     <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 
                     </div>
@@ -114,7 +130,9 @@ const mapStateToProps = (state: AppState): GameDisplayStateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
     return {
-
+        changeStage: (stage: Stage) => { 
+            dispatch(changeStage(stage));
+        }
     }
 }
 
