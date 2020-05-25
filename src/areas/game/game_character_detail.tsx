@@ -57,7 +57,7 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img className="pr-1" src="images/attributes/sword.png"/>
+                                        <img className="pr-1" src="images/attributes/gold.png"/>
                                         Gold
                                     </td>
                                     <td> {player.currentGold} </td>

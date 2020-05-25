@@ -69,11 +69,6 @@ export class Enemy extends Unit {
 
     remove(){
         super.remove()
-        Object.keys(this.spriteParts).forEach((partName: string) => {
-            const tempPartName: UnitPartNames = partName as UnitPartNames;
-            const part: SpritePart = this.spriteParts[tempPartName];
-            this.currentStage.viewport.removeChild(part.sprite);
-        })
         this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy != this);
     }
 

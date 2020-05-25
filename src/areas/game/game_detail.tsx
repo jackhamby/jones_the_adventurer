@@ -28,7 +28,7 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
             </tr>)
             tableRows.push(row);
         })
-        return (<table>
+        return (<table className="p-3">
                     <tbody>
                         {tableRows}
                     </tbody>

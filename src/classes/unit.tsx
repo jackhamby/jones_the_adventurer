@@ -168,6 +168,17 @@ export class Unit extends Sprite{
         this.currentStage.viewport.removeChild(this.hpBar);
         this.hpBar.clear();
         this.hpBar.destroy();
+        Object.keys(this.spriteParts).forEach((partName: string) => {
+            const tempPartName: UnitPartNames = partName as UnitPartNames;
+            const part: SpritePart = this.spriteParts[tempPartName];
+            this.currentStage.viewport.removeChild(part.sprite);
+        }) 
+    }
+
+    clearStats(){
+        this.statistics.damage = 0;
+        this.statistics.killed = 0;
+        this.statistics.projectiles = 0;
     }
 
     getSprites(){
@@ -177,6 +188,10 @@ export class Unit extends Sprite{
         })
         return [ ...unitBodyParts, this.hpBar ];
     }
+
+    // removeSprites(){
+  
+    // }
 
     setState(state: UnitStateNames){
         this.state = state;
@@ -218,62 +233,33 @@ export class Unit extends Sprite{
         })
     }
 
-    applyDamage(value: number){
-        if (this.state === UnitStateNames.DEAD || this.isImmune){
-            return;
+    takeDamage(value: number): number{
+        let damageTaken = 0;
+        if (this.state !== UnitStateNames.DEAD && !this.isImmune){
+            damageTaken = Math.round(value - (this.currentAttributes.armor * .50));
+            this.currentAttributes.health -= damageTaken;
+            const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${damageTaken}`);
+            this.currentStage.floatingTexts.push(floatingText);
+            this.currentStage.viewport.addChild(floatingText.displayObject);
+            if (this.currentAttributes.health <= 0){
+                this.setState(UnitStateNames.DEAD);
+            }        
         }
-        const damageToApply = Math.round(value - (this.currentAttributes.armor * .50));
-        this.currentAttributes.health -= damageToApply;
-        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${damageToApply}`);
-        this.currentStage.floatingTexts.push(floatingText);
-        this.currentStage.viewport.addChild(floatingText.displayObject);
-        if (this.currentAttributes.health <= 0){
-            this.setState(UnitStateNames.DEAD);
-        }
+        return damageTaken;
+
     }
 
-    dealDamage(target: Unit){
-        let damage = 0;
+    dealDamage(target: Unit): number{
+        let damageDealt = 0;
         if (this.state !== UnitStateNames.DEAD){
-            damage = this.projectile.baseAttributes.damage + Math.round( this.currentAttributes.attack * .25 );
-            // TODO, can we dispatch ONE action for this?
-            const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damage)
-            // debugger;
-            store.dispatch(updateStatsAction as ControlAction);
+            damageDealt = this.projectile.baseAttributes.damage + Math.round( this.currentAttributes.attack * .25 );  
         }
-        target.applyDamage(damage);
-        if (target.state === UnitStateNames.DEAD){
-            const updateStatsAction = updateStatistic(UnitStatisticNames.ENEMIES_KILLED, this.statistics.killed + 1)
-            store.dispatch(updateStatsAction as ControlAction);
-        }
+        target.takeDamage(damageDealt);
+        return damageDealt;
     }
 
     revive(){
-        this.currentAttributes = { ...this.attributes };
-        this.setState(UnitStateNames.STANDING);
-        this.fallingTimer = 0;
-        this.projectileCooldown = 0;
-            
-        // TODO lets abstract this into a shared method. the same is used in Enemy.tsx dying()
-        Object.keys(this.spriteParts).forEach((partName: string) => {
-            const tempPartName: UnitPartNames = partName as UnitPartNames;
-            const part: SpritePart = this.spriteParts[tempPartName];
-            this.currentStage.viewport.removeChild(part.sprite);
-        })
-
-        this.spriteParts = this.initSpriteParts();
-        
-        // TODO: another hack, we need to address this asap
-        // without this palyer keeps moving the in direction they
-        // were when they died. ie. if you die moving right, 
-        // the player still thinks the right key is pressed
-        this.currentKeys.moveRight = false;
-        this.currentKeys.moveLeft = false;
-        // -------------------------------------------------------
-
-
-        this.currentStage.viewport.addChild(...this.getSprites())
-        this.currentStage.viewport.follow(this.spriteParts.head.sprite);
+    
         
     }
 
@@ -486,10 +472,6 @@ export class Unit extends Sprite{
         }
         this.currentStage.viewport.addChild(projectile.sprite);
         this.currentStage.projectiles.push(projectile);
-        // this.statistics.projectiles += 1;
-        const updateStatsAction = updateStatistic(UnitStatisticNames.PROJECTILES_FIRED, this.statistics.projectiles + 1)
-        store.dispatch(updateStatsAction as ControlAction);
-        
     }
 
     tryJump(){

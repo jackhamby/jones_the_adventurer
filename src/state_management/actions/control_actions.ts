@@ -2,6 +2,7 @@ import { ScreenOptions, PlayerOptionNames, UnitStatisticNames } from "../../type
 import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
 import { Treasure } from "../../classes/treasure";
+import { UnitStatistics } from "../../types/types";
 
 // export const TEXTURES_LOADED = 'UPDATE_TEXTURES_LOADED';
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'
@@ -13,8 +14,13 @@ export const CHANGE_STAGE: string = 'CREATE_STAGE';
 export const SETUP_GAME: string = 'SETUP_GAME';
 export const APPLY_TREASURE: string = "APPLY_TREASURE";
 export const UPDATE_STATS: string = "UPDATE_STATISTICS";
+export const UPDATE_STATS_FULL: string = "UPDATE_STATISTICS_FULL";
 
 
+
+interface UpdateStatisticsFullPayload {
+    stats: UnitStatistics;
+}
 
 interface UpdateStatisticPayload {
     statistic: UnitStatisticNames;
@@ -51,6 +57,14 @@ interface ScreenResizePayload {
 
 
 
+
+
+
+
+interface UpdateStatisticsFullAction {
+    type: typeof UPDATE_STATS_FULL,
+    payload: UpdateStatisticsFullPayload;
+}
 
 interface UpdateStatisticAction {
     type: typeof UPDATE_STATS;
@@ -90,6 +104,16 @@ interface UpdateKeyReleasedAction {
 }
 
 
+
+
+export  const updateStatistics = (stats: UnitStatistics): UpdateStatisticsFullAction => {
+    return {
+        type: UPDATE_STATS_FULL,
+        payload: {
+            stats,
+        } as UpdateStatisticsFullPayload
+    }
+}
 
 export const updateStatistic = (statistic: UnitStatisticNames, value: number): UpdateStatisticAction => {
     return {
@@ -164,4 +188,4 @@ export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
         }
     }
 }
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction  & ApplyTreasureAction & UpdateStatisticAction
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction  & ApplyTreasureAction & UpdateStatisticAction & UpdateStatisticsFullAction;

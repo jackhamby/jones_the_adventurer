@@ -35,18 +35,18 @@ export class Control extends React.Component<ControlProps, {}> {
     renderState = () => {
         const props = {} as any;
         switch(this.props.currentScreen){
-            case(ScreenOptions.MAIN_MENU):
-                return <ConnectedMainMenu/>
-            case(ScreenOptions.CHARACTER_SELECT):
-                return <ConnectedCharacterSelectWrapper {...props}/>
-            case(ScreenOptions.SINGLE_PLAYER_MENU):
-                return <SinglePlayerMenuWrapper/>
-            case(ScreenOptions.GAME):
-                return <ConnectedGame/>
-            default:
-                return (<div> There was an error </div>)
+            // case(ScreenOptions.MAIN_MENU):
+            //     return <ConnectedMainMenu/>
+            // case(ScreenOptions.CHARACTER_SELECT):
+            //     return <ConnectedCharacterSelectWrapper {...props}/>
+            // case(ScreenOptions.SINGLE_PLAYER_MENU):
+            //     return <SinglePlayerMenuWrapper/>
+            // case(ScreenOptions.GAME):
+            //     return <ConnectedGame/>
             // default:
-            //     return (<ConnectedGame/>)
+            //     return (<div> There was an error </div>)
+            default:
+                return (<ConnectedGame/>)
         }
     }
 

@@ -1,7 +1,7 @@
 
 
 
-import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS} from '../actions/control_actions';
+import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS, UPDATE_STATS_FULL} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
 import { Treasure } from '../../classes/treasure';
 import { PlayerOptionNames } from '../../types/enums';
@@ -13,7 +13,6 @@ export const PLAYER_OPTIONS = {
     knight: Knight,
     kobold: Kobold,
 } as PlayerOptions;
-
 
 const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
     const newKeyOptions = {...prevKeyOptions};
@@ -69,6 +68,13 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                 
             } as AppState;
 
+        case UPDATE_STATS_FULL:
+            typedState.gameState.currentStage.player.statistics = {
+                ...action.payload.stats
+            };
+            return {
+                ...typedState
+            }
 
         case APPLY_TREASURE:
             // player.attributes[this.effect.attribute] += this.effect.value;
@@ -114,7 +120,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                 } as PlayerState
             };
         case KEY_PRESS:
-            console.log('still here')
             return {
                 ...typedState,
                 controlState: {
@@ -130,6 +135,7 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     currentKeys: mapKeys(action.payload.key, typedState.controlState.currentKeys, false)
                 } as ControlState
             }
+
         case CHANGE_STAGE:
             return {
                 ...typedState,
