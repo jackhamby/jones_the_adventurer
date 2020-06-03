@@ -17,6 +17,7 @@ export class Projectile extends Sprite {
     currentStage: Stage;
     attributes: ProjectileAttributes;
     hasDealtDamage: boolean;
+    texture: PIXI.Texture;
     
     static width = 10;
     static height = 10;
@@ -26,8 +27,7 @@ export class Projectile extends Sprite {
         speed: 1
     }
     
-
-    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit){
+    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
         // x, y, width, height, xVel, yVel
         super(loader, x, y, Projectile.width, Projectile.height, 0, 0);
         this.state = ProjectileStateNames.FLYING;
@@ -37,6 +37,24 @@ export class Projectile extends Sprite {
         this.currentStage = unit.currentStage;
         this.attributes = {} as ProjectileAttributes;
         this.hasDealtDamage = false;
+        this.xVelocity = xVelocity;
+        this.yVelocity = yVelocity;
+        this.texture = {} as PIXI.Texture;
+    }
+
+    createSprite(){
+        const sprite = new PIXI.Sprite(this.texture);
+        sprite.x = this.x;
+        sprite.y = this.y;
+        return sprite;
+    }
+
+    setXVelocity(velocity: number){
+        this.xVelocity = velocity;
+    }
+
+    setYVelocity(velocity: number){
+        this.yVelocity = velocity;
     }
 
     setState(state: ProjectileStateNames){
@@ -70,6 +88,7 @@ export class Projectile extends Sprite {
 
     update(){
         this.handleState();
+        this.flipSprite(this.sprite)
         if (this.decay <= 0) {
             this.remove();
         };
@@ -130,6 +149,26 @@ export class Projectile extends Sprite {
         const gravity = 0.5;
         this.yVelocity += gravity;
     }
+
+    flipSprite(sprite: PIXI.Sprite){
+        if (this.xVelocity === 0 && this.yVelocity === 0){
+            return; // leave sprite as is
+        }
+        if (this.xVelocity > 0){
+            // flip sprite 180
+            sprite.rotation = 3.14159;
+            sprite.anchor.x = 1;
+            sprite.anchor.y = 1;
+
+        } else if (this.xVelocity < 0) {
+            // leave as is
+        }
+        else if (this.yVelocity > 0){
+            sprite.rotation = -1.5708;
+        } else {
+            sprite.rotation = 1.5708;
+        }
+    }
 }
 
 
@@ -140,30 +179,22 @@ export class Projectile extends Sprite {
 export class Rock extends Projectile {
 
     static baseAttributes = {
-        damage: 5,
+        damage: 40,
         speed: 15
     }
 
     static width = 10;
     static height = 10;
 
-    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit){
-        super(loader, x, y, unit);
+    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
+        super(loader, x, y, unit, xVelocity, yVelocity);
+        this.texture = this.loader.resources['rock'].texture;
         this.sprite = this.createSprite();
         this.sticky = false;
         this.attributes = Rock.baseAttributes;
         this.width = Rock.width;
         this.height = Rock.height;
     }
-
-    createSprite(){
-        const sprite = new PIXI.Sprite(this.loader.resources['rock'].texture);
-        sprite.x = this.x;
-        sprite.y = this.y;
-        // TODO: use right sprite
-        return sprite;
-    }
-
 }
 
 
@@ -174,31 +205,45 @@ export class Rock extends Projectile {
 export class Arrow extends Projectile {
 
     static baseAttributes = {
-        damage: 30,
-        speed: 15
+        damage: 25,
+        speed: 20
     }
 
     static width = 13;
     static height = 5;
 
-    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit){
-        super(loader, x, y, unit);
+    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
+        super(loader, x, y, unit, xVelocity, yVelocity);
+        this.texture = this.loader.resources['arrow'].texture;
         this.sprite = this.createSprite();
         this.sticky = true;
         this.attributes = Arrow.baseAttributes
         this.width = Arrow.width;
         this.height = Arrow.height;
     }
+}
 
-    createSprite(){
-        const sprite = new PIXI.Sprite(this.loader.resources['arrow'].texture);
-        // sprite.rotation = -0.436332;
-        sprite.x = this.x;
-        sprite.y = this.y;
-        // TODO: use right sprite
-        return sprite;
+
+
+export class Stinger extends Projectile {
+
+    static baseAttributes = {
+        damage: 20,
+        speed: 20,
     }
 
+    static width = 13;
+    static height = 5;
+
+    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
+        super(loader, x, y, unit, xVelocity, yVelocity);
+        this.texture = this.loader.resources['stinger'].texture;
+        this.sprite = this.createSprite();
+        this.sticky = true;
+        this.attributes = Arrow.baseAttributes
+        this.width = Arrow.width;
+        this.height = Arrow.height;
+    }
 }
 
 

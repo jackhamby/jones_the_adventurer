@@ -83,4 +83,34 @@ export class GrassPlatform extends Platform {
         } as PlatformTextures;
     }
 }
+export class RedGrassPlatform extends Platform {
+    constructor(loader: PIXI.Loader, x: number, y:number, width: number, height: number){
+        super(loader, x, y, width, height);
+    }
+
+    createPixiSprite(): PIXI.Sprite {
+        return new PIXI.Sprite(this.textures.default); 
+    }
+
+    initializeTextures(): PlatformTextures{
+        return {
+            default: this.loader.resources["red-grass-platform"].texture,
+        } as PlatformTextures;
+    }
+}
+export class SandRockPlatform extends Platform {
+    constructor(loader: PIXI.Loader, x: number, y:number, width: number, height: number){
+        super(loader, x, y, width, height);
+    }
+
+    createPixiSprite(): PIXI.Sprite {
+        return new PIXI.Sprite(this.textures.default); 
+    }
+
+    initializeTextures(): PlatformTextures{
+        return {
+            default: this.loader.resources["sand-rock-platform"].texture,
+        } as PlatformTextures;
+    }
+}
 

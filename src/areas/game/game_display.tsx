@@ -85,15 +85,26 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         this.setState({ isStarted: true })
     }
 
+    // TODO: lets make a conrol class to house everything relating to game
+    // stage managerment/game loop
     gameLoop = (delta: any) => {
         this.props.currentStage.update(this.props.keyboard);
         if (this.props.currentStage.isCleared && !this.state.keepPlaying){
             // TODO clean this up into another method
+        
             const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.props.currentStage.level} in ${this.props.currentStage.timer.timerText}. continue to the next stage?`);
             if (response){
+
+                // TODO: there is duplicated code in StageManager.restartStage()
                 this.props.stageManager.clearStage();
                 const nextStage = this.props.stageManager.getStage(this.props.currentStage.level + 1);
+                nextStage.startingTreasures = this.props.currentStage.player.treasures;
                 this.props.currentStage.player.currentStage = nextStage;
+
+                // TODO: lets put starting coords into constants
+                this.props.currentStage.player.setX(100);
+                this.props.currentStage.player.setY(100);
+
                 this.props.stageManager.loadStage(nextStage);
                 this.props.changeStage(nextStage);
             } else {
@@ -107,8 +118,8 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
             return (
                 <>
                     <button style={{position: "absolute"}} onClick={this.testOnClick}>TEST BUTTON</button>
-                    {/* <button style={{position:"absolute",left:"69%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
-                    <audio src={"audio/music/game.mp3"} id={"music"} loop/> */}
+                    <button style={{position:"absolute",left:"74%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
+                    <audio src={"audio/music/game.mp3"} id={"music"} loop/>
                     <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 
                     </div>
@@ -119,7 +130,6 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 } 
 
 const mapStateToProps = (state: AppState): GameDisplayStateProps => {
-    // debugger;
     return {
         pixiApplication: state.gameState.pixiApplication,
         keyboard: state.controlState.currentKeys,

@@ -45,7 +45,7 @@ export class Kobold extends Player {
             legs: {
                 default: this.loader.resources['kobold-legs-default'].texture,
                 armor2: this.loader.resources['kobold-legs-default'].texture,
-                armor1: this.loader.resources['kobold-legs-default'].texture,
+                armor1: this.loader.resources['kobold-legs-armor1'].texture,
             }
         }
     }

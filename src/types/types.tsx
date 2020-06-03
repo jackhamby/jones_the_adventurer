@@ -36,9 +36,9 @@ export type ProjectileAttributes = {
     [key in ProjectileAttributeNames]: any;
 }
 
-export type ProjectileTypes = {
-    [key in ProjectileNames] : Projectile;
-}
+// export type ProjectileTypes = {
+//     [key in ProjectileNames] : Projectile;
+// }
 
 export type PlayerOptions = {
     [key in PlayerOptionNames] : typeof Unit;

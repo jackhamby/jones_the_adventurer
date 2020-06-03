@@ -77,21 +77,8 @@ export const controlReducer = (state: any, action: ControlAction): any => {
             }
 
         case APPLY_TREASURE:
-            // player.attributes[this.effect.attribute] += this.effect.value;
-            // if (this.effect.textureEffect){
-            //     const affectedBodyPart = this.effect.textureEffect.bodyPart;
-            //     const newArmorType = this.effect.textureEffect.armorType;
-            //     const newTexture = player.textures[affectedBodyPart][newArmorType][player.typedState];
-            //     const spritePart = player.spriteParts[affectedBodyPart].sprite;
-            //     spritePart.texture = newTexture;
-            // }
-            // player.treasures.push(this);
-            // typedState.gameState.currentStage.player.treasures = []
-            // typedState.gameState.currentStage.player.treasures.push(action.payload.)
-            // debugger;
             const player = typedState.gameState.currentStage.player;
             Treasure.apply(player, action.payload.treasure);
-            // debugger;
 
             
             return {

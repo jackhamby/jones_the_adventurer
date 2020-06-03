@@ -17,6 +17,7 @@ export class Unit extends Sprite{
     // Player attributes/data
     attributes: UnitAttributes;
     currentAttributes: UnitAttributes;
+    baseAttributes: UnitAttributes;
     treasures: Treasure[];
     statistics: UnitStatistics;
     projectile: typeof Projectile;
@@ -60,10 +61,9 @@ export class Unit extends Sprite{
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){    
         // x, y, width, height, xVel, yVel
         super(loader, x, y, width, height, 0, 0);    
-        this.attributes = initialAttributes;
-        this.currentAttributes = {
-            ...initialAttributes            
-        };
+        this.baseAttributes = { ...initialAttributes };
+        this.attributes = { ...initialAttributes };
+        this.currentAttributes = { ...initialAttributes };
         this.treasures = [];
         this.statistics = {
             projectiles: 0,
@@ -107,9 +107,9 @@ export class Unit extends Sprite{
 
     update(keyboard: KeyOptions){
         this.currentKeys = keyboard;
+        this.flipSpriteParts();
         this.handleState();
         this.updateCooldowns();
-        this.flipSpriteParts();
         this.debugging();
     }
 
@@ -139,20 +139,17 @@ export class Unit extends Sprite{
 
     debugging(){
         this.debugGraphics.clear()
-        // this.debugGraphics.beginFill(0xFFFF00);
         this.debugGraphics.lineStyle(5, 0xFF0000);
         if (this.debugPartLocation){
             this.currentStage.viewport.removeChild(this.debugGraphics);
             this.debugGraphics.lineStyle(5, 0xFF0000);
-            // Object.keys(this.spriteParts).forEach((key: string) => {
-            //     const partName = key as UnitPartNames;
-            //     const part = this.spriteParts[partName];
-            //     this.debugGraphics.drawRect(part.sprite.x, part.sprite.y , part.sprite.width + part.offSetX, part.sprite.height + part.offSetY);
-
-            // })
-            const part = this.spriteParts[UnitPartNames.HEAD];
-            this.debugGraphics.drawRect(part.sprite.x + part.offSetX, part.sprite.y + part.offSetX, part.sprite.width - part.offSetX, part.sprite.height - part.offSetY);
-            // this.currentStage.viewport.addChild(this.debugGraphics);
+            Object.keys(this.spriteParts).forEach((key: string) => {
+                const partName = key as UnitPartNames;
+                const part = this.spriteParts[partName];
+                this.debugGraphics.drawRect(part.sprite.x, part.sprite.y, part.sprite.width, part.sprite.height);
+            });
+            this.debugGraphics.lineStyle(5, 0x0000FF);
+            this.debugGraphics.drawRect(this.x, this.y, this.width, this.height);
         }
 
         if (this.debugUnitRadius){
@@ -188,10 +185,6 @@ export class Unit extends Sprite{
         })
         return [ ...unitBodyParts, this.hpBar ];
     }
-
-    // removeSprites(){
-  
-    // }
 
     setState(state: UnitStateNames){
         this.state = state;
@@ -246,7 +239,6 @@ export class Unit extends Sprite{
             }        
         }
         return damageTaken;
-
     }
 
     dealDamage(target: Unit): number{
@@ -368,8 +360,9 @@ export class Unit extends Sprite{
         // Flip parts 90 for death
         if (this.state === UnitStateNames.DEAD){
             this.y = this.y + (this.height - this.width)
+            const oldWidth = this.width;
             this.width = this.height;
-            this.height = this.width;
+            this.height = oldWidth;
             this.xVelocity = 0;
             this.yVelocity = 0;
             // this.setState(UnitStateNames.DEAD)
@@ -451,25 +444,25 @@ export class Unit extends Sprite{
 
     fireProjectile(xVelocity: number, yVelocity: number){
         this.timeSinceLastProjectileFired = this.projectileCooldown;
-        const projectile = new this.projectile(this.loader, this.x, this.y, this)
-        projectile.xVelocity = xVelocity;
-        projectile.yVelocity = yVelocity;
+        const projectile = new this.projectile(this.loader, this.x, this.y, this, xVelocity, yVelocity)
+        // projectile.xVelocity = xVelocity;
+        // projectile.yVelocity = yVelocity;
 
-        if (projectile.xVelocity > 0){
-            // flip sprite 180
-            projectile.sprite.rotation = 3.14159;
-            projectile.sprite.anchor.x = 1;
-            projectile.sprite.anchor.y = 1;
+        // if (projectile.xVelocity > 0){
+        //     // flip sprite 180
+        //     projectile.sprite.rotation = 3.14159;
+        //     projectile.sprite.anchor.x = 1;
+        //     projectile.sprite.anchor.y = 1;
 
-        } else if (projectile.xVelocity < 0) {
-            // leave as is
-        }
+        // } else if (projectile.xVelocity < 0) {
+        //     // leave as is
+        // }
 
-        else if (projectile.yVelocity > 0){
-            projectile.sprite.rotation = -1.5708;
-        } else {
-            projectile.sprite.rotation = 1.5708;
-        }
+        // else if (projectile.yVelocity > 0){
+        //     projectile.sprite.rotation = -1.5708;
+        // } else {
+        //     projectile.sprite.rotation = 1.5708;
+        // }
         this.currentStage.viewport.addChild(projectile.sprite);
         this.currentStage.projectiles.push(projectile);
     }

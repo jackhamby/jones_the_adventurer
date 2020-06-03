@@ -47,6 +47,9 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add('default-platform', 'images/platforms/platform1.png')
             .add('dirt-platform', 'images/platforms/dirt.png')
             .add('grass-platform', 'images/platforms/grass.png')
+            .add('red-grass-platform', 'images/platforms/red_grass.png')
+            .add('sand-rock-platform', 'images/platforms/sand_rock.png')
+
 
             // coin textures
             .add('coins-small', 'images/coins/coins.png')
@@ -73,6 +76,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             // Add projectile images
             .add('rock', 'images/projectiles/rock.png')
             .add('arrow', 'images/projectiles/dart.png')
+            .add('stinger', 'images/projectiles/stinger.png')
 
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
@@ -80,6 +84,12 @@ export class GameWrapper extends React.Component<GameProps, {}> {
             .add('kobold-body-default', "images/kobold/body/body_default.png")
             .add('kobold-head-default', "images/kobold/head/head_default.png")
             .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")
+
+            // Manticore 
+            .add('manticore-legs-default', "images/manticore/legs/manticore_legs_default.png")
+            .add('manticore-body-default', "images/manticore/body/manticore_body_default.png")
+            .add('manticore-head-default', "images/manticore/head/manticore_head_default.png")
+
 
 
             // Once textures have loaded, fire this method

@@ -3,7 +3,7 @@
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { Player } from '../../classes/player';
-import { UnitPartNames } from '../../types/enums';
+import { UnitPartNames, UnitStateNames } from '../../types/enums';
 
 
 interface CharacterIconProps {
@@ -58,7 +58,7 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
 
     updateIconImage(){
         this.clearStage()
-
+        
         // Need to copy the sprite parts so we dont share sprite on 2 canvas
         this.spriteParts = this.copySpriteParts();
         let x = (this.appWidth / 2) - (this.props.player.width / 2);
@@ -95,9 +95,6 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
 
     copySpriteParts(){
         let newParts = {} as any;
-
-
-        
 
         Object.keys(this.props.player.spriteParts).map((key: string) => {
             const playerPartName = key as UnitPartNames;

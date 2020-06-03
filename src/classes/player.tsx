@@ -7,6 +7,7 @@ import { SpritePart } from "./interfaces";
 import * as PIXI from 'pixi.js';
 import { updateStatistic, ControlAction, updateStatistics } from "../state_management/actions/control_actions";
 import { store } from "../state_management/store";
+import { Treasure } from "./treasure";
 
 
 export class Player extends Unit {
@@ -20,12 +21,14 @@ export class Player extends Unit {
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        // console.log(this.timeSinceLastProjectileFired)
-        console.log(this.projectileCooldown);
     }
 
     handleState(){
         super.handleState();
+    }
+
+    drawHpBar(){
+        super.drawHpBar();
     }
 
     clearStats(){
@@ -48,8 +51,6 @@ export class Player extends Unit {
         const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
         store.dispatch(updateStatsAction as ControlAction);
         if (target.state === UnitStateNames.DEAD){
-            // const updateStatsAction = updateStatistic(UnitStatisticNames.ENEMIES_KILLED, this.statistics.killed + 1)
-            // store.dispatch(updateStatsAction as ControlAction);
             this.statistics.damage += damageDealt;
             const updateStatsAction = updateStatistics(this.statistics);
             store.dispatch(updateStatsAction as ControlAction);
@@ -63,8 +64,6 @@ export class Player extends Unit {
         this.statistics.projectiles += 1;
         const updateStatsAction = updateStatistics(this.statistics);
         store.dispatch(updateStatsAction as ControlAction);
-        // const updateStatsAction = updateStatistic(UnitStatisticNames.PROJECTILES_FIRED, this.statistics.projectiles + 1)
-        // store.dispatch(updateStatsAction as ControlAction);
     }
 
     tryAttack(){
@@ -83,12 +82,13 @@ export class Player extends Unit {
             this.fireProjectile(0, projectileVelocity);
         }
         else if(this.currentKeys.attackUp){
-            if (this.facingRight){
-                this.fireProjectile(15, -projectileVelocity);
-            }   
-            else {
-                this.fireProjectile(-15, -projectileVelocity);
-            }    
+            this.fireProjectile(0, -projectileVelocity);
+            // if (this.facingRight){
+            //     this.fireProjectile(0, );
+            // }   
+            // else {
+            //     this.fireProjectile(0, );
+            // }    
         }
     }
 
@@ -157,8 +157,6 @@ export class Player extends Unit {
 
         // Move right
         else if (this.currentKeys.moveRight){
-            // console.log('here')
-            // console.log(this.currentKeys.moveRight)
             this.facingRight = true;
             this.xVelocity = this.currentAttributes.speed;
         }
@@ -206,16 +204,18 @@ export class Player extends Unit {
     }
 
     revive(){
-        this.currentAttributes = { ...this.attributes };
+        this.attributes = { ...this.baseAttributes };
+        this.currentAttributes = { ...this.baseAttributes };
         this.setState(UnitStateNames.STANDING);
         this.fallingTimer = 0;
         this.timeSinceLastProjectileFired = 0;
             
         this.remove();
-        this.clearStats();
 
         this.spriteParts = this.initSpriteParts();
         this.hpBar = new PIXI.Graphics();
+
+        this.clearStats();
 
         // TODO move this into method
         this.currentKeys.attackRight = false;
@@ -228,6 +228,15 @@ export class Player extends Unit {
         this.currentKeys.moveDown = false;
         this.currentKeys.jump = false;
 
+        // we flipped the parts 90 degrees on death, lets flip them back
+        const oldWidth = this.width;
+        this.width = this.height;
+        this.treasures = [];
+        this.currentStage.startingTreasures.forEach((treasure: Treasure) => {
+            Treasure.apply(this, treasure);
+        })
+
+        this.height = oldWidth;
         this.currentStage.viewport.addChild(...this.getSprites())
         this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
@@ -235,7 +244,6 @@ export class Player extends Unit {
 
     dying(){
         super.dying();
-
         const resp = window.confirm('sorry you suck. restart?')
         if (resp){
             this.currentStage.restart();
