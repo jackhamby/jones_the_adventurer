@@ -24,8 +24,6 @@ export class GameController {
     // User actions
     keepPlaying: boolean;
 
-
-
     constructor(pixiApplication: PIXI.Application){
         this.pixiApplication = pixiApplication;
         this.viewport = this.createViewport();

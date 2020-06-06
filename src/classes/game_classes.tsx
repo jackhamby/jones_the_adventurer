@@ -46,8 +46,8 @@ export class StageManager {
     getStage(level: number){
         switch(level) {
             case(1):
-                // return this.buildStageOne();
-                return this.buildStageTwo();
+                return this.buildStageOne();
+                // return this.buildStageTwo();
 
             case(2):
                 return this.buildStageTwo();
