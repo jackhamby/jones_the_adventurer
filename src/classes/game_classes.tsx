@@ -46,8 +46,8 @@ export class StageManager {
     getStage(level: number){
         switch(level) {
             case(1):
-                return this.buildStageOne();
-                // return this.buildStageTwo();
+                // return this.buildStageOne();
+                return this.buildStageTwo();
 
             case(2):
                 return this.buildStageTwo();
@@ -79,20 +79,6 @@ export class StageManager {
     clearStage(){
         this.viewport.removeChildren(0, this.viewport.children.length);
     }
-
-    restartStage(level: number){
-        const startingTreasures = this.player.currentStage.startingTreasures;
-        const restartedStage = this.getStage(level);
-        this.player.currentStage = restartedStage;
-        restartedStage.startingTreasures = startingTreasures;
-
-        this.clearStage();
-        this.loadStage(restartedStage);
-
-        const changeStageAction = changeStage(restartedStage);
-        store.dispatch(changeStageAction as ControlAction);
-    }
-
 
     // Stage 1
     private buildStageOne(): Stage{
@@ -146,7 +132,7 @@ export class StageManager {
 
 
         stage.enemies.push(armoredKobold);
-        stage.enemies.push(new Manticore(this.loader, stage, {} as UnitAttributes, 462, 540), new Man(this.loader, stage, {} as UnitAttributes, 127, 427.5), new Man(this.loader, stage, {} as UnitAttributes, 403, 427.5));
+        // stage.enemies.push(new Manticore(this.loader, stage, {} as UnitAttributes, 462, 540), new Man(this.loader, stage, {} as UnitAttributes, 127, 427.5), new Man(this.loader, stage, {} as UnitAttributes, 403, 427.5));
         return stage;
 
     }
@@ -371,6 +357,9 @@ export class Stage implements IStage{
     startingTreasures: Treasure[]
 
 
+    needsRestart: boolean;
+
+
     constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport, stageManager: StageManager){
         this.level = level;
         this.name = name;
@@ -386,10 +375,11 @@ export class Stage implements IStage{
         this.isCleared = false;
         this.stageManager = stageManager;
         this.startingTreasures = [];
+        this.needsRestart = false;
     }
 
     restart(){
-        this.stageManager.restartStage(this.level);
+        this.needsRestart = true;
     }
 
     removeTreasure(treasureToRemove: Treasure){
@@ -428,17 +418,20 @@ export class Stage implements IStage{
         })
     }
 
+
+
+
+
+
+
+
+
     // Update all sprite positions
     private updateAllSpritePositions(){
         this.updatePlayerPosition()
         this.updateEnemyPositions();
         this.updateProjectilePositions();
     }
-
-
-
-
-
 
     private updateProjectilePositions(){
         this.projectiles.forEach((projectile: Projectile) => {

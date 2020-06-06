@@ -119,9 +119,6 @@ export class Unit extends Sprite{
         }
         return false;
     }
-    
-
-
 
     isInsideRadius(sprite: Sprite, radius: number): boolean {
         const targetCenterX = sprite.x + (sprite.width / 2);
@@ -162,9 +159,9 @@ export class Unit extends Sprite{
     }
 
     remove(){
-        this.currentStage.viewport.removeChild(this.hpBar);
         this.hpBar.clear();
         this.hpBar.destroy();
+        this.currentStage.viewport.removeChild(this.hpBar);
         Object.keys(this.spriteParts).forEach((partName: string) => {
             const tempPartName: UnitPartNames = partName as UnitPartNames;
             const part: SpritePart = this.spriteParts[tempPartName];
@@ -235,6 +232,7 @@ export class Unit extends Sprite{
             this.currentStage.floatingTexts.push(floatingText);
             this.currentStage.viewport.addChild(floatingText.displayObject);
             if (this.currentAttributes.health <= 0){
+                this.hpBar.visible = false;
                 this.setState(UnitStateNames.DEAD);
             }        
         }
@@ -375,7 +373,7 @@ export class Unit extends Sprite{
             // TODO remove this fro here and in Kobold in enemy.tsx
             const head = this.spriteParts.head;
             const headOffsetX =  0
-            const headOffsetY = head.sprite.height/4;
+            const headOffsetY = head.sprite.height/4 + 10;
             head.offSetX = headOffsetX;
             head.offSetY = headOffsetY;
             head.sprite.x = this.x + headOffsetX;
@@ -383,7 +381,7 @@ export class Unit extends Sprite{
 
             const body = this.spriteParts.body;
             const bodyOffsetX = head.sprite.height;;
-            const bodyOffsetY = 0;
+            const bodyOffsetY = 10;
             body.offSetX = bodyOffsetX;
             body.offSetY = bodyOffsetY;
             body.sprite.x = this.x + bodyOffsetX;
@@ -391,7 +389,7 @@ export class Unit extends Sprite{
 
             const legs = this.spriteParts.legs;
             const legsOffsetX = head.sprite.height + body.sprite.height;
-            const legsOffsetY = 0;
+            const legsOffsetY = 10;
             legs.offSetX = legsOffsetX;
             legs.offSetY = legsOffsetY;
             legs.sprite.x = this.x + legsOffsetX;

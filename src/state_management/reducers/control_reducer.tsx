@@ -1,10 +1,9 @@
 
 
 
-import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, KEY_PRESS, KEY_RELEASE, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS, UPDATE_STATS_FULL} from '../actions/control_actions';
+import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS, UPDATE_STATS_FULL} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
 import { Treasure } from '../../classes/treasure';
-import { PlayerOptionNames } from '../../types/enums';
 import { PlayerOptions } from '../../types/types';
 import { Kobold } from '../../classes/kobold';
 import { Knight } from '../../classes/knight';
@@ -13,45 +12,6 @@ export const PLAYER_OPTIONS = {
     knight: Knight,
     kobold: Kobold,
 } as PlayerOptions;
-
-const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
-    const newKeyOptions = {...prevKeyOptions};
-    switch(key){
-        case 'a':
-            newKeyOptions.moveLeft = toggle;
-            break;
-        case 'd':
-            newKeyOptions.moveRight = toggle;
-            break;
-        case 'w':
-            newKeyOptions.moveUp = toggle;
-            break;
-        case 's': 
-            newKeyOptions.moveDown = toggle;
-            break;
-        case ' ':
-            newKeyOptions.jump = toggle;
-            break;
-        case 'ArrowRight':
-            newKeyOptions.attackRight = toggle;
-            break;
-        case 'ArrowLeft':
-            newKeyOptions.attackLeft = toggle;
-            break;
-        case 'ArrowUp':
-            newKeyOptions.attackUp = toggle;
-            break;
-
-        case 'ArrowDown':
-            newKeyOptions.attackDown = toggle;
-            break;
-        default:
-            // unhandled key action
-            break;
-    }
-    return newKeyOptions
-
-}
 
 export const controlReducer = (state: any, action: ControlAction): any => {
     const typedState = state as AppState;
@@ -106,23 +66,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     } as Character
                 } as PlayerState
             };
-        case KEY_PRESS:
-            return {
-                ...typedState,
-                controlState: {
-                    ...typedState.controlState,
-                    currentKeys: mapKeys(action.payload.key, typedState.controlState.currentKeys, true)
-                } as ControlState
-            }
-        case KEY_RELEASE:
-            return {
-                ...typedState,
-                controlState: {
-                    ...typedState.controlState,
-                    currentKeys: mapKeys(action.payload.key, typedState.controlState.currentKeys, false)
-                } as ControlState
-            }
-
         case CHANGE_STAGE:
             return {
                 ...typedState,

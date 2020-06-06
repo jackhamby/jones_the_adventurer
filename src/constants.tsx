@@ -6,6 +6,9 @@ import { Kobold } from './classes/kobold';
 const SCREEN_HEIGHT = window.screen.width * .4;
 const SCREEN_WIDTH = window.screen.height;
 
+const PLAYER_STARTING_X = 100;
+const PLAYER_STARTING_Y = 100;
+
 // const CHARACTER_ATTRIBUTES = {} as any;
 
 const SPRITE_DECAY = 1000;
@@ -129,6 +132,8 @@ export {
     SPRITE_DECAY,
     SPRITE_DECAY_FADE_TIME,
     TEXT_FADE_TIME,
+    PLAYER_STARTING_X,
+    PLAYER_STARTING_Y,
 }
 
 

@@ -2,20 +2,24 @@
 import React, { Dispatch } from 'react';
 import { connect } from 'react-redux';
 import { ScreenOptions } from '../types/enums';
-import { CharacterSelectWrapper, ConnectedCharacterSelectWrapper } from '../areas/character_select/character_select_wrapper';
-import { SinglePlayerMenuWrapper} from '../areas/single_player_menu/single_player_menu_wrapper';
-import { MainMenuWrapper, ConnectedMainMenu } from '../areas/main_menu/main_menu_wrapper';
-import { ControlState, AppState, KeyOptions } from '../types/states';
-import { updateScreen, updateKeyPressed, updateKeyReleased } from '../state_management/actions/control_actions';
-import { store } from '../state_management/store';
+import { AppState, KeyOptions } from '../types/states';
+import { updateScreen } from '../state_management/actions/control_actions';
 import { AnyAction } from 'redux';
 import { ConnectedGame } from '../areas/game/game_wrapper';
-import { getCanvasDimensions } from '../helpers/util';
+import { getCanvasDimensions, mapKeys } from '../helpers/util';
 import './global.css';
+import { SinglePlayerMenuWrapper } from '../areas/single_player_menu/single_player_menu_wrapper';
+import { ConnectedCharacterSelectWrapper } from '../areas/character_select/character_select_wrapper';
+import { ConnectedMainMenu } from '../areas/main_menu/main_menu_wrapper';
+
 export interface ControlStateProps {
     currentScreen: ScreenOptions;
     pixiApplication: PIXI.Application;
  };
+
+export const keyboard = {
+
+} as KeyOptions;
 
 export interface ControlDispatchProps { 
     updateScreen: (nextScreen: ScreenOptions) => void;
@@ -55,16 +59,10 @@ export class Control extends React.Component<ControlProps, {}> {
             if (event.repeat){
                 return
             }
-            this.props.updateKeyPress(event.key)
-            // let state: AppState = store.getState();
-            // state.controlState.currentKeys = mapKeys(event.key, state.controlState.currentKeys, true);
-
+            mapKeys(event.key, keyboard, true)
         } )
         document.addEventListener("keyup", (event: any) => {
-            // let state: AppState = store.getState();
-            // state.controlState.currentKeys = mapKeys(event.key, state.controlState.currentKeys, false);
-            
-            this.props.updateKeyRelease(event.key)
+            mapKeys(event.key, keyboard, false)
         } )
     }
 
@@ -97,12 +95,6 @@ export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): ControlDispat
     return { 
         updateScreen: (nextScreen: ScreenOptions) => {
             dispatch(updateScreen(nextScreen));
-        },
-        updateKeyPress: (key: string) => {
-            dispatch(updateKeyPressed(key));
-        },
-        updateKeyRelease: (key: string) => {
-            dispatch(updateKeyReleased(key));
         }
     } as ControlDispatchProps;
 }

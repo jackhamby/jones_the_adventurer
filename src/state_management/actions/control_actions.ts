@@ -4,12 +4,8 @@ import { Effect } from "../../classes/interfaces";
 import { Treasure } from "../../classes/treasure";
 import { UnitStatistics } from "../../types/types";
 
-// export const TEXTURES_LOADED = 'UPDATE_TEXTURES_LOADED';
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'
 export const UPDATE_CHARACTER: string = 'UPDATE_CHARACTER';
-export const KEY_RELEASE: string = 'KEY_RELEASE';
-export const KEY_PRESS: string = 'KEY_PRESS'
-// export const CREATE_PLAYER: string = 'CREATE_PLAYER';
 export const CHANGE_STAGE: string = 'CREATE_STAGE';
 export const SETUP_GAME: string = 'SETUP_GAME';
 export const APPLY_TREASURE: string = "APPLY_TREASURE";
@@ -41,21 +37,12 @@ interface ChangeStagePayload {
 interface UpdateKeyPressedPayload {
     key: string;
 }
-interface UpdateKeyReleasedPayload {
-    key: string;
-}
 interface UpdateScreenPayload {
     newScreen: ScreenOptions;
 }
 interface ChangeCharacterPayload {
     newCharacter: PlayerOptionNames;
 }
-interface ScreenResizePayload {
-    height: number;
-    width: number;
-}
-
-
 
 
 
@@ -94,15 +81,6 @@ interface UpdateScreenAction {
   type: typeof UPDATE_SCREEN;
   payload: UpdateScreenPayload;
 }
-interface UpdateKeyPressedAction {
-    type: typeof KEY_PRESS;
-    payload: UpdateKeyPressedPayload;
-}
-interface UpdateKeyReleasedAction {
-    type: typeof KEY_RELEASE;
-    payload: UpdateKeyPressedPayload;
-}
-
 
 
 
@@ -170,22 +148,5 @@ export const changeCharacter = (nextCharacter: PlayerOptionNames): ChangeCharact
     }
 }
 
-export const updateKeyPressed = (key: string): UpdateKeyPressedAction => {
-    return {
-        type: KEY_PRESS,
-        payload: {
-            key,
-        }
-    }
-}
 
-
-export const updateKeyReleased = (key: string): UpdateKeyReleasedAction => {
-    return {
-        type: KEY_RELEASE,
-        payload: {
-            key,
-        }
-    }
-}
-export type ControlAction = UpdateScreenAction & ChangeCharacterAction & UpdateKeyPressedAction & UpdateKeyReleasedAction & ChangeStageAction & StartGameAction  & ApplyTreasureAction & UpdateStatisticAction & UpdateStatisticsFullAction;
+export type ControlAction = UpdateScreenAction & ChangeCharacterAction  & ChangeStageAction & StartGameAction  & ApplyTreasureAction & UpdateStatisticAction & UpdateStatisticsFullAction;
