@@ -7,10 +7,12 @@ import { Treasure } from '../../classes/treasure';
 import { PlayerOptions } from '../../types/types';
 import { Kobold } from '../../classes/kobold';
 import { Knight } from '../../classes/knight';
+import { Orc } from '../../classes/orc';
 
 export const PLAYER_OPTIONS = {
     knight: Knight,
     kobold: Kobold,
+    orc: Orc,
 } as PlayerOptions;
 
 export const controlReducer = (state: any, action: ControlAction): any => {

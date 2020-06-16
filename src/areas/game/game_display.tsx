@@ -43,7 +43,8 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     testOnClick(){
         const state = store.getState() as AppState;
         console.log(`x: ${state.gameState.currentStage.player.x}`)
-        console.log(`y: ${state.gameState.currentStage.player.y}`)
+        console.log(`y: ${state.gameState.currentStage.player.y}`);
+
     }
 
     toggleMusic(){

@@ -443,6 +443,8 @@ export class Unit extends Sprite{
     fireProjectile(xVelocity: number, yVelocity: number){
         this.timeSinceLastProjectileFired = this.projectileCooldown;
         const projectile = new this.projectile(this.loader, this.x, this.y, this, xVelocity, yVelocity)
+
+        
         // projectile.xVelocity = xVelocity;
         // projectile.yVelocity = yVelocity;
 

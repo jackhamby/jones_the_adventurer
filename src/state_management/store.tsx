@@ -17,14 +17,14 @@ const initialState = {
     } as ControlState,
     playerState: {
         // default charater
-        // character: {
-        //     name: PlayerOptionNames.KOBOLD,  // Default to kobold 
-        //     attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
-        // } as Character
         character: {
-            name: PlayerOptionNames.KNIGHT,  // Default to kobold 
-            attributes: PLAYER_OPTIONS[PlayerOptionNames.KNIGHT].baseAttributes,
+            name: PlayerOptionNames.KOBOLD,  // Default to kobold 
+            attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
         } as Character
+        // character: {
+        //     name: PlayerOptionNames.KNIGHT,  // Default to kobold 
+        //     attributes: PLAYER_OPTIONS[PlayerOptionNames.KNIGHT].baseAttributes,
+        // } as Character
     } as PlayerState,
     gameState: {
         pixiApplication: new PIXI.Application({ 

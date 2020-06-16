@@ -18,6 +18,7 @@ import { Treasure } from '../../classes/treasure';
 import { Player } from '../../classes/player';
 import { UnitStatistics, UnitAttributes } from '../../types/types';
 import { GameController } from '../../classes/game_controller';
+import { Modal } from '../../components/modal';
 
 export interface GameStateProps {
     character: Character;
@@ -50,6 +51,8 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     render(){
         return (
             <div className="container" style={{height: "100%"}}>
+                {/* debugger modal */}
+                <Modal/>
                 <div className="row game-header">
                     header
                 </div>
@@ -75,7 +78,6 @@ export const mapStateToProps = (state: AppState): GameStateProps => {
         character: state.playerState.character,
         pixiApplication: state.gameState.pixiApplication,
         currentStage: state.gameState.currentStage,
-        // TODO: we should init player in the store to have intial stage defined
         collectedTreasures: state.gameState.currentStage ? state.gameState.currentStage.player.treasures : [],
         statistics: state.gameState.currentStage ? state.gameState.currentStage.player.statistics : {} as UnitStatistics,
     };

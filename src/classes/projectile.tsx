@@ -24,7 +24,8 @@ export class Projectile extends Sprite {
 
     static baseAttributes = {
         damage: 1,
-        speed: 1
+        speed: 1,
+        loft: 0,
     }
     
     constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
@@ -180,7 +181,8 @@ export class Rock extends Projectile {
 
     static baseAttributes = {
         damage: 40,
-        speed: 15
+        speed: 17,
+        loft: -3,
     }
 
     static width = 10;
@@ -206,7 +208,8 @@ export class Arrow extends Projectile {
 
     static baseAttributes = {
         damage: 25,
-        speed: 20
+        speed: 20,
+        loft: 0,
     }
 
     static width = 13;
@@ -230,6 +233,7 @@ export class Stinger extends Projectile {
     static baseAttributes = {
         damage: 20,
         speed: 20,
+        loft: 0,
     }
 
     static width = 13;

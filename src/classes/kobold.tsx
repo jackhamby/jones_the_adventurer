@@ -7,6 +7,7 @@ import { UnitPartNames, UnitStateNames } from "../types/enums";
 import { Rock } from "./projectile";
 
 
+
 export class Kobold extends Player {
 
     static width = 15;
@@ -33,19 +34,22 @@ export class Kobold extends Player {
     initializeTextures(): UnitParts {
         return {
             body:{
-                armor1: this.loader.resources['kobold-body-default'].texture, //TODO: update to use the correct type
-                armor2: this.loader.resources['kobold-body-default'].texture,
+                armor1: this.loader.resources['kobold-body-armor1'].texture, 
+                armor2: this.loader.resources['kobold-body-armor2'].texture,
+                armor3: undefined,
                 default: this.loader.resources['kobold-body-default'].texture,
             },
             head: {
-                default: this.loader.resources['kobold-head-default'].texture,
-                armor2: this.loader.resources['kobold-head-default'].texture,
                 armor1: this.loader.resources['kobold-head-armor1'].texture,
+                armor2: this.loader.resources['kobold-head-armor2'].texture,
+                armor3: this.loader.resources['kobold-head-armor3'].texture,
+                default: this.loader.resources['kobold-head-default'].texture,
             },
             legs: {
-                default: this.loader.resources['kobold-legs-default'].texture,
-                armor2: this.loader.resources['kobold-legs-default'].texture,
                 armor1: this.loader.resources['kobold-legs-armor1'].texture,
+                armor2: undefined,
+                armor3: undefined,
+                default: this.loader.resources['kobold-legs-default'].texture,
             }
         }
     }

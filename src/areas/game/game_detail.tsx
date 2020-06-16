@@ -35,7 +35,6 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
                 </table>);
     }
 
-
     render(){
         if (this.props.stage){
             return (
@@ -49,6 +48,11 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
                     <div>
                         {this.renderStatistics()}
                     </div>
+
+                     <button type="button" className="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+                        Dev menu
+                    </button>
+
                 </div>
             )
         }

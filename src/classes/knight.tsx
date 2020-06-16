@@ -32,19 +32,24 @@ export class Knight extends Player {
         return {
             body:{
                 armor1: this.loader.resources['knight-body-armor1-standing'].texture,
+                armor2: undefined,
+                armor3: undefined,
                 default: this.loader.resources['knight-body-default-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
 
             },
             head: {
-                default: this.loader.resources['knight-head-default-standing'].texture,
                 armor1: this.loader.resources['knight-head-armor1-standing'].texture,
                 armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor3: undefined,
+                default: this.loader.resources['knight-head-default-standing'].texture,
+         
             },
             legs: {
-                default: this.loader.resources['knight-legs-default-standing'].texture,
                 armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor2: undefined,
+                armor3: undefined,
+                default: this.loader.resources['knight-legs-default-standing'].texture,
+
             }
         }
     }

@@ -4,6 +4,7 @@ import './character_display.css';
 import { CharacterAttributeDisplay } from './character_attribute_display';
 import { Character } from '../../types/states';
 import { MAX_ATTRIBUTES } from '../../constants';
+import { PlayerOptionNames } from '../../types/enums';
 
 export interface CharacterDisplayProps {
     character: Character;
@@ -31,11 +32,27 @@ export class CharacterDisplay extends React.Component<CharacterDisplayProps, {}>
         )
     }
 
+    renderCharacterImage = () => {
+        let src = "";
+        switch(this.props.character.name){
+            case(PlayerOptionNames.KNIGHT):
+                src = '/images/knight/knight_lg.png'
+                break;
+            case(PlayerOptionNames.KOBOLD):
+                src = '/images/kobold/kobold_lg.png'
+                break;
+            case(PlayerOptionNames.ORC):
+                src = '/images/orc/orc_lg.png'
+                break;
+        }
+        return <input type="image" src={src}></input>;
+    }
+
     render(){
         return (   
         <React.Fragment>
             <div className="row icon-contianer">
-                <img  style={{maxHeight: "100%", maxWidth: "100%"}} src={`${this.props.character.name}_lg.png`}></img>
+                {this.renderCharacterImage()}
             </div>
             <div className="row stats-container">
                 {this.renderAttributes()}

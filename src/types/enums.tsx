@@ -13,6 +13,7 @@ export enum ScreenOptions {
 export enum PlayerOptionNames {
     KNIGHT = "knight",
     KOBOLD = "kobold",
+    ORC = "orc"
 }
 
 export enum Attributes {
@@ -34,6 +35,8 @@ export enum UnitStateNames {
     STANDING = "standing",
     KNOCKBACK = "knockback",
     DEAD = "dead",
+
+    // Enemy specific
     PATROLLING = 'patrolling',
     ATTACKING = 'attacking'
 }
@@ -47,7 +50,8 @@ export enum UnitPartNames {
 export enum UnitArmorNames {
     DEFAULT = "default",
     ARMOR1 = "armor1",
-    ARMOR2 = "armor2"
+    ARMOR2 = "armor2",
+    ARMOR3 = "armor3",
 }
 
 export enum UnitStatisticNames {

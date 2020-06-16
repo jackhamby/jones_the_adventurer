@@ -50,7 +50,6 @@ export class CharacterSelectWrapper extends React.Component<CharacterSelectProps
                     <div className="col-2 mt-2 mb-1">
                         <button className="btn-block float-right" onClick={this.setupGame}>Start</button>
                     </div>
-                    {/* detail */}
                 </div>  
 
 

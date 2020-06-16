@@ -73,22 +73,17 @@ export class Player extends Unit {
             return;
         }
         if (this.currentKeys.attackRight){
-            this.fireProjectile(projectileVelocity, 0);
+            // Loft creates creates an angle for the projectile
+            this.fireProjectile(projectileVelocity, this.projectile.baseAttributes.loft);
         }
         else if (this.currentKeys.attackLeft){
-            this.fireProjectile(-projectileVelocity, 0);
+            this.fireProjectile(-projectileVelocity,  this.projectile.baseAttributes.loft);
         }
         else if(this.currentKeys.attackDown){  
             this.fireProjectile(0, projectileVelocity);
         }
         else if(this.currentKeys.attackUp){
-            this.fireProjectile(0, -projectileVelocity);
-            // if (this.facingRight){
-            //     this.fireProjectile(0, );
-            // }   
-            // else {
-            //     this.fireProjectile(0, );
-            // }    
+            this.fireProjectile(0, -projectileVelocity);  
         }
     }
 

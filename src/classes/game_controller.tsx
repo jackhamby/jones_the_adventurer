@@ -12,6 +12,7 @@ import { store } from "../state_management/store";
 import { setupGame, ControlAction, changeStage } from "../state_management/actions/control_actions";
 import { keyboard } from "../components/control";
 import * as Constants from '../constants';
+import { Orc } from "./orc";
 
 export class GameController {
 
@@ -159,6 +160,10 @@ export class GameController {
                 attributes = character.attributes;
                 newPlayer = new Kobold(loader, {} as Stage, attributes, 100, 100);
                 break;
+            case(PlayerOptionNames.ORC):
+                attributes = character.attributes;
+                newPlayer = new Orc(loader, {} as Stage, attributes, 100, 100);
+                break;
             default:
                 throw "unknown character name";
         }
@@ -198,7 +203,7 @@ export class GameController {
             // Add enemy images
             .add('kobold-standing', "images/enemies/kobold/kobold_standing.png")
 
-            // Add projectile images
+            // Add projectile images2
             .add('rock', 'images/projectiles/rock.png')
             .add('arrow', 'images/projectiles/dart.png')
             .add('stinger', 'images/projectiles/stinger.png')
@@ -206,9 +211,21 @@ export class GameController {
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
             .add('kobold-legs-armor1', "images/kobold/legs/legs_armor1.png")
-            .add('kobold-body-default', "images/kobold/body/body_default.png")
+
             .add('kobold-head-default', "images/kobold/head/head_default.png")
             .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")
+            .add('kobold-head-armor2', "images/kobold/head/head_armor2.png")
+            .add('kobold-head-armor3', "images/kobold/head/head_armor3.png")
+
+            .add('kobold-body-default', "images/kobold/body/body_default.png")
+            .add('kobold-body-armor1', "images/kobold/body/body_armor1.png")
+            .add('kobold-body-armor2', "images/kobold/body/body_armor2.png")
+
+
+            // Orc
+            .add('orc-legs-default', "images/orc/legs/legs_default.png")
+            .add('orc-body-default', "images/orc/body/body_default.png")
+            .add('orc-head-default', "images/orc/head/head_default.png")
 
             // Manticore 
             .add('manticore-legs-default', "images/manticore/legs/manticore_legs_default.png")
@@ -218,7 +235,6 @@ export class GameController {
             // Once textures have loaded, fire this method
             .load(() => {
                 this.startGame(character);
-                // this.setupGame();
             });
     }
 

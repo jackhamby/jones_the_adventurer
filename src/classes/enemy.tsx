@@ -184,19 +184,24 @@ export class Man extends Enemy {
         return {
             body:{
                 armor1: this.loader.resources['knight-body-armor1-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor2: undefined,
+                armor3: undefined,
                 default: this.loader.resources['knight-body-default-standing'].texture,
 
             },
             head: {
-                default: this.loader.resources['knight-head-default-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
                 armor1: this.loader.resources['knight-head-armor1-standing'].texture,
+                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor3: undefined,
+                default: this.loader.resources['knight-head-default-standing'].texture,
+          
+
             },
             legs: {
-                default: this.loader.resources['knight-legs-default-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
                 armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
+                armor2: undefined,
+                armor3: undefined,
+                default: this.loader.resources['knight-legs-default-standing'].texture,
             }
         }
     }
@@ -257,21 +262,24 @@ export class Manticore extends Enemy {
     initializeTextures(): UnitParts {
         return {
             body:{
-                armor1: this.loader.resources['manticore-body-default'].texture,
-                armor2: this.loader.resources['manticore-body-default'].texture,
+                armor1: undefined,
+                armor2: undefined,
+                armor3: undefined,
                 default: this.loader.resources['manticore-body-default'].texture,
 
             },
             head: {
+                armor1: undefined,
+                armor2: undefined,
+                armor3: undefined,
                 default: this.loader.resources['manticore-head-default'].texture,
-                armor2: this.loader.resources['manticore-head-default'].texture,
-                armor1: this.loader.resources['manticore-head-default'].texture,
             },
             // Legs for this creature is its tail
             legs: {
+                armor1: undefined,
+                armor2: undefined,
+                armor3: undefined,
                 default: this.loader.resources['manticore-legs-default'].texture,
-                armor2: this.loader.resources['manticore-legs-default'].texture,
-                armor1: this.loader.resources['manticore-legs-default'].texture,
             }
         }
     }
@@ -408,20 +416,23 @@ export class Kobold2 extends Enemy {
     initializeTextures(): UnitParts {
         return {
             body:{
-                armor1: this.loader.resources['kobold-body-default'].texture,
-                armor2: this.loader.resources['kobold-body-default'].texture,
+                armor1: this.loader.resources['kobold-body-armor1'].texture,
+                armor2: this.loader.resources['kobold-body-armor2'].texture,
+                armor3: undefined,
                 default: this.loader.resources['kobold-body-default'].texture,
 
             },
             head: {
+                armor1: this.loader.resources['kobold-head-armor1'].texture,
+                armor2: this.loader.resources['kobold-head-armor2'].texture,
+                armor3: this.loader.resources['kobold-head-armor3'].texture,
                 default: this.loader.resources['kobold-head-default'].texture,
-                armor2: this.loader.resources['kobold-head-default'].texture,
-                armor1: this.loader.resources['kobold-head-default'].texture,
             },
             legs: {
-                default: this.loader.resources['kobold-legs-default'].texture,
-                armor2: this.loader.resources['kobold-legs-default'].texture,
                 armor1: this.loader.resources['kobold-legs-default'].texture,
+                armor2: undefined,
+                armor3: undefined,
+                default: this.loader.resources['kobold-legs-default'].texture,
             }
         }
     }
@@ -506,7 +517,143 @@ export class Kobold2 extends Enemy {
             legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
         }
     }
-
-
-    
 }
+
+
+
+// ================================== Kobold2  ===========================================================   
+// ======================================================================================================== 
+// export class Kobold3 extends Enemy {
+
+//     static baseAttributes = {
+//         attack: 5,
+//         attack_speed: 5,
+//         health: 100,
+//         speed: 10,
+//         jump_height: 3,
+//         jump_count: 1,
+//         armor: 2
+//     } as UnitAttributes
+
+//     static width = 15;
+//     static height = 20;
+
+//     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
+//         super(loader, currentStage, Kobold2.baseAttributes, Kobold2.width, Kobold2.height, x, y);
+//         this.textures = this.initializeTextures();
+//         this.spriteParts = this.createSpriteParts();
+//         this.facingRight = true;
+//         Object.keys(this.spriteParts).forEach((key) => {
+//             const playerPartName = key as UnitPartNames;
+//             const sprite = this.spriteParts[playerPartName].sprite;
+//             sprite.anchor.x = 1;
+//             sprite.scale.x = -1;
+            
+//         })
+//     }
+
+//     initializeTextures(): UnitParts {
+//         return {
+//             body:{
+//                 armor1: undefined,
+//                 armor2: undefined,
+//                 armor3: undefined,
+//                 default: this.loader.resources['kobold2-body-default'].texture,
+
+//             },
+//             head: {
+//                 armor1: undefined,
+//                 armor2: undefined,
+//                 armor3: undefined,
+//                 default: this.loader.resources['kobold2-head-default'].texture,
+//             },
+//             legs: {
+//                 armor1: undefined,
+//                 armor2: undefined,
+//                 armor3: undefined,
+//                 default: this.loader.resources['kobold2-legs-default'].texture,
+//             }
+//         }
+//     }
+
+//     createSpriteParts(): SpriteParts {
+//         const headOffsetX = 0;
+//         const headOffSetY = -7;
+//         const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
+//         head.sprite.zIndex = 99999999999;
+
+//         const bodyOffsetX = 0;
+//         const bodyOffsetY = head.sprite.height + headOffSetY - 3;
+//         const body = new Part(this.textures.body.default, bodyOffsetX, bodyOffsetY, this);
+
+//         const legsOffsetX = 0;
+//         const legsOffsetY = body.sprite.height + bodyOffsetY;
+//         const legs = new Part(this.textures.legs.default, legsOffsetX, legsOffsetY, this);
+
+//         return {
+//             head,
+//             body,
+//             legs
+//         };
+//     }
+
+//     flipSpriteParts(){
+//         if (this.xVelocity > 0){
+//             this.facingRight = false;
+//         } else {
+//             this.facingRight = true;
+//         }
+//         Object.keys(this.spriteParts).forEach((key) => {
+//             const playerPartName = key as UnitPartNames;
+//             const sprite = this.spriteParts[playerPartName].sprite;
+//             if (this.facingRight){
+//                 sprite.anchor.x = 0;
+//                 sprite.scale.x = 1;
+//             }
+//             else{
+//                 sprite.anchor.x = 1;
+//                 sprite.scale.x = -1;
+//             }
+//         })
+
+
+//         if (this.state === UnitStateNames.DEAD){
+//             this.y = this.y + (this.height - this.width)
+//             this.width = this.height;
+//             this.height = this.width;
+//             this.xVelocity = 0;
+//             this.yVelocity = 0;
+//             // this.setState(UnitStateNames.DEAD)
+//             Object.keys(this.spriteParts).forEach((key: string) => {
+//                 const partName = key as UnitPartNames;
+//                 const spritePart = this.spriteParts[partName];
+//                 spritePart.sprite.rotation = -1.5708; // 90degress in rads
+//             })
+
+//             // TODO remove this fro here and in Kobold in enemy.tsx
+//             const head = this.spriteParts.head;
+//             const headOffsetX =  0
+//             const headOffsetY = head.sprite.height/4;
+//             head.offSetX = headOffsetX;
+//             head.offSetY = headOffsetY;
+//             head.sprite.x = this.x + headOffsetX;
+//             head.sprite.y = (this.y + this.height) + headOffsetY;
+
+//             const body = this.spriteParts.body;
+//             const bodyOffsetX = head.sprite.height;;
+//             const bodyOffsetY = 0;
+//             body.offSetX = bodyOffsetX;
+//             body.offSetY = bodyOffsetY;
+//             body.sprite.x = this.x + bodyOffsetX;
+//             body.sprite.y = (this.y + this.height) + bodyOffsetY;
+
+//             const legs = this.spriteParts.legs;
+//             const legsOffsetX = head.sprite.height + body.sprite.height;
+//             const legsOffsetY = 0;
+//             legs.offSetX = legsOffsetX;
+//             legs.offSetY = legsOffsetY;
+//             legs.sprite.x = this.x + legsOffsetX;
+//             legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+//         }
+//     }
+// }
