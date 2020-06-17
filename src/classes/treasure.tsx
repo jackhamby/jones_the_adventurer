@@ -184,6 +184,35 @@ export class KoboldHeadArmor2 extends Treasure {
     }
 }
 
+
+export class KoboldHeadArmor3 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = -6;
+        this.iconOffsetY = 0;
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 10,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR3,
+                bodyPart: UnitPartNames.HEAD,
+            }
+        } as Effect;
+        this.name = "wooden mask";
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['kobold-head-armor3'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
 export class KoboldBodyArmor1 extends Treasure {
 
     constructor(loader: PIXI.Loader, x: number, y: number){

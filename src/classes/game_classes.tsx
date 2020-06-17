@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2 } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3 } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
@@ -240,7 +240,7 @@ export class StageManager {
                 koboldTreasures.push(...this.generateStage1Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):
-                treasureOptions = [KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2];
+                treasureOptions = [KoboldBodyArmor1, KoboldHeadArmor2, KoboldHeadArmor3, KoboldBodyArmor2];
                 randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 koboldTreasures.push(...this.generateStage2Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
@@ -721,6 +721,7 @@ export class Stage implements IStage{
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
         if (projectile.yVelocity > 0){
+            // debugger;
             projectile.setY(collider.top() - projectile.height);
         }
 
@@ -732,6 +733,15 @@ export class Stage implements IStage{
             projectile.setState(ProjectileStateNames.STANDING);
         }
         projectile.yVelocity = 0;
+
+
+        // if (projectile.yVelocity < 0){
+        //     projectile.yVelocity = projectile.yVelocity * -1;
+        // }
+        // else if (projectile.yVelocity > 0){
+        //     projectile.yVelocity = projectile.yVelocity * -1;
+        // }
+        // projectile.yVelocity = 0;
     }
 
     private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
@@ -750,7 +760,7 @@ export class Stage implements IStage{
             projectile.xVelocity = projectile.xVelocity * -1;
         }
         else if (projectile.xVelocity > 0){
-            projectile.xVelocity = -projectile.xVelocity;
+            projectile.xVelocity = projectile.xVelocity * -1;
         }
     }
 

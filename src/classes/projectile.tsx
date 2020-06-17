@@ -88,6 +88,7 @@ export class Projectile extends Sprite {
     }
 
     update(){
+        console.log(this.state)
         this.handleState();
         this.flipSprite(this.sprite)
         if (this.decay <= 0) {

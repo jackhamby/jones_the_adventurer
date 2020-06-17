@@ -23,42 +23,42 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         <table className="attribute-table">
                             <thead>
                                 <tr>
-                                    <th> Player Attributes </th>    
+                                    <th> player attributes </th>    
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>                     
                                         <img className="pr-1" src="images/attributes/heart.png"/>
-                                        Health
+                                        health
                                     </td>
                                     <td> {player.attributes.health} </td>
                                 </tr>
                                 <tr>
                                     <td> 
                                         <img  className="pr-1" src="images/attributes/armor.png"/>
-                                        Armor
+                                        armor
                                         </td>
                                     <td> {player.attributes.armor} </td>
                                 </tr>
                                 <tr>
                                     <td> 
                                         <img className="pr-1" src="images/attributes/speed.png"/>
-                                        Speed
+                                        speed
                                     </td>
                                     <td> {player.attributes.speed} </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <img className="pr-1" src="images/attributes/sword.png"/>
-                                        Attack
+                                        attack
                                     </td>
                                     <td> {player.attributes.attack} </td>
                                 </tr>
                                 <tr>
                                     <td>
                                         <img className="pr-1" src="images/attributes/gold.png"/>
-                                        Gold
+                                        gold
                                     </td>
                                     <td> {player.currentGold} </td>
                                 </tr>
@@ -67,7 +67,7 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         
                     </div>
                     <div className="col-5 h-100" style={{overflow: "scroll"}}>
-                         Treasures:   
+                         treasures:   
                         <div className="row" style={{overflow: "scroll"}}>
                             {/* {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0}  */}
                             {this.props.stage.player.treasures.map(treasure => <TreasureDetail treasure={treasure}/>)}

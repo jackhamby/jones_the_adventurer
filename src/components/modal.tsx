@@ -9,40 +9,65 @@ interface ModalState {
 interface ModalProps {
     header: string;
     content: JSX.Element;
+    link: JSX.Element;
+    onModalShow: Function;
+    onModalHide: Function;
+
 }
 
-export class Modal extends React.Component<{}, ModalState> {
+export class Modal extends React.Component<ModalProps, ModalState> {
 
-    componentDidMount(){
+    constructor(props: ModalProps){
+        super(props);
         this.state = {
             showModal: false,
         }
     }
 
+    componentDidUpdate(previousProps: ModalProps, previousState: ModalState){
+        if (this.state.showModal != previousState.showModal){
+            if (this.state.showModal){
+                this.props.onModalShow();
+            } else {
+                this.props.onModalHide();
+            }
+        } 
+    }
+
     render(){
-        if (this.state && this.state.showModal){
+        if (this.state.showModal){
             return (
                 <>
-                    <div style={{position: 'absolute', width: '600px', height: '400px', backgroundColor: 'white', top: '50%', left: '50%',  transform: 'translate(-50%, -50%)'}}>
-    
-                        modal
+                    <div className="p-3" style={{position: 'fixed', width: '600px', height: '400px', backgroundColor: 'white', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: '2px solid gray', zIndex: 9999999}}>
+                        <h1 style={{height: '15%'}}>
+                            {this.props.header}
+                        </h1>
+                        <div style={{height: '70%'}}>
+                            {this.props.content}
+                        </div>
 
-                        <button onClick={() => { this.setState({showModal: false})}}>
-                            close
-                        </button>
+                        <div style={{height: '15%', textAlign: 'right'}}> 
+                            <button className='mr-2'>
+                                go
+                            </button>
+                            <button onClick={() => { this.setState({showModal: false})}}>
+                                close
+                            </button>
+                        </div>
+                
 
                     </div>
-                    <button onClick={() => { this.setState({showModal: true})}}>    
-
-                    Open
-                    </button>
+                    <div onClick={() => { this.setState({showModal: true})}}>    
+                        {this.props.link}
+                    </div>
                 </>
             );
         }
         return (
-            <button onClick={() => { this.setState({showModal: true})}}>   
-                Open
-             </button>);
+            <div onClick={() => { this.setState({showModal: true})}}>   
+                {this.props.link}
+             </div>
+        );
     }
 
 }

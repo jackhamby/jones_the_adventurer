@@ -34,11 +34,11 @@ export class GameController {
         this.keepPlaying = false;
     }
 
-    start(){
+    start = () => {
         this.pixiApplication.ticker.start();
     }
 
-    stop(){
+    stop = () => {
         this.pixiApplication.ticker.stop();
     }
 
@@ -54,7 +54,8 @@ export class GameController {
         if (this.currentStage.isCleared && !this.keepPlaying){
             const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
             if (response){
-                this.changeStage(this.currentStage.level + 1)
+                // this.changeStage(this.currentStage.level + 1)
+                this.advanceStage();
             } else {
                 this.keepPlaying = true;
             }
@@ -97,6 +98,11 @@ export class GameController {
         this.player.setY(Constants.PLAYER_STARTING_Y);
 
         this.stageManager.loadStage(nextStage);
+    }
+
+    advanceStage = () => {
+        const nextLevel = this.currentStage.level + 1;
+        this.changeStage(nextLevel);
     }
 
 

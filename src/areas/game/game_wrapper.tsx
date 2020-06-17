@@ -19,6 +19,7 @@ import { Player } from '../../classes/player';
 import { UnitStatistics, UnitAttributes } from '../../types/types';
 import { GameController } from '../../classes/game_controller';
 import { Modal } from '../../components/modal';
+import { DebuggerModal } from '../../components/modals/debugger_modal';
 
 export interface GameStateProps {
     character: Character;
@@ -52,7 +53,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
         return (
             <div className="container" style={{height: "100%"}}>
                 {/* debugger modal */}
-                <Modal/>
+                {/* <Modal content={<div> test</div>} header={'poop'}/> */}
                 <div className="row game-header">
                     header
                 </div>
@@ -61,7 +62,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
                         <ConnectedGameDisplay stageManager={this.stageManager} />
                     </div>
                     <div className="game-detail">
-                        <GameDetail stage={this.props.currentStage} statistics={this.props.currentStage?.player.statistics}/>    
+                        <GameDetail gameController={this.gameController} stage={this.props.currentStage} statistics={this.props.currentStage?.player.statistics}/>    
                     </div>
                 </div>
                 <div className="row game-footer">

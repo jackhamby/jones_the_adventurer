@@ -22,7 +22,7 @@ const initialState = {
             attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
         } as Character
         // character: {
-        //     name: PlayerOptionNames.KNIGHT,  // Default to kobold 
+        //     name: PlayerOptionNames.KNIGHT,  // Default to knight 
         //     attributes: PLAYER_OPTIONS[PlayerOptionNames.KNIGHT].baseAttributes,
         // } as Character
     } as PlayerState,
