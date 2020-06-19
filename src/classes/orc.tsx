@@ -25,7 +25,7 @@ export class Orc extends Player {
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
         super(loader, stage, initialAttributes, Orc.width, Orc.height, x, y);
         this.textures = this.initializeTextures();
-        this.spriteParts = this.createSpriteParts();
+        this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
         this.projectile = Rock;
     }
@@ -54,7 +54,7 @@ export class Orc extends Player {
         }
     }
 
-    createSpriteParts(): SpriteParts {
+    initSpriteParts(): SpriteParts {
         const headOffsetX = 0;
         const headOffSetY = 0;
         const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);

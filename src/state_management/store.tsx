@@ -6,7 +6,6 @@ import { create } from 'istanbul-reports';
 import { AppState, ControlState, PlayerState, Character, KeyOptions } from '../types/states';
 import { ScreenOptions, PlayerOptionNames } from '../types/enums';
 import { SCREEN_WIDTH, SCREEN_HEIGHT} from '../constants';
-import { Kobold2 } from '../classes/enemy';
 
 
 
@@ -17,9 +16,13 @@ const initialState = {
     } as ControlState,
     playerState: {
         // default charater
+        // character: {
+        //     name: PlayerOptionNames.KOBOLD,  // Default to kobold 
+        //     attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
+        // } as Character
         character: {
-            name: PlayerOptionNames.KOBOLD,  // Default to kobold 
-            attributes: PLAYER_OPTIONS[PlayerOptionNames.KOBOLD].baseAttributes,
+            name: PlayerOptionNames.ORC,  // Default to kobold 
+            attributes: PLAYER_OPTIONS[PlayerOptionNames.ORC].baseAttributes,
         } as Character
         // character: {
         //     name: PlayerOptionNames.KNIGHT,  // Default to knight 

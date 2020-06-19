@@ -3,7 +3,7 @@ import { KeyOptions, IStage } from '../types/states';
 import { ProjectileStateNames, UnitPartNames, UnitStateNames, UnitArmorNames } from '../types/enums';
 import { Platform, DefaultPlatform, GrassPlatform, DirtPlatform, RedGrassPlatform, SandRockPlatform } from './platform';
 import { STAGE1_LAYOUT, SCREEN_WIDTH, SCREEN_HEIGHT, STAGE2_LAYOUT } from '../constants';
-import { Enemy, Man, Kobold2, Manticore } from './enemy';
+import { Enemy, Man, Kobold as EnemyKobold, Manticore } from './enemy';
 import {store} from '../state_management/store';
 import { ControlAction, applyTreasure, changeStage } from '../state_management/actions/control_actions';
 import { act } from 'react-dom/test-utils';
@@ -98,8 +98,8 @@ export class StageManager {
             this.viewport,
             this,
         );
-        // const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new Kobold2(this.loader, stage, {} as UnitAttributes, 83, 700)];
-        const enemies = [new Kobold2(this.loader, stage, {} as UnitAttributes, 200, 200)]
+        // const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new EnemyKobold(this.loader, stage, {} as UnitAttributes, 83, 700)];
+        const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200)]
 
         stage.enemies = enemies;
         return stage;
@@ -452,6 +452,7 @@ export class Stage implements IStage{
 
     private updateProjectilePositions(){
         this.projectiles.forEach((projectile: Projectile) => {
+            // debugger;
             projectile.updateX(projectile.xVelocity);
             this.checkProjectileXCollisions(projectile);
             projectile.updateY(projectile.yVelocity);
@@ -637,6 +638,7 @@ export class Stage implements IStage{
     private handleEnemyPlatformCollisionY(enemy: Enemy, collider: Sprite){
         // Set at the top
         if (enemy.yVelocity > 0){
+            
             enemy.setY(collider.top() - enemy.height);
         }
         else if(enemy.yVelocity < 0){
@@ -702,6 +704,9 @@ export class Stage implements IStage{
         const collidePlayer = this.collide(projectile, this.player);
 
         if (collidePlatform){
+            var t = projectile;
+            var b = collidePlatform;
+            // debugger;
             this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
         }
         if (collideEnemy){
@@ -720,12 +725,16 @@ export class Stage implements IStage{
     }
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
+        // debugger;
         if (projectile.yVelocity > 0){
             // debugger;
+            // console.log('setting')
             projectile.setY(collider.top() - projectile.height);
+            // debugger;
         }
 
         else if (projectile.yVelocity < 0){
+            // debugger;
             projectile.setY(collider.bottom());
         }
 
@@ -745,6 +754,7 @@ export class Stage implements IStage{
     }
 
     private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
+        // debugger;
         if (projectile.xVelocity < 0){
             projectile.setX(collider.right());
         }

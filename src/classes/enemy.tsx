@@ -382,9 +382,9 @@ export class Manticore extends Enemy {
 
 
 
-// ================================== Kobold2  ===========================================================   
+// ================================== Kobold  ===========================================================   
 // ======================================================================================================== 
-export class Kobold2 extends Enemy {
+export class Kobold extends Enemy {
 
     static baseAttributes = {
         attack: 5,
@@ -400,7 +400,7 @@ export class Kobold2 extends Enemy {
     static height = 20;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
-        super(loader, currentStage, Kobold2.baseAttributes, Kobold2.width, Kobold2.height, x, y);
+        super(loader, currentStage, Kobold.baseAttributes, Kobold.width, Kobold.height, x, y);
         this.textures = this.initializeTextures();
         this.spriteParts = this.createSpriteParts();
         this.facingRight = true;
@@ -521,7 +521,7 @@ export class Kobold2 extends Enemy {
 
 
 
-// ================================== Kobold2  ===========================================================   
+// ================================== Kobold  ===========================================================   
 // ======================================================================================================== 
 // export class Kobold3 extends Enemy {
 
@@ -539,7 +539,7 @@ export class Kobold2 extends Enemy {
 //     static height = 20;
 
 //     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
-//         super(loader, currentStage, Kobold2.baseAttributes, Kobold2.width, Kobold2.height, x, y);
+//         super(loader, currentStage, Kobold.baseAttributes, Kobold.width, Kobold.height, x, y);
 //         this.textures = this.initializeTextures();
 //         this.spriteParts = this.createSpriteParts();
 //         this.facingRight = true;

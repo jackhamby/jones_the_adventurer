@@ -126,6 +126,7 @@ export class GameController {
     }
 
     private gameLoop(delta: number): void {
+        // debugger;
         this.update(delta);
     }
 

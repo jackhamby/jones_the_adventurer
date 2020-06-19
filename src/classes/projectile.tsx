@@ -88,7 +88,7 @@ export class Projectile extends Sprite {
     }
 
     update(){
-        console.log(this.state)
+        console.log(this.y)
         this.handleState();
         this.flipSprite(this.sprite)
         if (this.decay <= 0) {
@@ -167,7 +167,11 @@ export class Projectile extends Sprite {
         }
         else if (this.yVelocity > 0){
             sprite.rotation = -1.5708;
+            sprite.anchor.x = 1;
+            sprite.anchor.y = 1;
         } else {
+            sprite.anchor.x = 1;
+            sprite.anchor.y = 1;
             sprite.rotation = 1.5708;
         }
     }

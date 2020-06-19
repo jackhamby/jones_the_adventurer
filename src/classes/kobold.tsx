@@ -26,7 +26,7 @@ export class Kobold extends Player {
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
         super(loader, stage, initialAttributes, Kobold.width, Kobold.height, x, y);
         this.textures = this.initializeTextures();
-        this.spriteParts = this.createSpriteParts();
+        this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
         this.projectile = Rock;
     }
@@ -54,7 +54,7 @@ export class Kobold extends Player {
         }
     }
 
-    createSpriteParts(): SpriteParts {
+    initSpriteParts(): SpriteParts {
         const headOffsetX = 0;
         const headOffSetY = -7;
         const head = new Part(this.textures.head.default, headOffsetX, headOffSetY, this);
@@ -74,30 +74,6 @@ export class Kobold extends Player {
             legs
         };
     }
-
-
-    // createSpriteParts(): SpriteParts {
-    //     const headOffsetX = 0;
-    //     const headOffSetY = -7;
-    //     const head = new Part(this.textures.head[this.currentArmorSet.head], headOffsetX, headOffSetY, this);
-    //     head.sprite.zIndex = 999999;
-
-    //     const bodyOffsetX = 0;
-    //     const bodyOffsetY = head.sprite.height + headOffSetY - 4;
-    //     const body = new Part(this.textures.body[this.currentArmorSet.body], bodyOffsetX, bodyOffsetY, this);
-
-    //     const legsOffsetX = 0;
-    //     const legsOffsetY = body.sprite.height + bodyOffsetY;
-    //     const legs = new Part(this.textures.legs[this.currentArmorSet.head], legsOffsetX, legsOffsetY, this);
-
-    //     return {
-    //         head,
-    //         body,
-    //         legs
-    //     };
-    // }
-
-
 
     flipSpriteParts(){
         if (this.xVelocity > 0){
