@@ -101,7 +101,7 @@ export class Unit extends Sprite{
 
         // Debuggin
         this.debugGraphics = new PIXI.Graphics();
-        this.debugPartLocation = false;
+        this.debugPartLocation = true;
         this.debugUnitRadius = false;
     }
 
@@ -147,6 +147,9 @@ export class Unit extends Sprite{
             });
             this.debugGraphics.lineStyle(5, 0x0000FF);
             this.debugGraphics.drawRect(this.x, this.y, this.width, this.height);
+            this.currentStage.projectiles.forEach( (projectile: Projectile) => {
+                this.debugGraphics.drawRect(projectile.sprite.x, projectile.sprite.y, projectile.sprite.width, projectile.sprite.height);
+            } )
         }
 
         if (this.debugUnitRadius){

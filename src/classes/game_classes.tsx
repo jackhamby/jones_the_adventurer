@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3 } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3, ArrowTreasure } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
@@ -179,14 +179,18 @@ export class StageManager {
     private generateStage1Treasures(treasure1Type: typeof Treasure, treasure2Type: typeof Treasure): Treasure[]{
         const treasures = [];
 
-        const treasure1X =  334;
-        const treasure1Y =  1045;
+        const lowerTreasureX =  334;
+        const lowerTreasureY =  1045;
 
-        const treasure2X = 223;
-        const treasure2Y = 70;
+        const upperTreasureX = 223;
+        const upperTreasureY = 70;
 
-        treasures.push(new treasure1Type(this.loader, treasure1X, treasure1Y))
-        treasures.push(new treasure2Type(this.loader, treasure2X, treasure2Y))
+        const projectileTreasureX = 1071;
+        const projectileTreasureY = 837;
+
+        treasures.push(new ArrowTreasure(this.loader, projectileTreasureX, projectileTreasureY));
+        treasures.push(new treasure1Type(this.loader, lowerTreasureX, lowerTreasureY));
+        treasures.push(new treasure2Type(this.loader, upperTreasureX, upperTreasureY));
 
         return treasures;
     }
@@ -725,16 +729,11 @@ export class Stage implements IStage{
     }
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
-        // debugger;
         if (projectile.yVelocity > 0){
-            // debugger;
-            // console.log('setting')
             projectile.setY(collider.top() - projectile.height);
-            // debugger;
         }
 
         else if (projectile.yVelocity < 0){
-            // debugger;
             projectile.setY(collider.bottom());
         }
 
@@ -742,19 +741,9 @@ export class Stage implements IStage{
             projectile.setState(ProjectileStateNames.STANDING);
         }
         projectile.yVelocity = 0;
-
-
-        // if (projectile.yVelocity < 0){
-        //     projectile.yVelocity = projectile.yVelocity * -1;
-        // }
-        // else if (projectile.yVelocity > 0){
-        //     projectile.yVelocity = projectile.yVelocity * -1;
-        // }
-        // projectile.yVelocity = 0;
     }
 
     private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
-        // debugger;
         if (projectile.xVelocity < 0){
             projectile.setX(collider.right());
         }

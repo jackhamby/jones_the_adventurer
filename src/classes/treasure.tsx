@@ -5,6 +5,7 @@ import { SpritePart, Effect } from './interfaces';
 // import { Player } from './player';
 import { Player } from './player';
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
+import { Arrow } from './projectile';
 
 export interface TreasureTextures {
     treasureBody?: PIXI.Texture;
@@ -83,6 +84,11 @@ export class Treasure extends Sprite {
         if (treasure.effect.goldEffect){
             player.currentGold += treasure.effect.goldEffect.amount;
         }
+
+        if (treasure.effect.projectileEffect){
+            player.projectile = treasure.effect.projectileEffect.projectileType;
+        }
+
         player.treasures = [...player.treasures, treasure];
     }
 }
@@ -435,3 +441,36 @@ export class Armor1Legs extends Treasure {
         }
     }
 }
+
+
+// ================================ Projectile treasures ======================================//
+// =========================================================================================//
+
+export class ArrowTreasure extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = -5;
+        this.iconOffsetY = -8;
+        this.effect = {
+            projectileEffect: {
+                projectileType: Arrow,
+            }
+     
+        } as Effect;
+        this.name = "bow and arrow"
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['arrow'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+
+}
+
+
+

@@ -10,6 +10,16 @@ export const getCanvasDimensions = () => {
     }
 }
 
+export const toDegrees = (radians:number): number => {
+    const degrees = (radians * 180) / Math.PI;
+    return degrees;
+}
+
+export const toRadians = (degrees: number): number => {
+    const radians = (degrees * Math.PI) / 180;
+    return radians;
+}
+
 export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
     switch(key){
         case 'a':

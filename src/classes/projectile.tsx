@@ -6,6 +6,7 @@ import { Unit } from './unit';
 import { Stage } from './game_classes';
 import { ProjectileAttributes } from '../types/types';
 import { SPRITE_DECAY_FADE_TIME } from '../constants';
+import { toDegrees, toRadians } from '../helpers/util';
 
 
 export class Projectile extends Sprite {
@@ -88,7 +89,6 @@ export class Projectile extends Sprite {
     }
 
     update(){
-        console.log(this.y)
         this.handleState();
         this.flipSprite(this.sprite)
         if (this.decay <= 0) {
@@ -254,6 +254,91 @@ export class Stinger extends Projectile {
         this.height = Arrow.height;
     }
 }
+
+
+
+
+export class Axe extends Projectile {
+
+    static baseAttributes = {
+        damage: 25,
+        speed: 20,
+        loft: 0,
+    }
+
+    static width = 15;
+    static height = 15;
+
+    constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
+        super(loader, x, y, unit, xVelocity, yVelocity);
+        this.texture = this.loader.resources['axe'].texture;
+        this.sprite = this.createSprite();
+        this.sticky = true;
+        this.attributes = Axe.baseAttributes
+        this.width = Axe.width;
+        this.height = Axe.height;
+        // this.sprite.anchor.set(-1);
+        this.sprite.rotation = toRadians(45)
+    }
+
+
+    flipSprite(sprite: PIXI.Sprite){
+     
+        // // Uncomment to top spinning
+        // if (this.xVelocity === 0 && this.yVelocity === 0){
+        //     return; // leave sprite as is
+        // }
+        // // this.sprite.anchor.set(0.5);
+        // this.sprite.rotation = this.sprite.rotation + Math.PI / 4
+        // if (this.sprite.rotation > (2 * Math.PI)){
+        //     this.sprite.rotation = 0;
+        // }
+        // // this.sprite.anchor.set(1)
+
+        // const rotationDegrees = toDegrees(this.sprite.rotation);
+        // console.log(rotationDegrees)
+
+        // switch(rotationDegrees){
+        //     case(45):
+        //         this.sprite.anchor.x = 0.5;
+        //         this.sprite.anchor.y = 0;
+        //         break;
+        //     case (90):
+        //         this.sprite.anchor.x = 1;
+        //         this.sprite.anchor.y = 0;
+        //         break;
+        //     case (135):
+        //         this.sprite.anchor.x = 1;
+        //         this.sprite.anchor.y = 0.5;
+        //         break;
+        //     case (180):
+        //         this.sprite.anchor.x = 1
+        //         this.sprite.anchor.y = 1
+        //         break;
+        //     case (225):
+        //         this.sprite.anchor.x = 0.5;
+        //         this.sprite.anchor.y = 1;
+        //         break;
+        //     case (270):
+        //         this.sprite.anchor.x = 0;
+        //         this.sprite.anchor.y = 1;
+        //         break;
+        //     case (315):
+        //         this.sprite.anchor.x = 0;
+        //         this.sprite.anchor.y = -0.5;
+        //         break;
+        //     case(360):
+        //         this.sprite.anchor.x = 0;
+        //         this.sprite.anchor.y = 0;
+        //         break;
+        //     default:
+        //         this.sprite.anchor.x = 0;
+        //         this.sprite.anchor.y = 0;
+        //         break;
+        // }
+    }
+}
+
 
 
 

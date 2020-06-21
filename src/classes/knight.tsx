@@ -4,6 +4,7 @@ import { Stage } from "./game_classes";
 import { Player } from "./player";
 import { UnitParts, SpriteParts, UnitAttributes } from "../types/types";
 import { Part } from "./part";
+import { Rock, Axe } from "./projectile";
 
 
 export class Knight extends Player {
@@ -25,6 +26,7 @@ export class Knight extends Player {
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
+        this.projectile = Axe;
     }
 
 

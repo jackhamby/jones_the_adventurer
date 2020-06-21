@@ -1,5 +1,6 @@
 import { PlayerAttributeNames } from "../types/states";
-import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from "../types/enums";
+import { UnitArmorNames, UnitPartNames, UnitAttributeNames, ProjectileNames } from "../types/enums";
+import { Projectile } from "./projectile";
 
 export interface SpritePart {
     offSetX: number;
@@ -16,7 +17,11 @@ export interface Effect {
     },
     goldEffect?: {
         amount: number;
+    },
+    projectileEffect?: {
+        projectileType: typeof Projectile,
     }
+
 }
 
 

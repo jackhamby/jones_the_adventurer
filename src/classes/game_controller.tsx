@@ -214,6 +214,7 @@ export class GameController {
             .add('rock', 'images/projectiles/rock.png')
             .add('arrow', 'images/projectiles/dart.png')
             .add('stinger', 'images/projectiles/stinger.png')
+            .add('axe', 'images/projectiles/axe.png')
 
             // Kobold
             .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
