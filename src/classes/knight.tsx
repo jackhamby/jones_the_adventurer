@@ -26,7 +26,7 @@ export class Knight extends Player {
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
         this.attributes = initialAttributes;
-        this.projectile = Axe;
+        // this.projectile = Axe;
     }
 
 

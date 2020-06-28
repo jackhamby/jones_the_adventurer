@@ -54,7 +54,9 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
                             {this.renderStatistics()}
                         </div>
                     </div>
-                    <DebuggerModal control={this.props.gameController}/>
+                    <div className="ml-3 mt-5">
+                        <DebuggerModal control={this.props.gameController}/>
+                    </div>
                 </>
             )
         }

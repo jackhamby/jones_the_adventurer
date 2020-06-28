@@ -42,16 +42,13 @@ export class Modal extends React.Component<ModalProps, ModalState> {
                         <h1 style={{height: '15%'}}>
                             {this.props.header}
                         </h1>
-                        <div style={{height: '70%'}}>
+                        <div className="p-3" style={{height: '70%'}}>
                             {this.props.content}
                         </div>
 
                         <div style={{height: '15%', textAlign: 'right'}}> 
-                            <button className='mr-2'>
-                                go
-                            </button>
                             <button onClick={() => { this.setState({showModal: false})}}>
-                                close
+                                done
                             </button>
                         </div>
                 

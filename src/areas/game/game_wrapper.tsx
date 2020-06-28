@@ -52,10 +52,8 @@ export class GameWrapper extends React.Component<GameProps, {}> {
     render(){
         return (
             <div className="container" style={{height: "100%"}}>
-                {/* debugger modal */}
-                {/* <Modal content={<div> test</div>} header={'poop'}/> */}
-                <div className="row game-header">
-                    header
+                <div className="row game-header p-2">
+                    jones the adventurer
                 </div>
                 <div className="row game-body">
                     <div className="game">

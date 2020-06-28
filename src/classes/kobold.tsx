@@ -20,7 +20,7 @@ export class Kobold extends Player {
         attack: 10,
         jump_height: 10,
         jump_count: 3,
-        attack_speed: 10
+        attack_speed: 6
     }
 
     constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
@@ -75,64 +75,64 @@ export class Kobold extends Player {
         };
     }
 
-    flipSpriteParts(){
-        if (this.xVelocity > 0){
-            this.facingRight = false;
-        } else {
-            this.facingRight = true;
-        }
-        Object.keys(this.spriteParts).forEach((key) => {
-            const playerPartName = key as UnitPartNames;
-            const sprite = this.spriteParts[playerPartName].sprite;
-            if (this.facingRight){
-                sprite.anchor.x = 0;
-                sprite.scale.x = 1;
-            }
-            else{
-                sprite.anchor.x = 1;
-                sprite.scale.x = -1;
-            }
-        })
+    // flipSpriteParts(){
+    //     if (this.xVelocity > 0){
+    //         this.facingRight = false;
+    //     } else {
+    //         this.facingRight = true;
+    //     }
+    //     Object.keys(this.spriteParts).forEach((key) => {
+    //         const playerPartName = key as UnitPartNames;
+    //         const sprite = this.spriteParts[playerPartName].sprite;
+    //         if (this.facingRight){
+    //             sprite.anchor.x = 0;
+    //             sprite.scale.x = 1;
+    //         }
+    //         else{
+    //             sprite.anchor.x = 1;
+    //             sprite.scale.x = -1;
+    //         }
+    //     })
 
 
-        if (this.state === UnitStateNames.DEAD){
-            this.y = this.y + (this.height - this.width)
-            this.width = this.height;
-            this.height = this.width;
-            this.xVelocity = 0;
-            this.yVelocity = 0;
-            // this.setState(UnitStateNames.DEAD)
-            Object.keys(this.spriteParts).forEach((key: string) => {
-                const partName = key as UnitPartNames;
-                const spritePart = this.spriteParts[partName];
-                spritePart.sprite.rotation = -1.5708; // 90degress in rads
-            })
+    //     if (this.state === UnitStateNames.DEAD){
+    //         this.y = this.y + (this.height - this.width)
+    //         this.width = this.height;
+    //         this.height = this.width;
+    //         this.xVelocity = 0;
+    //         this.yVelocity = 0;
+    //         // this.setState(UnitStateNames.DEAD)
+    //         Object.keys(this.spriteParts).forEach((key: string) => {
+    //             const partName = key as UnitPartNames;
+    //             const spritePart = this.spriteParts[partName];
+    //             spritePart.sprite.rotation = -1.5708; // 90degress in rads
+    //         })
 
-            // TODO remove this fro here and in Kobold in enemy.tsx
-            const head = this.spriteParts.head;
-            const headOffsetX =  0
-            const headOffsetY = head.sprite.height/4;
-            head.offSetX = headOffsetX;
-            head.offSetY = headOffsetY;
-            head.sprite.x = this.x + headOffsetX;
-            head.sprite.y = (this.y + this.height) + headOffsetY;
+    //         // TODO remove this fro here and in Kobold in enemy.tsx
+    //         const head = this.spriteParts.head;
+    //         const headOffsetX =  0
+    //         const headOffsetY = head.sprite.height/4;
+    //         head.offSetX = headOffsetX;
+    //         head.offSetY = headOffsetY;
+    //         head.sprite.x = this.x + headOffsetX;
+    //         head.sprite.y = (this.y + this.height) + headOffsetY;
 
-            const body = this.spriteParts.body;
-            const bodyOffsetX = head.sprite.height;;
-            const bodyOffsetY = 0;
-            body.offSetX = bodyOffsetX;
-            body.offSetY = bodyOffsetY;
-            body.sprite.x = this.x + bodyOffsetX;
-            body.sprite.y = (this.y + this.height) + bodyOffsetY;
+    //         const body = this.spriteParts.body;
+    //         const bodyOffsetX = head.sprite.height;;
+    //         const bodyOffsetY = 0;
+    //         body.offSetX = bodyOffsetX;
+    //         body.offSetY = bodyOffsetY;
+    //         body.sprite.x = this.x + bodyOffsetX;
+    //         body.sprite.y = (this.y + this.height) + bodyOffsetY;
 
-            const legs = this.spriteParts.legs;
-            const legsOffsetX = head.sprite.height + body.sprite.height;
-            const legsOffsetY = 0;
-            legs.offSetX = legsOffsetX;
-            legs.offSetY = legsOffsetY;
-            legs.sprite.x = this.x + legsOffsetX;
-            legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
-        }
-    }
+    //         const legs = this.spriteParts.legs;
+    //         const legsOffsetX = head.sprite.height + body.sprite.height;
+    //         const legsOffsetY = 0;
+    //         legs.offSetX = legsOffsetX;
+    //         legs.offSetY = legsOffsetY;
+    //         legs.sprite.x = this.x + legsOffsetX;
+    //         legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+    //     }
+    // }
 
 }

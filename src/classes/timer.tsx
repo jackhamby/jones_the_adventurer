@@ -38,7 +38,7 @@ export class Timer {
     }
 
     update() {
-        this.x = this.currentStage.viewport.corner.x + this.currentStage.viewport.screenWidth - 50;
+        this.x = this.currentStage.viewport.corner.x + 20;
         this.y = this.currentStage.viewport.corner.y + 20;
         this.displayObject.x = this.x;
         this.displayObject.y = this.y;

@@ -17,19 +17,19 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
 
         return (
             <div>
-                <div className="row">
+                <div className="row mb-2">
                     <button onClick={this.props.control.advanceStage}> advance stage </button>
                 </div>
-                <div className="row">
+                <div className="row mb-2">
                     <button onClick={this.godMode}>god mode</button>
                 </div>
-                <div className="row">
+                <div className="row mb-2">
                     <button onClick={this.restoreAllHp}> restore hp </button>
                 </div>
-                <div className="row">
+                <div className="row mb-2">
                     <button onClick={this.completeImmunity}>immunity </button>
                 </div>
-                <div className="row">
+                <div className="row mb-2">
                     <button onClick={this.infiniteJumps}>infinite jump </button>
                 </div>
 
@@ -42,6 +42,9 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.restoreAllHp();
         this.completeImmunity();
         this.infiniteJumps();
+        this.props.control.player.attributes.attack = 99999999999999;
+        this.props.control.player.currentAttributes.attack = 99999999999999;
+        this.setState({closeModal: true})
     }
 
 
@@ -61,7 +64,6 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
 
 
     render(){
-
         return (
             <Modal
                 content={this.getContent()}

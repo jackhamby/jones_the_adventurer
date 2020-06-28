@@ -474,3 +474,122 @@ export class ArrowTreasure extends Treasure {
 
 
 
+
+// ================================ Knight treasures ======================================//
+// =========================================================================================//
+export class OrcHeadArmor1 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = 5;
+        this.iconOffsetY = -5;
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.HEAD,
+            }
+        } as Effect;
+        this.name = "cool hair";
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['orc-head-armor1'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+export class OrcHeadArmor2 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = 5;
+        this.iconOffsetY = -5;
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR2,
+                bodyPart: UnitPartNames.HEAD,
+            }
+        } as Effect;
+        this.name = "ninja hood";
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['orc-head-armor2'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+export class OrcLegsArmor1 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = 5;
+        this.iconOffsetY = -5;
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.LEGS,
+            }
+        } as Effect;
+        this.name = "jorts";
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['orc-legs-armor1'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+export class OrcBodyArmor1 extends Treasure {
+
+    constructor(loader: PIXI.Loader, x: number, y: number){
+        super(loader, x, y);
+        this.iconOffsetX = 5;
+        this.iconOffsetY = -5;
+        this.effect = {
+            attribute: UnitAttributeNames.ARMOR,
+            value: 5,
+            textureEffect: {
+                armorType: UnitArmorNames.ARMOR1,
+                bodyPart: UnitPartNames.BODY,
+            }
+        } as Effect;
+        this.name = "crop top";
+        this.textures = this.initTextures();
+        this.spriteParts = this.initSpriteParts();
+    }
+
+
+    initTextures(): TreasureTextures {
+        return {
+            treasureIcon: this.loader.resources['orc-body-armor1'].texture,
+            treasureBody: this.loader.resources['treasure-base'].texture,
+        }
+    }
+}
+
+
+
+
+

@@ -39,13 +39,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 
     private canvasRef = createRef<HTMLDivElement>();
 
-    // TODO REMOVE
-    testOnClick(){
-        const state = store.getState() as AppState;
-        console.log(`x: ${state.gameState.currentStage.player.x}`)
-        console.log(`y: ${state.gameState.currentStage.player.y}`);
 
-    }
 
     toggleMusic(){
         const music = document.getElementById("music") as HTMLAudioElement;
@@ -74,8 +68,8 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     render(){
         return (
             <>
-                <button style={{position: "absolute"}} onClick={this.testOnClick}>TEST BUTTON</button>
-                <button style={{position:"absolute",left:"74%", }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
+                {/* <button style={{position: "absolute", top: 0, right: -1}} onClick={this.testOnClick}>TEST BUTTON</button> */}
+                <button style={{position:"absolute", top: '13%', left: '15%' }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
                 <audio src={"audio/music/game.mp3"} id={"music"} loop/>
                 <div className="game-container" id="canvas-container" ref={this.canvasRef}>
 

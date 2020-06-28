@@ -10,7 +10,7 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3, ArrowTreasure } from './treasure';
+import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3, ArrowTreasure, OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1 } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
@@ -21,6 +21,7 @@ import { Knight } from './knight';
 import { Kobold } from './kobold';
 import { FloatingText } from './floating_text';
 import { Timer } from './timer';
+import { Orc } from './orc';
 
 
 export interface Container {
@@ -98,8 +99,8 @@ export class StageManager {
             this.viewport,
             this,
         );
-        // const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new EnemyKobold(this.loader, stage, {} as UnitAttributes, 83, 700)];
-        const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200)]
+        const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200), new Man(this.loader, stage, {} as UnitAttributes, 789, 554), new EnemyKobold(this.loader, stage, {} as UnitAttributes, 83, 700)];
+        // const enemies = [new EnemyKobold(this.loader, stage, {} as UnitAttributes, 200, 200)]
 
         stage.enemies = enemies;
         return stage;
@@ -154,6 +155,8 @@ export class StageManager {
             case(Kobold):
                 treasures.push(...this.generateRandomKoboldTreasures(level));
                 break;
+            case(Orc):
+                treasures.push(...this.generateRandomOrcTreasures(level))
             default: 
                 break;
         }
@@ -252,6 +255,29 @@ export class StageManager {
                 break;  
         }
         return koboldTreasures;
+    }
+
+    private generateRandomOrcTreasures(stage: number): Treasure[] {
+
+
+        const orcTreasures: Treasure[] = [];
+        let treasureOptions = [] as  typeof Treasure[];
+        let randomTreasureTypes = [] as typeof Treasure[]
+        switch(stage){
+            case(1):
+                treasureOptions = [OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
+                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                orcTreasures.push(...this.generateStage1Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
+                break;
+            case(2):
+                treasureOptions = [OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
+                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                orcTreasures.push(...this.generateStage2Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
+                break;
+            default: 
+                break;  
+        }
+        return orcTreasures;
     }
 
 
@@ -764,9 +790,15 @@ export class Stage implements IStage{
     }
 
     private handleProjectileEnemyCollisionY(projectile: Projectile, enemy: Unit){
+        // cant be damaged by other enemies
+        if (projectile.unit instanceof Enemy){
+            return;
+        }
+        // cant be damaged by itself
         if (projectile.unit === enemy){
             return;
         }
+        
         if ((projectile.state == ProjectileStateNames.FLYING ||
             projectile.state == ProjectileStateNames.FALLING) && 
             enemy.state != UnitStateNames.DEAD){

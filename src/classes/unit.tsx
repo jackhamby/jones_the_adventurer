@@ -70,7 +70,7 @@ export class Unit extends Sprite{
             killed: 0,
             damage: 0
         } as UnitStatistics;
-        this.projectile = Arrow;
+        this.projectile = Rock;
         this.currentJumps = this.attributes.jump_count;
         this.currentArmorSet = {
             head: UnitArmorNames.DEFAULT,
@@ -101,7 +101,7 @@ export class Unit extends Sprite{
 
         // Debuggin
         this.debugGraphics = new PIXI.Graphics();
-        this.debugPartLocation = true;
+        this.debugPartLocation = false;
         this.debugUnitRadius = false;
     }
 
@@ -127,6 +127,29 @@ export class Unit extends Sprite{
         const circleCenterX = this.x + (this.width / 2);
         const circleCenterY = this.y + (this.height / 2);
 
+        //  (x - center_x)^2 + (y - center_y)^2 < radius^2.
+        if ( ( Math.pow((targetCenterX - circleCenterX), 2) + Math.pow((targetCenterY - circleCenterY), 2) )  < Math.pow(radius, 2) ){
+            return true;
+        }
+
+        return false;
+    }
+
+    isInsideSemiCircle(sprite: Sprite, radius: number): boolean {
+        const targetCenterX = sprite.x + (sprite.width / 2);
+        const targetCenterY = sprite.y + (sprite.height / 2);
+
+        const circleCenterX = this.x + (this.width / 2);
+        const circleCenterY = this.y + (this.height / 2);
+
+        if (targetCenterY > (circleCenterY + 50)){
+            return false;
+        }
+        if (targetCenterY < (circleCenterY - 50)){
+            return false
+        }
+
+        //  (x - center_x)^2 + (y - center_y)^2 < radius^2.
         if ( ( Math.pow((targetCenterX - circleCenterX), 2) + Math.pow((targetCenterY - circleCenterY), 2) )  < Math.pow(radius, 2) ){
             return true;
         }
@@ -323,7 +346,6 @@ export class Unit extends Sprite{
         } else {
             this.facingRight = false;
         }
-
         let alphaToSet = 1;
         if (this.isImmune){
             this.currentImmuneFadeInterval += this.currentFadeIncrement;
@@ -430,14 +452,13 @@ export class Unit extends Sprite{
         this.hpBar.beginFill(0x00FF00);
         let greenPercent = this.currentAttributes.health / this.attributes.health;
         let redPercent = 1.0 - greenPercent;
-        // Temp hack to fix neg percent
+        // TODO: fix the underlying issue. Temp hack to fix neg percent
         if ((greenPercent) < 0){
             redPercent = 1.0;
             greenPercent = 0;
         }
 
         this.hpBar.drawRect(this.x + marginX, this.y + marginY, hpBarWidth * greenPercent, hpBarHeight);
-
         this.hpBar.beginFill(0xFF0000);
         this.hpBar.drawRect(this.x + marginX + (greenPercent * hpBarWidth), this.y + marginY, hpBarWidth * redPercent, hpBarHeight);
     }

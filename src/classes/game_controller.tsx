@@ -229,11 +229,16 @@ export class GameController {
             .add('kobold-body-armor1', "images/kobold/body/body_armor1.png")
             .add('kobold-body-armor2', "images/kobold/body/body_armor2.png")
 
-
             // Orc
             .add('orc-legs-default', "images/orc/legs/legs_default.png")
+            .add('orc-legs-armor1', "images/orc/legs/legs_armor1.png")
+
             .add('orc-body-default', "images/orc/body/body_default.png")
+            .add('orc-body-armor1', "images/orc/body/body_armor1.png")
+
             .add('orc-head-default', "images/orc/head/head_default.png")
+            .add('orc-head-armor1', "images/orc/head/head_armor1.png")
+            .add('orc-head-armor2', "images/orc/head/head_armor2.png")
 
             // Manticore 
             .add('manticore-legs-default', "images/manticore/legs/manticore_legs_default.png")

@@ -142,12 +142,12 @@ export class Projectile extends Sprite {
     }
 
     falling(){
-        if (this.xVelocity > 0){
-            this.xVelocity += -.25;
-        }
-        else if (this.xVelocity < 0){
-            this.xVelocity += .25;
-        }
+        // if (this.xVelocity > 0){
+        //     this.xVelocity += -.25;
+        // }
+        // else if (this.xVelocity < 0){
+        //     this.xVelocity += .25;
+        // }
         const gravity = 0.5;
         this.yVelocity += gravity;
     }
@@ -185,7 +185,7 @@ export class Projectile extends Sprite {
 export class Rock extends Projectile {
 
     static baseAttributes = {
-        damage: 40,
+        damage: 15,
         speed: 17,
         loft: -3,
     }
@@ -261,13 +261,13 @@ export class Stinger extends Projectile {
 export class Axe extends Projectile {
 
     static baseAttributes = {
-        damage: 25,
+        damage: 40,
         speed: 20,
-        loft: 0,
+        loft: -3,
     }
 
-    static width = 15;
-    static height = 15;
+    static width = 13;
+    static height = 13;
 
     constructor(loader: PIXI.Loader, x: number, y: number, unit: Unit, xVelocity: number, yVelocity: number){
         super(loader, x, y, unit, xVelocity, yVelocity);
@@ -277,65 +277,25 @@ export class Axe extends Projectile {
         this.attributes = Axe.baseAttributes
         this.width = Axe.width;
         this.height = Axe.height;
-        // this.sprite.anchor.set(-1);
-        this.sprite.rotation = toRadians(45)
     }
 
 
     flipSprite(sprite: PIXI.Sprite){
-     
-        // // Uncomment to top spinning
-        // if (this.xVelocity === 0 && this.yVelocity === 0){
-        //     return; // leave sprite as is
-        // }
-        // // this.sprite.anchor.set(0.5);
-        // this.sprite.rotation = this.sprite.rotation + Math.PI / 4
-        // if (this.sprite.rotation > (2 * Math.PI)){
-        //     this.sprite.rotation = 0;
-        // }
-        // // this.sprite.anchor.set(1)
+        const rotationDegrees = toDegrees(this.sprite.rotation);
 
-        // const rotationDegrees = toDegrees(this.sprite.rotation);
-        // console.log(rotationDegrees)
+        if (this.xVelocity === 0 && this.yVelocity === 0){
+            return; // leave sprite as is
+        }
 
-        // switch(rotationDegrees){
-        //     case(45):
-        //         this.sprite.anchor.x = 0.5;
-        //         this.sprite.anchor.y = 0;
-        //         break;
-        //     case (90):
-        //         this.sprite.anchor.x = 1;
-        //         this.sprite.anchor.y = 0;
-        //         break;
-        //     case (135):
-        //         this.sprite.anchor.x = 1;
-        //         this.sprite.anchor.y = 0.5;
-        //         break;
-        //     case (180):
-        //         this.sprite.anchor.x = 1
-        //         this.sprite.anchor.y = 1
-        //         break;
-        //     case (225):
-        //         this.sprite.anchor.x = 0.5;
-        //         this.sprite.anchor.y = 1;
-        //         break;
-        //     case (270):
-        //         this.sprite.anchor.x = 0;
-        //         this.sprite.anchor.y = 1;
-        //         break;
-        //     case (315):
-        //         this.sprite.anchor.x = 0;
-        //         this.sprite.anchor.y = -0.5;
-        //         break;
-        //     case(360):
-        //         this.sprite.anchor.x = 0;
-        //         this.sprite.anchor.y = 0;
-        //         break;
-        //     default:
-        //         this.sprite.anchor.x = 0;
-        //         this.sprite.anchor.y = 0;
-        //         break;
-        // }
+        // TODO: there is often space between the rotated axe
+        // and its collision platform. this has to do with the space
+        // in the axe image itself and the rotation we are perfoming.
+        // for now, always rotate around center point
+        this.sprite.anchor.set(0.5);
+        this.sprite.rotation = this.sprite.rotation + 1
+        if (this.sprite.rotation > (2 * Math.PI)){
+            this.sprite.rotation = 0;
+        }
     }
 }
 

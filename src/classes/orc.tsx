@@ -16,7 +16,7 @@ export class Orc extends Player {
         health: 120,
         speed: 2,
         armor: 10,
-        attack: 8,
+        attack: 20,
         jump_height: 10,
         jump_count: 2,
         attack_speed: 12
@@ -33,20 +33,20 @@ export class Orc extends Player {
     initializeTextures(): UnitParts {
         return {
             body:{
-                armor1: undefined,
+                armor1:  this.loader.resources['orc-body-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
                 default: this.loader.resources['orc-body-default'].texture,
 
             },
             head: {
-                armor1: undefined,
-                armor2: undefined,
+                armor1:  this.loader.resources['orc-head-armor1'].texture,
+                armor2:  this.loader.resources['orc-head-armor2'].texture,
                 armor3: undefined,
                 default: this.loader.resources['orc-head-default'].texture,
             },
             legs: {
-                armor1: undefined,
+                armor1:  this.loader.resources['orc-legs-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
                 default: this.loader.resources['orc-legs-default'].texture,
