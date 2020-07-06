@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js";
-import { Stage } from "./game_classes";
+import { Stage } from "../game_classes";
 import { Player } from "./player";
-import { UnitParts, SpriteParts, UnitAttributes } from "../types/types";
-import { Part } from "./part";
-import { UnitPartNames, UnitStateNames } from "../types/enums";
-import { Rock } from "./projectile";
+import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
+import { Part } from "../part";
+import { UnitPartNames, UnitStateNames } from "../../types/enums";
+import { Rock } from "../projectile";
 
 
 export class Orc extends Player {

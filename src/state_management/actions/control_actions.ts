@@ -1,7 +1,7 @@
 import { ScreenOptions, PlayerOptionNames, UnitStatisticNames } from "../../types/enums";
 import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
-import { Treasure } from "../../classes/treasure";
+import { Treasure } from "../../classes/treasures/treasure";
 import { UnitStatistics } from "../../types/types";
 
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'

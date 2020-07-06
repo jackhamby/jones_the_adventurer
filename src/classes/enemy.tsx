@@ -7,7 +7,7 @@ import { Part } from './part';
 import { SpritePart } from './interfaces';
 import { KeyOptions } from '../types/states';
 import { Stinger, Arrow } from './projectile';
-import { SmallCoins } from './treasure';
+import { SmallCoins } from './treasures/coin_treasure';
 
 
 
@@ -135,7 +135,7 @@ export class Enemy extends Unit {
         super.dying();  
         if (!this.hasDroppedTreasure){
             // spawn coins 
-            const coins = new SmallCoins(this.loader, this.x, this.y - 30, Math.floor(Math.random() * 10))
+            const coins = new SmallCoins(this.loader, this.x, this.y - 30)
             this.currentStage.treasures.push(coins);
             this.currentStage.viewport.addChild(...coins.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
             this.hasDroppedTreasure = true;
@@ -185,25 +185,25 @@ export class Man extends Enemy {
     initializeTextures(): UnitParts {
         return {
             body:{
-                armor1: this.loader.resources['knight-body-armor1-standing'].texture,
+                armor1: this.loader.resources['knight-body-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
-                default: this.loader.resources['knight-body-default-standing'].texture,
+                default: this.loader.resources['knight-body-default'].texture,
 
             },
             head: {
-                armor1: this.loader.resources['knight-head-armor1-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor1: this.loader.resources['knight-head-armor1'].texture,
+                armor2: this.loader.resources['knight-head-armor2'].texture,
                 armor3: undefined,
-                default: this.loader.resources['knight-head-default-standing'].texture,
+                default: this.loader.resources['knight-head-default'].texture,
           
 
             },
             legs: {
-                armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
+                armor1: this.loader.resources['knight-legs-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
-                default: this.loader.resources['knight-legs-default-standing'].texture,
+                default: this.loader.resources['knight-legs-default'].texture,
             }
         }
     }

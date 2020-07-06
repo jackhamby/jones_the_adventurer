@@ -1,5 +1,5 @@
 import { Sprite } from './sprite';
-import { Treasure } from './treasure';
+import { Treasure } from './treasures/treasure';
 import { Stage } from './game_classes';
 import { KeyOptions } from '../types/states';
 import { Rock, Projectile, Arrow } from './projectile';
@@ -13,7 +13,7 @@ import { updateStatistic, ControlAction } from '../state_management/actions/cont
 import { FloatingText } from './floating_text';
 import { Part } from './part';
 
-export class Unit extends Sprite{
+export class Unit extends Sprite {
     // Player attributes/data
     attributes: UnitAttributes;
     currentAttributes: UnitAttributes;
@@ -38,7 +38,6 @@ export class Unit extends Sprite{
     currentFadeIncrement: number;
     currentImmuneFadeInterval: number;
     fallingTimer: number;
-
 
     // Textures/sprites
     textures: UnitParts;
@@ -73,11 +72,10 @@ export class Unit extends Sprite{
         this.projectile = Rock;
         this.currentJumps = this.attributes.jump_count;
         this.currentArmorSet = {
-            head: UnitArmorNames.DEFAULT,
-            legs: UnitArmorNames.DEFAULT,
-            body: UnitArmorNames.DEFAULT
+            head: null,
+            legs: null,
+            body: null,
         }
-
         this.state = {} as UnitStateNames;
         this.facingRight = false;
         this.inKnockBack = false;
@@ -425,15 +423,15 @@ export class Unit extends Sprite{
     initSpriteParts(): SpriteParts {
         const headOffsetX = 0;
         const headOffSetY = -5;
-        const head = new Part(this.textures.head[this.currentArmorSet.head], headOffsetX, headOffSetY, this);
+        const head = new Part(this.textures.head[UnitArmorNames.DEFAULT], headOffsetX, headOffSetY, this);
 
         const bodyOffsetX = 0;
         const bodyOffsetY = head.sprite.height + headOffSetY;
-        const body = new Part(this.textures.body[this.currentArmorSet.body], bodyOffsetX, bodyOffsetY, this);
+        const body = new Part(this.textures.body[UnitArmorNames.DEFAULT], bodyOffsetX, bodyOffsetY, this);
 
         const legsOffsetX = 0;
         const legsOffsetY = body.sprite.height + bodyOffsetY;
-        const legs = new Part(this.textures.legs[this.currentArmorSet.legs], legsOffsetX, legsOffsetY, this);;
+        const legs = new Part(this.textures.legs[UnitArmorNames.DEFAULT], legsOffsetX, legsOffsetY, this);;
         return {
             head,
             body,

@@ -2,17 +2,17 @@ import { StageManager, Stage } from "./game_classes";
 import { getCanvasDimensions } from "../helpers/util";
 import { Viewport } from "pixi-viewport";
 import * as PIXI from 'pixi.js';
-import { Player } from "./player";
+import { Player } from "./players/player";
 import { UnitAttributes } from "../types/types";
 import { Character } from "../types/states";
 import { PlayerOptionNames, UnitPartNames } from "../types/enums";
-import { Knight } from "./knight";
-import { Kobold } from "./kobold";
+import { Knight } from "./players/knight";
+import { Kobold } from "./players/kobold";
 import { store } from "../state_management/store";
 import { setupGame, ControlAction, changeStage } from "../state_management/actions/control_actions";
 import { keyboard } from "../components/control";
 import * as Constants from '../constants';
-import { Orc } from "./orc";
+import { Orc } from "./players/orc";
 
 export class GameController {
 
@@ -191,18 +191,18 @@ export class GameController {
             // coin textures
             .add('coins-small', 'images/coins/coins.png')
 
-            // Add head textures
-            .add('knight-head-armor1-standing', "images/knight/head/head_armor1_standing.png")
-            .add('knight-head-default-standing', "images/knight/head/head_default_standing.png")
-            .add('knight-head-armor2-standing', "images/knight/head/head_armor2.png")
+            // Knight
+            .add('knight-head-default', "images/knight/head/head_default.png")
+            .add('knight-head-armor1', "images/knight/head/head_armor1.png")
+            .add('knight-head-armor2', "images/knight/head/head_armor2.png")
 
             // Add body textures
-            .add('knight-body-default-standing', "images/knight/body/body_default_standing.png")
-            .add('knight-body-armor1-standing', "images/knight/body/body_armor1_standing.png")
+            .add('knight-body-default', "images/knight/body/body_default.png")
+            .add('knight-body-armor1', "images/knight/body/body_armor1.png")
 
             // Add leg textures
-            .add('knight-legs-default-standing', "images/knight/legs/legs_default_standing.png")
-            .add('knight-legs-armor1-standing', "images/knight/legs/legs_armor1_standing.png")
+            .add('knight-legs-default', "images/knight/legs/legs_default.png")
+            .add('knight-legs-armor1', "images/knight/legs/legs_armor1.png")
 
             // Add treasures images
             .add('treasure-base', "images/treasures/treasure_base.png")
@@ -241,9 +241,9 @@ export class GameController {
             .add('orc-head-armor2', "images/orc/head/head_armor2.png")
 
             // Manticore 
-            .add('manticore-legs-default', "images/manticore/legs/manticore_legs_default.png")
-            .add('manticore-body-default', "images/manticore/body/manticore_body_default.png")
-            .add('manticore-head-default', "images/manticore/head/manticore_head_default.png")
+            .add('manticore-legs-default', "images/manticore/legs/legs_default.png")
+            .add('manticore-body-default', "images/manticore/body/body_default.png")
+            .add('manticore-head-default', "images/manticore/head/head_default.png")
 
             // Once textures have loaded, fire this method
             .load(() => {

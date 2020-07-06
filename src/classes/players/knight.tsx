@@ -1,10 +1,10 @@
 import * as PIXI from "pixi.js";
-import { PlayerAttributes } from "../types/states";
-import { Stage } from "./game_classes";
+import { PlayerAttributes } from "../../types/states";
+import { Stage } from "../game_classes";
 import { Player } from "./player";
-import { UnitParts, SpriteParts, UnitAttributes } from "../types/types";
-import { Part } from "./part";
-import { Rock, Axe } from "./projectile";
+import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
+import { Part } from "../part";
+import { Rock, Axe } from "../projectile";
 
 
 export class Knight extends Player {
@@ -33,24 +33,24 @@ export class Knight extends Player {
     initTextures(): UnitParts {  
         return {
             body:{
-                armor1: this.loader.resources['knight-body-armor1-standing'].texture,
+                armor1: this.loader.resources['knight-body-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
-                default: this.loader.resources['knight-body-default-standing'].texture,
+                default: this.loader.resources['knight-body-default'].texture,
 
             },
             head: {
-                armor1: this.loader.resources['knight-head-armor1-standing'].texture,
-                armor2: this.loader.resources['knight-head-armor2-standing'].texture,
+                armor1: this.loader.resources['knight-head-armor1'].texture,
+                armor2: this.loader.resources['knight-head-armor2'].texture,
                 armor3: undefined,
-                default: this.loader.resources['knight-head-default-standing'].texture,
+                default: this.loader.resources['knight-head-default'].texture,
          
             },
             legs: {
-                armor1: this.loader.resources['knight-legs-armor1-standing'].texture,
+                armor1: this.loader.resources['knight-legs-armor1'].texture,
                 armor2: undefined,
                 armor3: undefined,
-                default: this.loader.resources['knight-legs-default-standing'].texture,
+                default: this.loader.resources['knight-legs-default'].texture,
 
             }
         }

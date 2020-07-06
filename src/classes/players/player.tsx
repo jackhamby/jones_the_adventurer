@@ -1,13 +1,13 @@
-import { Unit} from "./unit";
-import { Stage } from "./game_classes";
-import { UnitStateNames, UnitPartNames, UnitStatisticNames } from "../types/enums";
-import { UnitAttributes } from "../types/types";
-import { KeyOptions } from "../types/states";
-import { SpritePart } from "./interfaces";
+import { Unit} from "../unit";
+import { Stage } from "../game_classes";
+import { UnitStateNames, UnitPartNames, UnitStatisticNames } from "../../types/enums";
+import { UnitAttributes } from "../../types/types";
+import { KeyOptions } from "../../types/states";
+import { SpritePart } from "../interfaces";
 import * as PIXI from 'pixi.js';
-import { updateStatistic, ControlAction, updateStatistics } from "../state_management/actions/control_actions";
-import { store } from "../state_management/store";
-import { Treasure } from "./treasure";
+import { updateStatistic, ControlAction, updateStatistics } from "../../state_management/actions/control_actions";
+import { store } from "../../state_management/store";
+import { Treasure } from "../treasures/treasure";
 
 
 export class Player extends Unit {
@@ -228,7 +228,8 @@ export class Player extends Unit {
         this.width = this.height;
         this.treasures = [];
         this.currentStage.startingTreasures.forEach((treasure: Treasure) => {
-            Treasure.apply(this, treasure);
+            // Treasure.apply(this, treasure);
+            treasure.apply(this);
         })
 
         this.height = oldWidth;

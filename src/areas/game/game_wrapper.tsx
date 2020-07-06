@@ -10,16 +10,16 @@ import './game_wrapper.css';
 import { setupGame } from '../../state_management/actions/control_actions';
 import { Stage, StageManager } from '../../classes/game_classes';
 import { UnitPartNames, PlayerOptionNames } from '../../types/enums';
-import { Knight } from '../../classes/knight';
-import { Kobold } from '../../classes/kobold';
+import { Knight } from '../../classes/players/knight';
+import { Kobold } from '../../classes/players/kobold';
 import { Viewport } from 'pixi-viewport'
 import { getCanvasDimensions } from '../../helpers/util';
-import { Treasure } from '../../classes/treasure';
-import { Player } from '../../classes/player';
+import { Treasure } from '../../classes/treasures/treasure';
+import { Player } from '../../classes/players/player';
 import { UnitStatistics, UnitAttributes } from '../../types/types';
 import { GameController } from '../../classes/game_controller';
-import { Modal } from '../../components/modal';
-import { DebuggerModal } from '../../components/modals/debugger_modal';
+// import { Modal } from '../../components/modals/modal';
+// import { DebuggerModal } from '../../components/modals/debugger_modal';
 
 export interface GameStateProps {
     character: Character;

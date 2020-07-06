@@ -3,11 +3,11 @@
 
 import { ControlAction, UPDATE_SCREEN, UPDATE_CHARACTER, CHANGE_STAGE, SETUP_GAME, APPLY_TREASURE, UPDATE_STATS, UPDATE_STATS_FULL} from '../actions/control_actions';
 import { AppState, ControlState, PlayerState, Character, KeyOptions, GameState } from '../../types/states';
-import { Treasure } from '../../classes/treasure';
+import { Treasure } from '../../classes/treasures/treasure';
 import { PlayerOptions } from '../../types/types';
-import { Kobold } from '../../classes/kobold';
-import { Knight } from '../../classes/knight';
-import { Orc } from '../../classes/orc';
+import { Kobold } from '../../classes/players/kobold';
+import { Knight } from '../../classes/players/knight';
+import { Orc } from '../../classes/players/orc';
 
 export const PLAYER_OPTIONS = {
     knight: Knight,
@@ -40,9 +40,8 @@ export const controlReducer = (state: any, action: ControlAction): any => {
 
         case APPLY_TREASURE:
             const player = typedState.gameState.currentStage.player;
-            Treasure.apply(player, action.payload.treasure);
-
-            
+            // Treasure.apply(player, action.payload.treasure);
+            action.payload.treasure.apply(player);
             return {
                 ...typedState,
                 gameState: {

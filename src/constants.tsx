@@ -1,7 +1,7 @@
 
 import { UnitAttributes, PlayerOptions } from './types/types';
-import { Knight } from './classes/knight';
-import { Kobold } from './classes/kobold';
+import { Knight } from './classes/players/knight';
+import { Kobold } from './classes/players/kobold';
 
 const SCREEN_HEIGHT = window.screen.width * .4;
 const SCREEN_WIDTH = window.screen.height;

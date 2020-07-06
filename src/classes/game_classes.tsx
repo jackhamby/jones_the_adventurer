@@ -10,18 +10,25 @@ import { act } from 'react-dom/test-utils';
 // import { Player } from './player';
 import { getCanvasDimensions } from '../helpers/util';
 import { Sprite } from './sprite';
-import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3, ArrowTreasure, OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1 } from './treasure';
+// import { Treasure, Armor1Helmet, Armor1Body, Armor1Legs, Armor2Helmet, KoboldArmor1, SmallCoins, KoboldArmorLegs1, KoboldBodyArmor1, KoboldHeadArmor2, KoboldBodyArmor2, KoboldHeadArmor3, ArrowTreasure, OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1 } from './treasure';
 import { SpritePart } from './interfaces';
 import { Viewport } from 'pixi-viewport';
 import { Projectile } from './projectile';
-import { Player } from './player';
+import { Player } from './players/player';
 import { Unit } from './unit';
 import { UnitAttributes } from '../types/types';
-import { Knight } from './knight';
-import { Kobold } from './kobold';
+import { Knight } from './players/knight';
+import { Kobold } from './players/kobold';
 import { FloatingText } from './floating_text';
 import { Timer } from './timer';
-import { Orc } from './orc';
+import { Orc } from './players/orc';
+
+// New treasure stuff
+import { Treasure } from './treasures/treasure';
+import { SmallCoins } from './treasures/coin_treasure';
+import { ArrowTreasure } from './treasures/projectile_treasure';
+import { KnightHeadArmor1 } from './armor';
+import { KnightHeadArmor1Treasure, KnightHeadArmor2Treasure } from './treasures/armor_treasure';
 
 
 export interface Container {
@@ -129,10 +136,9 @@ export class StageManager {
         const affectedBodyPart = UnitPartNames.HEAD;
         const newArmorType = UnitArmorNames.ARMOR2;
         const newTexture = armoredKobold.textures[affectedBodyPart][newArmorType];
-        const spritePart = armoredKobold.spriteParts[affectedBodyPart].sprite;
-        spritePart.texture = newTexture;
-        armoredKobold.currentArmorSet[affectedBodyPart] = newArmorType;
-
+        // const spritePart = armoredKobold.spriteParts[affectedBodyPart].sprite;
+        // spritePart.texture = newTexture;
+        // armoredKobold.currentArmorSet[affectedBodyPart] = newArmorType;
 
         stage.enemies.push(armoredKobold);
         stage.enemies.push(new Manticore(this.loader, stage, {} as UnitAttributes, 462, 540), new Man(this.loader, stage, {} as UnitAttributes, 127, 427.5), new Man(this.loader, stage, {} as UnitAttributes, 403, 427.5));
@@ -167,10 +173,10 @@ export class StageManager {
         const genericTreasures: Treasure[] = [];
         switch(stage){
             case(1):
-                genericTreasures.push(new SmallCoins(this.loader, 536, 805, 4));
+                genericTreasures.push(new SmallCoins(this.loader, 536, 805));
                 break;
             case(2):
-                genericTreasures.push(new SmallCoins(this.loader, 1214, 517.5, 4));
+                genericTreasures.push(new SmallCoins(this.loader, 1214, 517.5));
                 break;
             default:
                 break;
@@ -190,7 +196,6 @@ export class StageManager {
 
         const projectileTreasureX = 1071;
         const projectileTreasureY = 837;
-
         treasures.push(new ArrowTreasure(this.loader, projectileTreasureX, projectileTreasureY));
         treasures.push(new treasure1Type(this.loader, lowerTreasureX, lowerTreasureY));
         treasures.push(new treasure2Type(this.loader, upperTreasureX, upperTreasureY));
@@ -207,8 +212,8 @@ export class StageManager {
         const treasure2X = 1265;
         const treasure2Y = 652;
 
-        treasures.push(new treasure1Type(this.loader, treasure1X, treasure1Y))
-        treasures.push(new treasure2Type(this.loader, treasure2X, treasure2Y))
+        // treasures.push(new treasure1Type(this.loader, treasure1X, treasure1Y))
+        // treasures.push(new treasure2Type(this.loader, treasure2X, treasure2Y))
 
         return treasures;
     }
@@ -220,13 +225,14 @@ export class StageManager {
 
         switch(stage){
             case(1):
-                treasureOptions = [Armor2Helmet, Armor1Helmet, Armor1Legs, Armor1Body];
+                // treasureOptions = [Armor2Helmet, Armor1Helmet, Armor1Legs, Armor1Body];
+                treasureOptions = [KnightHeadArmor1Treasure, KnightHeadArmor2Treasure]
                 randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 knightTreasures.push(...this.generateStage1Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):   
-                treasureOptions = [Armor2Helmet, Armor1Helmet, Armor1Legs, Armor1Body];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                // treasureOptions = [Armor2Helmet, Armor1Helmet, Armor1Legs, Armor1Body];
+                // randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 knightTreasures.push(...this.generateStage2Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default:
@@ -242,13 +248,13 @@ export class StageManager {
         let randomTreasureTypes = [] as typeof Treasure[]
         switch(stage){
             case(1):
-                treasureOptions = [KoboldArmor1, KoboldArmorLegs1];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                // treasureOptions = [KoboldArmor1, KoboldArmorLegs1];
+                // randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 koboldTreasures.push(...this.generateStage1Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):
-                treasureOptions = [KoboldBodyArmor1, KoboldHeadArmor2, KoboldHeadArmor3, KoboldBodyArmor2];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                // treasureOptions = [KoboldBodyArmor1, KoboldHeadArmor2, KoboldHeadArmor3, KoboldBodyArmor2];
+                // randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 koboldTreasures.push(...this.generateStage2Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default: 
@@ -265,13 +271,13 @@ export class StageManager {
         let randomTreasureTypes = [] as typeof Treasure[]
         switch(stage){
             case(1):
-                treasureOptions = [OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                // treasureOptions = [OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
+                // randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 orcTreasures.push(...this.generateStage1Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):
-                treasureOptions = [OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                // treasureOptions = [OrcHeadArmor2, OrcHeadArmor1, OrcBodyArmor1, OrcLegsArmor1];
+                // randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
                 orcTreasures.push(...this.generateStage2Treasures(randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default: 

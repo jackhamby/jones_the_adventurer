@@ -2,7 +2,7 @@
 import React from 'react';
 import './character_option_button.css';
 import { PlayerOptionNames } from '../../types/enums';
-import { Player } from '../../classes/player';
+import { Player } from '../../classes/players/player';
 
 
 export interface CharacterOptionButtonProps {

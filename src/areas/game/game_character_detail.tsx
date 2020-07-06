@@ -4,6 +4,7 @@ import { Stage } from '../../classes/game_classes';
 import { CharacterIcon } from './character_icon';
 import './game_character_detail.css';
 import { TreasureDetail } from './treasure_detail';
+import { ArmorSelectModal } from '../../components/modals/armor_select_modal';
 export interface GameCharacterDetailProps {
     stage: Stage;
 }
@@ -67,9 +68,11 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         
                     </div>
                     <div className="col-5 h-100" style={{overflow: "scroll"}}>
+                        <div>
+                            <ArmorSelectModal player={this.props.stage.player}/>
+                        </div>
                          treasures:   
                         <div className="row" style={{overflow: "scroll"}}>
-                            {/* {this.props.stage.player.treasures ? this.props.stage.player.treasures.length : 0}  */}
                             {this.props.stage.player.treasures.map(treasure => <TreasureDetail treasure={treasure}/>)}
                         </div>
                        

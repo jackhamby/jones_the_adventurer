@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Modal } from '../modal';
+import { Modal } from './modal';
 import { GameController } from '../../classes/game_controller';
 
 interface DebuggerModalProps {
@@ -42,12 +42,23 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.restoreAllHp();
         this.completeImmunity();
         this.infiniteJumps();
+        this.veryFast();
+        // this.quickAttacks();
         this.props.control.player.attributes.attack = 99999999999999;
         this.props.control.player.currentAttributes.attack = 99999999999999;
         this.setState({closeModal: true})
     }
 
 
+    veryFast = () => {
+        this.props.control.player.attributes.speed = 7;
+        this.props.control.player.currentAttributes.speed = 7;
+    }
+
+    // quickAttacks = () => {
+    //     this.props.control.player.attributes.attack_speed = 0;
+    //     this.props.control.player.currentAttributes.attack_speed = 0;
+    // }
 
     restoreAllHp = () => {
         this.props.control.player.currentAttributes.health = this.props.control.player.attributes.health;

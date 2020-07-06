@@ -2,7 +2,7 @@
 
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
-import { Player } from '../../classes/player';
+import { Player } from '../../classes/players/player';
 import { UnitPartNames, UnitStateNames } from '../../types/enums';
 
 
