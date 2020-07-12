@@ -68,7 +68,7 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     render(){
         return (
             <>
-                {/* <button style={{position: "absolute", top: 0, right: -1}} onClick={this.testOnClick}>TEST BUTTON</button> */}
+            {/* TODO clean up this css */}
                 <button style={{position:"absolute", top: '13%', left: '15%' }} onClick={this.toggleMusic}><img id={"speakerImage"} src={"images/audio/audioOff.png"}/></button>
                 <audio src={"audio/music/game.mp3"} id={"music"} loop/>
                 <div className="game-container" id="canvas-container" ref={this.canvasRef}>
@@ -82,7 +82,6 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
 const mapStateToProps = (state: AppState): GameDisplayStateProps => {
     return {
         pixiApplication: state.gameState.pixiApplication,
-        // keyboard: state.controlState.currentKeys,
         currentStage: state.gameState.currentStage,
         isReady: state.gameState.gameReady,
     } 

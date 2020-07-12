@@ -33,13 +33,6 @@ export class Armor {
         this.attributes.forEach((attributeUpdate: AttributeUpdate) => {
             player.attributes[attributeUpdate.attribute] += attributeUpdate.amount;
         });
-        // const affectedBodyPart = this.part;
-        // const newArmorType = this.type;
-        // const newTexture = player.textures[affectedBodyPart][newArmorType];
-        // if (player.sprit){
-        //     // player.spriteParts[this.part]
-        //     player
-        // }
         const spritePart = player.spriteParts[this.part].sprite;
         spritePart.texture = this.texture;
 
@@ -73,6 +66,7 @@ export class KnightHeadArmor1 extends Armor {
         super();
         this.loader = loader;
         this.name = "iron helmet";
+        this.type = UnitArmorNames.ARMOR1;
         this.texture = this.loader.resources['knight-head-armor1'].texture;
         this.attributes = [
             {
@@ -92,6 +86,8 @@ export class KnightHeadArmor2 extends Armor {
         super();
         this.loader = loader;
         this.name = "a hat";
+        this.type = UnitArmorNames.ARMOR2;
+
         this.texture = this.loader.resources['knight-head-armor2'].texture;
         this.attributes = [
             {

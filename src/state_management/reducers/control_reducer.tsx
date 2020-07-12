@@ -48,7 +48,6 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     ...typedState.gameState
                 }
             };
-
         case UPDATE_SCREEN:
             return { 
                 ...typedState,
@@ -75,6 +74,8 @@ export const controlReducer = (state: any, action: ControlAction): any => {
                     currentStage: action.payload.stage
                 } as GameState
             } 
+
+        
         case SETUP_GAME:
             
             return {

@@ -73,6 +73,7 @@ export class GameWrapper extends React.Component<GameProps, {}> {
 
 
 export const mapStateToProps = (state: AppState): GameStateProps => {
+    debugger;
     return {
         character: state.playerState.character,
         pixiApplication: state.gameState.pixiApplication,

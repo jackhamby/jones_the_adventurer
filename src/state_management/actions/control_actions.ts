@@ -3,6 +3,7 @@ import { Stage } from "../../classes/game_classes";
 import { Effect } from "../../classes/interfaces";
 import { Treasure } from "../../classes/treasures/treasure";
 import { UnitStatistics } from "../../types/types";
+import { Armor } from "../../classes/armor";
 
 export const UPDATE_SCREEN: string = 'UPDATE_SCREEN'
 export const UPDATE_CHARACTER: string = 'UPDATE_CHARACTER';
@@ -12,7 +13,12 @@ export const APPLY_TREASURE: string = "APPLY_TREASURE";
 export const UPDATE_STATS: string = "UPDATE_STATISTICS";
 export const UPDATE_STATS_FULL: string = "UPDATE_STATISTICS_FULL";
 
+export const APPLY_ARMOR: string = "APPLY_ARMOR";
 
+
+interface ApplyArmorPayload {
+    armor: Armor;
+}
 
 interface UpdateStatisticsFullPayload {
     stats: UnitStatistics;
@@ -47,6 +53,10 @@ interface ChangeCharacterPayload {
 
 
 
+interface ApplyArmorAction {
+    type: typeof APPLY_ARMOR;
+    payload: ApplyArmorPayload;
+}
 
 interface UpdateStatisticsFullAction {
     type: typeof UPDATE_STATS_FULL,
@@ -83,6 +93,7 @@ interface UpdateScreenAction {
 }
 
 
+// export const 
 
 export  const updateStatistics = (stats: UnitStatistics): UpdateStatisticsFullAction => {
     return {
@@ -111,6 +122,9 @@ export const applyTreasure = (treasure: Treasure): ApplyTreasureAction => {
         }
     } 
 }
+
+
+// export const applyArmor = (armor: Armor): 
 
 export const setupGame = (stage: Stage) => {
     return {
