@@ -1,29 +1,11 @@
 import React, { RefObject, createRef, Dispatch } from 'react';
 import * as PIXI from 'pixi.js';
 import { KeyOptions, AppState } from '../../types/states';
-// import { createPlayer } from '../../state_management/actions/control_actions';
 import './game_display.css'
 import { Stage } from '../../classes/stages/stage';
 import { StageManager } from '../../classes/stages/stage_manager';
 import { Player } from '../../classes/players/player';
-// import { store } from '../../state_management/store';
-// import { changeStage } from '../../state_management/actions/control_actions';
-// import { keyboard } from '../../components/control';
 
-// export interface GameDisplayStateProps { 
-//     pixiApplication: PIXI.Application;
-//     // keyboard: KeyOptions;
-//     currentStage: Stage;
-//     isReady: boolean;
-// }
-
-// export interface GameDisplayOwnProps {
-//     stageManager: StageManager;
-// }
-
-// export interface GameDisplayDispatchProps {
-//     changeStage: (stage: Stage) => void; 
-// }
 
 interface GameDisplayState {
     // isStarted: boolean; 
@@ -32,10 +14,6 @@ interface GameDisplayState {
 
  interface GameDisplayProps {
     pixiApplication: PIXI.Application;
-    // selectedPlayer: typeof Player;
-    // keyboard: KeyOptions;
-    // currentStage: Stage;
-    // isReady: boolean;
  }
 
 

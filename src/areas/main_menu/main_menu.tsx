@@ -1,14 +1,10 @@
-// export const x = 2;
-
 import React from 'react';
 import { ScreenOptions } from '../../types/enums';
 
-// export interface MainMenuStateProps { };
 export interface MainMenuProps {
     updateScreen: (screenName: ScreenOptions) => void;
 }
 
-// export type MainMenuProps = MainMenuDispatchProps & MainMenuDispatchProps;
 
 export class MainMenu extends React.Component<MainMenuProps, {}> {
 
@@ -61,17 +57,3 @@ export class MainMenu extends React.Component<MainMenuProps, {}> {
         )
     }
 }
-
-// export const mapStateToProps = (state: AppState): MainMenuStateProps => {
-//     return {} as MainMenuStateProps;
-// }
-
-// export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): MainMenuDispatchProps => {
-//     return { 
-//         updateScreen: (nextScreen: ScreenOptions) => {
-//             dispatch(updateScreen(nextScreen))
-//         }
-//     } as MainMenuDispatchProps;
-// }
-
-// export const ConnectedMainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenuWrapper);

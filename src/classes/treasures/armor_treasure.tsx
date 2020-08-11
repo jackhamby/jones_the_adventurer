@@ -66,6 +66,7 @@ export class KnightHeadArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KnightHeadArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -80,6 +81,7 @@ export class KnightHeadArmor2Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KnightHeadArmor2(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -95,6 +97,7 @@ export class KnightBodyArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KnightBodyArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -109,6 +112,7 @@ export class KnightLegsArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KnightLegsArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -126,6 +130,7 @@ export class KoboldHeadArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldHeadArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -140,6 +145,7 @@ export class KoboldHeadArmor2Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldHeadArmor2(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -154,6 +160,7 @@ export class KoboldHeadArmor3Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldHeadArmor3(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -168,6 +175,7 @@ export class KoboldBodyArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldBodyArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -182,6 +190,7 @@ export class KoboldBodyArmor2Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldBodyArmor2(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -196,6 +205,7 @@ export class KoboldLegsArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new KoboldLegsArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -214,6 +224,7 @@ export class OrcHeadArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new OrcHeadArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -228,6 +239,7 @@ export class OrcHeadArmor2Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new OrcHeadArmor2(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -242,6 +254,7 @@ export class OrcLegsArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new OrcLegsArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }
@@ -256,6 +269,7 @@ export class OrcBodyArmor1Treasure extends ArmorTreasure {
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
         this.armor = new OrcBodyArmor1(loader);
+        this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
     }

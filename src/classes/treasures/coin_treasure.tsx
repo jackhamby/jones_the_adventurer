@@ -30,6 +30,7 @@ export class SmallCoins extends CoinTreasure {
         this.amount = Math.ceil(Math.random() * 10);
         this.initTextures();
         this.initSpriteParts();
+        this.name = "small coins"
     }
 
     initTextures(){

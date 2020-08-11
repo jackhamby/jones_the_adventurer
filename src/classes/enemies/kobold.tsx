@@ -27,13 +27,6 @@ export class Kobold extends Enemy {
         this.spriteParts = this.createSpriteParts();
         this.facingRight = true;
         this.projectile = Arrow;
-        // Object.keys(this.spriteParts).forEach((key) => {
-        //     const playerPartName = key as UnitPartNames;
-        //     const sprite = this.spriteParts[playerPartName].sprite;
-        //     sprite.anchor.x = 1;
-        //     sprite.scale.x = -1;
-            
-        // })
     }
 
     initializeTextures(): UnitParts {

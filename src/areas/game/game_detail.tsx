@@ -5,7 +5,6 @@ import * as PIXI from 'pixi.js';
 import './game_detail.css'
 import { UnitStatistics } from '../../types/types';
 import { UnitStatisticNames, UnitAttributeNames } from '../../types/enums';
-// import { DebuggerModal } from '../../components/modals/debugger_modal';
 import { GameController } from '../../classes/game_controller';
 import { Stage } from '../../classes/stages/stage';
 import { Player } from '../../classes/players/player';
@@ -15,7 +14,7 @@ export interface GameDetailProps {
     player?: Player;
     // stage: Stage;
     // statistics: UnitStatistics;
-    // gameController: GameController;
+    gameController: GameController;
 
 }
 
@@ -30,7 +29,6 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
         Object.keys(this.props.player.statistics).forEach((statisticName: string) => {
             const test = statisticName as UnitStatisticNames
             const stat = this.props.player?.statistics[statisticName as UnitStatisticNames];
-            // const test = UnitStatisticNames["PROJECTILES_FIRED"];
             const row = (<tr>
                 <td>
                     {test}:
@@ -66,7 +64,7 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
                         </div>
                     </div>
                     <div className="ml-3 mt-5">
-                        {/* <DebuggerModal control={this.props.gameController}/> */}
+                        <DebuggerModal control={this.props.gameController}/>
                     </div>
                 </>
             )

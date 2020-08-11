@@ -13,18 +13,16 @@ export class Player extends Unit {
     _id: number;
     // game_wrapper callbacks
     // updatePlayer: Function;
-    updateStatistics: Function;
+    // updateStatistics: Function;
+    updateView: Function;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
         super(loader, currentStage, initialAttributes, width, height, x, y);
         this.currentGold = 0;
         this._id = 0;
-        this.updateStatistics = () => {
-            console.warn('update statistics not defined for player')
+        this.updateView = () => {
+            console.warn('update view is not defined')
         }
-        // this.updatePlayer = () => {
-        //     console.warn(`update statistics not defined for Player`)
-        // };
     };
 
     update(keyboard: KeyOptions){
@@ -54,34 +52,21 @@ export class Player extends Unit {
     dealDamage(target: Unit): number{
         // deal damage via parent class
         const damageDealt = super.dealDamage(target);
-
-        // update player statistics
-        // const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
-        // store.dispatch(updateStatsAction as ControlAction);
-        // if (target.state === UnitStateNames.DEAD){
-        //     this.statistics.damage += damageDealt;
-        //     const updateStatsAction = updateStatistics(this.statistics);
-        //     store.dispatch(updateStatsAction as ControlAction);
-        // }
         this.statistics[UnitStatisticNames.DAMAGE_DEALT] = this.statistics.damage + damageDealt;
-        // this.updatePlayer();
-        this.updateStatistics();
-        // this.updateStatistics(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
+        this.updateView();
+
         return damageDealt;
     }
 
     pickupTreasure(treasure: Treasure): void {
         treasure.apply(this);
-        // this.updatePlayer();
+        this.updateView();
     }
 
     fireProjectile(xVelocity: number, yVelocity: number){
         super.fireProjectile(xVelocity, yVelocity);
         this.statistics.projectiles += 1;
-        // this.updatePlayer();
-
-        // const updateStatsAction = updateStatistics(this.statistics);
-        // store.dispatch(updateStatsAction as ControlAction);
+        this.updateView();
     }
 
     tryAttack(){

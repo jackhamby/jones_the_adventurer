@@ -6,29 +6,14 @@ import { PlayerSelect } from './player_select';
 import { PlayerDisplay } from './player_display';
 import { Player } from '../../classes/players/player';
 
-
-// interface PlayerSelectWrapperState {
-//     selectedPlayer: typeof Player;
-// }
-
 interface PlayerSelectWrapperProps {
     updateScreen: (screenName: ScreenOptions) => void;
     changePlayer: (player: typeof Player) => void;
-    // changeCharacter: (character: PlayerOptionNames) => void;
     selectedPlayer: typeof Player;
 }
 
 
 export class PlayerSelectWrapper extends React.Component<PlayerSelectWrapperProps, {}> {
-
-
-    constructor(props: PlayerSelectWrapperProps){
-        super(props);
-        // this.state = {
-        //     selectedPlayer: this.props.selectedPlayer,
-        // };
-    }
-
     render(){
         return(
             <div className="container" style={{height: "100%"}}>
