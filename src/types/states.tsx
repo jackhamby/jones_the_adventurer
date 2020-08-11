@@ -1,9 +1,11 @@
 import * as PIXI from 'pixi.js';
 import { ScreenOptions, Attributes, PlayerOptionNames } from '../types/enums';
-import { Stage } from '../classes/game_classes';
+// import { Stage } from '../classes/game_classes';
 import { Platform } from '../classes/platform';
-import { Enemy } from '../classes/enemy';
-import { UnitAttributes } from './types';
+import { Player } from '../classes/players/player';
+import { Stage } from '../classes/stages/stage';
+// import { Enemy } from '../classes/enemy';
+// import { UnitAttributes } from './types';
 
 export interface AppState {
     controlState: ControlState;
@@ -12,7 +14,7 @@ export interface AppState {
 }
 
 export interface PlayerState {
-    character: Character;
+    player: typeof Player;
 }
 
 export interface GameState {
@@ -34,14 +36,14 @@ export interface ControlState {
 export interface IStage {
     name: string;
     level: number;
-    enemies: Enemy[];
+    // enemies: Enemy[];
     platforms: Platform[];
 }
 
-export interface Character {
-    name: PlayerOptionNames;
-    attributes: UnitAttributes;
-}
+// export interface Character {
+//     name: PlayerOptionNames;
+//     attributes: UnitAttributes;
+// }
 
 export enum PlayerAttributeNames {
     HEALTH = "health",

@@ -2,8 +2,6 @@ import * as PIXI from 'pixi.js';
 import { Treasure } from './treasure';
 import { Player } from '../players/player';
 
-
-
 export class CoinTreasure extends Treasure {
 
     amount: number;
@@ -14,8 +12,8 @@ export class CoinTreasure extends Treasure {
     }
 
     apply(player: Player){
+        super.apply(player)
         player.currentGold += this.amount;
-        player.treasures = [...player.treasures, this];
     }
 
     initTextures(){
@@ -29,7 +27,7 @@ export class SmallCoins extends CoinTreasure {
 
     constructor(loader: PIXI.Loader, x: number, y: number){
         super(loader, x, y);
-        this.amount = Math.floor(Math.random() * 10);
+        this.amount = Math.ceil(Math.random() * 10);
         this.initTextures();
         this.initSpriteParts();
     }

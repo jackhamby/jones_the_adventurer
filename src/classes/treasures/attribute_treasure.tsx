@@ -1,23 +1,25 @@
-import * as PIXI from 'pixi.js';
-import { Treasure } from './treasure';
-import { Player } from '../players/player';
+
+export const x = 2;
+// import * as PIXI from 'pixi.js';
+// import { Treasure } from './treasure';
+// import { Player } from '../players/player';
 
 
 
-export class AttributeTreasure extends Treasure {
+// export class AttributeTreasure extends Treasure {
 
-    // amount: number;
+//     // amount: number;
 
-    constructor(loader: PIXI.Loader, x: number, y: number){
-        super(loader, x, y);
+//     constructor(loader: PIXI.Loader, x: number, y: number){
+//         super(loader, x, y);
 
-        // this.amount = 0;
-    }
+//         // this.amount = 0;
+//     }
 
-    apply(player: Player){
-        // player.currentGold += this.amount;
+//     apply(player: Player){
+//         // player.currentGold += this.amount;
 
         
-    }
+//     }
 
-}
+// }

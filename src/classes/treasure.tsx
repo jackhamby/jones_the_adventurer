@@ -1,6 +1,5 @@
 
 export const fuck = "fuck";
-
 // import * as PIXI from 'pixi.js';
 // import { PlayerAttributeNames } from '../types/states';
 // import { Sprite } from './sprite';

@@ -1,3 +1,4 @@
+
 import { PlayerAttributeNames } from "../types/states";
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames, ProjectileNames } from "../types/enums";
 import { Projectile } from "./projectile";
@@ -21,7 +22,13 @@ export interface Effect {
     projectileEffect?: {
         projectileType: typeof Projectile,
     }
+}
 
+export interface Container {
+    x: number;
+    y: number;
+    width: number;
+    height: number;
 }
 
 

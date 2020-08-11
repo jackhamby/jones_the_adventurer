@@ -1,33 +1,71 @@
 
-import { UnitAttributes, PlayerOptions } from './types/types';
-import { Knight } from './classes/players/knight';
-import { Kobold } from './classes/players/kobold';
+// import { UnitAttributes, PlayerOptions } from './types/types';
+// import { Knight } from './classes/players/knight';
+// import { Kobold } from './classes/players/kobold';
 
-const SCREEN_HEIGHT = window.screen.width * .4;
-const SCREEN_WIDTH = window.screen.height;
+import { UnitAttributes } from "./types";
 
-const PLAYER_STARTING_X = 100;
-const PLAYER_STARTING_Y = 100;
+import { TestKnight } from "../classes/players/test_knight";
+
+import { Player } from "../classes/players/player";
+
+import { Orc } from "../classes/players/orc";
+import { Kobold } from "../classes/players/kobold";
+import { Knight } from "../classes/players/knight";
+
+
+// import { Knight } from "../classes/players/knight";
+// import { Kobold } from "../classes/players/kobold";
+// import { Player } from "../classes/players/player";
+
+export const SCREEN_HEIGHT = window.screen.width * .4;
+export const SCREEN_WIDTH = window.screen.height;
+
+export const PLAYER_STARTING_X = 120;
+export const PLAYER_STARTING_Y = 120;
 
 // const CHARACTER_ATTRIBUTES = {} as any;
 
-const SPRITE_DECAY = 1000;
-const SPRITE_DECAY_FADE_TIME =  150;
+export const SPRITE_DECAY = 1000;
+export const SPRITE_DECAY_FADE_TIME =  150;
 
-const TEXT_FADE_TIME = 100;
+export const TEXT_FADE_TIME = 100;
 
-const MAX_ATTRIBUTES = {
-    health: 140,
-    speed: 15,
-    armor: 10,
-    jump: 20,
-    attack: 20,
-    attack_speed: 15,
-    jump_height: 50,
-    jump_count: 6,
+export const MAX_ATTRIBUTES = {
+    HEALTH: 140,
+    SPEED: 15,
+    ARMOR: 10,
+    ATTACK: 20,
+    ATTACK_SPEED: 15,
+    JUMP_HEIGHT: 50,
+    JUMP_COUNT: 6,
 } as UnitAttributes;
 
-const STAGE1_LAYOUT = `80 45
+// console.log('\n');
+// console.log('\n');
+// console.log(Player)
+// console.log('\n');
+// export class Kobold2 extends Player {
+
+// }
+
+
+// export const PLAYER_OPTIONS = {
+//     // "orc" : {} as any,
+//     // orc: Orc,
+//     knight: {} as any,
+//     // kobold: {} as any,
+//     // kobold: Kobold,
+
+// } as PlayerOptions;
+
+
+// export const TEST_PLAYER_OPTIONS = {
+//     "test_knight" : TestKnight
+// }
+
+
+export const STAGE1_LAYOUT = `80 45
 DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD
 D000000000000000000000000000000000000000D000000000000000000000000000000000000000
 D00000000000000000000000000000000000000DD000000000000000000000000000000000000000
@@ -75,7 +113,7 @@ D000000000000GG0000000000GG000000000000GGD00000000000000000000000000000000000000
 D0000000000000000000000000000000000GG00DD000000000000000000000000000000000000000
 `
 
-const STAGE2_LAYOUT = `80 45
+export const STAGE2_LAYOUT = `80 45
 00000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000
@@ -123,18 +161,18 @@ const STAGE2_LAYOUT = `80 45
 00000000000000000000000000000000000000000000000000000000000000000000000000000000
 `
 
-export { 
-    MAX_ATTRIBUTES,
-    STAGE1_LAYOUT,
-    STAGE2_LAYOUT,
-    SCREEN_HEIGHT,
-    SCREEN_WIDTH,
-    SPRITE_DECAY,
-    SPRITE_DECAY_FADE_TIME,
-    TEXT_FADE_TIME,
-    PLAYER_STARTING_X,
-    PLAYER_STARTING_Y,
-}
+// export { 
+//     // MAX_ATTRIBUTES,
+//     STAGE1_LAYOUT,
+//     STAGE2_LAYOUT,
+//     SCREEN_HEIGHT,
+//     SCREEN_WIDTH,
+//     SPRITE_DECAY,
+//     SPRITE_DECAY_FADE_TIME,
+//     TEXT_FADE_TIME,
+//     PLAYER_STARTING_X,
+//     PLAYER_STARTING_Y,
+// }
 
 
 

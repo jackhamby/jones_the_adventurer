@@ -1,45 +1,49 @@
 import React, { RefObject, createRef, Dispatch } from 'react';
 import * as PIXI from 'pixi.js';
-import { KeyOptions, Character, AppState } from '../../types/states';
-import { AnyAction } from 'redux';
-import { connect } from 'react-redux';
+import { KeyOptions, AppState } from '../../types/states';
 // import { createPlayer } from '../../state_management/actions/control_actions';
-import { Stage, StageManager } from '../../classes/game_classes';
 import './game_display.css'
-import { store } from '../../state_management/store';
-import { changeStage } from '../../state_management/actions/control_actions';
-import { keyboard } from '../../components/control';
+import { Stage } from '../../classes/stages/stage';
+import { StageManager } from '../../classes/stages/stage_manager';
+import { Player } from '../../classes/players/player';
+// import { store } from '../../state_management/store';
+// import { changeStage } from '../../state_management/actions/control_actions';
+// import { keyboard } from '../../components/control';
 
-export interface GameDisplayStateProps { 
+// export interface GameDisplayStateProps { 
+//     pixiApplication: PIXI.Application;
+//     // keyboard: KeyOptions;
+//     currentStage: Stage;
+//     isReady: boolean;
+// }
+
+// export interface GameDisplayOwnProps {
+//     stageManager: StageManager;
+// }
+
+// export interface GameDisplayDispatchProps {
+//     changeStage: (stage: Stage) => void; 
+// }
+
+interface GameDisplayState {
+    // isStarted: boolean; 
+    // keepPlaying: boolean;
+ }
+
+ interface GameDisplayProps {
     pixiApplication: PIXI.Application;
+    // selectedPlayer: typeof Player;
     // keyboard: KeyOptions;
-    currentStage: Stage;
-    isReady: boolean;
-}
-
-export interface GameDisplayOwnProps {
-    stageManager: StageManager;
-}
-
-export interface GameDisplayDispatchProps {
-    changeStage: (stage: Stage) => void; 
-}
-
-export interface GameDisplayState {
-    isStarted: boolean; 
-    keepPlaying: boolean;
+    // currentStage: Stage;
+    // isReady: boolean;
  }
 
 
 
 
-export type GameDisplayProps = GameDisplayDispatchProps & GameDisplayStateProps & GameDisplayOwnProps;
-
 export class GameDisplay extends React.Component<GameDisplayProps, GameDisplayState> {
 
     private canvasRef = createRef<HTMLDivElement>();
-
-
 
     toggleMusic(){
         const music = document.getElementById("music") as HTMLAudioElement;
@@ -60,11 +64,10 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         canvasHtmlElement?.appendChild(this.props.pixiApplication.view);
         const containerHeight = canvasHtmlElement ? canvasHtmlElement.clientHeight : 1;
         const containerWidth = canvasHtmlElement ? canvasHtmlElement.clientWidth : 1;
-        this.props.pixiApplication.renderer.resize(containerWidth, containerHeight);
-        this.setState({isStarted: false, keepPlaying: false})
-        
+        this.props.pixiApplication.renderer.resize(containerWidth, containerHeight);        
     }
 
+ 
     render(){
         return (
             <>
@@ -79,23 +82,23 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
     }
 } 
 
-const mapStateToProps = (state: AppState): GameDisplayStateProps => {
-    return {
-        pixiApplication: state.gameState.pixiApplication,
-        currentStage: state.gameState.currentStage,
-        isReady: state.gameState.gameReady,
-    } 
-}
+// const mapStateToProps = (state: AppState): GameDisplayStateProps => {
+//     return {
+//         pixiApplication: state.gameState.pixiApplication,
+//         currentStage: state.gameState.currentStage,
+//         isReady: state.gameState.gameReady,
+//     } 
+// }
 
-const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
-    return {
-        changeStage: (stage: Stage) => { 
-            dispatch(changeStage(stage));
-        }
-    }
-}
+// const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
+//     return {
+//         changeStage: (stage: Stage) => { 
+//             dispatch(changeStage(stage));
+//         }
+//     }
+// }
 
 
-export const ConnectedGameDisplay = connect(mapStateToProps, mapDispatchToProps)(GameDisplay);
+// export const ConnectedGameDisplay = connect(mapStateToProps, mapDispatchToProps)(GameDisplay);
 
 

@@ -1,18 +1,16 @@
-import React, { Dispatch } from 'react';
-import { AppState } from '../../types/states';
-import { AnyAction } from 'redux';
-import { updateScreen } from '../../state_management/actions/control_actions';
-import { connect } from 'react-redux';
+// export const x = 2;
+
+import React from 'react';
 import { ScreenOptions } from '../../types/enums';
 
-export interface MainMenuStateProps { };
-export interface MainMenuDispatchProps {
+// export interface MainMenuStateProps { };
+export interface MainMenuProps {
     updateScreen: (screenName: ScreenOptions) => void;
 }
 
-export type MainMenuProps = MainMenuDispatchProps & MainMenuDispatchProps;
+// export type MainMenuProps = MainMenuDispatchProps & MainMenuDispatchProps;
 
-export class MainMenuWrapper extends React.Component<MainMenuProps, {}> {
+export class MainMenu extends React.Component<MainMenuProps, {}> {
 
     render(){
         let x: number = 3;
@@ -64,16 +62,16 @@ export class MainMenuWrapper extends React.Component<MainMenuProps, {}> {
     }
 }
 
-export const mapStateToProps = (state: AppState): MainMenuStateProps => {
-    return {} as MainMenuStateProps;
-}
+// export const mapStateToProps = (state: AppState): MainMenuStateProps => {
+//     return {} as MainMenuStateProps;
+// }
 
-export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): MainMenuDispatchProps => {
-    return { 
-        updateScreen: (nextScreen: ScreenOptions) => {
-            dispatch(updateScreen(nextScreen))
-        }
-    } as MainMenuDispatchProps;
-}
+// export const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): MainMenuDispatchProps => {
+//     return { 
+//         updateScreen: (nextScreen: ScreenOptions) => {
+//             dispatch(updateScreen(nextScreen))
+//         }
+//     } as MainMenuDispatchProps;
+// }
 
-export const ConnectedMainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenuWrapper);
+// export const ConnectedMainMenu = connect(mapStateToProps, mapDispatchToProps)(MainMenuWrapper);

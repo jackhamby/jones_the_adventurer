@@ -1,33 +1,40 @@
-import * as PIXI from "pixi.js";
-import { Stage } from "../game_classes";
+// export const x = 2;
+
+// import * as PIXI from "pixi.js";
+// import { Stage } from "../game_classes";
 import { Player } from "./player";
-import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
-import { Part } from "../part";
-import { UnitPartNames, UnitStateNames } from "../../types/enums";
+import { Stage } from "../stages/stage";
+import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Rock } from "../projectile";
+import { Part } from "../part";
+// import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
+// import { Part } from "../part";
+// import { UnitPartNames, UnitStateNames } from "../../types/enums";
+// import { Rock } from "../projectile";
 
 
 
 export class Kobold extends Player {
 
+    static baseAttributes = {
+        HEALTH: 80,
+        SPEED: 4,
+        ARMOR: 2,
+        ATTACK: 10,
+        JUMP_HEIGHT: 10,
+        JUMP_COUNT: 3,
+        ATTACK_SPEED: 6
+    } as UnitAttributes;
+
+    static _name: string = "kobold";
+    
     static width = 15;
     static height = 20;
 
-    static baseAttributes = {
-        health: 80,
-        speed: 4,
-        armor: 2,
-        attack: 10,
-        jump_height: 10,
-        jump_count: 3,
-        attack_speed: 6
-    }
-
-    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, x: number, y: number){
-        super(loader, stage, initialAttributes, Kobold.width, Kobold.height, x, y);
+    constructor(loader: PIXI.Loader, stage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
+        super(loader, stage, initialAttributes, width, height, x, y);
         this.textures = this.initializeTextures();
         this.spriteParts = this.initSpriteParts();
-        this.attributes = initialAttributes;
         this.projectile = Rock;
     }
 

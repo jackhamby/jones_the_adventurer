@@ -1,3 +1,4 @@
+// export const x = 2;
 
 
 import * as PIXI from 'pixi.js';

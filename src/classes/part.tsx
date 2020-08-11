@@ -8,8 +8,6 @@ export class Part {
     sprite: PIXI.Sprite;
     parentSprite: Sprite;
 
-
-
     constructor(texture: PIXI.Texture, offSetX: number, offSetY: number, parentSprite: Sprite){
         this.texture = texture;
         this.offSetX = offSetX;
@@ -23,5 +21,6 @@ export class Part {
     setSprite(newTexture: PIXI.Texture){
         this.sprite.texture = newTexture;
     }
-
 }
+
+

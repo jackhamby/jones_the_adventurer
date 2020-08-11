@@ -1,13 +1,13 @@
 import React from 'react';
 
-export interface CharacterAttributeDisplayProps {
+export interface PlayerAttributeDisplayProps {
     attribute: string;
     value: any;
     maxValue: any;
     tooltip?: string;
 }
 
-export class CharacterAttributeDisplay extends React.Component<CharacterAttributeDisplayProps, {}> {
+export class PlayerAttributeDisplay extends React.Component<PlayerAttributeDisplayProps, {}> {
 
     render(){
         const progressBarWidth = ((this.props.value / this.props.maxValue) * 100).toString();
@@ -21,5 +21,3 @@ export class CharacterAttributeDisplay extends React.Component<CharacterAttribut
         )
     }
 }
-
-export default CharacterAttributeDisplay;

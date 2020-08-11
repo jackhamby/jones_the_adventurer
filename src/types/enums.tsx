@@ -1,7 +1,10 @@
+// import { CharacterSelectWrapper } from "../areas/player_select/player_select_wrapper";
+import { Knight } from "../classes/players/knight";
+import { Orc } from "../classes/players/orc";
+import { Kobold } from "../classes/players/kobold";
 
 export enum ScreenOptions {
     MAIN_MENU,
-    SINGLE_PLAYER_MENU,
     CHARACTER_SELECT,
     GAME,
 }
@@ -11,6 +14,18 @@ export enum PlayerOptionNames {
     KOBOLD = "kobold",
     ORC = "orc"
 }
+
+// export class PlayerOptions {
+//     static KNIGHT = typeof Knight;
+//     static ORC = typeof Orc;
+//     static KOBOLD = typeof Kobold;
+// }
+
+// export enum PlayerOptionNames {
+//     // KNIGHT = typeof CharacterSelectWrapper,
+//     // KOBOLD = "kobold",
+//     // ORC = "orc"
+// }
 
 export enum Attributes {
     HEALTH = "health",
@@ -53,16 +68,16 @@ export enum UnitArmorNames {
 export enum UnitStatisticNames {
     PROJECTILES_FIRED = "projectiles",
     DAMAGE_DEALT = "damage",
-    ENEMIES_KILLED = "killed",
+    ENEMIES_KILLED = "enemies",
 }
 export enum UnitAttributeNames {
-    HEALTH = "health",
-    SPEED = "speed",
-    ARMOR = "armor",
-    ATTACK = "attack",
-    JUMP_HEIGHT = "jump_height",
-    JUMP_COUNT = "jump_count",
-    ATTACK_SPEED = "attack_speed",
+    health = "HEALTH",
+    speed = "SPEED",
+    armor = "ARMOR",
+    attack = "ATTACK",
+    jump_height = "JUMP_HEIGHT",
+    jump_count = "JUMP_COUNT",
+    attack_speed = "ATTACK_SPEED",
 }
 
 export enum ProjectileNames {

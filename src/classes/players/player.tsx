@@ -1,22 +1,30 @@
-import { Unit} from "../unit";
-import { Stage } from "../game_classes";
-import { UnitStateNames, UnitPartNames, UnitStatisticNames } from "../../types/enums";
-import { UnitAttributes } from "../../types/types";
-import { KeyOptions } from "../../types/states";
-import { SpritePart } from "../interfaces";
-import * as PIXI from 'pixi.js';
-import { updateStatistic, ControlAction, updateStatistics } from "../../state_management/actions/control_actions";
-import { store } from "../../state_management/store";
-import { Treasure } from "../treasures/treasure";
 
+import { Unit} from "../unit";
+import { KeyOptions } from "../../types/states";
+import { Stage } from "../stages/stage";
+import { UnitAttributes } from "../../types/types";
+import { UnitStateNames, UnitStatisticNames } from "../../types/enums";
+import { Treasure } from "../treasures/treasure";
+import * as PIXI from 'pixi.js';
 
 export class Player extends Unit {
 
     currentGold: number;
+    _id: number;
+    // game_wrapper callbacks
+    // updatePlayer: Function;
+    updateStatistics: Function;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
         super(loader, currentStage, initialAttributes, width, height, x, y);
         this.currentGold = 0;
+        this._id = 0;
+        this.updateStatistics = () => {
+            console.warn('update statistics not defined for player')
+        }
+        // this.updatePlayer = () => {
+        //     console.warn(`update statistics not defined for Player`)
+        // };
     };
 
     update(keyboard: KeyOptions){
@@ -33,8 +41,8 @@ export class Player extends Unit {
 
     clearStats(){
         super.clearStats();
-        const updateStatsAction = updateStatistics(this.statistics);
-        store.dispatch(updateStatsAction as ControlAction);
+        // const updateStatsAction = updateStatistics(this.statistics);
+        // store.dispatch(updateStatsAction as ControlAction);
     }
 
     takeDamage(value: number): number{
@@ -48,22 +56,32 @@ export class Player extends Unit {
         const damageDealt = super.dealDamage(target);
 
         // update player statistics
-        const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
-        store.dispatch(updateStatsAction as ControlAction);
-        if (target.state === UnitStateNames.DEAD){
-            this.statistics.damage += damageDealt;
-            const updateStatsAction = updateStatistics(this.statistics);
-            store.dispatch(updateStatsAction as ControlAction);
-        }
+        // const updateStatsAction = updateStatistic(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
+        // store.dispatch(updateStatsAction as ControlAction);
+        // if (target.state === UnitStateNames.DEAD){
+        //     this.statistics.damage += damageDealt;
+        //     const updateStatsAction = updateStatistics(this.statistics);
+        //     store.dispatch(updateStatsAction as ControlAction);
+        // }
+        this.statistics[UnitStatisticNames.DAMAGE_DEALT] = this.statistics.damage + damageDealt;
+        // this.updatePlayer();
+        this.updateStatistics();
+        // this.updateStatistics(UnitStatisticNames.DAMAGE_DEALT, this.statistics.damage + damageDealt)
         return damageDealt;
     }
 
+    pickupTreasure(treasure: Treasure): void {
+        treasure.apply(this);
+        // this.updatePlayer();
+    }
 
     fireProjectile(xVelocity: number, yVelocity: number){
         super.fireProjectile(xVelocity, yVelocity);
         this.statistics.projectiles += 1;
-        const updateStatsAction = updateStatistics(this.statistics);
-        store.dispatch(updateStatsAction as ControlAction);
+        // this.updatePlayer();
+
+        // const updateStatsAction = updateStatistics(this.statistics);
+        // store.dispatch(updateStatsAction as ControlAction);
     }
 
     tryAttack(){
@@ -87,6 +105,8 @@ export class Player extends Unit {
         }
     }
 
+
+
     falling(){
         this.tryAttack();
         this.tryJump();
@@ -100,12 +120,12 @@ export class Player extends Unit {
         // Move right while fallig
         if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = this.currentAttributes.speed;
+            this.xVelocity = this.currentAttributes.SPEED;
         }
         // Move left while falling
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -this.currentAttributes.speed;
+            this.xVelocity = -this.currentAttributes.SPEED;
         }
     }
 
@@ -129,19 +149,19 @@ export class Player extends Unit {
         // Move right while jumping
         if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = this.currentAttributes.speed;
+            this.xVelocity = this.currentAttributes.SPEED;
         }
         // Move left while jumping
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -this.currentAttributes.speed;
+            this.xVelocity = -this.currentAttributes.SPEED;
         }
 
     }
 
     // Called when player in walking state
     walking(){
-        this.currentJumps = this.attributes.jump_count;
+        this.currentJumps = this.attributes.JUMP_COUNT;
         this.tryAttack();
         this.tryJump();
 
@@ -153,13 +173,13 @@ export class Player extends Unit {
         // Move right
         else if (this.currentKeys.moveRight){
             this.facingRight = true;
-            this.xVelocity = this.currentAttributes.speed;
+            this.xVelocity = this.currentAttributes.SPEED;
         }
 
         // Move left
         else if (this.currentKeys.moveLeft){
             this.facingRight = false;
-            this.xVelocity = -this.currentAttributes.speed;
+            this.xVelocity = -this.currentAttributes.SPEED;
         }
 
         // doing nothing
@@ -173,7 +193,7 @@ export class Player extends Unit {
     // Called when player in standing state
     standing(){
         this.inKnockBack =  false;
-        this.currentJumps = this.attributes.jump_count;
+        this.currentJumps = this.attributes.JUMP_COUNT;
 
         this.tryAttack();
         this.tryJump();

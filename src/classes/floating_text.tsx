@@ -1,6 +1,6 @@
-import { TEXT_FADE_TIME } from "../constants";
-import { Stage } from "./game_classes";
+import { TEXT_FADE_TIME } from "../types/constants";
 import * as PIXI from "pixi.js";
+import { Stage } from "./stages/stage";
 
 
 export class FloatingText {

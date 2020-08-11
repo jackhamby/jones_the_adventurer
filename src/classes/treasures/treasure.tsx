@@ -29,7 +29,7 @@ export class Treasure extends Sprite {
     }
 
     apply(player: Player){
-        throw(`treasure ${this.name} needs to overload apply()`);
+        player.treasures.push(this);
     }
 
     initTextures(){
@@ -65,6 +65,3 @@ export class Treasure extends Sprite {
         this.spriteParts = spriteParts;
     }
 }
-
-
-

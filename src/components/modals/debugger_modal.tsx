@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 import { Modal } from './modal';
 import { GameController } from '../../classes/game_controller';
@@ -44,15 +45,15 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.infiniteJumps();
         this.veryFast();
         // this.quickAttacks();
-        this.props.control.player.attributes.attack = 99999999999999;
-        this.props.control.player.currentAttributes.attack = 99999999999999;
+        this.props.control.player.attributes.ATTACK = 99999999999999;
+        this.props.control.player.currentAttributes.ATTACK = 99999999999999;
         this.setState({closeModal: true})
     }
 
 
     veryFast = () => {
-        this.props.control.player.attributes.speed = 7;
-        this.props.control.player.currentAttributes.speed = 7;
+        this.props.control.player.attributes.SPEED = 7;
+        this.props.control.player.currentAttributes.SPEED = 7;
     }
 
     // quickAttacks = () => {
@@ -61,7 +62,7 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
     // }
 
     restoreAllHp = () => {
-        this.props.control.player.currentAttributes.health = this.props.control.player.attributes.health;
+        this.props.control.player.currentAttributes.HEALTH = this.props.control.player.attributes.HEALTH;
     }
 
     completeImmunity = () => {
@@ -70,7 +71,7 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
     }
 
     infiniteJumps = () => {
-        this.props.control.player.attributes.jump_count = 99999999999999;
+        this.props.control.player.attributes.JUMP_COUNT = 99999999999999;
     }
 
 

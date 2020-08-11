@@ -1,5 +1,4 @@
 
-
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { Player } from '../../classes/players/player';

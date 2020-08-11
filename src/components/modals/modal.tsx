@@ -25,7 +25,7 @@ export class Modal extends React.Component<ModalProps, ModalState> {
     }
 
     componentDidUpdate(previousProps: ModalProps, previousState: ModalState){
-        if (this.state.showModal != previousState.showModal){
+        if (this.state.showModal !== previousState.showModal){
             if (this.state.showModal){
                 this.props.onModalShow();
             } else {

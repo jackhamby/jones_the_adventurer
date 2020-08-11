@@ -1,17 +1,21 @@
 
+
 import React from 'react';
 import * as PIXI from 'pixi.js';
-import { Stage } from '../../classes/game_classes';
 import './game_detail.css'
 import { UnitStatistics } from '../../types/types';
-import { UnitStatisticNames } from '../../types/enums';
-import { DebuggerModal } from '../../components/modals/debugger_modal';
+import { UnitStatisticNames, UnitAttributeNames } from '../../types/enums';
+// import { DebuggerModal } from '../../components/modals/debugger_modal';
 import { GameController } from '../../classes/game_controller';
+import { Stage } from '../../classes/stages/stage';
+import { Player } from '../../classes/players/player';
+import { DebuggerModal } from '../../components/modals/debugger_modal';
 
 export interface GameDetailProps {
-    stage: Stage;
-    statistics: UnitStatistics;
-    gameController: GameController;
+    player?: Player;
+    // stage: Stage;
+    // statistics: UnitStatistics;
+    // gameController: GameController;
 
 }
 
@@ -20,11 +24,16 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
 
     renderStatistics(): JSX.Element {
         const tableRows: JSX.Element[] = [];
-        Object.keys(this.props.statistics).forEach((statisticName: string) => {
-            const stat = this.props.statistics[statisticName as UnitStatisticNames];
+        if (!this.props.player){
+            return <></>;
+        }
+        Object.keys(this.props.player.statistics).forEach((statisticName: string) => {
+            const test = statisticName as UnitStatisticNames
+            const stat = this.props.player?.statistics[statisticName as UnitStatisticNames];
+            // const test = UnitStatisticNames["PROJECTILES_FIRED"];
             const row = (<tr>
                 <td>
-                    {statisticName}:
+                    {test}:
                 </td>
                 <td className='ml-2'>
                     {stat}
@@ -32,30 +41,32 @@ export class GameDetail extends React.Component<GameDetailProps, {}> {
             </tr>)
             tableRows.push(row);
         })
-        return (<table className="p-3">
-                    <tbody>
-                        {tableRows}
-                    </tbody>
-                </table>);
+        return (
+            <table className="p-3">
+                <tbody>
+                    {tableRows}
+                </tbody>
+            </table>
+        );
     }
 
     render(){
-        if (this.props.stage){
+        if (this.props.player){
             return (
                 <>
                     <div className="col-12">
                         <h2>
-                            stage: {this.props.stage.level}
+                            stage: {this.props.player.currentStage.level}
                         </h2>
                         <h4 className="stage-name-text">
-                            {this.props.stage.name }
+                            {this.props.player.currentStage.name }
                         </h4>
                         <div>
                             {this.renderStatistics()}
                         </div>
                     </div>
                     <div className="ml-3 mt-5">
-                        <DebuggerModal control={this.props.gameController}/>
+                        {/* <DebuggerModal control={this.props.gameController}/> */}
                     </div>
                 </>
             )

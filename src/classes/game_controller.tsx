@@ -1,18 +1,20 @@
-import { StageManager, Stage } from "./game_classes";
+// import { StageManager, Stage } from "./game_classes";
 import { getCanvasDimensions } from "../helpers/util";
 import { Viewport } from "pixi-viewport";
 import * as PIXI from 'pixi.js';
 import { Player } from "./players/player";
 import { UnitAttributes } from "../types/types";
-import { Character } from "../types/states";
+// import { Character } from "../types/states";
 import { PlayerOptionNames, UnitPartNames } from "../types/enums";
 import { Knight } from "./players/knight";
 import { Kobold } from "./players/kobold";
-import { store } from "../state_management/store";
-import { setupGame, ControlAction, changeStage } from "../state_management/actions/control_actions";
+// import { store } from "../state_management/store";
+// import { setupGame, ControlAction, changeStage } from "../state_management/actions/control_actions";
 import { keyboard } from "../components/control";
-import * as Constants from '../constants';
+import * as Constants from '../types/constants';
 import { Orc } from "./players/orc";
+import { StageManager } from "./stages/stage_manager";
+import { Stage } from "./stages/stage";
 
 export class GameController {
 
@@ -22,17 +24,27 @@ export class GameController {
     stageManager: StageManager;
     currentStage: Stage;
 
+    // game_wrapper call backs
+    startGame: Function;
+
     // User actions
     keepPlaying: boolean;
 
-    constructor(pixiApplication: PIXI.Application){
+    constructor(pixiApplication: PIXI.Application, startGame: Function){
         this.pixiApplication = pixiApplication;
         this.viewport = this.createViewport();
         this.player = {} as Player;
         this.stageManager = {} as StageManager;
         this.currentStage = {} as Stage;
         this.keepPlaying = false;
+        this.startGame = startGame;
     }
+
+    // updatePlayerReference = (newPlayerReference: Player) => {
+    //     this.player = newPlayerReference;
+    //     this.stageManager.player = newPlayerReference;
+    //     this.currentStage.player = newPlayerReference;
+    // }
 
     start = () => {
         this.pixiApplication.ticker.start();
@@ -42,8 +54,8 @@ export class GameController {
         this.pixiApplication.ticker.stop();
     }
 
-    startGame2(startingCharacter: Character){
-        this.loadTextures(startingCharacter);
+    setupAndStartGame(startingPlayer: typeof Player){
+        this.loadTextures(startingPlayer);        
     }
 
     update(delta: number){
@@ -54,7 +66,6 @@ export class GameController {
         if (this.currentStage.isCleared && !this.keepPlaying){
             const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
             if (response){
-                // this.changeStage(this.currentStage.level + 1)
                 this.advanceStage();
             } else {
                 this.keepPlaying = true;
@@ -62,9 +73,9 @@ export class GameController {
         }
     }
 
-    startGame(startingCharacter: Character){
+    setupGame(startingPlayer: typeof Player){
         // Create player
-        this.setupPlayer(startingCharacter)
+        this.setupPlayer(startingPlayer)
 
         // Create stage manager
         this.stageManager = new StageManager(this.pixiApplication.loader, this.player, this.viewport);
@@ -78,9 +89,10 @@ export class GameController {
         // Start game loop
         this.pixiApplication.ticker.add(delta => this.gameLoop(delta));
 
+        this.startGame();
         // Update redux to show gameState.gameReady as true
-        const setupGameAction = setupGame(stageOne);
-        store.dispatch(setupGameAction as ControlAction);
+        // const setupGameAction = setupGame(stageOne);
+        // store.dispatch(setupGameAction as ControlAction);
     }
 
     changeStage(level: number){
@@ -93,10 +105,10 @@ export class GameController {
         this.player.currentStage = nextStage;
         this.currentStage = nextStage;
 
-        // Set player at starting position
         this.player.setX(Constants.PLAYER_STARTING_X);
         this.player.setY(Constants.PLAYER_STARTING_Y);
 
+        // Load stage
         this.stageManager.loadStage(nextStage);
     }
 
@@ -104,7 +116,6 @@ export class GameController {
         const nextLevel = this.currentStage.level + 1;
         this.changeStage(nextLevel);
     }
-
 
     restartStage(level: number){
         // Set stage with players current treasures
@@ -121,13 +132,13 @@ export class GameController {
         this.stageManager.loadStage(restartedStage);
 
         // Update redux to show gameState.gameReady as true
-        const changeStageAction = changeStage(restartedStage);
-        store.dispatch(changeStageAction as ControlAction);
+        // const changeStageAction = changeStage(restartedStage);
+        // store.dispatch(changeStageAction as ControlAction);
     }
 
     private gameLoop(delta: number): void {
-        // debugger;
         this.update(delta);
+        // this.updatePlayerStatistics();
     }
 
     private createViewport(): Viewport{ 
@@ -142,42 +153,37 @@ export class GameController {
         return viewport;
     }
 
-    private setupGame(){
-    
-    }
-
-    private setupPlayer(character: Character){
-        const player = this.createPlayer(character);
+    private setupPlayer(initialPlayer: typeof Player){
+        const player = this.createPlayer(initialPlayer);
         this.player = player;
         this.viewport.follow(player.spriteParts[UnitPartNames.HEAD].sprite);
     }
 
-
-    private createPlayer(character: Character): Player{
+    private createPlayer(initialPlayer: typeof Player): Player{
         let newPlayer: Player;
         let attributes: UnitAttributes;
         const loader = this.pixiApplication.loader;
-
-        switch(character.name){
-            case(PlayerOptionNames.KNIGHT):
-                attributes = character.attributes;
-                newPlayer = new Knight(loader, {} as Stage, attributes, 100, 100);
-                break;
-            case(PlayerOptionNames.KOBOLD):
-                attributes = character.attributes;
-                newPlayer = new Kobold(loader, {} as Stage, attributes, 100, 100);
-                break;
-            case(PlayerOptionNames.ORC):
-                attributes = character.attributes;
-                newPlayer = new Orc(loader, {} as Stage, attributes, 100, 100);
-                break;
-            default:
-                throw "unknown character name";
-        }
+        newPlayer = new initialPlayer(loader, {} as Stage, initialPlayer.baseAttributes, initialPlayer.width, initialPlayer.height, Constants.PLAYER_STARTING_X, Constants.PLAYER_STARTING_Y);
+        // switch(character.name){
+        //     case(PlayerOptionNames.KNIGHT):
+        //         attributes = character.attributes;
+        //         newPlayer = new Knight(loader, {} as Stage, attributes, 100, 100);
+        //         break;
+        //     case(PlayerOptionNames.KOBOLD):
+        //         attributes = character.attributes;
+        //         newPlayer = new Kobold(loader, {} as Stage, attributes, 100, 100);
+        //         break;
+        //     case(PlayerOptionNames.ORC):
+        //         attributes = character.attributes;
+        //         newPlayer = new Orc(loader, {} as Stage, attributes, 100, 100);
+        //         break;
+        //     default:
+        //         throw "unknown character name";
+        // }
         return newPlayer
     }
 
-    private loadTextures(character: Character){
+    private loadTextures(player: typeof Player){
         this.pixiApplication.loader
 
             // add platform tetures
@@ -247,12 +253,7 @@ export class GameController {
 
             // Once textures have loaded, fire this method
             .load(() => {
-                this.startGame(character);
+                this.setupGame(player);
             });
     }
-
-
-
-
-
 }

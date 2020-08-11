@@ -3,10 +3,10 @@ import { Sprite } from './sprite';
 import * as PIXI from 'pixi.js';
 import { ProjectileStateNames } from '../types/enums';
 import { Unit } from './unit';
-import { Stage } from './game_classes';
 import { ProjectileAttributes } from '../types/types';
-import { SPRITE_DECAY_FADE_TIME } from '../constants';
+import { SPRITE_DECAY_FADE_TIME } from '../types/constants';
 import { toDegrees, toRadians } from '../helpers/util';
+import { Stage } from './stages/stage';
 
 
 export class Projectile extends Sprite {

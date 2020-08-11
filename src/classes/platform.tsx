@@ -9,6 +9,7 @@ export interface PlatformTextures {
 }
 
 export class Platform extends Sprite{
+
     pixiSprite: PIXI.Sprite;
     textures: PlatformTextures;
 
