@@ -4,8 +4,12 @@ import { CharacterIcon } from './character_icon';
 import './game_character_detail.css';
 import { Player } from '../../classes/players/player';
 import { TreasureDetail } from './treasure_detail';
-export interface GameCharacterDetailProps {
+import { ArmorSelectModal } from '../../components/modals/armor_select_modal';
+import { GameController } from '../../classes/game_controller';
+
+interface GameCharacterDetailProps {
     player?: Player;
+    gameController: GameController;
 }
 
 export class GameCharacterDetail extends React.Component<GameCharacterDetailProps, {}> {
@@ -27,35 +31,35 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                             <tbody>
                                 <tr>
                                     <td>                     
-                                        <img className="pr-1" src="images/attributes/heart.png"/>
+                                        <img className="pr-1" src="images/attributes/heart.png" alt="health"/>
                                         health
                                     </td>
                                     <td> {this.props.player.attributes.HEALTH} </td>
                                 </tr>
                                 <tr>
                                     <td> 
-                                        <img  className="pr-1" src="images/attributes/armor.png"/>
+                                        <img  className="pr-1" src="images/attributes/armor.png" alt="armor"/>
                                         armor
                                         </td>
                                     <td> {this.props.player.attributes.ARMOR} </td>
                                 </tr>
                                 <tr>
                                     <td> 
-                                        <img className="pr-1" src="images/attributes/speed.png"/>
+                                        <img className="pr-1" src="images/attributes/speed.png" alt="speed"/>
                                         speed
                                     </td>
                                     <td> {this.props.player.attributes.SPEED} </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img className="pr-1" src="images/attributes/sword.png"/>
+                                        <img className="pr-1" src="images/attributes/sword.png" alt="attack"/>
                                         attack
                                     </td>
                                     <td> {this.props.player.attributes.ATTACK} </td>
                                 </tr>
                                 <tr>
                                     <td>
-                                        <img className="pr-1" src="images/attributes/gold.png"/>
+                                        <img className="pr-1" src="images/attributes/gold.png" alt="gold"/>
                                         gold
                                     </td>
                                     <td> {this.props.player.currentGold} </td>
@@ -65,10 +69,11 @@ export class GameCharacterDetail extends React.Component<GameCharacterDetailProp
                         
                     </div>
                     <div className="col-5 h-100" style={{overflow: "scroll"}}>
-                        <div>
+                        <div className="pt-1" >
+                            <ArmorSelectModal player={this.props.player} control={this.props.gameController}/>
                         </div>
                          treasures:   
-                        <div className="row" style={{overflow: "scroll"}}>
+                        <div className="row">
                             {this.props.player.treasures.map(treasure => <TreasureDetail treasure={treasure}/>)}
                         </div>
                     </div>

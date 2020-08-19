@@ -36,18 +36,12 @@ export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperSt
         }
     }
 
-    componentDidUpdate(){
-        if (this.state.player){
-            this.state.player.canAttack();
-        }
-    }
-
     componentDidMount(){
+        this.gameController.updateView = this.updateView;
         this.gameController.setupAndStartGame(this.props.selectedPlayer);
     }
 
     startGame = (): void => {
-        this.gameController.player.updateView = this.updateView;
         this.setState({player: this.gameController.player});
     }
 
@@ -69,11 +63,10 @@ export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperSt
                     </div>
                     <div className="game-detail">
                         <GameDetail player={this.state.player} gameController={this.gameController} />    
-
                     </div>
                 </div>
                 <div className="row game-footer">
-                    <GameCharacterDetail player={this.state.player} />
+                    <GameCharacterDetail player={this.state.player} gameController={this.gameController} />
                 </div>
             </div>
         )

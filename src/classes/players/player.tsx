@@ -6,20 +6,17 @@ import { UnitAttributes } from "../../types/types";
 import { UnitStateNames, UnitStatisticNames } from "../../types/enums";
 import { Treasure } from "../treasures/treasure";
 import * as PIXI from 'pixi.js';
+import { FloatingText } from "../floating_text";
+import { ArmorTreasure } from "../treasures/armor_treasure";
 
 export class Player extends Unit {
 
     currentGold: number;
-    _id: number;
-    // game_wrapper callbacks
-    // updatePlayer: Function;
-    // updateStatistics: Function;
     updateView: Function;
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
         super(loader, currentStage, initialAttributes, width, height, x, y);
         this.currentGold = 0;
-        this._id = 0;
         this.updateView = () => {
             console.warn('update view is not defined')
         }
@@ -29,18 +26,8 @@ export class Player extends Unit {
         super.update(keyboard);
     }
 
-    handleState(){
-        super.handleState();
-    }
-
     drawHpBar(){
         super.drawHpBar();
-    }
-
-    clearStats(){
-        super.clearStats();
-        // const updateStatsAction = updateStatistics(this.statistics);
-        // store.dispatch(updateStatsAction as ControlAction);
     }
 
     takeDamage(value: number): number{
@@ -61,15 +48,38 @@ export class Player extends Unit {
     pickupTreasure(treasure: Treasure): void {
         treasure.apply(this);
         this.updateView();
+        // TOOD: Update this to handle multiple attributes
+        let text = ''
+        switch(Object.getPrototypeOf(treasure).constructor){
+            case(ArmorTreasure):
+                const typedTreasure = treasure as ArmorTreasure;
+                text = `${typedTreasure.armor.attributes.ARMOR}`
+                break;
+            default:
+                break;
+        }   
+        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${text}`);
+        this.currentStage.viewport.addChild(floatingText.displayObject);
     }
 
-    fireProjectile(xVelocity: number, yVelocity: number){
+    // ================================== protected ===========================================================
+    // ========================================================================================================
+
+    protected handleState(){
+        super.handleState();
+    }
+
+    protected clearStats(){
+        super.clearStats();
+    }
+
+    protected ireProjectile(xVelocity: number, yVelocity: number){
         super.fireProjectile(xVelocity, yVelocity);
         this.statistics.projectiles += 1;
         this.updateView();
     }
 
-    tryAttack(){
+    protected tryAttack(){
 
         const projectileVelocity = this.projectile.baseAttributes.speed;
         if (!this.canAttack()){
@@ -90,9 +100,7 @@ export class Player extends Unit {
         }
     }
 
-
-
-    falling(){
+    protected falling(){
         this.tryAttack();
         this.tryJump();
         const gravity = 0.5;
@@ -114,7 +122,7 @@ export class Player extends Unit {
         }
     }
 
-    jumping(){
+    protected jumping(){
         this.tryAttack();
         this.tryJump();
 
@@ -144,8 +152,7 @@ export class Player extends Unit {
 
     }
 
-    // Called when player in walking state
-    walking(){
+    protected walking(){
         this.currentJumps = this.attributes.JUMP_COUNT;
         this.tryAttack();
         this.tryJump();
@@ -175,8 +182,7 @@ export class Player extends Unit {
 
     }
 
-    // Called when player in standing state
-    standing(){
+    protected standing(){
         this.inKnockBack =  false;
         this.currentJumps = this.attributes.JUMP_COUNT;
 
@@ -203,7 +209,7 @@ export class Player extends Unit {
         this.xVelocity = 0;
     }
 
-    revive(){
+    protected revive(){
         this.attributes = { ...this.baseAttributes };
         this.currentAttributes = { ...this.baseAttributes };
         this.setState(UnitStateNames.STANDING);
@@ -242,8 +248,7 @@ export class Player extends Unit {
         this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
 
-
-    dying(){
+    protected dying(){
         super.dying();
         const resp = window.confirm('sorry you suck. restart?')
         if (resp){
@@ -255,6 +260,5 @@ export class Player extends Unit {
             window.location.reload();
         }
     }
-
 
 }

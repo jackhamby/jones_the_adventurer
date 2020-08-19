@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Sprite } from '../sprite';
 import { SpritePart } from '../interfaces';
 import { Player } from '../players/player';
+import { FloatingText } from '../floating_text';
 
 export class Treasure extends Sprite {
     treasureIconTexture: PIXI.Texture;
@@ -20,11 +21,9 @@ export class Treasure extends Sprite {
         this.treasureBodyTexture = undefined;
         this.spriteParts = [];
         this.name = "";
-
-        // TODO: this shouldnt be needed, use smart
-        // icon positioning
         this.iconOffsetX = 0;
         this.iconOffsetY = 0;
+    
         
     }
 
@@ -32,16 +31,19 @@ export class Treasure extends Sprite {
         player.treasures.push(this);
     }
 
-    initTextures(){
+    initTextures(): void{
         throw(`treasure ${this.name} needs to overload initTextures()`);
     }
 
-    initSpriteParts(){
+    initSpriteParts(): void{
         const spriteParts = [];
         if (this.treasureBodyTexture){
             const baseIcon = new PIXI.Sprite(this.treasureBodyTexture);
+            this.iconOffsetX = baseIcon.width / 4;
+            this.iconOffsetY = -baseIcon.height / 4;
             baseIcon.x = this.x + this.iconOffsetX;
-            baseIcon.y = this.y + this.iconOffsetY
+            baseIcon.y = this.y + this.iconOffsetY;
+
             const baseSpritePart = {
                 offSetX: this.iconOffsetX,
                 offSetY: this.iconOffsetY,
@@ -49,6 +51,8 @@ export class Treasure extends Sprite {
             } as SpritePart;
             spriteParts.push(baseSpritePart);
         }
+
+
 
         const icon = new PIXI.Sprite(this.treasureIconTexture);
         const iconOffSetX = 0;
@@ -61,7 +65,6 @@ export class Treasure extends Sprite {
             sprite: icon,
         }
         spriteParts.push(iconSpritePart);
-        // return spriteParts;
         this.spriteParts = spriteParts;
     }
 }

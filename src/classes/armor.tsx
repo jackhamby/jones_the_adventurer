@@ -2,25 +2,31 @@
 import * as PIXI from 'pixi.js';
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
 import { Player } from './players/player';
-
-interface AttributeUpdate {
-    attribute: UnitAttributeNames;
-    amount: number;
-}
+import { UnitAttributes } from '../types/types';
 
 export class Armor {
 
     type: UnitArmorNames;
     part: UnitPartNames;
     name: string;
-    attributes: AttributeUpdate[];
+    attributes: UnitAttributes;
     texture: PIXI.Texture;
+    loader: PIXI.Loader;
     
-    constructor(){
+    constructor(loader: PIXI.Loader){
         this.type = UnitArmorNames.DEFAULT;
         this.part = UnitPartNames.HEAD;
+        this.loader = loader;
         this.name = "";
-        this.attributes = [];
+        this.attributes = {
+            HEALTH: 0,
+            ATTACK: 0,
+            ATTACK_SPEED: 0,
+            JUMP_COUNT: 0,
+            JUMP_HEIGHT: 0,
+            SPEED: 0,
+            ARMOR: 0,
+        };
         this.texture = {} as PIXI.Texture;
     }
 
@@ -28,8 +34,9 @@ export class Armor {
         if (player.currentArmorSet[this.part]){
             player.currentArmorSet[this.part]?.remove(player);
         }
-        this.attributes.forEach((attributeUpdate: AttributeUpdate) => {
-            player.attributes[attributeUpdate.attribute] += attributeUpdate.amount;
+        Object.keys(this.attributes).forEach((key: string) => {
+            const attributeName = key as UnitAttributeNames;
+            player.attributes[attributeName] += this.attributes[attributeName];
         });
         const spritePart = player.spriteParts[this.part].sprite;
         spritePart.texture = this.texture;
@@ -38,10 +45,15 @@ export class Armor {
     }
 
     remove(player: Player){
-        this.attributes.forEach((attributeUpdate: AttributeUpdate) => {
-            player.attributes[attributeUpdate.attribute] -= attributeUpdate.amount;
+        Object.keys(this.attributes).forEach((key: string) => {
+            const attributeName = key as UnitAttributeNames;
+            player.attributes[attributeName] -= this.attributes[attributeName];
         });
+        // Remove from current armorset
         player.currentArmorSet[this.part] = null;
+
+        // Set sprite texture back to default texture
+        player.spriteParts[this.part].sprite.texture = player.textures[this.part][UnitArmorNames.DEFAULT];
     }
 }
 
@@ -51,78 +63,50 @@ export class Armor {
 // Knight ==================================================================================================
 
 export class KnightHeadArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
-        this.loader = loader;
+        super(loader);
         this.name = "iron helmet";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.HEAD;
         this.texture = this.loader.resources['knight-head-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 5,
-            }
-        ]
+        this.attributes.ARMOR = 5;
     }
 }
 
 export class KnightHeadArmor2 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "a hat";
         this.type = UnitArmorNames.ARMOR2;
         this.part = UnitPartNames.HEAD;
         this.texture = this.loader.resources['knight-head-armor2'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 10,
-            }
-        ]
+        this.attributes.ARMOR = 10;
     }
 }
 
 export class KnightBodyArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "iron breast plate";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.BODY;
         this.texture = this.loader.resources['knight-body-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 7,
-            }
-        ]
+        this.attributes.ARMOR = 7;
+
     }
 }
 
 export class KnightLegsArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "iron plate legs";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.LEGS;
         this.texture = this.loader.resources['knight-legs-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 6,
-            }
-        ]
+        this.attributes.ARMOR = 6;
     }
 }
 
@@ -135,83 +119,57 @@ export class KnightLegsArmor1 extends Armor {
 
 
 export class OrcHeadArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "cool hair";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.HEAD;
 
         this.texture = this.loader.resources['orc-head-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 5,
-            }
-        ]
+        this.attributes.ARMOR = 5;
     }
 }
 
 
 export class OrcHeadArmor2 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "ninja hood";
         this.type = UnitArmorNames.ARMOR2;
         this.part = UnitPartNames.HEAD;
 
         this.texture = this.loader.resources['orc-head-armor2'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 5,
-            }
-        ]
+        this.attributes.ARMOR = 10;
+
     }
 }
 
 export class OrcLegsArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "jorts";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.LEGS;
 
         this.texture = this.loader.resources['orc-legs-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 8,
-            }
-        ]
+        this.attributes.ARMOR = 10;
+
     }
 }
 
 export class OrcBodyArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "crop top";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.BODY;
 
         this.texture = this.loader.resources['orc-body-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 10,
-            }
-        ]
+        this.attributes.ARMOR = 10;
     }
 }
 
@@ -220,124 +178,82 @@ export class OrcBodyArmor1 extends Armor {
 // Kobold ==================================================================================================
 
 export class KoboldHeadArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "iron helmet";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.HEAD;
 
         this.texture = this.loader.resources['kobold-head-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 5,
-            }
-        ]
+        this.attributes.ARMOR = 5;
     }
 }
 
 
 export class KoboldHeadArmor2 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "wooden helmet";
         this.type = UnitArmorNames.ARMOR2;
         this.part = UnitPartNames.HEAD;
 
         this.texture = this.loader.resources['kobold-head-armor2'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 10,
-            }
-        ]
+        this.attributes.ARMOR = 10;
     }
 }
 
 
 export class KoboldHeadArmor3 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "wooden mask";
         this.type = UnitArmorNames.ARMOR3;
         this.part = UnitPartNames.HEAD;
 
         this.texture = this.loader.resources['kobold-head-armor3'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 15,
-            }
-        ]
+        this.attributes.ARMOR = 15;
     }
 }
 
 export class KoboldBodyArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "chainmail";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.BODY;
 
         this.texture = this.loader.resources['kobold-body-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 10,
-            }
-        ]
+        this.attributes.ARMOR = 10;
     }
 }
 
 export class KoboldBodyArmor2 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "platemail";
         this.type = UnitArmorNames.ARMOR2;
         this.part = UnitPartNames.BODY;
 
         this.texture = this.loader.resources['kobold-body-armor2'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 14,
-            }
-        ]
+        this.attributes.ARMOR = 14;
     }
 }
 
 
 export class KoboldLegsArmor1 extends Armor {
-    loader: PIXI.Loader;
-
     constructor(loader: PIXI.Loader){
-        super();
+        super(loader);
         this.loader = loader;
         this.name = "chainmail";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.LEGS;
 
         this.texture = this.loader.resources['kobold-legs-armor1'].texture;
-        this.attributes = [
-            {
-                attribute: UnitAttributeNames.armor,
-                amount: 8,
-            }
-        ]
+        this.attributes.ARMOR = 8;
     }
 }

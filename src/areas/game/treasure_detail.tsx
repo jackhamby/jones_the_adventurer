@@ -1,10 +1,9 @@
 
 import React from 'react';
-import * as PIXI from 'pixi.js';
 import { Treasure } from '../../classes/treasures/treasure';
 
 
-export interface TreasureDetailProps {
+interface TreasureDetailProps {
     treasure: Treasure;
 }
 

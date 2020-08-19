@@ -1,12 +1,10 @@
 
 import * as PIXI from 'pixi.js';
-import { UnitStateNames, UnitPartNames } from "../../types/enums";
+import { UnitStateNames } from "../../types/enums";
 import { Unit } from '../unit';
-import { UnitParts, SpriteParts, UnitAttributes } from '../../types/types';
-import { Part } from '../part';
+import { UnitAttributes } from '../../types/types';
 import { SpritePart } from '../interfaces';
 import { KeyOptions } from '../../types/states';
-import { Stinger, Arrow } from '../projectile';
 import { SmallCoins } from '../treasures/coin_treasure';
 import { Stage } from '../stages/stage';
 

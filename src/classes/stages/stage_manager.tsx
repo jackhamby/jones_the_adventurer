@@ -4,11 +4,7 @@ import { Stage } from "./stage";
 import { Platform, DefaultPlatform, GrassPlatform, DirtPlatform, RedGrassPlatform, SandRockPlatform } from "../platform";
 import { Treasure } from "../treasures/treasure";
 import { SmallCoins } from "../treasures/coin_treasure";
-import { Enemy } from "../enemies/enemy";
-import { SpritePart } from "../interfaces";
 import { STAGE1_LAYOUT, STAGE2_LAYOUT } from "../../types/constants";
-import { UnitAttributes } from "../../types/types";
-import { UnitPartNames, UnitArmorNames } from "../../types/enums";
 import { ArrowTreasure } from "../treasures/projectile_treasure";
 import { KnightHeadArmor1Treasure, KnightHeadArmor2Treasure, KnightBodyArmor1Treasure, KnightLegsArmor1Treasure, OrcHeadArmor1Treasure, OrcBodyArmor1Treasure, OrcLegsArmor1Treasure, KoboldHeadArmor1Treasure, KoboldLegsArmor1Treasure, KoboldBodyArmor2Treasure, KoboldHeadArmor2Treasure, KoboldHeadArmor3Treasure } from "../treasures/armor_treasure";
 import { Kobold } from "../enemies/kobold";
@@ -16,8 +12,9 @@ import { Man } from "../enemies/man";
 import { Manticore } from "../enemies/manticore";
 import { Knight } from "../players/knight";
 import { Orc } from "../players/orc";
-import { KoboldHeadArmor1, KoboldLegsArmor1 } from "../armor";
 
+
+// Creates stages
 export class StageManager {
 
     loader: PIXI.Loader;
@@ -43,32 +40,6 @@ export class StageManager {
         }
     }
 
-    loadStage(stage: Stage){
-        const platforms = stage.platforms;
-        const newplayer = stage.player;
-        const treasures = stage.treasures;
-        const enemies = stage.enemies;
-        
-        enemies.forEach((enemy: Enemy) => {
-            this.viewport.addChild(...enemy.getSprites());
-        });
-
-        platforms.forEach((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
-
-        treasures.forEach((treasure: Treasure) => {
-            this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-        })
-
-        this.viewport.addChild(stage.timer.displayObject);
-        this.viewport.addChild(...newplayer.getSprites())
-    }
-
-    clearStage(){
-        this.viewport.removeChildren(0, this.viewport.children.length);
-    }
-
-
-
     // =================================== Stage contruction ================================================= //
     // ======================================================================================================= //
     private buildStageOne(): Stage {
@@ -86,13 +57,12 @@ export class StageManager {
             this.viewport,
             this,
         );
-        // const enemies = [] as Enemy[];
+
         const enemies = [
             new Kobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 200, 200),
             new Man(this.loader, stage, Man.baseAttributes, Man.width, Man.height, 789, 554), 
             new Kobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 83, 700)
         ];
-        // const enemies = [new Kobold(this.loader, stage, {} as UnitAttributes, 200, 200)]
 
         stage.enemies = enemies;
         return stage;
@@ -114,18 +84,6 @@ export class StageManager {
             this,
         )
 
-        // TODO: temp hack to see how we can apply armor to enemies
-        // abstract this out
-        // const armoredKobold = new Man(this.loader, stage, {} as UnitAttributes, 895, 405);
-
-        const affectedBodyPart = UnitPartNames.HEAD;
-        const newArmorType = UnitArmorNames.ARMOR2;
-        // const newTexture = armoredKobold.textures[affectedBodyPart][newArmorType];
-        // const spritePart = armoredKobold.spriteParts[affectedBodyPart].sprite;
-        // spritePart.texture = newTexture;
-        // armoredKobold.currentArmorSet[affectedBodyPart] = newArmorType;
-
-        // stage.enemies.push(armoredKobold);
         stage.enemies.push(
             new Manticore(this.loader, stage, Manticore.baseAttributes, Manticore.width, Manticore.height, 462, 540),
             new Man(this.loader, stage, Man.baseAttributes, Man.width, Man.height, 127, 427.5),

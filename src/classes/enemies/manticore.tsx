@@ -28,11 +28,7 @@ export class Manticore extends Enemy {
         this.patrolRadius = 300;
         this.projectile = Stinger;
     }
-
-    update(keyboard: KeyOptions){
-        super.update(keyboard);
-    }
-
+    
     initializeTextures(): UnitParts {
         return {
             body:{

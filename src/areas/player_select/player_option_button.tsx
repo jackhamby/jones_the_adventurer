@@ -7,7 +7,7 @@ import { Kobold } from '../../classes/players/kobold';
 import { Orc } from '../../classes/players/orc';
 
 
-export interface PlayerOptionButtonProps {
+interface PlayerOptionButtonProps {
     player: typeof Player;
     changePlayer: (player: typeof Player) => void;
 }
@@ -32,7 +32,7 @@ export class PlayerOptionButton extends React.Component<PlayerOptionButtonProps,
                 src = '/images/orc/orc_sm.png';
                 break;
         }
-        return <input type="image" src={src}></input>;
+        return <input type="image" src={src} alt="character icon"></input>;
     }
 
     

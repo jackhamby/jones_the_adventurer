@@ -1,8 +1,5 @@
 
 
-// Wrapper for all items on the screen
-//
-
 import { Enemy } from "../enemies/enemy";
 import { Platform } from "../platform";
 import { KeyOptions } from "../../types/states";
@@ -18,7 +15,8 @@ import { UnitStateNames, ProjectileStateNames } from "../../types/enums";
 import { Unit } from "../unit";
 import { Sprite } from "../sprite";
 
-// handles collisions
+// Wrapper for all items on the screen
+// Handles sprite movement and collisions
 export class Stage{
 
     name: string;
@@ -26,13 +24,15 @@ export class Stage{
     enemies: Enemy[];
     platforms: Platform[];
     currentKeys: KeyOptions;
-    player: Player;
     treasures: Treasure[];
-    viewport: Viewport;
     projectiles: Projectile[];
     floatingTexts: FloatingText[];
     timer: Timer;
     isCleared: boolean;
+
+    // TODO: main references
+    viewport: Viewport;
+    player: Player;
     stageManager: StageManager;
     
     // this will hold the treasures the player starts with
@@ -65,14 +65,6 @@ export class Stage{
         this.needsRestart = true;
     }
 
-    removeTreasure(treasureToRemove: Treasure){
-        this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
-
-        treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
-            this.viewport.removeChild(spritePart.sprite);
-        })
-    }
-
     update(keys: KeyOptions){
         this.currentKeys = keys;
         this.checkIfStageCleared();
@@ -81,13 +73,48 @@ export class Stage{
         this.timer.update();
     }
 
+    load(){
+        this.enemies.forEach((enemy: Enemy) => {
+            this.viewport.addChild(...enemy.getSprites());
+        });
+
+        this.platforms.forEach((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
+
+        this.treasures.forEach((treasure: Treasure) => {
+            this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+        })
+
+        this.viewport.addChild(this.timer.displayObject);
+        this.viewport.addChild(...this.player.getSprites())
+    }
+
+    clear(){
+        this.viewport.removeChildren(0, this.viewport.children.length);
+    }
+
+    // ================================== private methods ===========================================================
+    // ===============================================================================================================  
+
+    // TODO: this should be else where
+    private removeTreasure(treasureToRemove: Treasure){
+        this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
+
+        treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
+            this.viewport.removeChild(spritePart.sprite);
+        })
+    }
+    
+
     private checkIfStageCleared(){
-        if (this.enemies.length == 0){
+        if (this.enemies.length === 0){
             this.isCleared = true;
         }
     }
 
-    // Update state of the sprite
+
+    // ================================== Update sprite states ===========================================================
+    // =================================================================================================================== 
+
     private updateAllSpriteStates(){
         this.player.update(this.currentKeys)
         this.enemies.forEach((enemy: Enemy) => {
@@ -101,15 +128,9 @@ export class Stage{
         })
     }
 
+    // ================================== Update sprite positions ===========================================================
+    // ======================================================================================================================  
 
-
-
-
-
-
-
-
-    // Update all sprite positions
     private updateAllSpritePositions(){
         this.updatePlayerPosition()
         this.updateEnemyPositions();
@@ -145,13 +166,8 @@ export class Stage{
         })
     }
 
-
-
-
-
-
     // ================================== Player collisions ===========================================================
-    // ===============================================================================================================   
+    // ================================================================================================================
     private checkPlayerXCollisions() {
         if(this.player.state === UnitStateNames.DEAD){
             return;
@@ -271,12 +287,6 @@ export class Stage{
         player.xVelocity = 0;
     }
 
-
-
-
-
-
-
     // ================================== Enemy collisions ===========================================================
     // ===============================================================================================================
     private checkEnemyXCollisions(enemy: Enemy){
@@ -329,19 +339,6 @@ export class Stage{
             enemy.xVelocity = 0;
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
     // ================================== Projectile collisions ===========================================================
     // ====================================================================================================================
@@ -435,9 +432,9 @@ export class Stage{
             return;
         }
         
-        if ((projectile.state == ProjectileStateNames.FLYING ||
-            projectile.state == ProjectileStateNames.FALLING) && 
-            enemy.state != UnitStateNames.DEAD){
+        if ((projectile.state === ProjectileStateNames.FLYING ||
+            projectile.state === ProjectileStateNames.FALLING) && 
+            enemy.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(enemy);  
@@ -455,9 +452,9 @@ export class Stage{
         if (projectile.unit === enemy){
             return;
         }
-        if ((projectile.state == ProjectileStateNames.FLYING ||
-            projectile.state == ProjectileStateNames.FALLING) && 
-            enemy.state != UnitStateNames.DEAD){    
+        if ((projectile.state === ProjectileStateNames.FLYING ||
+            projectile.state === ProjectileStateNames.FALLING) && 
+            enemy.state !== UnitStateNames.DEAD){    
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(enemy);
@@ -471,9 +468,9 @@ export class Stage{
         if (projectile.unit === player){
             return;
         }
-        if ((projectile.state == ProjectileStateNames.FLYING ||
-            projectile.state == ProjectileStateNames.FALLING) && 
-            player.state != UnitStateNames.DEAD){
+        if ((projectile.state === ProjectileStateNames.FLYING ||
+            projectile.state === ProjectileStateNames.FALLING) && 
+            player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(player);  
@@ -486,9 +483,9 @@ export class Stage{
         if (projectile.unit === player){
             return;
         }
-        if ((projectile.state == ProjectileStateNames.FLYING ||
-            projectile.state == ProjectileStateNames.FALLING) && 
-            player.state != UnitStateNames.DEAD){
+        if ((projectile.state === ProjectileStateNames.FLYING ||
+            projectile.state === ProjectileStateNames.FALLING) && 
+            player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(player);  
@@ -497,18 +494,8 @@ export class Stage{
         }
     }
 
-
-
-
-
-
-    
-
-
-
-
-
-
+    // ================================== util ===========================================================
+    // =================================================================================================== 
 
     private isFalling(player: Unit){
         player.updateY(1);
@@ -540,8 +527,6 @@ export class Stage{
         }
     }
 
-
-
     private isFallingProjectile(projectile: Projectile){
         projectile.updateY(1);
         
@@ -556,12 +541,6 @@ export class Stage{
             return true;
         }
     }
-
-
-
-
-
-
 
     private collide(sprite1: Sprite, sprite2: Sprite){
         if (sprite2.left() >= sprite1.right() ||
@@ -582,33 +561,4 @@ export class Stage{
         })
         return collidedSprite;
     }
-
-
-    private contain(player: Unit, container: Container){
-        // contain right side of container
-        if (player.left() < container.x){
-            player.setX(container.x + 1);
-        }
-        // contain left side of container
-        if (player.right() > (container.x + container.width)){
-            player.setX( (container.x + container.width) - player.width)
-        }
-        // contain top of container
-        if (player.top() < container.y){
-            player.setY(container.y + 1)
-
-        }
-        // contain bottom of container
-        if (player.bottom() > (container.y + container.height)){
-            player.setY((container.y + container.height) - player.height)
-            player.yVelocity = 0;
-            if (this.player.state == UnitStateNames.FALLING){
-                player.setState(UnitStateNames.WALKING);
-            }
-
-        }
-
-    }
-
-
 }

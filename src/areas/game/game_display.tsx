@@ -1,25 +1,12 @@
-import React, { RefObject, createRef, Dispatch } from 'react';
+import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
-import { KeyOptions, AppState } from '../../types/states';
-import './game_display.css'
-import { Stage } from '../../classes/stages/stage';
-import { StageManager } from '../../classes/stages/stage_manager';
-import { Player } from '../../classes/players/player';
+import './game_display.css';
 
-
-interface GameDisplayState {
-    // isStarted: boolean; 
-    // keepPlaying: boolean;
- }
-
- interface GameDisplayProps {
+interface GameDisplayProps {
     pixiApplication: PIXI.Application;
- }
+}
 
-
-
-
-export class GameDisplay extends React.Component<GameDisplayProps, GameDisplayState> {
+export class GameDisplay extends React.Component<GameDisplayProps> {
 
     private canvasRef = createRef<HTMLDivElement>();
 
@@ -59,24 +46,3 @@ export class GameDisplay extends React.Component<GameDisplayProps, GameDisplaySt
         )
     }
 } 
-
-// const mapStateToProps = (state: AppState): GameDisplayStateProps => {
-//     return {
-//         pixiApplication: state.gameState.pixiApplication,
-//         currentStage: state.gameState.currentStage,
-//         isReady: state.gameState.gameReady,
-//     } 
-// }
-
-// const mapDispatchToProps = (dispatch: Dispatch<AnyAction>): GameDisplayDispatchProps => {
-//     return {
-//         changeStage: (stage: Stage) => { 
-//             dispatch(changeStage(stage));
-//         }
-//     }
-// }
-
-
-// export const ConnectedGameDisplay = connect(mapStateToProps, mapDispatchToProps)(GameDisplay);
-
-
