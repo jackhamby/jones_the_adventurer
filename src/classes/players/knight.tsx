@@ -25,7 +25,7 @@ export class Knight extends Player{
         ATTACK: 10,
         JUMP_HEIGHT: 10,
         JUMP_COUNT: 2,
-        ATTACK_SPEED: 5,
+        ATTACK_SPEED: 50,
     };
 
     static _name: string = "knight";

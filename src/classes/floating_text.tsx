@@ -24,14 +24,6 @@ export class FloatingText {
                 fill: '#FF0000',
             } as PIXI.TextStyle
         this.displayObject = this.initializeText();
-
-    }
-
-    initializeText(): PIXI.DisplayObject{
-        const displayObject =  new PIXI.Text(this.text, this.style);
-        displayObject.x = this.x;
-        displayObject.y = this.y;
-        return displayObject;
     }
 
     update() {
@@ -43,12 +35,23 @@ export class FloatingText {
         }  
     }
 
+    add(){
+        this.currentStage.floatingTexts.push(this);
+        this.currentStage.viewport.addChild(this.displayObject);
+    }
+
     remove(){
         this.currentStage.viewport.removeChild(this.displayObject);
     }
 
+    // ================================ private  ==================================== 
+    // ==============================================================================
 
+    protected initializeText(): PIXI.DisplayObject{
+        const displayObject =  new PIXI.Text(this.text, this.style);
+        displayObject.x = this.x;
+        displayObject.y = this.y;
+        return displayObject;
+    }
 
 }
-
-// var test = new PIXI.Text('This is a PixiJS text',{fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'})

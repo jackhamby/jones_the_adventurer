@@ -2,14 +2,14 @@
 import { Enemy } from "./enemy";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Stage } from "../stages/stage";
-import { Arrow } from "../projectile";
+import { Arrow } from "../projectiles/arrow";
 import { Part } from "../part";
 
 export class Kobold extends Enemy {
 
     static baseAttributes: UnitAttributes = {
         ATTACK: 5,
-        ATTACK_SPEED: 5,
+        ATTACK_SPEED: 50,
         HEALTH: 100,
         SPEED: 10,
         JUMP_HEIGHT: 3,

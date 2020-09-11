@@ -1,7 +1,7 @@
 import { Enemy } from "./enemy";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Stage } from "../stages/stage";
-import { Arrow } from "../projectile";
+import { Arrow } from "../projectiles/arrow";
 import { Part } from "../part";
 
 
@@ -9,7 +9,7 @@ export class Man extends Enemy {
 
     static baseAttributes = {
         ATTACK: 3,
-        ATTACK_SPEED: 5,
+        ATTACK_SPEED: 50,
         HEALTH: 100,
         SPEED: 1,
         JUMP_HEIGHT: 3,

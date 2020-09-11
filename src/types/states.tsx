@@ -68,5 +68,8 @@ export interface KeyOptions {
     moveUp: boolean;
     moveDown: boolean;
     jump: boolean;
+    spell1: boolean;
+    spell2: boolean;
+    spell3: boolean;
 }
 

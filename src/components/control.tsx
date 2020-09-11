@@ -6,6 +6,8 @@ import { mapKeys, getCanvasDimensions } from '../helpers/util';
 import './global.css';
 import { GameWrapper } from '../areas/game/game_wrapper';
 import { Player } from '../classes/players/player';
+import { PlayerSelectWrapper } from '../areas/player_select/player_select_wrapper';
+import { MainMenu } from '../areas/main_menu/main_menu';
 
 export const keyboard = {
 
@@ -41,7 +43,7 @@ export class Control extends React.Component<ControlProps, ControlState> {
     }
 
     componentDidMount(){
-    this.handleKeyEvents();
+        this.handleKeyEvents();
         this.handleResizeEvents();
     }
 

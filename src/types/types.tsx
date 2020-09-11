@@ -1,6 +1,6 @@
 import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlayerOptionNames } from "./enums"
 import { Part } from "../classes/part"
-import { Projectile } from "../classes/projectile"
+import { Projectile } from "../classes/projectiles/projectile"
 import { Player } from "../classes/players/player"
 import { Unit } from "../classes/unit"
 import { Armor } from "../classes/armor"

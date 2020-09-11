@@ -25,8 +25,16 @@ export class Enemy extends Unit {
         this.patrolRadius = 100;
     }
 
+
+    remove(){
+        super.remove()
+        this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy != this);
+    }
+    // ================================== protected ===========================================================
+    // ========================================================================================================
+
     // Handle enemy specific states here
-    handleState(){
+    protected handleState(){
         super.handleState();
         switch(this.state){
             case (UnitStateNames.ATTACKING):
@@ -43,24 +51,16 @@ export class Enemy extends Unit {
         }
     }
 
-    update(keyboard: KeyOptions){
-        super.update(keyboard);
-        // this.flipSpriteParts();
-    }
-
-    drawHpBar(){
-        super.drawHpBar();
-    }
-
-    checkIfPlayerInAttackRange(){
+    protected checkIfPlayerInAttackRange(){
         return this.isInsideSemiCircle(this.currentStage.player, this.patrolRadius);
     }
 
-    tryAttack(){
+    protected tryAttack(){
         if (!this.canAttack()){
             return;
         }
         let projectileXVelocity = 0;
+        // walk right
         if (this.x < this.currentStage.player.x){
             projectileXVelocity = this.projectile.baseAttributes.speed;
         }
@@ -72,21 +72,17 @@ export class Enemy extends Unit {
         this.fireProjectile(projectileXVelocity, 0)
     }
 
-    remove(){
-        super.remove()
-        this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy != this);
-    }
-
-    standing(){
+    protected standing(){
         this.setState(UnitStateNames.PATROLLING);
     }
 
-    walking(){
+    protected walking(){
         this.setState(UnitStateNames.PATROLLING);
     }
 
-    attacking(){
+    private attacking(){
         this.tryAttack()
+        // walk right
         if (this.x < this.currentStage.player.x){
             this.xVelocity = 1;
         }
@@ -102,8 +98,7 @@ export class Enemy extends Unit {
         }
     }
 
-    patrolling(){
-
+    protected patrolling(){
         // If enemy not moving, start them moving right
         if (this.xVelocity === 0){
             this.xVelocity = 1;
@@ -116,26 +111,25 @@ export class Enemy extends Unit {
         }
     }
 
-    falling(){
+    protected falling(){
         const gravity = 0.5;
         this.yVelocity += gravity;
     }
 
-    jumping(){
+    protected jumping(){
         const gravity = 0.5;
         this.yVelocity += gravity;
     }
 
-    dying(){
+    protected dying(){
         super.dying();  
         if (!this.hasDroppedTreasure){
             // spawn coins 
-            const coins = new SmallCoins(this.loader, this.x, this.y - 30)
+            const coins = new SmallCoins(this.loader, this.currentStage, this.x, this.y - 30)
             this.currentStage.treasures.push(coins);
             this.currentStage.viewport.addChild(...coins.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
             this.hasDroppedTreasure = true;
         }
-   
     }
     
 }

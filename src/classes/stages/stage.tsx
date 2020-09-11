@@ -6,7 +6,7 @@ import { KeyOptions } from "../../types/states";
 import { Player } from "../players/player";
 import { Treasure } from "../treasures/treasure";
 import { Viewport } from "pixi-viewport";
-import { Projectile } from "../projectile";
+import { Projectile } from "../projectiles/projectile";
 import { FloatingText } from "../floating_text";
 import { Timer } from "../timer";
 import { StageManager } from "./stage_manager";
@@ -75,17 +75,18 @@ export class Stage{
 
     load(){
         this.enemies.forEach((enemy: Enemy) => {
-            this.viewport.addChild(...enemy.getSprites());
+            enemy.add();
         });
 
-        this.platforms.forEach((platform: Platform) => this.viewport.addChild(platform.pixiSprite));
+        this.platforms.forEach((platform: Platform) => platform.add());
 
         this.treasures.forEach((treasure: Treasure) => {
-            this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+            // this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
+            treasure.add();
         })
 
         this.viewport.addChild(this.timer.displayObject);
-        this.viewport.addChild(...this.player.getSprites())
+        this.player.add();
     }
 
     clear(){
@@ -96,13 +97,13 @@ export class Stage{
     // ===============================================================================================================  
 
     // TODO: this should be else where
-    private removeTreasure(treasureToRemove: Treasure){
-        this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
+    // private removeTreasure(treasureToRemove: Treasure){
+    //     this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
 
-        treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
-            this.viewport.removeChild(spritePart.sprite);
-        })
-    }
+    //     treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
+    //         this.viewport.removeChild(spritePart.sprite);
+    //     })
+    // }
     
 
     private checkIfStageCleared(){
@@ -153,6 +154,7 @@ export class Stage{
         this.checkPlayerYCollisions();
         this.player.hpBar.clear();
         this.player.drawHpBar();
+        this.player.drawEffects();
     }
 
     private updateEnemyPositions(){
@@ -163,6 +165,7 @@ export class Stage{
             this.checkEnemyYCollisions(enemy)
             enemy.hpBar.clear();
             enemy.drawHpBar()
+            
         })
     }
 
@@ -219,13 +222,15 @@ export class Stage{
     private handlePlayerTreasureCollisionX(player: Player, treasure: Treasure){
         // store.dispatch(applyTreasure(treasure) as ControlAction);
         player.pickupTreasure(treasure);
-        this.removeTreasure(treasure);
+        // this.removeTreasure(treasure);
+        treasure.remove();
     }
 
     private handlePlayerTreasureCollisionY(player: Player, treasure: Treasure){
         // store.dispatch(applyTreasure(treasure) as ControlAction);
         player.pickupTreasure(treasure);
-        this.removeTreasure(treasure);
+        // this.removeTreasure(treasure);
+        treasure.remove();
     }
 
     private handlePlayerEnemyCollisionX(player: Unit, collider: Enemy){

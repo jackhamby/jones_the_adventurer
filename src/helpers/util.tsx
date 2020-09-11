@@ -30,15 +30,19 @@ export const toRadians = (degrees: number): number => {
 
 export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
     switch(key){
+        case 'A':
         case 'a':
             prevKeyOptions.moveLeft = toggle;
             break;
+        case 'D':
         case 'd':
             prevKeyOptions.moveRight = toggle;
             break;
+        case 'W':
         case 'w':
             prevKeyOptions.moveUp = toggle;
             break;
+        case 'S':
         case 's': 
             prevKeyOptions.moveDown = toggle;
             break;
@@ -56,6 +60,10 @@ export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean
             break;
         case 'ArrowDown':
             prevKeyOptions.attackDown = toggle;
+            break;
+        case 'E':
+        case 'e':
+            prevKeyOptions.spell1 = toggle;
             break;
         default:
             // unhandled key action

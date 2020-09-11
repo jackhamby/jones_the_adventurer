@@ -8,6 +8,11 @@ import { Treasure } from "../treasures/treasure";
 import * as PIXI from 'pixi.js';
 import { FloatingText } from "../floating_text";
 import { ArmorTreasure } from "../treasures/armor_treasure";
+import { CoinTreasure } from "../treasures/coin_treasure";
+import { ProjectileTreasure } from "../treasures/projectile_treasure";
+import { IncreaseText } from "../floating_texts/increase_text";
+import { Spell } from "../spells/spell";
+import { PlayerSelect } from "../../areas/player_select/player_select";
 
 export class Player extends Unit {
 
@@ -23,11 +28,8 @@ export class Player extends Unit {
     };
 
     update(keyboard: KeyOptions){
+        // console.log(keyboard)
         super.update(keyboard);
-    }
-
-    drawHpBar(){
-        super.drawHpBar();
     }
 
     takeDamage(value: number): number{
@@ -49,16 +51,24 @@ export class Player extends Unit {
         treasure.apply(this);
         this.updateView();
         // TOOD: Update this to handle multiple attributes
-        let text = ''
-        switch(Object.getPrototypeOf(treasure).constructor){
-            case(ArmorTreasure):
-                const typedTreasure = treasure as ArmorTreasure;
-                text = `${typedTreasure.armor.attributes.ARMOR}`
-                break;
-            default:
-                break;
-        }   
-        const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${text}`);
+        let text = '';
+        if (treasure instanceof ArmorTreasure){
+            const typedTreasure = treasure as ArmorTreasure;
+            // Update this to handle several attributes
+            text = `${typedTreasure.armor.attributes.ARMOR} armor`;
+        } else if ( treasure instanceof CoinTreasure){
+            const typedTreasure = treasure as CoinTreasure;
+            text = `${typedTreasure.amount} coins`
+        } else if (treasure instanceof ProjectileTreasure){
+            const typedTreasure = treasure as ProjectileTreasure;
+
+            text = `${typedTreasure.projectile.name}`;
+        }
+        else{
+            return;
+        }
+        const floatingText = new IncreaseText(this.currentStage, this.x, this.y, `+${text}`);
+        floatingText.add();
         this.currentStage.viewport.addChild(floatingText.displayObject);
     }
 
@@ -73,13 +83,20 @@ export class Player extends Unit {
         super.clearStats();
     }
 
-    protected ireProjectile(xVelocity: number, yVelocity: number){
+    protected fireProjectile(xVelocity: number, yVelocity: number){
         super.fireProjectile(xVelocity, yVelocity);
         this.statistics.projectiles += 1;
         this.updateView();
     }
 
     protected tryAttack(){
+
+        // As of now, spells are put in a queue.
+        // spell is used on attack.
+        // if (this.queuedSpells.length > 0){
+        //     const spell: Spell = this.queuedSpells.pop();
+        //     spell.cast();
+        // }
 
         const projectileVelocity = this.projectile.baseAttributes.speed;
         if (!this.canAttack()){
@@ -100,7 +117,16 @@ export class Player extends Unit {
         }
     }
 
+
+    protected trySpellCast(){
+        if (this.currentKeys.spell1 && this.spells[0] && !this.spells[0].onCooldown){
+            // this.queuedSpells.push(this.spells[0]);
+            this.spells[0].cast();
+        };
+    }
+
     protected falling(){
+        this.trySpellCast();
         this.tryAttack();
         this.tryJump();
         const gravity = 0.5;
@@ -123,6 +149,7 @@ export class Player extends Unit {
     }
 
     protected jumping(){
+        this.trySpellCast();
         this.tryAttack();
         this.tryJump();
 
@@ -154,6 +181,7 @@ export class Player extends Unit {
 
     protected walking(){
         this.currentJumps = this.attributes.JUMP_COUNT;
+        this.trySpellCast();
         this.tryAttack();
         this.tryJump();
 
@@ -185,7 +213,7 @@ export class Player extends Unit {
     protected standing(){
         this.inKnockBack =  false;
         this.currentJumps = this.attributes.JUMP_COUNT;
-
+        this.trySpellCast();
         this.tryAttack();
         this.tryJump();
 
@@ -244,7 +272,8 @@ export class Player extends Unit {
         })
 
         this.height = oldWidth;
-        this.currentStage.viewport.addChild(...this.getSprites())
+        // this.currentStage.viewport.addChild(...this.getSprites())
+        this.add();
         this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
 

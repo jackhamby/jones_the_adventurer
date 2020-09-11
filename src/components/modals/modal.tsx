@@ -38,11 +38,11 @@ export class Modal extends React.Component<ModalProps, ModalState> {
         if (this.state.showModal){
             return (
                 <>
-                    <div className="p-3" style={{position: 'fixed', width: 'auto', height: 'auto', minWidth: '600px', minHeight: '400px', backgroundColor: 'white', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: '2px solid gray', zIndex: 9999999}}>
-                        <h1 style={{height: '15%'}}>
+                    <div className="p-1" style={{position: 'fixed', width: 'auto', height: 'auto', minWidth: '600px', minHeight: '400px', backgroundColor: 'white', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', border: '2px solid gray', zIndex: 9999999}}>
+                        <div className="p-2" style={{fontSize: '10px'}}>
                             {this.props.header}
-                        </h1>
-                        <div className="p-3" style={{height: '70%'}}>
+                        </div>
+                        <div className="p-2" style={{height: '80%'}}>
                             {this.props.content}
                         </div>
 
@@ -51,8 +51,6 @@ export class Modal extends React.Component<ModalProps, ModalState> {
                                 done
                             </button>
                         </div>
-                
-
                     </div>
                     <div onClick={() => { this.setState({showModal: true})}}>    
                         {this.props.link}

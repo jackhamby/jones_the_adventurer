@@ -1,7 +1,3 @@
-// import { CharacterSelectWrapper } from "../areas/player_select/player_select_wrapper";
-import { Knight } from "../classes/players/knight";
-import { Orc } from "../classes/players/orc";
-import { Kobold } from "../classes/players/kobold";
 
 export enum ScreenOptions {
     MAIN_MENU,
@@ -13,6 +9,12 @@ export enum PlayerOptionNames {
     KNIGHT = "knight",
     KOBOLD = "kobold",
     ORC = "orc"
+}
+
+export enum TabOptions {
+    armor = "armor",
+    spells = "spells",
+    projectiles = "projectiles"
 }
 
 // export class PlayerOptions {

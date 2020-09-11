@@ -1,33 +1,29 @@
 import * as React from 'react';
-import { Modal } from './modal';
-import { Player } from '../../classes/players/player';
-import { Treasure } from '../../classes/treasures/treasure';
-import { ArmorTreasure } from '../../classes/treasures/armor_treasure';
-import { UnitPartNames, UnitAttributeNames } from '../../types/enums';
-import './armor_select_modal.css';
-import { Armor } from '../../classes/armor';
-import { GameController } from '../../classes/game_controller';
+import { Armor } from '../../../classes/armor';
+import { UnitPartNames, UnitAttributeNames } from '../../../types/enums';
+import { Player } from '../../../classes/players/player';
+import { GameController } from '../../../classes/game_controller';
+import { ArmorTreasure } from '../../../classes/treasures/armor_treasure';
+import { Treasure } from '../../../classes/treasures/treasure';
 
-interface ArmorSelectModalProps {
-    control: GameController;
+
+interface ArmorSelectProps {
     player: Player;
+    control: GameController;
 }
 
-interface ArmorSelectModalState {
-    selectedArmor?: Armor;
+interface ArmorSelectState {
+    selectedArmor: Armor;
 }
-export class ArmorSelectModal extends React.Component<ArmorSelectModalProps, ArmorSelectModalState> {
 
-    constructor(props: ArmorSelectModalProps){
+export class ArmorSelect extends React.Component<ArmorSelectProps, ArmorSelectState>{
+
+
+    constructor(props: ArmorSelectProps){
         super(props);
         this.state = {
             selectedArmor: null,
         }
-    }
-
-
-    getHeader = () => {
-        return 'armor select'
     }
 
     setArmor = (armor: Armor) => {
@@ -35,46 +31,13 @@ export class ArmorSelectModal extends React.Component<ArmorSelectModalProps, Arm
         this.setState( { selectedArmor: armor} )
         this.props.control.updateView();
     }
-
     removeArmor = (part: UnitPartNames) => {
-        // TODO this functio
+        // TODO this function
         const armorToRemove = this.props.player.currentArmorSet[part];
         if (armorToRemove){
             armorToRemove.remove(this.props.player);
         }
         this.props.control.updateView();
-    }
-
-    getContent = () => {
-        return (
-            <>
-                <div className="row">
-                    <div className="col-4 p-2">
-                        {this.renderCurrentArmor()}
-                    </div>
-                    <div className="col-8 p-2">
-                        <div className="mb-2 armor-icon-container" >
-                            {this.renderPartTreasures(UnitPartNames.HEAD)}
-                        </div>
-                        <div className="mb-2 armor-icon-container" >
-                            {this.renderPartTreasures(UnitPartNames.BODY)}
-                        </div>
-                        <div className="mb-2 armor-icon-container">
-                            {this.renderPartTreasures(UnitPartNames.LEGS)}
-                        </div>
-                    </div>
-                </div>
-                <div className="row">
-                    <div className="col-8">
-                        Attriubtes:
-                        {this.renderAttributes()}
-                    </div>
-                    <div className="col-4">
-                        {this.state.selectedArmor ? this.state.selectedArmor.name : 'not defined'}
-                    </div>
-                </div>
-            </>
-        );
     }
 
     renderCurrentArmor = (): JSX.Element => {
@@ -106,38 +69,30 @@ export class ArmorSelectModal extends React.Component<ArmorSelectModalProps, Arm
     }
 
     renderPartTreasures = (part: UnitPartNames): JSX.Element[] => {
-        const partTreasures = this.getPartTreasures(part);
         const partTreasuresDom = [];
         partTreasuresDom.push(
             <div className="mb-2 armor-icon-image" onClick={() => { this.removeArmor(part) }}>
                 <img src={'/images/treasures/no_treasure.png'} alt="remove armor" className="pt-1"/>
             </div>
         )
-        partTreasuresDom.push(...partTreasures.map((partTreasure: ArmorTreasure) => {
-            const url = partTreasure.treasureIconTexture.textureCacheIds[1];
-            return (
-                <div className="mb-2 armor-icon-image" onClick={() => { this.setArmor(partTreasure.armor)}}>
-                    <img src={url} alt={`${partTreasure.armor.name}`}/>
-                </div>
-            );
+
+        partTreasuresDom.push(...this.props.player.armors.map((armor: Armor) => {
+            if (armor.part === part) {
+                const url = armor.texture.textureCacheIds[1];
+                return (
+                    <div className="mb-2 armor-icon-image" onClick={() => { this.setArmor(armor)}}>
+                        <img src={url} alt={`${armor.name}`}/>
+                    </div>
+                );            
+            }
         }));
         return partTreasuresDom;
     }
 
-    getPartTreasures = (part: UnitPartNames): ArmorTreasure[] => {
-        const partTreasures: Treasure[] = this.props.player.treasures.filter((treasure: Treasure) => {
-            if (treasure instanceof ArmorTreasure) {
-                const armorTreasure = treasure as ArmorTreasure;
-                if (armorTreasure.armor.part === part) {
-                    return treasure;
-                }
-            }
-        })
-        return partTreasures as ArmorTreasure[];
-    }
-
     renderAttribute = (attributeName: UnitAttributeNames) => {
-        if (this.state.selectedArmor.attributes[attributeName] > 0){
+        if (this.state.selectedArmor &&
+            this.state.selectedArmor.attributes &&
+            this.state.selectedArmor.attributes[attributeName] > 0){
             return (
                 <td style={{color: 'darkgreen'}}>  +{this.state.selectedArmor.attributes[attributeName]} </td>
             )
@@ -151,7 +106,6 @@ export class ArmorSelectModal extends React.Component<ArmorSelectModalProps, Arm
             <td style={{color: 'darkgray'}}>  {this.state.selectedArmor.attributes[attributeName]} </td>
         )
     }
-
 
 
     renderAttributes = (): JSX.Element => {
@@ -193,20 +147,40 @@ export class ArmorSelectModal extends React.Component<ArmorSelectModalProps, Arm
                 </tbody>
             </table>
         )
-
-        
     }
 
-    render() {
+    render(): JSX.Element {
         return (
-            <Modal
-                content={this.getContent()}
-                header={this.getHeader()}
-                link={<button>armor select</button>}
-                onModalShow={this.props.control.stop}
-                onModalHide={this.props.control.start}
-            />
+            <>
+                <div className="row">
+                    <div className="col-4 p-2">
+                        {this.renderCurrentArmor()}
+                    </div>
+                    <div className="col-8 p-2">
+                        <div className="mb-2 armor-icon-container" >
+                            {this.renderPartTreasures(UnitPartNames.HEAD)}
+                        </div>
+                        <div className="mb-2 armor-icon-container" >
+                            {this.renderPartTreasures(UnitPartNames.BODY)}
+                        </div>
+                        <div className="mb-2 armor-icon-container">
+                            {this.renderPartTreasures(UnitPartNames.LEGS)}
+                        </div>
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-8">
+                        Attriubtes:
+                        {this.renderAttributes()}
+                    </div>
+                    <div className="col-4">
+                        {this.state.selectedArmor ? this.state.selectedArmor.name : 'not defined'}
+                    </div>
+                </div>
+            </>
         );
     }
+
+
 
 }

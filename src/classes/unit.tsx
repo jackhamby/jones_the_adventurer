@@ -5,7 +5,8 @@ import { Sprite } from './sprite';
 import { UnitStateNames, UnitPartNames, UnitArmorNames } from '../types/enums';
 import { UnitAttributes, UnitStatistics, UnitParts, SpriteParts, SpriteArmors } from '../types/types';
 import { KeyOptions } from '../types/states';
-import { Projectile, Rock } from './projectile';
+import { Projectile } from './projectiles/projectile';
+import { Rock } from './projectiles/rock';
 import { Treasure } from './treasures/treasure';
 import { Stage } from './stages/stage';
 import { SpritePart } from './interfaces';
@@ -13,6 +14,9 @@ import { Part } from './part';
 import { SPRITE_DECAY_FADE_TIME } from '../types/constants';
 import { FloatingText } from './floating_text';
 import * as PIXI from 'pixi.js';
+import { Armor } from './armor';
+import { Spell, FastFire } from './spells/spell';
+import { Effect } from './effects/effect';
 
 export class Unit extends Sprite {
 
@@ -35,11 +39,16 @@ export class Unit extends Sprite {
     attributes: UnitAttributes;
     currentAttributes: UnitAttributes;
     baseAttributes: UnitAttributes;
-    treasures: Treasure[];
     statistics: UnitStatistics;
     projectile: typeof Projectile;
     currentJumps: number;
     currentArmorSet: SpriteArmors;
+
+    // Player items/abilitie
+    treasures: Treasure[];
+    projectiles: typeof Projectile[];
+    armors: Armor[];
+    spells: Spell[];
 
     // Sprite management
     state: UnitStateNames;
@@ -60,7 +69,9 @@ export class Unit extends Sprite {
     textures: UnitParts;
     spriteParts: SpriteParts;
     hpBar: PIXI.Graphics;
+    effects: Effect[];
 
+    // Keystoke tracking
     currentKeys: KeyOptions;
 
     // Debugging
@@ -71,15 +82,17 @@ export class Unit extends Sprite {
     // TODO: main references
     currentStage: Stage;
 
-
-
-
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){    
         super(loader, x, y, width, height, 0, 0);    
         this.baseAttributes = { ...initialAttributes };
         this.attributes = { ...initialAttributes  };
         this.currentAttributes = { ...initialAttributes  };
+
         this.treasures = [];
+        this.projectiles = [ Rock ];
+        this.armors = [];
+        this.spells = [new FastFire(this)];
+
         this.statistics = {
             projectiles: 0,
             enemies: 0,
@@ -96,7 +109,7 @@ export class Unit extends Sprite {
         this.facingRight = false;
         this.inKnockBack = false;
         this.timeSinceLastProjectileFired = 0;
-        this.projectileCooldown = 10 * this.attributes.ATTACK_SPEED;
+        this.projectileCooldown = this.attributes.ATTACK_SPEED;
         this.distinctJump = true; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
         this.isImmune = false;
         this.immuneTime = 0;
@@ -109,14 +122,11 @@ export class Unit extends Sprite {
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
         this.hpBar = new PIXI.Graphics();
+        this.effects = [];
+        // this.effects.zIndex = -1;
 
         this.currentStage = currentStage;
         this.currentKeys = {} as KeyOptions;
-
-        // Debuggin
-        this.debugGraphics = new PIXI.Graphics();
-        this.debugPartLocation = false;
-        this.debugUnitRadius = false;
     }
 
     update(keyboard: KeyOptions){
@@ -124,15 +134,36 @@ export class Unit extends Sprite {
         this.flipSpriteParts();
         this.handleState();
         this.updateCooldowns();
-        this.debugging();
+        this.updateSpells();
     }
 
-    getSprites(){
+
+    remove(): void {
+        this.hpBar.clear();
+        this.hpBar.destroy();
+        this.currentStage.viewport.removeChild(this.hpBar);
+        // this.currentStage.viewport.removeChild(this.effects);
+        this.effects.forEach((effect: Effect) => {
+            // this.currentStage.viewport.removeChild(effect);
+            effect.remove();
+        })
+        Object.keys(this.spriteParts).forEach((partName: string) => {
+            const tempPartName: UnitPartNames = partName as UnitPartNames;
+            const part: SpritePart = this.spriteParts[tempPartName];
+            this.currentStage.viewport.removeChild(part.sprite);
+        }) 
+    }
+
+    add(): void {
         const unitBodyParts = Object.keys(this.spriteParts).map((key: string) => {
             const partName = key as UnitPartNames;
             return this.spriteParts[partName].sprite
         })
-        return [ ...unitBodyParts, this.hpBar ];
+        const effectsGraphics = this.effects.map((effect: Effect) => {
+            return effect.graphics;
+        })
+        const allSprites: PIXI.DisplayObject[]  = [ ...unitBodyParts, this.hpBar, ...effectsGraphics];
+        this.currentStage.viewport.addChild(...allSprites);
     }
 
     setState(state: UnitStateNames){
@@ -157,6 +188,15 @@ export class Unit extends Sprite {
         })
     }
 
+    // setAttackSpeed(attackSpeed: number){
+    //     this.attributes.ATTACK_SPEED = attackSpeed;
+
+    //     // TODO: this may purge future negative effects
+    //     this.currentAttributes.ATTACK_SPEED = attackSpeed;
+    //     this.projectileCooldown = attackSpeed;
+
+    // }
+
     updateY(value: number){
         this.y += value;
         Object.keys(this.spriteParts).forEach((key) => {
@@ -175,14 +215,15 @@ export class Unit extends Sprite {
         })
     }
 
+    
+
     takeDamage(value: number): number{
         let damageTaken = 0;
         if (this.state !== UnitStateNames.DEAD && !this.isImmune){
             damageTaken = Math.round(value - (this.currentAttributes.ARMOR * .50));
             this.currentAttributes.HEALTH -= damageTaken;
             const floatingText = new FloatingText(this.currentStage, this.x, this.y, `-${damageTaken}`);
-            this.currentStage.floatingTexts.push(floatingText);
-            this.currentStage.viewport.addChild(floatingText.displayObject);
+            floatingText.add()
             if (this.currentAttributes.HEALTH <= 0){
                 this.hpBar.visible = false;
                 this.setState(UnitStateNames.DEAD);
@@ -200,6 +241,39 @@ export class Unit extends Sprite {
         return damageDealt;
     }
 
+    drawEffects(){
+        // this.effects.clear();
+        // this.effects.beginFill(0x00FFFF);
+        // this.effects.drawRect(this.x, this.y , this.width, this.height);
+        this.effects.forEach((effect: Effect) => {
+            effect.draw();
+        })
+    }
+
+
+    drawHpBar(){
+        this.hpBar.clear()
+        const marginX = 2;
+        const marginY = -10;
+        const hpBarHeight = this.height / 9;
+        const hpBarWidth = this.width;
+
+
+        this.hpBar.beginFill(0x00FF00);
+        let greenPercent = this.currentAttributes.HEALTH / this.attributes.HEALTH;
+        let redPercent = 1.0 - greenPercent;
+        // TODO: fix the underlying issue. Temp hack to fix neg percent
+        if ((greenPercent) < 0){
+            redPercent = 1.0;
+            greenPercent = 0;
+        }
+
+        this.hpBar.drawRect(this.x + marginX, this.y + marginY, hpBarWidth * greenPercent, hpBarHeight);
+        this.hpBar.beginFill(0xFF0000);
+        this.hpBar.drawRect(this.x + marginX + (greenPercent * hpBarWidth), this.y + marginY, hpBarWidth * redPercent, hpBarHeight);
+    }
+
+    
 
     // ================================== protected ===========================================================
     // ========================================================================================================
@@ -248,44 +322,6 @@ export class Unit extends Sprite {
         return false;
     }
 
-    private debugging(){
-        this.debugGraphics.clear()
-        this.debugGraphics.lineStyle(5, 0xFF0000);
-        if (this.debugPartLocation){
-            this.currentStage.viewport.removeChild(this.debugGraphics);
-            this.debugGraphics.lineStyle(5, 0xFF0000);
-            Object.keys(this.spriteParts).forEach((key: string) => {
-                const partName = key as UnitPartNames;
-                const part = this.spriteParts[partName];
-                this.debugGraphics.drawRect(part.sprite.x, part.sprite.y, part.sprite.width, part.sprite.height);
-            });
-            this.debugGraphics.lineStyle(5, 0x0000FF);
-            this.debugGraphics.drawRect(this.x, this.y, this.width, this.height);
-            this.currentStage.projectiles.forEach( (projectile: Projectile) => {
-                this.debugGraphics.drawRect(projectile.sprite.x, projectile.sprite.y, projectile.sprite.width, projectile.sprite.height);
-            } )
-        }
-
-        if (this.debugUnitRadius){
-            const centerX = this.x + (this.width / 2);
-            const centerY = this.y + (this.height / 2);
-            this.debugGraphics.drawCircle(centerX, centerY, 100);
-        }
-
-        this.currentStage.viewport.addChild(this.debugGraphics);
-    }
-
-    protected remove(){
-        this.hpBar.clear();
-        this.hpBar.destroy();
-        this.currentStage.viewport.removeChild(this.hpBar);
-        Object.keys(this.spriteParts).forEach((partName: string) => {
-            const tempPartName: UnitPartNames = partName as UnitPartNames;
-            const part: SpritePart = this.spriteParts[tempPartName];
-            this.currentStage.viewport.removeChild(part.sprite);
-        }) 
-    }
-
     protected clearStats(){
         this.statistics.damage = 0;
         this.statistics.enemies = 0;
@@ -314,6 +350,12 @@ export class Unit extends Sprite {
                 break;
         }
     }
+
+    protected updateSpells(){
+        this.spells.forEach((spell: Spell) => {
+            spell.update();
+        })
+    } 
 
     protected updateCooldowns(){
         // projectile cooldowns
@@ -454,33 +496,10 @@ export class Unit extends Sprite {
         };
     }
 
-    protected drawHpBar(){
-        this.hpBar.clear()
-        const marginX = 2;
-        const marginY = -10;
-        const hpBarHeight = this.height / 9;
-        const hpBarWidth = this.width;
-
-
-        this.hpBar.beginFill(0x00FF00);
-        let greenPercent = this.currentAttributes.HEALTH / this.attributes.HEALTH;
-        let redPercent = 1.0 - greenPercent;
-        // TODO: fix the underlying issue. Temp hack to fix neg percent
-        if ((greenPercent) < 0){
-            redPercent = 1.0;
-            greenPercent = 0;
-        }
-
-        this.hpBar.drawRect(this.x + marginX, this.y + marginY, hpBarWidth * greenPercent, hpBarHeight);
-        this.hpBar.beginFill(0xFF0000);
-        this.hpBar.drawRect(this.x + marginX + (greenPercent * hpBarWidth), this.y + marginY, hpBarWidth * redPercent, hpBarHeight);
-    }
-
-
     protected fireProjectile(xVelocity: number, yVelocity: number){
         this.timeSinceLastProjectileFired = this.projectileCooldown;
         const projectile = new this.projectile(this.loader, this.x, this.y, this, xVelocity, yVelocity)
-        this.currentStage.viewport.addChild(projectile.sprite);
+        projectile.add();
         this.currentStage.projectiles.push(projectile);
     }
 
@@ -519,6 +538,10 @@ export class Unit extends Sprite {
 
     protected tryAttack(){
         
+    }
+
+    protected trySpellCast(){
+
     }
 
     protected standing(){

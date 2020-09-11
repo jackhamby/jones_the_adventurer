@@ -4,6 +4,7 @@ import { Sprite } from '../sprite';
 import { SpritePart } from '../interfaces';
 import { Player } from '../players/player';
 import { FloatingText } from '../floating_text';
+import { Stage } from '../stages/stage';
 
 export class Treasure extends Sprite {
     treasureIconTexture: PIXI.Texture;
@@ -12,30 +13,45 @@ export class Treasure extends Sprite {
     name: string;
     iconOffsetX: number;
     iconOffsetY: number;
+    currentStage: Stage;
 
 
-    constructor(loader: PIXI.Loader, x: number, y: number){
+    constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         // For now treasure sizes are hard coded to 15, 15
         super(loader, x, y, 15, 15, 0, 0);
         this.treasureIconTexture = {} as PIXI.Texture;
+        this.currentStage = stage;
         this.treasureBodyTexture = undefined;
         this.spriteParts = [];
         this.name = "";
         this.iconOffsetX = 0;
         this.iconOffsetY = 0;
-    
-        
     }
 
     apply(player: Player){
         player.treasures.push(this);
     }
 
-    initTextures(): void{
+    add(): void {
+        this.currentStage.viewport.addChild(...this.spriteParts.map((spritePart: SpritePart) => spritePart.sprite))
+    }
+
+    remove(): void {
+        this.currentStage.treasures = this.currentStage.treasures.filter((treasure: Treasure) => treasure !== this);
+
+        this.spriteParts.forEach((spritePart: SpritePart) => {
+            this.currentStage.viewport.removeChild(spritePart.sprite);
+        })
+    }
+
+    // ================================ protected =================================== 
+    // ==============================================================================
+
+    protected initTextures(): void{
         throw(`treasure ${this.name} needs to overload initTextures()`);
     }
 
-    initSpriteParts(): void{
+    protected initSpriteParts(): void{
         const spriteParts = [];
         if (this.treasureBodyTexture){
             const baseIcon = new PIXI.Sprite(this.treasureBodyTexture);

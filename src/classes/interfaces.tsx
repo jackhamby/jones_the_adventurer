@@ -1,7 +1,8 @@
 
-import { PlayerAttributeNames } from "../types/states";
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames, ProjectileNames } from "../types/enums";
-import { Projectile } from "./projectile";
+import { Projectile } from "./projectiles/projectile";
+
+
 
 export interface SpritePart {
     offSetX: number;

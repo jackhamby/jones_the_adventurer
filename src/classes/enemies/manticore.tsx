@@ -1,6 +1,6 @@
 import { Enemy } from "./enemy";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
-import { Stinger } from "../projectile";
+import { Stinger } from "../projectiles/stinger";
 import { Stage } from "../stages/stage";
 import { KeyOptions } from "../../types/states";
 import { Part } from "../part";
@@ -10,7 +10,7 @@ export class Manticore extends Enemy {
 
     static baseAttributes = {
         ATTACK: 6,
-        ATTACK_SPEED: 10,
+        ATTACK_SPEED: 100,
         HEALTH: 500,
         SPEED: 10,
         JUMP_HEIGHT: 3,

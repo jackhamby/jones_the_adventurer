@@ -5,7 +5,7 @@
 import { Player } from "./player";
 import { Stage } from "../stages/stage";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
-import { Rock } from "../projectile";
+import { Rock } from "../projectiles/rock";
 import { Part } from "../part";
 // import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
 // import { Part } from "../part";
@@ -23,7 +23,7 @@ export class Kobold extends Player {
         ATTACK: 10,
         JUMP_HEIGHT: 10,
         JUMP_COUNT: 3,
-        ATTACK_SPEED: 6
+        ATTACK_SPEED: 60
     } as UnitAttributes;
 
     static _name: string = "kobold";

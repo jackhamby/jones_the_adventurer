@@ -1,16 +1,7 @@
-// export const x = 2;
-
-// import * as PIXI from "pixi.js";
-// import { Stage } from "../game_classes";
-// import { Player } from "./player";
-// import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
-// import { Part } from "../part";
-// import { UnitPartNames, UnitStateNames } from "../../types/enums";
-// import { Rock } from "../projectile";
 import { Player } from "./player";
 import { Stage } from "../stages/stage";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
-import { Rock } from "../projectile";
+import { Rock } from "../projectiles/rock";
 import { Part } from "../part";
 
 
@@ -22,7 +13,7 @@ export class Orc extends Player {
         ATTACK: 20,
         JUMP_HEIGHT: 10,
         JUMP_COUNT: 2,
-        ATTACK_SPEED: 12
+        ATTACK_SPEED: 120
     };
 
     static _name: string = "orc";

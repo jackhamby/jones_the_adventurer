@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Treasure } from '../../classes/treasures/treasure';
+import { Treasure } from '../../../classes/treasures/treasure';
 
 
 interface TreasureDetailProps {
