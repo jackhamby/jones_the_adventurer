@@ -55,6 +55,23 @@ export class CharacterSpells extends React.Component<CharacterSpellsProps> {
                 }
                 break;
             case(3):
+                spell = this.props.player.spells[2];
+
+                // Ready spell
+                if (spell && !spell.onCooldown){
+                    return (
+                        <div>
+                            {spell.name}
+                        </div>
+                    )
+                }
+
+                // Spell on cooldown
+                else if (spell && spell.onCooldown){
+                    return (
+                        <Cooldown spell={this.props.player.spells[2]}/>
+                    )
+                }
                 break;
         }
         return null;
@@ -90,6 +107,8 @@ export class CharacterSpells extends React.Component<CharacterSpellsProps> {
                         R
                     </span>
                     <div>
+                    {this.renderSpell(3)}
+
                         {/* <img src={url}/> */}
                     </div>
                 

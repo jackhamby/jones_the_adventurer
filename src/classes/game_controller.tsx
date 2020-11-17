@@ -194,12 +194,14 @@ export class GameController {
             // Add enemy images
             .add('kobold-standing', "images/enemies/kobold/kobold_standing.png")
 
-            // Add projectile images2
+            // Add projectile images
             .add('rock', 'images/projectiles/rock.png')
             .add('arrow', 'images/projectiles/dart.png')
             .add('stinger', 'images/projectiles/stinger.png')
             .add('axe', 'images/projectiles/axe.png')
             .add('fire_ball', 'images/projectiles/fire_ball.png')
+            .add('fire_ball_md', 'images/projectiles/fire_ball_md.png')
+
 
 
             // Kobold

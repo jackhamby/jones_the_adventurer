@@ -10,15 +10,12 @@ import { ArmorTreasure } from "../treasures/armor_treasure";
 import { CoinTreasure } from "../treasures/coin_treasure";
 import { ProjectileTreasure } from "../treasures/projectile_treasure";
 import { IncreaseText } from "../floating_texts/increase_text";
-import { FireBall, Spell } from "../spells/spell";
-import { FireBall as FireBallProjectile } from "../projectiles/fire_ball";
 import { Projectile } from "../projectiles/projectile";
 
 export class Player extends Unit {
 
     currentGold: number;
     updateView: Function;
-    queuedSpells: Spell[];
 
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
@@ -99,48 +96,27 @@ export class Player extends Unit {
 
 
         if (this.currentKeys.attackRight){
-            // this.fireProjectileOrSpell(1, 1);
-            // if (this.queuedSpells.length > 0){
-            //     const spellToCast = this.queuedSpells.pop();
-            //     // TODO: remove this and update to spells 
-            //     // to have inherited classes
-            //     const flameBall: FireBall = spellToCast as FireBall;
-            //     console.log(spellToCast);
-            //     this.fireProjectile(flameBall.projectile, flameBall.projectile.baseAttributes.speed, flameBall.projectile.baseAttributes.loft);
-            //     return 
-            // }
             const projectile = this.getProjectile();
-
-            this.fireProjectile(projectile, this.projectile.baseAttributes.speed, this.projectile.baseAttributes.loft);
+            this.fireProjectile(projectile, projectile.baseAttributes.speed, projectile.baseAttributes.loft);
         }
         else if (this.currentKeys.attackLeft){
-            // this.fireProjectileOrSpell(-1, 1);
             const projectile = this.getProjectile();
-
-            this.fireProjectile(projectile, -this.projectile.baseAttributes.speed,  this.projectile.baseAttributes.loft);
+            this.fireProjectile(projectile, -projectile.baseAttributes.speed,  projectile.baseAttributes.loft);
         }
         else if(this.currentKeys.attackDown){  
-            // this.fireProjectileOrSpell(0, 1);
             const projectile = this.getProjectile();
-
-            this.fireProjectile(projectile, 0, this.projectile.baseAttributes.speed);
+            this.fireProjectile(projectile, 0, projectile.baseAttributes.speed);
         }
         else if(this.currentKeys.attackUp){
-            // this.fireProjectileOrSpell(0, -1);
             const projectile = this.getProjectile();
-
-            this.fireProjectile(projectile, 0, -this.projectile.baseAttributes.speed);  
+            this.fireProjectile(projectile, 0, -projectile.baseAttributes.speed);  
         }
     }
 
     protected getProjectile(){
         if (this.queuedSpells.length > 0){
             const spellToCast = this.queuedSpells.pop();
-            // TODO: remove this and update to spells 
-            // to have inherited classes
-            const flameBall: FireBall = spellToCast as FireBall;
-            console.log(spellToCast);
-            return flameBall.projectile;
+            return spellToCast.projectile;
         }
         return this.projectile;
     }
@@ -153,6 +129,10 @@ export class Player extends Unit {
         };
         if (this.currentKeys.spell2 && this.spells[1] && !this.spells[1].onCooldown){
             this.spells[1].cast();
+            this.updateView();
+        };
+        if (this.currentKeys.spell3 && this.spells[2] && !this.spells[2].onCooldown){
+            this.spells[2].cast();
             this.updateView();
         };
     }

@@ -18,6 +18,7 @@ import { Arrow } from "../projectiles/arrow";
 import { Rock } from "../projectiles/rock";
 import { Axe } from "../projectiles/axe";
 import { FireBall } from "../projectiles/fire_ball";
+import { FireBallMedium } from "../spells/projectile_spell";
 
 // Wrapper for all items on the screen
 // Handles sprite movement and collisions
@@ -475,26 +476,28 @@ export class Stage{
             enemy.state !== UnitStateNames.DEAD){    
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(enemy, this.getProjectileType(projectile));
+                    projectile.unit.dealDamage(enemy, projectile.constructor as typeof Projectile);
                     projectile.hasDealtDamage = true;
                 }
         }
     }
 
-    private getProjectileType(projectile: Projectile): typeof Projectile{
-        switch(projectile.constructor){
-            case(Arrow):
-                return Arrow;
-            case(Rock):
-                return Rock;
-            case(Axe):
-                return Axe;
-            case(FireBall):
-                return FireBall;
-            default: 
-                throw(new Error(`Missing projectile type ${typeof projectile}`));
-        }
-    }
+    // private getProjectileType(projectile: Projectile): typeof Projectile{
+    //     switch(projectile.constructor){
+    //         case(Arrow):
+    //             return Arrow;
+    //         case(Rock):
+    //             return Rock;
+    //         case(Axe):
+    //             return Axe;
+    //         case(FireBall):
+    //             return FireBall;
+    //         case(FireBallMedium):
+    //             return FireBa
+    //         default: 
+    //             throw(new Error(`Missing projectile type ${typeof projectile}`));
+    //     }
+    // }
 
 
 
@@ -507,7 +510,7 @@ export class Stage{
             player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(player, this.getProjectileType(projectile));  
+                    projectile.unit.dealDamage(player, projectile.constructor as typeof Projectile);  
                     projectile.hasDealtDamage = true;
                 }
         }
@@ -522,7 +525,7 @@ export class Stage{
             player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(player, this.getProjectileType(projectile));  
+                    projectile.unit.dealDamage(player, projectile.constructor as typeof Projectile);  
                     projectile.hasDealtDamage = true;
                 }
         }

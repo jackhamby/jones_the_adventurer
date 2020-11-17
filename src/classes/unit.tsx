@@ -15,8 +15,10 @@ import { SPRITE_DECAY_FADE_TIME } from '../types/constants';
 import { FloatingText } from './floating_text';
 import * as PIXI from 'pixi.js';
 import { Armor } from './armor';
-import { Spell, FastFire, FireBall } from './spells/spell';
+import { Spell } from './spells/spell';
 import { Effect } from './effects/effect';
+import { FireBall, FireBallMedium, ProjectileSpell } from './spells/projectile_spell';
+import { FastFire } from './spells/buff_spell';
 
 export class Unit extends Sprite {
 
@@ -49,7 +51,7 @@ export class Unit extends Sprite {
     projectiles: typeof Projectile[];
     armors: Armor[];
     spells: Spell[];
-    queuedSpells: Spell[];
+    queuedSpells: ProjectileSpell[];
 
     // Sprite management
     state: UnitStateNames;
@@ -92,7 +94,7 @@ export class Unit extends Sprite {
         this.treasures = [];
         this.projectiles = [ Rock ];
         this.armors = [];
-        this.spells = [new FastFire(this), new FireBall(this)];
+        this.spells = [new FastFire(this), new FireBall(this), new FireBallMedium(this)];
 
         this.statistics = {
             projectiles: 0,
@@ -188,15 +190,6 @@ export class Unit extends Sprite {
             sprite.x = value + this.spriteParts[playerPartName].offSetX;
         })
     }
-
-    // setAttackSpeed(attackSpeed: number){
-    //     this.attributes.ATTACK_SPEED = attackSpeed;
-
-    //     // TODO: this may purge future negative effects
-    //     this.currentAttributes.ATTACK_SPEED = attackSpeed;
-    //     this.projectileCooldown = attackSpeed;
-
-    // }
 
     updateY(value: number){
         this.y += value;
