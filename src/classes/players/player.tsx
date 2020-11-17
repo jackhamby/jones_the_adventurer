@@ -6,18 +6,20 @@ import { UnitAttributes } from "../../types/types";
 import { UnitStateNames, UnitStatisticNames } from "../../types/enums";
 import { Treasure } from "../treasures/treasure";
 import * as PIXI from 'pixi.js';
-import { FloatingText } from "../floating_text";
 import { ArmorTreasure } from "../treasures/armor_treasure";
 import { CoinTreasure } from "../treasures/coin_treasure";
 import { ProjectileTreasure } from "../treasures/projectile_treasure";
 import { IncreaseText } from "../floating_texts/increase_text";
-import { Spell } from "../spells/spell";
-import { PlayerSelect } from "../../areas/player_select/player_select";
+import { FireBall, Spell } from "../spells/spell";
+import { FireBall as FireBallProjectile } from "../projectiles/fire_ball";
+import { Projectile } from "../projectiles/projectile";
 
 export class Player extends Unit {
 
     currentGold: number;
     updateView: Function;
+    queuedSpells: Spell[];
+
 
     constructor(loader: PIXI.Loader, currentStage: Stage, initialAttributes: UnitAttributes, width: number, height: number, x: number, y: number){
         super(loader, currentStage, initialAttributes, width, height, x, y);
@@ -25,11 +27,12 @@ export class Player extends Unit {
         this.updateView = () => {
             console.warn('update view is not defined')
         }
+        this.queuedSpells = [];
     };
 
     update(keyboard: KeyOptions){
-        // console.log(keyboard)
         super.update(keyboard);
+        console.log(this.queuedSpells)
     }
 
     takeDamage(value: number): number{
@@ -38,9 +41,9 @@ export class Player extends Unit {
         return damageTaken;
     }
 
-    dealDamage(target: Unit): number{
+    dealDamage(target: Unit, projectile: typeof Projectile): number{
         // deal damage via parent class
-        const damageDealt = super.dealDamage(target);
+        const damageDealt = super.dealDamage(target, projectile);
         this.statistics[UnitStatisticNames.DAMAGE_DEALT] = this.statistics.damage + damageDealt;
         this.updateView();
 
@@ -83,45 +86,74 @@ export class Player extends Unit {
         super.clearStats();
     }
 
-    protected fireProjectile(xVelocity: number, yVelocity: number){
-        super.fireProjectile(xVelocity, yVelocity);
+    protected fireProjectile(projectileType: typeof Projectile, xVelocity: number, yVelocity: number){
+        super.fireProjectile(projectileType, xVelocity, yVelocity);
         this.statistics.projectiles += 1;
         this.updateView();
     }
 
     protected tryAttack(){
-
-        // As of now, spells are put in a queue.
-        // spell is used on attack.
-        // if (this.queuedSpells.length > 0){
-        //     const spell: Spell = this.queuedSpells.pop();
-        //     spell.cast();
-        // }
-
-        const projectileVelocity = this.projectile.baseAttributes.speed;
         if (!this.canAttack()){
             return;
         }
+
+
         if (this.currentKeys.attackRight){
-            // Loft creates creates an angle for the projectile
-            this.fireProjectile(projectileVelocity, this.projectile.baseAttributes.loft);
+            // this.fireProjectileOrSpell(1, 1);
+            // if (this.queuedSpells.length > 0){
+            //     const spellToCast = this.queuedSpells.pop();
+            //     // TODO: remove this and update to spells 
+            //     // to have inherited classes
+            //     const flameBall: FireBall = spellToCast as FireBall;
+            //     console.log(spellToCast);
+            //     this.fireProjectile(flameBall.projectile, flameBall.projectile.baseAttributes.speed, flameBall.projectile.baseAttributes.loft);
+            //     return 
+            // }
+            const projectile = this.getProjectile();
+
+            this.fireProjectile(projectile, this.projectile.baseAttributes.speed, this.projectile.baseAttributes.loft);
         }
         else if (this.currentKeys.attackLeft){
-            this.fireProjectile(-projectileVelocity,  this.projectile.baseAttributes.loft);
+            // this.fireProjectileOrSpell(-1, 1);
+            const projectile = this.getProjectile();
+
+            this.fireProjectile(projectile, -this.projectile.baseAttributes.speed,  this.projectile.baseAttributes.loft);
         }
         else if(this.currentKeys.attackDown){  
-            this.fireProjectile(0, projectileVelocity);
+            // this.fireProjectileOrSpell(0, 1);
+            const projectile = this.getProjectile();
+
+            this.fireProjectile(projectile, 0, this.projectile.baseAttributes.speed);
         }
         else if(this.currentKeys.attackUp){
-            this.fireProjectile(0, -projectileVelocity);  
+            // this.fireProjectileOrSpell(0, -1);
+            const projectile = this.getProjectile();
+
+            this.fireProjectile(projectile, 0, -this.projectile.baseAttributes.speed);  
         }
+    }
+
+    protected getProjectile(){
+        if (this.queuedSpells.length > 0){
+            const spellToCast = this.queuedSpells.pop();
+            // TODO: remove this and update to spells 
+            // to have inherited classes
+            const flameBall: FireBall = spellToCast as FireBall;
+            console.log(spellToCast);
+            return flameBall.projectile;
+        }
+        return this.projectile;
     }
 
 
     protected trySpellCast(){
         if (this.currentKeys.spell1 && this.spells[0] && !this.spells[0].onCooldown){
-            // this.queuedSpells.push(this.spells[0]);
             this.spells[0].cast();
+            this.updateView();
+        };
+        if (this.currentKeys.spell2 && this.spells[1] && !this.spells[1].onCooldown){
+            this.spells[1].cast();
+            this.updateView();
         };
     }
 

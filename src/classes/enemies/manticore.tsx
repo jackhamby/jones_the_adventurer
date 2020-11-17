@@ -5,6 +5,7 @@ import { Stage } from "../stages/stage";
 import { KeyOptions } from "../../types/states";
 import { Part } from "../part";
 import { UnitPartNames } from "../../types/enums";
+import { Projectile } from "../projectiles/projectile";
 
 export class Manticore extends Enemy {
 
@@ -76,11 +77,11 @@ export class Manticore extends Enemy {
     }
 
       // over loaded for manticores special attack
-      fireProjectile(xVelocity: number, yVelocity: number){
+      fireProjectile(projectileType: typeof Projectile, xVelocity: number, yVelocity: number){
         this.timeSinceLastProjectileFired = this.projectileCooldown;
-        const projectile = new this.projectile(this.loader, this.x, this.y, this, xVelocity, yVelocity);
-        const projectile2 = new this.projectile(this.loader, this.x, this.y, this, xVelocity / 2, yVelocity / 2);
-        const projectile3 = new this.projectile(this.loader, this.x, this.y, this, xVelocity * 2, yVelocity * 2);
+        const projectile = new projectileType(this.loader, this.x, this.y, this, xVelocity, yVelocity);
+        const projectile2 = new projectileType(this.loader, this.x, this.y, this, xVelocity / 2, yVelocity / 2);
+        const projectile3 = new projectileType(this.loader, this.x, this.y, this, xVelocity * 2, yVelocity * 2);
 
         this.currentStage.viewport.addChild(projectile.sprite);
         this.currentStage.projectiles.push(projectile);
@@ -111,7 +112,7 @@ export class Manticore extends Enemy {
             projectileXVelocity = -this.projectile.baseAttributes.speed;
         }
         
-        this.fireProjectile(projectileXVelocity, 0)
+        this.fireProjectile(this.projectile, projectileXVelocity, 0)
 
     }
 

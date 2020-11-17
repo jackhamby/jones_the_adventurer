@@ -3,7 +3,7 @@ import { GameDisplay } from "./game_display";
 import { GameController } from "../../classes/game_controller";
 import { Player } from "../../classes/players/player";
 import { UnitAttributes, UnitStatistics } from "../../types/types";
-import { GameCharacterDetail } from "./game_character_detail";
+import { CharacterDetail } from "./character_detail/character_detail";
 import './game_wrapper.css';
 import { GameDetail } from "./game_detail";
 
@@ -20,11 +20,11 @@ interface GameWrapperState {
 
 
 export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperState> {
-    private gameController: GameController;
+    private controller: GameController;
 
     constructor(props: any){
         super(props);
-        this.gameController = new GameController(this.props.pixiApplication, this.startGame);
+        this.controller = new GameController(this.props.pixiApplication, this.startGame);
         this.state = {
             player: undefined,
             playerAttributes: this.props.selectedPlayer.baseAttributes,
@@ -37,12 +37,12 @@ export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperSt
     }
 
     componentDidMount(){
-        this.gameController.updateView = this.updateView;
-        this.gameController.setupAndStartGame(this.props.selectedPlayer);
+        this.controller.updateView = this.updateView;
+        this.controller.setupAndStartGame(this.props.selectedPlayer);
     }
 
     startGame = (): void => {
-        this.setState({player: this.gameController.player});
+        this.setState({player: this.controller.player});
     }
 
     updateView = (): void => {
@@ -62,11 +62,11 @@ export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperSt
                         />
                     </div>
                     <div className="game-detail">
-                        <GameDetail player={this.state.player} gameController={this.gameController} />    
+                        <GameDetail player={this.state.player} gameController={this.controller} />    
                     </div>
                 </div>
                 <div className="row game-footer">
-                    <GameCharacterDetail player={this.state.player} gameController={this.gameController} />
+                    <CharacterDetail player={this.state.player} controller={this.controller} />
                 </div>
             </div>
         )

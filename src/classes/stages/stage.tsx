@@ -14,6 +14,10 @@ import { SpritePart, Container } from "../interfaces";
 import { UnitStateNames, ProjectileStateNames } from "../../types/enums";
 import { Unit } from "../unit";
 import { Sprite } from "../sprite";
+import { Arrow } from "../projectiles/arrow";
+import { Rock } from "../projectiles/rock";
+import { Axe } from "../projectiles/axe";
+import { FireBall } from "../projectiles/fire_ball";
 
 // Wrapper for all items on the screen
 // Handles sprite movement and collisions
@@ -248,7 +252,7 @@ export class Stage{
             player.xVelocity = -3;
             // player.yVelocity = -3;
         }
-        collider.dealDamage(player);
+        collider.dealDamage(player, collider.projectile);
         player.inKnockBack =  true;
     }
 
@@ -393,6 +397,10 @@ export class Stage{
     }
 
     private handleProjectilePlatformCollisionY(projectile: Projectile, collider: Sprite){
+        if (projectile.destroyOnContact){
+            projectile.remove();
+            return
+        }
         if (projectile.yVelocity > 0){
             projectile.setY(collider.top() - projectile.height);
         }
@@ -408,6 +416,11 @@ export class Stage{
     }
 
     private handleProjectilePlatformCollisionX(projectile: Projectile, collider: Sprite){
+        if (projectile.destroyOnContact){
+            projectile.remove();
+            return
+        }
+
         if (projectile.xVelocity < 0){
             projectile.setX(collider.right());
         }
@@ -442,7 +455,7 @@ export class Stage{
             enemy.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(enemy);  
+                    projectile.unit.dealDamage(enemy, projectile.unit.projectile);  
                     projectile.hasDealtDamage = true;
                 }
         }
@@ -462,11 +475,27 @@ export class Stage{
             enemy.state !== UnitStateNames.DEAD){    
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(enemy);
+                    projectile.unit.dealDamage(enemy, this.getProjectileType(projectile));
                     projectile.hasDealtDamage = true;
                 }
         }
     }
+
+    private getProjectileType(projectile: Projectile): typeof Projectile{
+        switch(projectile.constructor){
+            case(Arrow):
+                return Arrow;
+            case(Rock):
+                return Rock;
+            case(Axe):
+                return Axe;
+            case(FireBall):
+                return FireBall;
+            default: 
+                throw(new Error(`Missing projectile type ${typeof projectile}`));
+        }
+    }
+
 
 
     private handleProjectilePlayerCollisionY(projectile: Projectile, player: Unit){
@@ -478,7 +507,7 @@ export class Stage{
             player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(player);  
+                    projectile.unit.dealDamage(player, this.getProjectileType(projectile));  
                     projectile.hasDealtDamage = true;
                 }
         }
@@ -493,7 +522,7 @@ export class Stage{
             player.state !== UnitStateNames.DEAD){
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
-                    projectile.unit.dealDamage(player);  
+                    projectile.unit.dealDamage(player, this.getProjectileType(projectile));  
                     projectile.hasDealtDamage = true;
                 }
         }

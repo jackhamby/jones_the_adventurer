@@ -61,9 +61,13 @@ export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean
         case 'ArrowDown':
             prevKeyOptions.attackDown = toggle;
             break;
+        case 'Q':
+        case 'q':
+            prevKeyOptions.spell1 = toggle;
+            break;
         case 'E':
         case 'e':
-            prevKeyOptions.spell1 = toggle;
+            prevKeyOptions.spell2 = toggle;
             break;
         default:
             // unhandled key action

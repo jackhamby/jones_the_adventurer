@@ -41,10 +41,6 @@ export const MAX_ATTRIBUTES = {
     JUMP_COUNT: 6,
 } as UnitAttributes;
 
-// console.log('\n');
-// console.log('\n');
-// console.log(Player)
-// console.log('\n');
 // export class Kobold2 extends Player {
 
 // }

@@ -15,7 +15,7 @@ import { SPRITE_DECAY_FADE_TIME } from '../types/constants';
 import { FloatingText } from './floating_text';
 import * as PIXI from 'pixi.js';
 import { Armor } from './armor';
-import { Spell, FastFire } from './spells/spell';
+import { Spell, FastFire, FireBall } from './spells/spell';
 import { Effect } from './effects/effect';
 
 export class Unit extends Sprite {
@@ -49,6 +49,7 @@ export class Unit extends Sprite {
     projectiles: typeof Projectile[];
     armors: Armor[];
     spells: Spell[];
+    queuedSpells: Spell[];
 
     // Sprite management
     state: UnitStateNames;
@@ -91,7 +92,7 @@ export class Unit extends Sprite {
         this.treasures = [];
         this.projectiles = [ Rock ];
         this.armors = [];
-        this.spells = [new FastFire(this)];
+        this.spells = [new FastFire(this), new FireBall(this)];
 
         this.statistics = {
             projectiles: 0,
@@ -232,19 +233,16 @@ export class Unit extends Sprite {
         return damageTaken;
     }
 
-    dealDamage(target: Unit): number{
+    dealDamage(target: Unit, projectile: typeof Projectile): number{
         let damageDealt = 0;
         if (this.state !== UnitStateNames.DEAD){
-            damageDealt = this.projectile.baseAttributes.damage + Math.round( this.currentAttributes.ATTACK * .25 );  
+            damageDealt = projectile.baseAttributes.damage + Math.round( this.currentAttributes.ATTACK * .25 );  
         }
         target.takeDamage(damageDealt);
         return damageDealt;
     }
 
     drawEffects(){
-        // this.effects.clear();
-        // this.effects.beginFill(0x00FFFF);
-        // this.effects.drawRect(this.x, this.y , this.width, this.height);
         this.effects.forEach((effect: Effect) => {
             effect.draw();
         })
@@ -496,9 +494,9 @@ export class Unit extends Sprite {
         };
     }
 
-    protected fireProjectile(xVelocity: number, yVelocity: number){
+    protected fireProjectile(projectileType: typeof Projectile, xVelocity: number, yVelocity: number){
         this.timeSinceLastProjectileFired = this.projectileCooldown;
-        const projectile = new this.projectile(this.loader, this.x, this.y, this, xVelocity, yVelocity)
+        const projectile = new projectileType(this.loader, this.x, this.y, this, xVelocity, yVelocity)
         projectile.add();
         this.currentStage.projectiles.push(projectile);
     }

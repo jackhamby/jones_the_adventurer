@@ -12,6 +12,7 @@ export class Projectile extends Sprite {
     sprite: PIXI.Sprite;
     state: ProjectileStateNames;
     sticky: boolean;
+    destroyOnContact: boolean;
     unit: Unit;
     currentStage: Stage;
     attributes: ProjectileAttributes;
@@ -34,6 +35,7 @@ export class Projectile extends Sprite {
         this.state = ProjectileStateNames.FLYING;
         this.sprite = {} as PIXI.Sprite;
         this.sticky = false;
+        this.destroyOnContact = false;
         this.unit = unit;
         this.currentStage = unit.currentStage;
         this.attributes = {} as ProjectileAttributes;

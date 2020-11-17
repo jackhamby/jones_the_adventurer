@@ -69,7 +69,7 @@ export class Enemy extends Unit {
             projectileXVelocity = -this.projectile.baseAttributes.speed;
         }
         
-        this.fireProjectile(projectileXVelocity, 0)
+        this.fireProjectile(this.projectile, projectileXVelocity, 0)
     }
 
     protected standing(){

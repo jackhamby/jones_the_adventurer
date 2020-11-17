@@ -37,6 +37,7 @@ export class Armor {
         Object.keys(this.attributes).forEach((key: string) => {
             const attributeName = key as UnitAttributeNames;
             player.attributes[attributeName] += this.attributes[attributeName];
+            player.currentAttributes[attributeName] += this.attributes[attributeName];
         });
         const spritePart = player.spriteParts[this.part].sprite;
         spritePart.texture = this.texture;
@@ -48,6 +49,7 @@ export class Armor {
         Object.keys(this.attributes).forEach((key: string) => {
             const attributeName = key as UnitAttributeNames;
             player.attributes[attributeName] -= this.attributes[attributeName];
+            player.currentAttributes[attributeName] -= this.attributes[attributeName];
         });
         // Remove from current armorset
         player.currentArmorSet[this.part] = null;
