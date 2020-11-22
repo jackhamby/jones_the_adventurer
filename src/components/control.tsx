@@ -50,26 +50,26 @@ export class Control extends React.Component<ControlProps, ControlState> {
     renderState = () => {
         const props = {} as any;
         switch(this.state.currentScreen){
-            // case(ScreenOptions.MAIN_MENU):
-            //     return <MainMenu updateScreen={this.updateScreen}/>;
-            // case(ScreenOptions.CHARACTER_SELECT):
-            //     return <PlayerSelectWrapper
-            //                 updateScreen={this.updateScreen} 
-            //                 changePlayer={this.changePlayer}
-            //                 selectedPlayer={this.state.selectedPlayer}
-            //             />
-            // case(ScreenOptions.GAME):
-            //     return <GameWrapper
-            //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
-            //                 selectedPlayer={this.state.selectedPlayer}
-            //             />
-            // default:
-            //     return (<div> There was an error </div>);
-            default: 
+            case(ScreenOptions.MAIN_MENU):
+                return <MainMenu updateScreen={this.updateScreen}/>;
+            case(ScreenOptions.CHARACTER_SELECT):
+                return <PlayerSelectWrapper
+                            updateScreen={this.updateScreen} 
+                            changePlayer={this.changePlayer}
+                            selectedPlayer={this.state.selectedPlayer}
+                        />
+            case(ScreenOptions.GAME):
                 return <GameWrapper
                             pixiApplication={this.props.initialState.gameState.pixiApplication}
                             selectedPlayer={this.state.selectedPlayer}
                         />
+            default:
+                return (<div> There was an error </div>);
+            // default: 
+            //     return <GameWrapper
+            //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
+            //                 selectedPlayer={this.state.selectedPlayer}
+            //             />
         }
     }
 

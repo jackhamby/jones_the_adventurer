@@ -24,12 +24,11 @@ export class Player extends Unit {
         this.updateView = () => {
             console.warn('update view is not defined')
         }
-        this.queuedSpells = [];
     };
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        console.log(this.queuedSpells)
+        console.log(this.temporaryBuffs)
     }
 
     takeDamage(value: number): number{

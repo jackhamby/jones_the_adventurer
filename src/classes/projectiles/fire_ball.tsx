@@ -1,6 +1,7 @@
 import { Projectile } from "./projectile";
 import { Unit } from "../unit";
 import * as PIXI from 'pixi.js'
+import { FireDot } from "../buffs/buff";
 
 
 export class FireBall extends Projectile {
@@ -24,6 +25,7 @@ export class FireBall extends Projectile {
         this.width = FireBall.width;
         this.height = FireBall.height;
         this.name = "fireball";
+        this.buffs = [ FireDot ]
     }
 }
 

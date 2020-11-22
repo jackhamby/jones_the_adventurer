@@ -4,10 +4,6 @@ import { Spell } from "./spell";
 import { FireBall as FireBallProjectile } from "../projectiles/fire_ball";
 import { FireBallMedium as FireBallProjectileMedium } from "../projectiles/fire_ball_md";
 
-
-
-
-
 export class ProjectileSpell extends Spell {
 
     projectile: typeof Projectile;

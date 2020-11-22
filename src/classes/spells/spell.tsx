@@ -1,10 +1,6 @@
 import { Unit } from "../unit";
 import * as PIXI from 'pixi.js';
-import { Effect } from "../effects/effect";
-import { GlowEffect } from "../effects/glow_effect";
 import { Player } from "../players/player";
-import { Projectile } from "../projectiles/projectile";
-import { Arrow } from "../projectiles/arrow";
 
 export class Spell {
     unit: Unit;

@@ -19,6 +19,7 @@ import { Spell } from './spells/spell';
 import { Effect } from './effects/effect';
 import { FireBall, FireBallMedium, ProjectileSpell } from './spells/projectile_spell';
 import { FastFire } from './spells/buff_spell';
+import { Buff } from './buffs/buff';
 
 export class Unit extends Sprite {
 
@@ -52,6 +53,7 @@ export class Unit extends Sprite {
     armors: Armor[];
     spells: Spell[];
     queuedSpells: ProjectileSpell[];
+    temporaryBuffs: Buff[];
 
     // Sprite management
     state: UnitStateNames;
@@ -95,7 +97,9 @@ export class Unit extends Sprite {
         this.projectiles = [ Rock ];
         this.armors = [];
         this.spells = [new FastFire(this), new FireBall(this), new FireBallMedium(this)];
-
+        this.queuedSpells = [];
+        this.temporaryBuffs = []; 
+    
         this.statistics = {
             projectiles: 0,
             enemies: 0,
@@ -126,7 +130,6 @@ export class Unit extends Sprite {
         this.spriteParts = {} as SpriteParts;
         this.hpBar = new PIXI.Graphics();
         this.effects = [];
-        // this.effects.zIndex = -1;
 
         this.currentStage = currentStage;
         this.currentKeys = {} as KeyOptions;
@@ -138,6 +141,7 @@ export class Unit extends Sprite {
         this.handleState();
         this.updateCooldowns();
         this.updateSpells();
+        this.updateBuffs();
     }
 
 
@@ -345,8 +349,14 @@ export class Unit extends Sprite {
     protected updateSpells(){
         this.spells.forEach((spell: Spell) => {
             spell.update();
-        })
+        });
     } 
+
+    protected updateBuffs(){
+        this.temporaryBuffs.forEach((buff: Buff) => {
+            buff.update();
+        });
+    }
 
     protected updateCooldowns(){
         // projectile cooldowns

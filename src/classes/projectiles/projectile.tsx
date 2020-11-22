@@ -5,7 +5,7 @@ import { Unit } from "../unit";
 import { Stage } from "../stages/stage";
 import { SPRITE_DECAY_FADE_TIME } from "../../types/constants";
 import * as PIXI from 'pixi.js'
-
+import { Buff } from "../buffs/buff";
 
 export class Projectile extends Sprite {
 
@@ -19,6 +19,7 @@ export class Projectile extends Sprite {
     hasDealtDamage: boolean;
     texture: PIXI.Texture;
     name: string;
+    buffs: typeof Buff[];
     
     static width = 10;
     static height = 10;

@@ -10,7 +10,7 @@ export class Effect {
         this.unit = unit;
     }
 
-    draw(){
+    draw(){ 
    
     }
 

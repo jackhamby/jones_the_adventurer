@@ -19,6 +19,7 @@ import { Rock } from "../projectiles/rock";
 import { Axe } from "../projectiles/axe";
 import { FireBall } from "../projectiles/fire_ball";
 import { FireBallMedium } from "../spells/projectile_spell";
+import { Buff } from "../buffs/buff";
 
 // Wrapper for all items on the screen
 // Handles sprite movement and collisions
@@ -454,7 +455,10 @@ export class Stage{
         if ((projectile.state === ProjectileStateNames.FLYING ||
             projectile.state === ProjectileStateNames.FALLING) && 
             enemy.state !== UnitStateNames.DEAD){
-                projectile.remove();
+                projectile.buffs.forEach((buff: typeof Buff) => {
+                    // buff.activate(enemy);
+                })
+                projectile.remove();   
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(enemy, projectile.unit.projectile);  
                     projectile.hasDealtDamage = true;
