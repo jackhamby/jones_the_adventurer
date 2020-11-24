@@ -1,6 +1,3 @@
-// export const x = 2;
-
-
 import { Sprite } from './sprite';
 import { UnitStateNames, UnitPartNames, UnitArmorNames } from '../types/enums';
 import { UnitAttributes, UnitStatistics, UnitParts, SpriteParts, SpriteArmors } from '../types/types';

@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js';
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
 import { Player } from './players/player';
 import { UnitAttributes } from '../types/types';
+import { Unit } from './unit';
 
 export class Armor {
 
@@ -30,7 +31,7 @@ export class Armor {
         this.texture = {} as PIXI.Texture;
     }
 
-    apply(player: Player){
+    apply(player: Unit){
         if (player.currentArmorSet[this.part]){
             player.currentArmorSet[this.part]?.remove(player);
         }
@@ -45,7 +46,7 @@ export class Armor {
         player.currentArmorSet[this.part] = this;
     }
 
-    remove(player: Player){
+    remove(player: Unit){
         Object.keys(this.attributes).forEach((key: string) => {
             const attributeName = key as UnitAttributeNames;
             player.attributes[attributeName] -= this.attributes[attributeName];
@@ -59,9 +60,7 @@ export class Armor {
     }
 }
 
-// ==================================================================================================
-
-
+// ========================================================================================================
 // Knight ==================================================================================================
 
 export class KnightHeadArmor1 extends Armor {
@@ -112,11 +111,8 @@ export class KnightLegsArmor1 extends Armor {
     }
 }
 
+
 // ==================================================================================================
-
-
-
-
 // Orc ==================================================================================================
 
 
@@ -176,7 +172,6 @@ export class OrcBodyArmor1 extends Armor {
 }
 
 // ==================================================================================================
-
 // Kobold ==================================================================================================
 
 export class KoboldHeadArmor1 extends Armor {

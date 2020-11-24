@@ -1,5 +1,3 @@
-
-
 import * as PIXI from "pixi.js";
 import { SPRITE_DECAY } from "../types/constants";
 
@@ -14,7 +12,6 @@ export class Sprite {
     loader: PIXI.Loader;
     decay: number;
 
-    
     constructor(loader: PIXI.Loader, x: number, y: number, width: number, height: number, xVelocity: number, yVelocity: number){
         this.x = x;
         this.x = x;
@@ -26,7 +23,6 @@ export class Sprite {
         this.loader = loader;
         this.decay = SPRITE_DECAY;
     }
-
 
     top(){
         return this.y;

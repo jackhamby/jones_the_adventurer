@@ -37,20 +37,9 @@ export class ArmorTreasure extends Treasure {
     }
 
     apply(player: Player){
-        // const affectedBodyPart = this.armor.part;
-        // const newArmorType = this.armor.type;
-        // const newTexture = player.textures[affectedBodyPart][newArmorType];
-        // const spritePart = player.spriteParts[affectedBodyPart].sprite;
-        // // if (player.currentArmorSet[affectedBodyPart]){
-
-        // // }
-        // spritePart.texture = newTexture;
-        // player.currentArmorSet[affectedBodyPart] = newArmorType;
         super.apply(player);
         this.armor.apply(player);
         player.armors.push(this.armor);
-
-        // player.currentGold += this.amount;
     }
 
     initTextures(){
@@ -124,7 +113,6 @@ export class KnightLegsArmor1Treasure extends ArmorTreasure {
     }
 }
 // ==================================================================================================
-
 // Kobold ==================================================================================================
 
 export class KoboldHeadArmor1Treasure extends ArmorTreasure {
@@ -218,7 +206,6 @@ export class KoboldLegsArmor1Treasure extends ArmorTreasure {
 }
 
 // ==================================================================================================
-
 // Orc ==================================================================================================
 
 export class OrcHeadArmor1Treasure extends ArmorTreasure {

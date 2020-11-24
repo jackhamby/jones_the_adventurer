@@ -60,14 +60,11 @@ export class CustomizeModal extends React.Component<CustomizeModalProps, Customi
             case(TabOptions.armor):
                 mainContent =  <ArmorSelect player={this.props.player} control={this.props.control}/>
                 break;
-            // TODO: define this
             case(TabOptions.projectiles):
                 mainContent = <ProjectileSelect player={this.props.player} control={this.props.control}/>
                 break;
-                // return null;\
             case(TabOptions.spells):
                 break;
-                // return null;    
         }
         return (
             <>

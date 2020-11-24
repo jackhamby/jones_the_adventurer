@@ -101,17 +101,6 @@ export class Stage{
 
     // ================================== private methods ===========================================================
     // ===============================================================================================================  
-
-    // TODO: this should be else where
-    // private removeTreasure(treasureToRemove: Treasure){
-    //     this.treasures = this.treasures.filter((treasure: Treasure) => treasure != treasureToRemove);
-
-    //     treasureToRemove.spriteParts.forEach((spritePart: SpritePart) => {
-    //         this.viewport.removeChild(spritePart.sprite);
-    //     })
-    // }
-    
-
     private checkIfStageCleared(){
         if (this.enemies.length === 0){
             this.isCleared = true;
@@ -226,16 +215,12 @@ export class Stage{
     }
 
     private handlePlayerTreasureCollisionX(player: Player, treasure: Treasure){
-        // store.dispatch(applyTreasure(treasure) as ControlAction);
         player.pickupTreasure(treasure);
-        // this.removeTreasure(treasure);
         treasure.remove();
     }
 
     private handlePlayerTreasureCollisionY(player: Player, treasure: Treasure){
-        // store.dispatch(applyTreasure(treasure) as ControlAction);
         player.pickupTreasure(treasure);
-        // this.removeTreasure(treasure);
         treasure.remove();
     }
 
@@ -247,34 +232,17 @@ export class Stage{
         // Set knockback right
         if (collider.xVelocity > 0){
             player.xVelocity = 3;
-            // player.yVelocity = -3;
         }
         // Set kockback left
         if (collider.xVelocity < 0){
             player.xVelocity = -3;
-            // player.yVelocity = -3;
         }
         collider.dealDamage(player, collider.projectile);
         player.inKnockBack =  true;
     }
 
     private handlePlayerEnemyCollisionY(player: Unit, collider: Enemy){
-        // if (collider.state === UnitStateNames.DEAD){
-        //     return;
-        // }
-        // player.yVelocity = -3;
-        // // Set knockback right
-        // if (collider.xVelocity > 0){
-        //     player.xVelocity = 3;
-        //     // player.yVelocity = -3;
-        // }
-        // // Set kockback left
-        // if (collider.xVelocity < 0){
-        //     player.xVelocity = -3;
-        //     // player.yVelocity = -3;
-        // }
-        // collider.dealDamage(player);
-        // player.inKnockBack =  true;
+        // TODO
     }
 
 
@@ -379,8 +347,6 @@ export class Stage{
         const collidePlayer = this.collide(projectile, this.player);
 
         if (collidePlatform){
-            var t = projectile;
-            var b = collidePlatform;
             this.handleProjectilePlatformCollisionY(projectile, collidePlatform);
         }
         if (collideEnemy){
@@ -491,25 +457,6 @@ export class Stage{
                 }
         }
     }
-
-    // private getProjectileType(projectile: Projectile): typeof Projectile{
-    //     switch(projectile.constructor){
-    //         case(Arrow):
-    //             return Arrow;
-    //         case(Rock):
-    //             return Rock;
-    //         case(Axe):
-    //             return Axe;
-    //         case(FireBall):
-    //             return FireBall;
-    //         case(FireBallMedium):
-    //             return FireBa
-    //         default: 
-    //             throw(new Error(`Missing projectile type ${typeof projectile}`));
-    //     }
-    // }
-
-
 
     private handleProjectilePlayerCollisionY(projectile: Projectile, player: Unit){
         if (projectile.unit === player){

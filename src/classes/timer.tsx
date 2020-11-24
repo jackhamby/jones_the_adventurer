@@ -1,4 +1,3 @@
-import { TEXT_FADE_TIME } from "../types/constants";
 import * as PIXI from "pixi.js";
 import { Stage } from "./stages/stage";
 

@@ -44,7 +44,6 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.completeImmunity();
         this.infiniteJumps();
         this.veryFast();
-        // this.quickAttacks();
         this.props.control.player.attributes.ATTACK = 99999999999999;
         this.props.control.player.currentAttributes.ATTACK = 99999999999999;
         this.setState({closeModal: true})
@@ -55,11 +54,6 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.props.control.player.attributes.SPEED = 7;
         this.props.control.player.currentAttributes.SPEED = 7;
     }
-
-    // quickAttacks = () => {
-    //     this.props.control.player.attributes.attack_speed = 0;
-    //     this.props.control.player.currentAttributes.attack_speed = 0;
-    // }
 
     restoreAllHp = () => {
         this.props.control.player.currentAttributes.HEALTH = this.props.control.player.attributes.HEALTH;
