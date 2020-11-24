@@ -28,7 +28,7 @@ export class Player extends Unit {
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        console.log(this.temporaryBuffs)
+        // console.log(this.temporaryBuffs)
     }
 
     takeDamage(value: number): number{

@@ -45,6 +45,7 @@ export class Projectile extends Sprite {
         this.yVelocity = yVelocity;
         this.texture = {} as PIXI.Texture;
         this.name = "default projectile";
+        this.buffs = [];
     }
 
     update(){

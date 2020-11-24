@@ -1,4 +1,5 @@
 import { Effect } from "../effects/effect";
+import { FireEffect } from "../effects/fire_effect";
 import { GlowEffect } from "../effects/glow_effect";
 import { Unit } from "../unit";
 
@@ -32,7 +33,8 @@ export class Buff {
         }
     }
 
-    activate(unit?: Unit){
+    apply(unit?: Unit){
+        this.currentActiveTime = this.activeTime;
         if (unit){
             unit.temporaryBuffs.push(this);
         }
@@ -58,44 +60,58 @@ export class AttackSpeed extends Buff {
         this.name = "attack speed buff";
         this.activeTime = 200;
         this.effect = new GlowEffect(this.unit, 0xFF0000);
+    }
 
+    update(){
+        super.update();
     }
 
     deactivate(){
-        this.effect.remove();
+        super.deactivate();
         this.unit.currentAttributes.ATTACK_SPEED = this.unit.attributes.ATTACK_SPEED;
         this.unit.projectileCooldown = this.unit.attributes.ATTACK_SPEED;  
     }
 
-    activate(){
-        this.effect.add();
+    apply(){
+        super.apply();
         this.unit.currentAttributes.ATTACK_SPEED = this.unit.currentAttributes.ATTACK_SPEED / 2;
         this.unit.projectileCooldown = this.unit.currentAttributes.ATTACK_SPEED;
-        this.currentActiveTime = this.activeTime;
     }
     
 }
+
+
+
+
+
+
 
 export class FireDot extends Buff {
     constructor(unit: Unit){
         super(unit);
         this.name = "fire over time";
         this.activeTime = 200;
+        this.effect = new FireEffect(this.unit);
         // this.effect = new GlowEffect(this.unit, 0xFF0000);
+
 
     }
 
     update(){
         super.update();
-        this.unit.takeDamage(5);
+        // console.log(this.activeTime)
+        // console.log(this.activeTime % 25)
+        if (this.currentActiveTime % 25 === 0){
+            this.unit.takeDamage(5);
+        }
     }
 
-    deactivate(){
-        super.deactivate();
-        // // this.effect.remove();
-        // this.unit.currentAttributes.ATTACK_SPEED = this.unit.attributes.ATTACK_SPEED;
-        // this.unit.projectileCooldown = this.unit.attributes.ATTACK_SPEED;  
-    }
+    // deactivate(){
+    //     super.deactivate();
+    //     // // this.effect.remove();
+    //     // this.unit.currentAttributes.ATTACK_SPEED = this.unit.attributes.ATTACK_SPEED;
+    //     // this.unit.projectileCooldown = this.unit.attributes.ATTACK_SPEED;  
+    // }
 
     
 }

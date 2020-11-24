@@ -42,32 +42,13 @@ export class FastFire extends BuffSpell {
 
     cast(){
         super.cast();
-        this.buff.activate();
-        // this.unit.temporaryBuffs.push(this.buff);
-        // this.unit.currentAttributes.ATTACK_SPEED = this.unit.currentAttributes.ATTACK_SPEED / 2;
-        // this.unit.projectileCooldown = this.unit.currentAttributes.ATTACK_SPEED;
-        // this.currentActiveTime = this.activeTime;
-        // this.effect.add();
+        this.buff.apply();
     }
-
-    // update(){
-    //     super.update();
-    //     // this.buff.update();
-    //     // if (this.activeTime > 0){
-    //     //     this.currentActiveTime -= 1;
-    //     //     if (this.currentActiveTime === 0){
-    //     //         this.deactivate();
-    //     //     }
-    //     // }
-    // }
 
     deactivate(){
         this.buff.deactivate();
         this.unit.temporaryBuffs = this.unit.temporaryBuffs.filter((buff: Buff) => {
             return buff !== this.buff;
-        })
-        // this.unit.currentAttributes.ATTACK_SPEED = this.unit.attributes.ATTACK_SPEED;
-        // this.unit.projectileCooldown = this.unit.attributes.ATTACK_SPEED;  
-        // this.effect.remove();
+        });
     }
 }

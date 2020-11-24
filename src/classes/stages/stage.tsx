@@ -171,7 +171,7 @@ export class Stage{
             this.checkEnemyYCollisions(enemy)
             enemy.hpBar.clear();
             enemy.drawHpBar()
-            
+            enemy.drawEffects();
         })
     }
 
@@ -447,6 +447,7 @@ export class Stage{
         if (projectile.unit instanceof Enemy){
             return;
         }
+
         // cant be damaged by itself
         if (projectile.unit === enemy){
             return;
@@ -456,7 +457,8 @@ export class Stage{
             projectile.state === ProjectileStateNames.FALLING) && 
             enemy.state !== UnitStateNames.DEAD){
                 projectile.buffs.forEach((buff: typeof Buff) => {
-                    // buff.activate(enemy);
+                    const bufff = new buff(enemy);
+                    bufff.apply()
                 })
                 projectile.remove();   
                 if (!projectile.hasDealtDamage){
@@ -477,7 +479,11 @@ export class Stage{
         }
         if ((projectile.state === ProjectileStateNames.FLYING ||
             projectile.state === ProjectileStateNames.FALLING) && 
-            enemy.state !== UnitStateNames.DEAD){    
+            enemy.state !== UnitStateNames.DEAD){   
+                projectile.buffs.forEach((buff: typeof Buff) => {
+                    const bufff = new buff(enemy);
+                    bufff.apply()
+                }) 
                 projectile.remove();
                 if (!projectile.hasDealtDamage){
                     projectile.unit.dealDamage(enemy, projectile.constructor as typeof Projectile);

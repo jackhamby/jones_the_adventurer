@@ -23,7 +23,7 @@ export class Effect {
         this.unit.currentStage.viewport.removeChild(this.graphics);
         this.unit.effects = this.unit.effects.filter((effect: Effect) => {
             return effect !== this;
-        })
+        });
     }
 }
 
