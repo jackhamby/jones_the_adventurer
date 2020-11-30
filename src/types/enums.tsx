@@ -17,18 +17,6 @@ export enum TabOptions {
     projectiles = "projectiles"
 }
 
-// export class PlayerOptions {
-//     static KNIGHT = typeof Knight;
-//     static ORC = typeof Orc;
-//     static KOBOLD = typeof Kobold;
-// }
-
-// export enum PlayerOptionNames {
-//     // KNIGHT = typeof CharacterSelectWrapper,
-//     // KOBOLD = "kobold",
-//     // ORC = "orc"
-// }
-
 export enum Attributes {
     HEALTH = "health",
     SPEED = "speed",

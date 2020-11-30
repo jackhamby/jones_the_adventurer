@@ -1,5 +1,4 @@
 
-import * as React from 'react';
 import * as PIXI from 'pixi.js';
 import { Sprite } from './sprite';
 import { Stage } from './stages/stage';
@@ -18,8 +17,7 @@ export class Platform extends Sprite{
 
 
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        // x, y, width, height, xVel, yVel
-        super(loader ,x, y, width, height, 0, 0)
+        super(loader ,x, y, width, height, 0, 0);
         this.loader = loader;
         this.currentStage = stage;
         this.textures = this.initializeTextures();
@@ -50,10 +48,6 @@ export class Platform extends Sprite{
 
 
 export class DefaultPlatform extends Platform {
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        super(loader, stage, x, y, width, height);
-    }
-
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -66,10 +60,6 @@ export class DefaultPlatform extends Platform {
 }
 
 export class DirtPlatform extends Platform {
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        super(loader, stage, x, y, width, height);
-    }
-
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -81,10 +71,6 @@ export class DirtPlatform extends Platform {
     }
 }
 export class GrassPlatform extends Platform {
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        super(loader, stage, x, y, width, height);
-    }
-
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -96,10 +82,6 @@ export class GrassPlatform extends Platform {
     }
 }
 export class RedGrassPlatform extends Platform {
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        super(loader, stage, x, y, width, height);
-    }
-
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -111,10 +93,6 @@ export class RedGrassPlatform extends Platform {
     }
 }
 export class SandRockPlatform extends Platform {
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
-        super(loader, stage, x, y, width, height);
-    }
-
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }

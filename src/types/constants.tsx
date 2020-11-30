@@ -1,22 +1,4 @@
-
-// import { UnitAttributes, PlayerOptions } from './types/types';
-// import { Knight } from './classes/players/knight';
-// import { Kobold } from './classes/players/kobold';
-
 import { UnitAttributes } from "./types";
-
-import { TestKnight } from "../classes/players/test_knight";
-
-import { Player } from "../classes/players/player";
-
-import { Orc } from "../classes/players/orc";
-import { Kobold } from "../classes/players/kobold";
-import { Knight } from "../classes/players/knight";
-
-
-// import { Knight } from "../classes/players/knight";
-// import { Kobold } from "../classes/players/kobold";
-// import { Player } from "../classes/players/player";
 
 export const SCREEN_HEIGHT = window.screen.width * .4;
 export const SCREEN_WIDTH = window.screen.height;
@@ -24,7 +6,6 @@ export const SCREEN_WIDTH = window.screen.height;
 export const PLAYER_STARTING_X = 120;
 export const PLAYER_STARTING_Y = 120;
 
-// const CHARACTER_ATTRIBUTES = {} as any;
 
 export const SPRITE_DECAY = 1000;
 export const SPRITE_DECAY_FADE_TIME =  150;
@@ -40,26 +21,6 @@ export const MAX_ATTRIBUTES = {
     JUMP_HEIGHT: 50,
     JUMP_COUNT: 6,
 } as UnitAttributes;
-
-// export class Kobold2 extends Player {
-
-// }
-
-
-// export const PLAYER_OPTIONS = {
-//     // "orc" : {} as any,
-//     // orc: Orc,
-//     knight: {} as any,
-//     // kobold: {} as any,
-//     // kobold: Kobold,
-
-// } as PlayerOptions;
-
-
-// export const TEST_PLAYER_OPTIONS = {
-//     "test_knight" : TestKnight
-// }
-
 
 export const STAGE1_LAYOUT = `80 45
 DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD

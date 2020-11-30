@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 
 interface ModalState {
@@ -12,7 +10,6 @@ interface ModalProps {
     link: JSX.Element;
     onModalShow: Function;
     onModalHide: Function;
-
 }
 
 export class Modal extends React.Component<ModalProps, ModalState> {

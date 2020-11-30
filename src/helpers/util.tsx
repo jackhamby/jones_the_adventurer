@@ -20,14 +20,6 @@ export const toRadians = (degrees: number): number => {
     return radians;
 }
 
-// // Give a percent, return if chance happened
-// export const chance = (percent: number): boolean => {
-//     if (percent < 0 || percent > 100){
-//         throw (`chance in util.tsx takes a percent 1-100, not ${percent}`);
-//     }
-
-// }
-
 export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean): KeyOptions => {
     switch(key){
         case 'A':

@@ -1,8 +1,7 @@
-import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlayerOptionNames } from "./enums"
-import { Part } from "../classes/part"
-import { Projectile } from "../classes/projectiles/projectile"
-import { Player } from "../classes/players/player"
-import { Unit } from "../classes/unit"
+import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames } from "./enums";
+import { Part } from "../classes/part";
+import { Projectile } from "../classes/projectiles/projectile";
+
 import { Armor } from "../classes/armor"
 
 export type UnitStates = {

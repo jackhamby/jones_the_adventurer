@@ -91,7 +91,6 @@ export class KnightLegsArmor1Treasure extends ArmorTreasure {
 
 }
 // ==================================================================================================
-
 // Kobold ==================================================================================================
 
 export class KoboldHeadArmor1Treasure extends ArmorTreasure {
@@ -162,7 +161,6 @@ export class KoboldLegsArmor1Treasure extends ArmorTreasure {
 }
 
 // ==================================================================================================
-
 // Orc ==================================================================================================
 
 export class OrcHeadArmor1Treasure extends ArmorTreasure {
