@@ -7,6 +7,10 @@ import { keyboard } from "../components/control";
 import * as Constants from '../types/constants';
 import { StageManager } from "./stages/stage_manager";
 import { Stage } from "./stages/stage";
+import { Spell } from "./spells/spell";
+import { FireBall, FireBallMedium } from "./spells/projectile_spell";
+import { FastFire } from "./spells/buff_spell";
+import { Unit } from "./unit";
 
 
 // Initialize game data
@@ -158,7 +162,16 @@ export class GameController {
         let newPlayer: Player;
         const loader = this.pixiApplication.loader;
         newPlayer = new initialPlayer(loader, {} as Stage, initialPlayer.baseAttributes, initialPlayer.width, initialPlayer.height, Constants.PLAYER_STARTING_X, Constants.PLAYER_STARTING_Y);
+        newPlayer.spells.push(this.getRandomSpell(newPlayer));
         return newPlayer
+    }
+
+    private getRandomSpell(unit: Unit): Spell {
+        const spellOptions = [FireBall, FireBallMedium, FastFire];
+        const randomIndex = Math.floor(Math.random() * 10) % (spellOptions.length - 1);
+        const randomSpell = spellOptions[randomIndex];
+
+        return new randomSpell(unit);
     }
 
     private loadTextures(player: typeof Player){
@@ -201,6 +214,9 @@ export class GameController {
             .add('axe', 'images/projectiles/axe.png')
             .add('fire_ball', 'images/projectiles/fire_ball.png')
             .add('fire_ball_md', 'images/projectiles/fire_ball_md.png')
+
+            // Add attribute images
+            .add('speed', 'images/attributes/speed.png')
 
 
 

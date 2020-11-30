@@ -10,15 +10,9 @@ import { Projectile } from "../projectiles/projectile";
 import { FloatingText } from "../floating_text";
 import { Timer } from "../timer";
 import { StageManager } from "./stage_manager";
-import { SpritePart, Container } from "../interfaces";
 import { UnitStateNames, ProjectileStateNames } from "../../types/enums";
 import { Unit } from "../unit";
 import { Sprite } from "../sprite";
-import { Arrow } from "../projectiles/arrow";
-import { Rock } from "../projectiles/rock";
-import { Axe } from "../projectiles/axe";
-import { FireBall } from "../projectiles/fire_ball";
-import { FireBallMedium } from "../spells/projectile_spell";
 import { Buff } from "../buffs/buff";
 
 // Wrapper for all items on the screen

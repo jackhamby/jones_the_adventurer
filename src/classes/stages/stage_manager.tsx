@@ -7,11 +7,13 @@ import { SmallCoins } from "../treasures/coin_treasure";
 import { STAGE1_LAYOUT, STAGE2_LAYOUT } from "../../types/constants";
 import { ArrowTreasure } from "../treasures/projectile_treasure";
 import { KnightHeadArmor1Treasure, KnightHeadArmor2Treasure, KnightBodyArmor1Treasure, KnightLegsArmor1Treasure, OrcHeadArmor1Treasure, OrcBodyArmor1Treasure, OrcLegsArmor1Treasure, KoboldHeadArmor1Treasure, KoboldLegsArmor1Treasure, KoboldBodyArmor2Treasure, KoboldHeadArmor2Treasure, KoboldHeadArmor3Treasure } from "../treasures/armor_treasure";
-import { Kobold } from "../enemies/kobold";
+import { Kobold as EnemyKobold } from "../enemies/kobold";
 import { Man } from "../enemies/man";
 import { Manticore } from "../enemies/manticore";
 import { Knight } from "../players/knight";
 import { Orc } from "../players/orc";
+import { Kobold } from "../players/kobold";
+import { FastFireTreasure, FireBallMediumTreasure, FireBallTreasure } from "../treasures/spell_treasure";
 
 
 // Creates stages
@@ -39,6 +41,9 @@ export class StageManager {
         }
     }
 
+
+
+
     // =================================== Stage contruction ================================================= //
     // ======================================================================================================= //
     private buildStageOne(): Stage {
@@ -57,9 +62,9 @@ export class StageManager {
         );
 
         const enemies = [
-            new Kobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 200, 200),
+            new EnemyKobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 200, 200),
             new Man(this.loader, stage, Man.baseAttributes, Man.width, Man.height, 789, 554), 
-            new Kobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 83, 700)
+            new EnemyKobold(this.loader, stage, Kobold.baseAttributes, Kobold.width, Kobold.height, 83, 700)
         ];
 
         const platforms = this.generatePlatforms(STAGE1_LAYOUT, stage);
@@ -67,7 +72,6 @@ export class StageManager {
 
         const treasures = this.generateTreasures(stage);
         stage.treasures = treasures;
-
 
         stage.enemies = enemies;
         return stage;
@@ -136,12 +140,12 @@ export class StageManager {
         switch(stage.level){
             case(1):
                 treasureOptions = [KnightHeadArmor1Treasure, KnightHeadArmor2Treasure, KnightBodyArmor1Treasure, KnightLegsArmor1Treasure]
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 knightTreasures.push(...this.generateStage1Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):   
                 treasureOptions = [KnightHeadArmor1Treasure, KnightHeadArmor2Treasure, KnightBodyArmor1Treasure, KnightLegsArmor1Treasure]
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 knightTreasures.push(...this.generateStage2Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default:
@@ -157,13 +161,14 @@ export class StageManager {
         let randomTreasureTypes = [] as typeof Treasure[]
         switch(stage.level){
             case(1):
+            
                 treasureOptions = [KoboldHeadArmor1Treasure, KoboldLegsArmor1Treasure, KoboldBodyArmor2Treasure, KoboldHeadArmor2Treasure];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 koboldTreasures.push(...this.generateStage1Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):
                 treasureOptions = [KoboldBodyArmor2Treasure, KoboldHeadArmor3Treasure];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 koboldTreasures.push(...this.generateStage2Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default: 
@@ -179,18 +184,32 @@ export class StageManager {
         switch(stage.level){
             case(1):
                 treasureOptions = [OrcHeadArmor1Treasure, OrcBodyArmor1Treasure, OrcLegsArmor1Treasure];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 orcTreasures.push(...this.generateStage1Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             case(2):
                 treasureOptions = [OrcHeadArmor1Treasure, OrcBodyArmor1Treasure, OrcLegsArmor1Treasure];
-                randomTreasureTypes = this.getRandomTreaureTypes(treasureOptions, 2);
+                randomTreasureTypes = this.getRandomTreasureTypes(treasureOptions, 2);
                 orcTreasures.push(...this.generateStage2Treasures(stage, randomTreasureTypes[0], randomTreasureTypes[1]));
                 break;
             default: 
                 break;  
         }
         return orcTreasures;
+    }
+
+    private generateRandomSpellTreasures(stage: Stage): typeof Treasure[] {
+        const spellTreasures = [];
+        switch(stage.level){
+            case(1):
+                const spellTreasureOptions = [FastFireTreasure, FireBallMediumTreasure, FireBallTreasure];
+                const randomSpellTreasures = this.getRandomTreasureTypes(spellTreasureOptions, 1);
+                spellTreasures.push(randomSpellTreasures[0]);
+                break;
+            default:
+                break;
+        }
+        return spellTreasures;
     }
 
 
@@ -209,8 +228,9 @@ export class StageManager {
         return genericTreasures;
     }
 
-
-    private generateStage1Treasures(stage: Stage, treasure1Type: typeof Treasure, treasure2Type: typeof Treasure): Treasure[]{
+    private generateStage1Treasures(stage: Stage,
+                                    armorTreasure1: typeof Treasure,
+                                    armorTreasure2: typeof Treasure): Treasure[]{
         const treasures = [];
 
         const lowerTreasureX =  334;
@@ -221,14 +241,24 @@ export class StageManager {
 
         const projectileTreasureX = 1071;
         const projectileTreasureY = 837;
+
+
+        const spellTreasureX = 280;
+        const spellTreasureY = 70;
+
+
         treasures.push(new ArrowTreasure(this.loader, stage,  projectileTreasureX, projectileTreasureY));
-        treasures.push(new treasure1Type(this.loader, stage, lowerTreasureX, lowerTreasureY));
-        treasures.push(new treasure2Type(this.loader, stage, upperTreasureX, upperTreasureY));
+        treasures.push(new FastFireTreasure(this.loader, stage, spellTreasureX, spellTreasureY));
+        treasures.push(new armorTreasure1(this.loader, stage, lowerTreasureX, lowerTreasureY));
+        treasures.push(new armorTreasure2(this.loader, stage, upperTreasureX, upperTreasureY));
+    
 
         return treasures;
     }
 
-    private generateStage2Treasures(stage: Stage, treasure1Type: typeof Treasure, treasure2Type: typeof Treasure): Treasure[] {
+    private generateStage2Treasures(stage: Stage,
+                                    armorTreasure1: typeof Treasure,
+                                    armorTreasure2: typeof Treasure): Treasure[] {
         const treasures = [] as Treasure[];
 
         const treasure1X = 1915;
@@ -237,8 +267,8 @@ export class StageManager {
         const treasure2X = 1265;
         const treasure2Y = 652;
 
-        treasures.push(new treasure1Type(this.loader, stage, treasure1X, treasure1Y))
-        treasures.push(new treasure2Type(this.loader, stage, treasure2X, treasure2Y))
+        treasures.push(new armorTreasure1(this.loader, stage, treasure1X, treasure1Y))
+        treasures.push(new armorTreasure2(this.loader, stage, treasure2X, treasure2Y))
 
         return treasures;
     }
@@ -251,7 +281,7 @@ export class StageManager {
     // Returns list of treasure types equal to the <count> passed in
     // treasure types wil be randomly picked from the <options> passed
     // in.
-    private getRandomTreaureTypes(options: typeof Treasure[], count: number): typeof Treasure[]{
+    private getRandomTreasureTypes(options: typeof Treasure[], count: number): typeof Treasure[]{
         if (count > options.length){
             throw "not enough unique treasures in getRandomTreasureTypes";
         }

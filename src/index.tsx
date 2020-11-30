@@ -49,7 +49,7 @@ const initialState = {
         //     name: PlayerOptionNames.ORC,  // Default to kobold 
         //     attributes: PLAYER_OPTIONS[PlayerOptionNames.ORC].baseAttributes,
         // } as Character
-        player:  Knight,
+        player:  Kobold,
         // character: {
         //     name: PlayerOptionNames.KNIGHT,  // Default to knight 
         //     // attributes: PLAYER_OPTIONS[PlayerOptionNames.KNIGHT].baseAttributes,

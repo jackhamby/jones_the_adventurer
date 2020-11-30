@@ -96,7 +96,7 @@ export class Unit extends Sprite {
         this.treasures = [];
         this.projectiles = [ Rock ];
         this.armors = [];
-        this.spells = [new FastFire(this), new FireBall(this), new FireBallMedium(this)];
+        this.spells = [];
         this.queuedSpells = [];
         this.temporaryBuffs = []; 
     

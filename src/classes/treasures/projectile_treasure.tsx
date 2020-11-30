@@ -1,6 +1,3 @@
-// export const x = 2;
-
-
 import * as PIXI from 'pixi.js';
 import { Treasure } from './treasure';
 import { Player } from '../players/player';

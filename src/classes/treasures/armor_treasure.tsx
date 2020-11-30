@@ -18,14 +18,6 @@ import { Armor,
     OrcBodyArmor1 
 } from '../armor';
 import { Stage } from '../stages/stage';
-
-
-// TODO: this class shouldnt need to be exteneded a million times for each armor.
-// The extended classes like KoboldArmor1Treasure dont do any lifting
-// Remove these classes and just update constructor on ArmorTreasure
-// Armor class can do whatever heavy lifting needed
-
-
 export class ArmorTreasure extends Treasure {
 
     armor: Armor;
@@ -37,20 +29,9 @@ export class ArmorTreasure extends Treasure {
     }
 
     apply(player: Player){
-        // const affectedBodyPart = this.armor.part;
-        // const newArmorType = this.armor.type;
-        // const newTexture = player.textures[affectedBodyPart][newArmorType];
-        // const spritePart = player.spriteParts[affectedBodyPart].sprite;
-        // // if (player.currentArmorSet[affectedBodyPart]){
-
-        // // }
-        // spritePart.texture = newTexture;
-        // player.currentArmorSet[affectedBodyPart] = newArmorType;
         super.apply(player);
         this.armor.apply(player);
         player.armors.push(this.armor);
-
-        // player.currentGold += this.amount;
     }
 
     initTextures(){
@@ -73,9 +54,6 @@ export class KnightHeadArmor1Treasure extends ArmorTreasure {
         this.initSpriteParts();
     }
 
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KnightHeadArmor2Treasure extends ArmorTreasure {
@@ -86,10 +64,6 @@ export class KnightHeadArmor2Treasure extends ArmorTreasure {
         this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
-    }
-
-    initTextures(){
-        super.initTextures();
     }
 }
 
@@ -103,10 +77,6 @@ export class KnightBodyArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KnightLegsArmor1Treasure extends ArmorTreasure {
@@ -119,9 +89,6 @@ export class KnightLegsArmor1Treasure extends ArmorTreasure {
         this.initSpriteParts();
     }
 
-    initTextures(){
-        super.initTextures();
-    }
 }
 // ==================================================================================================
 
@@ -136,10 +103,6 @@ export class KoboldHeadArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KoboldHeadArmor2Treasure extends ArmorTreasure {
@@ -152,9 +115,6 @@ export class KoboldHeadArmor2Treasure extends ArmorTreasure {
         this.initSpriteParts();
     }
 
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KoboldHeadArmor3Treasure extends ArmorTreasure {
@@ -165,10 +125,6 @@ export class KoboldHeadArmor3Treasure extends ArmorTreasure {
         this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
-    }
-
-    initTextures(){
-        super.initTextures();
     }
 }
 
@@ -181,10 +137,6 @@ export class KoboldBodyArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KoboldBodyArmor2Treasure extends ArmorTreasure {
@@ -196,10 +148,6 @@ export class KoboldBodyArmor2Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class KoboldLegsArmor1Treasure extends ArmorTreasure {
@@ -210,10 +158,6 @@ export class KoboldLegsArmor1Treasure extends ArmorTreasure {
         this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
-    }
-
-    initTextures(){
-        super.initTextures();
     }
 }
 
@@ -230,10 +174,6 @@ export class OrcHeadArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class OrcHeadArmor2Treasure extends ArmorTreasure {
@@ -244,10 +184,6 @@ export class OrcHeadArmor2Treasure extends ArmorTreasure {
         this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
-    }
-
-    initTextures(){
-        super.initTextures();
     }
 }
 
@@ -260,10 +196,6 @@ export class OrcLegsArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
-    initTextures(){
-        super.initTextures();
-    }
 }
 
 export class OrcBodyArmor1Treasure extends ArmorTreasure {
@@ -274,9 +206,5 @@ export class OrcBodyArmor1Treasure extends ArmorTreasure {
         this.name = this.armor.name;
         this.initTextures();
         this.initSpriteParts();
-    }
-
-    initTextures(){
-        super.initTextures();
     }
 }
