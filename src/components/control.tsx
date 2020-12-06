@@ -101,7 +101,7 @@ export class Control extends React.Component<ControlProps, ControlState> {
 
     render(){
         return (
-            <div className="container" style={{height: "100%", paddingRight: "0px", paddingLeft: "0px"}}>
+            <div style={{height: "100%", paddingRight: "0px", paddingLeft: "0px"}}>
                 {this.renderState()}
             </div>
         )
