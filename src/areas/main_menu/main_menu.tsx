@@ -40,14 +40,24 @@ export class MainMenu extends React.Component<MainMenuProps, {}> {
                                         this.props.updateScreen(ScreenOptions.CHARACTER_SELECT)
                                     }}
                                     >
-                                1 Player
+                                1 player
                                 </button>
                             </div>
                             <div className="col-12 mt-3 text-center">
-                                <button className="btn-block" disabled> 2 Player</button>
+                                <button 
+                                    className="btn-block"
+                                    onClick={() => {
+                                        this.props.updateScreen(ScreenOptions.STAGE_BUILDER)
+                                    }}
+                                    >
+                                stage builder
+                                </button>
                             </div>
                             <div className="col-12 mt-3 text-center">
-                                <button className="btn-block" disabled> Online </button>
+                                <button className="btn-block" disabled> 2 player</button>
+                            </div>
+                            <div className="col-12 mt-3 text-center">
+                                <button className="btn-block" disabled> online </button>
                             </div>
                         </div>
                     </div>

@@ -71,3 +71,83 @@ export const mapKeys = (key: string, prevKeyOptions: KeyOptions, toggle: boolean
     }
     return prevKeyOptions
 }
+
+
+export const loadTextures = (pixiApplication: PIXI.Application, callBack: Function) => {
+    pixiApplication.loader
+
+        // add platform tetures
+        .add('default-platform', 'images/platforms/platform1.png')
+        .add('dirt-platform', 'images/platforms/dirt.png')
+        .add('grass-platform', 'images/platforms/grass.png')
+        .add('red-grass-platform', 'images/platforms/red_grass.png')
+        .add('sand-rock-platform', 'images/platforms/sand_rock.png')
+
+
+        // coin textures
+        .add('coins-small', 'images/coins/coins.png')
+
+        // Knight
+        .add('knight-head-default', "images/knight/head/head_default.png")
+        .add('knight-head-armor1', "images/knight/head/head_armor1.png")
+        .add('knight-head-armor2', "images/knight/head/head_armor2.png")
+
+        // Add body textures
+        .add('knight-body-default', "images/knight/body/body_default.png")
+        .add('knight-body-armor1', "images/knight/body/body_armor1.png")
+
+        // Add leg textures
+        .add('knight-legs-default', "images/knight/legs/legs_default.png")
+        .add('knight-legs-armor1', "images/knight/legs/legs_armor1.png")
+
+        // Add treasures images
+        .add('treasure-base', "images/treasures/treasure_base.png")
+
+        // Add enemy images
+        .add('kobold-standing', "images/enemies/kobold/kobold_standing.png")
+
+        // Add projectile images
+        .add('rock', 'images/projectiles/rock.png')
+        .add('arrow', 'images/projectiles/dart.png')
+        .add('stinger', 'images/projectiles/stinger.png')
+        .add('axe', 'images/projectiles/axe.png')
+        .add('fire_ball', 'images/projectiles/fire_ball.png')
+        .add('fire_ball_md', 'images/projectiles/fire_ball_md.png')
+
+        // Add attribute images
+        .add('speed', 'images/attributes/speed.png')
+
+        // Kobold
+        .add('kobold-legs-default', "images/kobold/legs/legs_default.png")
+        .add('kobold-legs-armor1', "images/kobold/legs/legs_armor1.png")
+
+        .add('kobold-head-default', "images/kobold/head/head_default.png")
+        .add('kobold-head-armor1', "images/kobold/head/head_armor1.png")
+        .add('kobold-head-armor2', "images/kobold/head/head_armor2.png")
+        .add('kobold-head-armor3', "images/kobold/head/head_armor3.png")
+
+        .add('kobold-body-default', "images/kobold/body/body_default.png")
+        .add('kobold-body-armor1', "images/kobold/body/body_armor1.png")
+        .add('kobold-body-armor2', "images/kobold/body/body_armor2.png")
+
+        // Orc
+        .add('orc-legs-default', "images/orc/legs/legs_default.png")
+        .add('orc-legs-armor1', "images/orc/legs/legs_armor1.png")
+
+        .add('orc-body-default', "images/orc/body/body_default.png")
+        .add('orc-body-armor1', "images/orc/body/body_armor1.png")
+
+        .add('orc-head-default', "images/orc/head/head_default.png")
+        .add('orc-head-armor1', "images/orc/head/head_armor1.png")
+        .add('orc-head-armor2', "images/orc/head/head_armor2.png")
+
+        // Manticore 
+        .add('manticore-legs-default', "images/manticore/legs/legs_default.png")
+        .add('manticore-body-default', "images/manticore/body/body_default.png")
+        .add('manticore-head-default', "images/manticore/head/head_default.png")
+
+        // Once textures have loaded, fire this method
+        .load(() => {
+            callBack();
+        });
+}

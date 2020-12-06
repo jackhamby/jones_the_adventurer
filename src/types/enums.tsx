@@ -3,6 +3,7 @@ export enum ScreenOptions {
     MAIN_MENU,
     CHARACTER_SELECT,
     GAME,
+    STAGE_BUILDER
 }
 
 export enum PlayerOptionNames {

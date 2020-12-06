@@ -8,6 +8,7 @@ import { GameWrapper } from '../areas/game/game_wrapper';
 import { Player } from '../classes/players/player';
 import { PlayerSelectWrapper } from '../areas/player_select/player_select_wrapper';
 import { MainMenu } from '../areas/main_menu/main_menu';
+import { StageBuilderWrapper } from '../areas/stage_builder/stage_builder_wrapper';
 
 export const keyboard = {
 
@@ -50,21 +51,27 @@ export class Control extends React.Component<ControlProps, ControlState> {
     renderState = () => {
         const props = {} as any;
         switch(this.state.currentScreen){
-            case(ScreenOptions.MAIN_MENU):
-                return <MainMenu updateScreen={this.updateScreen}/>;
-            case(ScreenOptions.CHARACTER_SELECT):
-                return <PlayerSelectWrapper
-                            updateScreen={this.updateScreen} 
-                            changePlayer={this.changePlayer}
-                            selectedPlayer={this.state.selectedPlayer}
-                        />
-            case(ScreenOptions.GAME):
-                return <GameWrapper
-                            pixiApplication={this.props.initialState.gameState.pixiApplication}
-                            selectedPlayer={this.state.selectedPlayer}
-                        />
+            // case(ScreenOptions.MAIN_MENU):
+            //     return <MainMenu updateScreen={this.updateScreen}/>;
+            // case(ScreenOptions.CHARACTER_SELECT):
+            //     return <PlayerSelectWrapper
+            //                 updateScreen={this.updateScreen} 
+            //                 changePlayer={this.changePlayer}
+            //                 selectedPlayer={this.state.selectedPlayer}
+            //             />
+            // case(ScreenOptions.GAME):
+            //     return <GameWrapper
+            //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
+            //                 selectedPlayer={this.state.selectedPlayer}
+            //             />
+            // case(ScreenOptions.STAGE_BUILDER):
+            //     return <StageBuilderWrapper />
+            // default:
+            //     return (<div> There was an error </div>);
+
             default:
-                return (<div> There was an error </div>);
+                return <StageBuilderWrapper />
+
             // default: 
             //     return <GameWrapper
             //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
