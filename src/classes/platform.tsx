@@ -10,6 +10,7 @@ export interface PlatformTextures {
 
 export class Platform extends Sprite{
 
+    static imageUrl = "/images/platforms/default-platform";
     pixiSprite: PIXI.Sprite;
     textures: PlatformTextures;
     currentStage: Stage;
@@ -48,6 +49,8 @@ export class Platform extends Sprite{
 
 
 export class DefaultPlatform extends Platform {
+    static imageUrl = "/images/platforms/platform1.png";
+
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -60,6 +63,8 @@ export class DefaultPlatform extends Platform {
 }
 
 export class DirtPlatform extends Platform {
+    static imageUrl = "/images/platforms/dirt.png";
+
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -71,6 +76,8 @@ export class DirtPlatform extends Platform {
     }
 }
 export class GrassPlatform extends Platform {
+    static imageUrl = "/images/platforms/grass.png";
+
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -82,6 +89,8 @@ export class GrassPlatform extends Platform {
     }
 }
 export class RedGrassPlatform extends Platform {
+    static imageUrl = "/images/platforms/red_grass.png";
+
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }
@@ -93,6 +102,8 @@ export class RedGrassPlatform extends Platform {
     }
 }
 export class SandRockPlatform extends Platform {
+    static imageUrl = "/images/platforms/sand_rock.png";
+
     createPixiSprite(): PIXI.Sprite {
         return new PIXI.Sprite(this.textures.default); 
     }

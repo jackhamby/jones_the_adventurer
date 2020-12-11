@@ -3,9 +3,11 @@ import * as PIXI from 'pixi.js';
 import { createRef } from 'react';
 import { DirtPlatform } from '../../classes/platform';
 import { Stage } from '../../classes/stages/stage';
-import { loadTextures } from '../../helpers/util';
+import { getCanvasDimensions, loadTextures, mapStageBuilderKeys } from '../../helpers/util';
 import { ClickEventData, Viewport } from 'pixi-viewport';
 import { BuilderMenu } from './builder_menu';
+import { KeyOptions, StageBuilderKeyOptions } from '../../types/states';
+import { Sprite } from '../../classes/sprite';
 
 const width = 800;
 const height = 800;
@@ -16,11 +18,18 @@ const gridHeight = 15;
 const worldHeight = 10000;
 const worldWidth = 10000;
 
+
+export const stageBuilderKeyboard = {
+
+} as StageBuilderKeyOptions;
+
+
 export class Tile {
     x: number;
     y: number;
     width: number;
     height: number;
+    occupiedWith: Sprite;
     
     constructor(x: number, y: number, width: number, height: number){
         this.x = x;
@@ -30,7 +39,12 @@ export class Tile {
     }
 }
 
-export class StageBuilderWrapper extends React.Component {
+
+export interface StageBuilderWrapperState {
+    addCallback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite
+}
+
+export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapperState> {
 
     private canvasRef = createRef<HTMLDivElement>();
     private pixiApplication = new PIXI.Application({ 
@@ -44,27 +58,82 @@ export class StageBuilderWrapper extends React.Component {
     private viewport = new Viewport();
     private stage = new Stage(0, "", [], [], [], null, null, null);
 
+    constructor(props){
+        super(props);
+        this.state = {
+            addCallback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => {
+                const platform = new DirtPlatform(loader, stage, x, y, 15, 15);
+                viewport.addChild(platform.pixiSprite);
+                return platform;
+            }
+        }
+    }
+
     componentDidMount(){
         const canvasHtmlElement = this.canvasRef.current;
         canvasHtmlElement?.appendChild(this.pixiApplication.view);
+
+        canvasHtmlElement?.appendChild(this.pixiApplication.view);
+        const containerHeight = canvasHtmlElement ? canvasHtmlElement.clientHeight : 1;
+        const containerWidth = canvasHtmlElement ? canvasHtmlElement.clientWidth : 1;
+        this.pixiApplication.renderer.resize(containerWidth, containerHeight);  
         this.viewport.sortableChildren = true;
 
         this.viewport.drag();
         this.viewport.pinch();
 
+
+
         this.viewport.on("clicked", (data: ClickEventData) => {
+            if (stageBuilderKeyboard.shift){
+                // TODO delete
+                return;
+            }
             const xTileIndex = Math.floor(data.world.x / gridWidth)
             const yTileIndex = Math.floor(data.world.y / gridHeight);
             const tile = this.tiles[yTileIndex][xTileIndex];
-            this.viewport.addChild(new DirtPlatform(this.pixiApplication.loader, this.stage, tile.x, tile.y, 15, 15).pixiSprite);
+            if (tile.occupiedWith){
+                console.log('occupied, skipping')
+                return;
+            }
+            const spriteAdded = this.addToStage(tile.x, tile.y);
+            tile.occupiedWith = spriteAdded;
         });
 
         this.pixiApplication.stage.addChild(this.viewport);
         this.viewport.moveCenter(worldWidth / 2, worldHeight / 2);
         // this.viewport.zoom(-500)
-
         loadTextures(this.pixiApplication, this.onLoad);   
+        this.handleResizeEvents();
+        this.handleKeyEvents();
+    }
 
+
+    handleResizeEvents = () => {
+        window.addEventListener('resize', (event) => {
+            const canvasDimensions = getCanvasDimensions();
+            this.pixiApplication.renderer.resize(canvasDimensions.width, canvasDimensions.height);
+        });
+    }
+
+    addToStage = (x: number, y: number): Sprite => {
+        return this.state.addCallback(this.pixiApplication.loader, this.stage, this.viewport, x, y);
+    }
+
+    handleKeyEvents = () => {
+        document.addEventListener("keydown", (event: any) => {
+            if (event.repeat){
+                return
+            }
+            mapStageBuilderKeys(event.key, stageBuilderKeyboard, true)
+        } )
+        document.addEventListener("keyup", (event: any) => {
+            mapStageBuilderKeys(event.key, stageBuilderKeyboard, false)
+        } )
+    }
+
+    setAddCallback = (callback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => {
+        this.setState({ addCallback: callback });
     }
 
     drawGrid = () => {
@@ -95,18 +164,18 @@ export class StageBuilderWrapper extends React.Component {
     }
 
     onLoad = () => {
-        this.viewport.addChild(new DirtPlatform(this.pixiApplication.loader, this.stage, 500, 500, 15, 15).pixiSprite);
+        // this.viewport.addChild(new DirtPlatform(this.pixiApplication.loader, this.stage, 500, 500, 15, 15).pixiSprite);
         this.drawGrid();
     }
 
     render(){
         return (
             <div className="row">
-                <div className="col-7 pl-2" ref={this.canvasRef}>
+                <div className="col-7 pl-2" ref={this.canvasRef} id="canvas-container">
 
                 </div>
                 <div className="col-5">
-                    <BuilderMenu/>
+                    <BuilderMenu setAddCallback={this.setAddCallback}/>
                 </div>
             </div>
         )

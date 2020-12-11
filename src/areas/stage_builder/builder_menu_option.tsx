@@ -1,5 +1,3 @@
-
-
 import * as React from 'react';
 
 
@@ -23,13 +21,15 @@ export class BuilderMenuOption extends React.Component<BuilderMenuOptionProps, B
     renderContent = () => {
         if (this.state.selected){
             return (
-                <div> 
-                    {this.props.title}
+                <div className="p-3">
+                    {this.props.children}
                 </div>
             );
         }
         return null;
     }
+
+
 
     render(){
         return (

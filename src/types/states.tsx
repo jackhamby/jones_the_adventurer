@@ -54,3 +54,8 @@ export interface KeyOptions {
     spell3: boolean;
 }
 
+export interface StageBuilderKeyOptions {
+    control: boolean;
+    shift: boolean;
+}
+
