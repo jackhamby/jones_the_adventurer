@@ -8,7 +8,6 @@ import './game_wrapper.css';
 import { GameDetail } from "./game_detail";
 
 interface GameWrapperProps {
-    pixiApplication: PIXI.Application;
     selectedPlayer: typeof Player;
 }
 
@@ -18,13 +17,12 @@ interface GameWrapperState {
     player?: Player;
 }
 
-
 export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperState> {
     private controller: GameController;
 
     constructor(props: any){
         super(props);
-        this.controller = new GameController(this.props.pixiApplication, this.startGame);
+        this.controller = new GameController(this.startGame);
         this.state = {
             player: undefined,
             playerAttributes: this.props.selectedPlayer.baseAttributes,
@@ -58,7 +56,7 @@ export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperSt
                 <div className="row game-body">
                     <div className="game">
                         <GameDisplay
-                            pixiApplication={this.props.pixiApplication}
+                            pixiApplication={this.controller.pixiApplication}
                         />
                     </div>
                     <div className="game-detail">

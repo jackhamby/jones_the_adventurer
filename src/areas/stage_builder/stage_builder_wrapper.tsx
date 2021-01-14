@@ -24,6 +24,20 @@ export const stageBuilderKeyboard = {
 } as StageBuilderKeyOptions;
 
 
+export interface GameBuilderContext {
+    loader: PIXI.Loader;
+    stage: Stage;
+    lastClickedX: number;
+    lastClickedY: number;
+}
+
+export const gameBuilderContext: GameBuilderContext  = {
+    loader: null,
+    stage: null,
+    lastClickedX: 0,
+    lastClickedY: 0,
+}
+
 export class Tile {
     x: number;
     y: number;
@@ -56,7 +70,8 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
     });
     private tiles: Tile[][] = [];
     private viewport = new Viewport();
-    private stage = new Stage(0, "", [], [], [], null, null, null);
+    private stage = new Stage(0, "", [], [], [], null, this.viewport, null);
+    
 
     constructor(props){
         super(props);
@@ -84,26 +99,31 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
 
 
 
-        this.viewport.on("clicked", (data: ClickEventData) => {
-            if (stageBuilderKeyboard.shift){
-                // TODO delete
-                return;
-            }
-            const xTileIndex = Math.floor(data.world.x / gridWidth)
-            const yTileIndex = Math.floor(data.world.y / gridHeight);
-            const tile = this.tiles[yTileIndex][xTileIndex];
-            if (tile.occupiedWith){
-                console.log('occupied, skipping')
-                return;
-            }
-            const spriteAdded = this.addToStage(tile.x, tile.y);
-            tile.occupiedWith = spriteAdded;
-        });
+        // this.viewport.on("clicked", (data: ClickEventData) => {
+        //     gameBuilderContext.lastClickedX = data.world.x;
+        //     gameBuilderContext.lastClickedY = data.world.y;
+        //     if (stageBuilderKeyboard.shift){
+        //         // TODO delete
+        //         return;
+        //     }
+        //     const xTileIndex = Math.floor(data.world.x / gridWidth)
+        //     const yTileIndex = Math.floor(data.world.y / gridHeight);
+        //     const tile = this.tiles[yTileIndex][xTileIndex];
+        //     if (tile.occupiedWith){
+        //         console.log('occupied, skipping')
+        //         return;
+        //     }
+        //     const spriteAdded = this.addToStage(tile.x, tile.y);
+        //     tile.occupiedWith = spriteAdded;
+        // });
+
 
         this.pixiApplication.stage.addChild(this.viewport);
         this.viewport.moveCenter(worldWidth / 2, worldHeight / 2);
         // this.viewport.zoom(-500)
-        loadTextures(this.pixiApplication, this.onLoad);   
+        loadTextures(this.pixiApplication, this.onLoad); 
+        gameBuilderContext.stage = this.stage;
+        gameBuilderContext.loader = this.pixiApplication.loader;  
         this.handleResizeEvents();
         this.handleKeyEvents();
     }
@@ -175,7 +195,8 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
 
                 </div>
                 <div className="col-5">
-                    <BuilderMenu setAddCallback={this.setAddCallback}/>
+                    {/* <BuilderMenu setAddCallback={this.setAddCallback}/> */}
+                    <BuilderMenu />
                 </div>
             </div>
         )

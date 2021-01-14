@@ -7,15 +7,14 @@ import { PlatformMenu } from './platform_menu';
 import './stage_builder.css';
 
 export interface BuilderMenuProps {
-    setAddCallback: ( callBack: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => void;
+    // setAddCallback: ( callBack: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => void;
 }
+
 export enum SpriteTypes {
     platforms = "platforms",
     treasures = "treasures",
     enemies = "enemies"
 }
-
-
 
 export class BuilderMenu extends React.Component<BuilderMenuProps> {
     render(){
@@ -23,7 +22,8 @@ export class BuilderMenu extends React.Component<BuilderMenuProps> {
             <div className="row m-2" style={{border: "1px solid black"}}>
                 <BuilderMenuOption
                     title="platforms">
-                        <PlatformMenu setAddCallback={this.props.setAddCallback}/>
+                        {/* <PlatformMenu setAddCallback={this.props.setAddCallback}/> */}
+                        <PlatformMenu/>
                 </BuilderMenuOption>
                 <BuilderMenuOption 
                     title="treasures"

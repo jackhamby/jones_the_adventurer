@@ -9,29 +9,24 @@ import { Player } from '../classes/players/player';
 import { PlayerSelectWrapper } from '../areas/player_select/player_select_wrapper';
 import { MainMenu } from '../areas/main_menu/main_menu';
 import { StageBuilderWrapper } from '../areas/stage_builder/stage_builder_wrapper';
+import { Kobold } from '../classes/players/kobold';
 
 export const keyboard = {
 
 } as KeyOptions;
-
-
-interface ControlProps {
-    initialState: AppState
-}
 
 interface ControlState {
     currentScreen: ScreenOptions;
     selectedPlayer: typeof Player;
 }
 
+export class Control extends React.Component<{}, ControlState> {
 
-export class Control extends React.Component<ControlProps, ControlState> {
-
-    constructor(props: ControlProps){
+    constructor(props){
         super(props);
         this.state = {
-            currentScreen: props.initialState.controlState.currentScreen,
-            selectedPlayer: props.initialState.playerState.player,
+            currentScreen: ScreenOptions.GAME,
+            selectedPlayer: Kobold,
         }
     }
 
@@ -45,38 +40,26 @@ export class Control extends React.Component<ControlProps, ControlState> {
 
     componentDidMount(){
         this.handleKeyEvents();
-        this.handleResizeEvents();
     }
 
     renderState = () => {
-        const props = {} as any;
         switch(this.state.currentScreen){
-            // case(ScreenOptions.MAIN_MENU):
-            //     return <MainMenu updateScreen={this.updateScreen}/>;
-            // case(ScreenOptions.CHARACTER_SELECT):
-            //     return <PlayerSelectWrapper
-            //                 updateScreen={this.updateScreen} 
-            //                 changePlayer={this.changePlayer}
-            //                 selectedPlayer={this.state.selectedPlayer}
-            //             />
-            // case(ScreenOptions.GAME):
-            //     return <GameWrapper
-            //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
-            //                 selectedPlayer={this.state.selectedPlayer}
-            //             />
-            // case(ScreenOptions.STAGE_BUILDER):
-            //     return <StageBuilderWrapper />
-            // default:
-            //     return (<div> There was an error </div>);
-
-            default:
+            case(ScreenOptions.MAIN_MENU):
+                return <MainMenu updateScreen={this.updateScreen}/>;
+            case(ScreenOptions.CHARACTER_SELECT):
+                return <PlayerSelectWrapper
+                            updateScreen={this.updateScreen} 
+                            changePlayer={this.changePlayer}
+                            selectedPlayer={this.state.selectedPlayer}
+                        />
+            case(ScreenOptions.GAME):
+                return <GameWrapper
+                            selectedPlayer={this.state.selectedPlayer}
+                        />
+            case(ScreenOptions.STAGE_BUILDER):
                 return <StageBuilderWrapper />
-
-            // default: 
-            //     return <GameWrapper
-            //                 pixiApplication={this.props.initialState.gameState.pixiApplication}
-            //                 selectedPlayer={this.state.selectedPlayer}
-            //             />
+            default:
+                return (<div> There was an error </div>);
         }
     }
 
@@ -91,14 +74,7 @@ export class Control extends React.Component<ControlProps, ControlState> {
             mapKeys(event.key, keyboard, false)
         } )
     }
-
-    handleResizeEvents = () => {
-        window.addEventListener('resize', (event) => {
-            const canvasDimensions = getCanvasDimensions();
-            this.props.initialState.gameState.pixiApplication.renderer.resize(canvasDimensions.width, canvasDimensions.height);
-        })
-    }
-
+    
     render(){
         return (
             <div style={{height: "100%", paddingRight: "0px", paddingLeft: "0px"}}>
