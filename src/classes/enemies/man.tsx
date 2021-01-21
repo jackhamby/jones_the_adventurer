@@ -6,6 +6,7 @@ import { Part } from "../part";
 
 
 export class Man extends Enemy {
+    static imageUrl = "/images/knight/knight_sm.png";
 
     static baseAttributes = {
         ATTACK: 3,

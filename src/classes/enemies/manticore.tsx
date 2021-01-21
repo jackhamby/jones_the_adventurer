@@ -8,6 +8,7 @@ import { UnitPartNames } from "../../types/enums";
 import { Projectile } from "../projectiles/projectile";
 
 export class Manticore extends Enemy {
+    static imageUrl = "/images/manticore/manticore_sm.png";
 
     static baseAttributes = {
         ATTACK: 6,

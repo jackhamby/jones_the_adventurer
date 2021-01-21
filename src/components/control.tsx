@@ -25,7 +25,7 @@ export class Control extends React.Component<{}, ControlState> {
     constructor(props){
         super(props);
         this.state = {
-            currentScreen: ScreenOptions.GAME,
+            currentScreen: ScreenOptions.STAGE_BUILDER,
             selectedPlayer: Kobold,
         }
     }
@@ -74,7 +74,8 @@ export class Control extends React.Component<{}, ControlState> {
             mapKeys(event.key, keyboard, false)
         } )
     }
-    
+
+
     render(){
         return (
             <div style={{height: "100%", paddingRight: "0px", paddingLeft: "0px"}}>

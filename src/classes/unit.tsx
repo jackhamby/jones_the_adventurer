@@ -139,6 +139,20 @@ export class Unit extends Sprite {
         this.updateCooldowns();
         this.updateSpells();
         this.updateBuffs();
+    };
+
+    hide(): void {
+        this.currentStage.viewport.removeChild(this.hpBar);
+        Object.keys(this.spriteParts).forEach((partName: string) => {
+            const tempPartName: UnitPartNames = partName as UnitPartNames;
+            const part: SpritePart = this.spriteParts[tempPartName];
+            this.currentStage.viewport.removeChild(part.sprite);
+        });
+
+        this.effects.forEach((effect: Effect) => {
+            // this.currentStage.viewport.removeChild(effect);
+            effect.hide();
+        });
     }
 
 

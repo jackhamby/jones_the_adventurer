@@ -6,6 +6,7 @@ import { Arrow } from "../projectiles/arrow";
 import { Part } from "../part";
 
 export class Kobold extends Enemy {
+    static imageUrl = "/images/kobold/kobold_sm.png";
 
     static baseAttributes: UnitAttributes = {
         ATTACK: 5,

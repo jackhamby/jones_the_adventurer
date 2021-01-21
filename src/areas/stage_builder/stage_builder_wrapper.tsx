@@ -8,35 +8,29 @@ import { ClickEventData, Viewport } from 'pixi-viewport';
 import { BuilderMenu } from './builder_menu';
 import { KeyOptions, StageBuilderKeyOptions } from '../../types/states';
 import { Sprite } from '../../classes/sprite';
+import { StageBuilderController } from '../../classes/stage_builder/stage_builder_controller';
 
 const width = 800;
 const height = 800;
-
-const gridWidth = 15;
-const gridHeight = 15;
-
-const worldHeight = 10000;
-const worldWidth = 10000;
 
 
 export const stageBuilderKeyboard = {
 
 } as StageBuilderKeyOptions;
 
+// export interface GameBuilderContext {
+//     loader: PIXI.Loader;
+//     stage: Stage;
+//     lastClickedX: number;
+//     lastClickedY: number;
+// }
 
-export interface GameBuilderContext {
-    loader: PIXI.Loader;
-    stage: Stage;
-    lastClickedX: number;
-    lastClickedY: number;
-}
-
-export const gameBuilderContext: GameBuilderContext  = {
-    loader: null,
-    stage: null,
-    lastClickedX: 0,
-    lastClickedY: 0,
-}
+// export const gameBuilderContext: GameBuilderContext  = {
+//     loader: null,
+//     stage: null,
+//     lastClickedX: 0,
+//     lastClickedY: 0,
+// }
 
 export class Tile {
     x: number;
@@ -55,11 +49,11 @@ export class Tile {
 
 
 export interface StageBuilderWrapperState {
-    addCallback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite
+    isSelectingSpawn: boolean;
+    isPlaying: boolean;
 }
 
 export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapperState> {
-
     private canvasRef = createRef<HTMLDivElement>();
     private pixiApplication = new PIXI.Application({ 
         width: width,
@@ -68,19 +62,13 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
         transparent: false, 
         resolution: 1
     });
-    private tiles: Tile[][] = [];
-    private viewport = new Viewport();
-    private stage = new Stage(0, "", [], [], [], null, this.viewport, null);
+    private controller = new StageBuilderController(this.pixiApplication);
     
-
     constructor(props){
         super(props);
         this.state = {
-            addCallback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => {
-                const platform = new DirtPlatform(loader, stage, x, y, 15, 15);
-                viewport.addChild(platform.pixiSprite);
-                return platform;
-            }
+            isSelectingSpawn: false,
+            isPlaying: false,
         }
     }
 
@@ -92,52 +80,17 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
         const containerHeight = canvasHtmlElement ? canvasHtmlElement.clientHeight : 1;
         const containerWidth = canvasHtmlElement ? canvasHtmlElement.clientWidth : 1;
         this.pixiApplication.renderer.resize(containerWidth, containerHeight);  
-        this.viewport.sortableChildren = true;
-
-        this.viewport.drag();
-        this.viewport.pinch();
-
-
-
-        // this.viewport.on("clicked", (data: ClickEventData) => {
-        //     gameBuilderContext.lastClickedX = data.world.x;
-        //     gameBuilderContext.lastClickedY = data.world.y;
-        //     if (stageBuilderKeyboard.shift){
-        //         // TODO delete
-        //         return;
-        //     }
-        //     const xTileIndex = Math.floor(data.world.x / gridWidth)
-        //     const yTileIndex = Math.floor(data.world.y / gridHeight);
-        //     const tile = this.tiles[yTileIndex][xTileIndex];
-        //     if (tile.occupiedWith){
-        //         console.log('occupied, skipping')
-        //         return;
-        //     }
-        //     const spriteAdded = this.addToStage(tile.x, tile.y);
-        //     tile.occupiedWith = spriteAdded;
-        // });
-
-
-        this.pixiApplication.stage.addChild(this.viewport);
-        this.viewport.moveCenter(worldWidth / 2, worldHeight / 2);
-        // this.viewport.zoom(-500)
-        loadTextures(this.pixiApplication, this.onLoad); 
-        gameBuilderContext.stage = this.stage;
-        gameBuilderContext.loader = this.pixiApplication.loader;  
+ 
+        loadTextures(this.pixiApplication, () => {}); 
         this.handleResizeEvents();
         this.handleKeyEvents();
     }
-
 
     handleResizeEvents = () => {
         window.addEventListener('resize', (event) => {
             const canvasDimensions = getCanvasDimensions();
             this.pixiApplication.renderer.resize(canvasDimensions.width, canvasDimensions.height);
         });
-    }
-
-    addToStage = (x: number, y: number): Sprite => {
-        return this.state.addCallback(this.pixiApplication.loader, this.stage, this.viewport, x, y);
     }
 
     handleKeyEvents = () => {
@@ -152,40 +105,31 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
         } )
     }
 
-    setAddCallback = (callback: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => {
-        this.setState({ addCallback: callback });
-    }
-
-    drawGrid = () => {
-        const graphics = new PIXI.Graphics();
-        graphics.position.set(0, 0);
-
-        for(let i = 0; i < worldHeight; i += gridHeight){
-            const row = [];
-            for(let k = 0; k < worldWidth; k += gridWidth){
-                row.push(new Tile(k, i, gridWidth, gridHeight));
-            }
-            this.tiles.push(row);
+    renderPlayTest = (): JSX.Element => {
+        if (this.state.isPlaying){
+            return (
+                <button className="btn-danger" onClick={
+                    () => {
+                        console.log('stop');
+                        this.controller.stopPlayTest();
+                        this.setState({ isPlaying: false })
+                    }
+                }>
+                    stop play test
+                </button>
+            );  
         }
-
-        graphics.position.set(0, 0);
-        for (let y = 0; y < worldHeight; y += gridHeight){
-            graphics.lineStyle(1, 0xffffff)
-                .moveTo(0, y)
-                .lineTo(worldWidth, y);
+        else {
+            return (
+                <button className="btn-primary" onClick={() => {
+                    this.controller.playTest();
+                    this.setState({ isPlaying: true });
+                }}>
+                    play test
+                </button>
+            );
+            
         }
-        for (let x = 0; x < worldWidth; x += gridWidth){
-            graphics.lineStyle(1, 0xffffff)
-                .moveTo(x, 0)
-                .lineTo(x, worldHeight);
-        }
-
-        this.viewport.addChild(graphics);
-    }
-
-    onLoad = () => {
-        // this.viewport.addChild(new DirtPlatform(this.pixiApplication.loader, this.stage, 500, 500, 15, 15).pixiSprite);
-        this.drawGrid();
     }
 
     render(){
@@ -195,9 +139,33 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
 
                 </div>
                 <div className="col-5">
-                    {/* <BuilderMenu setAddCallback={this.setAddCallback}/> */}
-                    <BuilderMenu />
+                    <BuilderMenu controller={this.controller} />
+                    <div className="col-12 pt-4">
+                        <button disabled={this.state.isSelectingSpawn} onClick={() => {
+                            this.controller.isSelectingSpawn = !this.state.isSelectingSpawn;
+                            this.controller.viewport.off("clicked");
+                            this.controller.viewport.on("clicked", (data: ClickEventData) => {
+                                this.controller.setSpawn(data.world.x, data.world.y)
+                                this.controller.drawSpawnIcon();
+                                this.setState({isSelectingSpawn: false})
+                            });
+
+                            this.setState({isSelectingSpawn: !this.state.isSelectingSpawn});
+                        }} >
+                            
+                            select spawn
+                        </button>
+                    </div>
+                    <div className="col-12 pt-4">
+                        {this.renderPlayTest()}
+                    </div>
+                    
+
+                    <div>
+
+                    </div>
                 </div>
+
             </div>
         )
     }

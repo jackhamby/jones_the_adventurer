@@ -6,6 +6,11 @@ export const SCREEN_WIDTH = window.screen.height;
 export const PLAYER_STARTING_X = 120;
 export const PLAYER_STARTING_Y = 120;
 
+export const GRID_WIDTH = 15;
+export const GRID_HEIGHT = 15;
+
+export const STAGE_BUILDER_WORLD_HEIGHT = 10000;
+export const STAGE_BUILDER_WORLD_WIDTH = 10000;
 
 export const SPRITE_DECAY = 1000;
 export const SPRITE_DECAY_FADE_TIME =  150;
@@ -130,6 +135,4 @@ export const STAGE2_LAYOUT = `80 45
 //     PLAYER_STARTING_X,
 //     PLAYER_STARTING_Y,
 // }
-
-
 

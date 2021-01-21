@@ -3,10 +3,12 @@ import * as React from 'react';
 import { Sprite } from '../../classes/sprite';
 import { Stage } from '../../classes/stages/stage';
 import { BuilderMenuOption } from './builder_menu_option';
+import { EnemyMenu } from './enemy_menu';
 import { PlatformMenu } from './platform_menu';
 import './stage_builder.css';
 
 export interface BuilderMenuProps {
+    controller
     // setAddCallback: ( callBack: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => void;
 }
 
@@ -23,18 +25,17 @@ export class BuilderMenu extends React.Component<BuilderMenuProps> {
                 <BuilderMenuOption
                     title="platforms">
                         {/* <PlatformMenu setAddCallback={this.props.setAddCallback}/> */}
-                        <PlatformMenu/>
+                        <PlatformMenu controller={this.props.controller}/>
                 </BuilderMenuOption>
                 <BuilderMenuOption 
-                    title="treasures"
-                >
-                    todo
+                    title="treasures">
+                        todo
                 </BuilderMenuOption>
                 <BuilderMenuOption
-                    title="enemies"
-                >
-                    todo
+                    title="enemies">
+                    <EnemyMenu controller={this.props.controller}/>
                 </BuilderMenuOption>
+                
             </div>
         );
     }

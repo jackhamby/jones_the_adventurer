@@ -1,7 +1,7 @@
 
 import React from 'react';
 import './player_select_wrapper.css';
-import { ScreenOptions, PlayerOptionNames } from '../../types/enums';
+import { ScreenOptions } from '../../types/enums';
 import { PlayerSelect } from './player_select';
 import { PlayerDisplay } from './player_display';
 import { Player } from '../../classes/players/player';

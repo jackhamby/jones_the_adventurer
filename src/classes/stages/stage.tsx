@@ -30,6 +30,9 @@ export class Stage{
     timer: Timer;
     isCleared: boolean;
 
+    spawnX: number;
+    spawnY: number;
+
     // TODO: main references
     viewport: Viewport;
     player: Player;
@@ -43,7 +46,16 @@ export class Stage{
     needsRestart: boolean;
 
 
-    constructor(level: number, name: string, enemies: Enemy[], platforms: Platform[], treasures: Treasure[], player: Player, viewport: Viewport, stageManager: StageManager){
+    constructor(level: number,
+                name: string,
+                enemies: Enemy[], 
+                platforms: Platform[], 
+                treasures: Treasure[], 
+                player: Player, 
+                viewport: Viewport, 
+                stageManager: StageManager){
+        this.spawnX = 100;
+        this.spawnY = 100;
         this.level = level;
         this.name = name;
         this.enemies = enemies;
@@ -100,7 +112,6 @@ export class Stage{
             this.isCleared = true;
         }
     }
-
 
     // ================================== Update sprite states ===========================================================
     // =================================================================================================================== 

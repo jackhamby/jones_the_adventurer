@@ -19,8 +19,12 @@ export class Effect {
         this.unit.currentStage.viewport.addChild(this.graphics);
     }
 
-    remove(){
+    hide(){
         this.unit.currentStage.viewport.removeChild(this.graphics);
+    }
+
+    remove(){
+        this.hide();
         this.unit.effects = this.unit.effects.filter((effect: Effect) => {
             return effect !== this;
         });

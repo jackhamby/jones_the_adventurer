@@ -12,7 +12,7 @@ import { Stage } from '../stages/stage';
 
 // Base class for all enemeis
 export class Enemy extends Unit {
-
+    static imageUrl = "/images/kobold/kobold_sm.png";
     isPlayerInRange: boolean;
     hasDroppedTreasure: boolean;
     patrolRadius: number;
@@ -28,7 +28,7 @@ export class Enemy extends Unit {
 
     remove(){
         super.remove()
-        this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy != this);
+        this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy !== this);
     }
     // ================================== protected ===========================================================
     // ========================================================================================================

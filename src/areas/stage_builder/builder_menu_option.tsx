@@ -14,7 +14,7 @@ export class BuilderMenuOption extends React.Component<BuilderMenuOptionProps, B
     constructor(props){
         super(props);
         this.state = {
-            selected: false,
+            selected: true,
         }
     }
 

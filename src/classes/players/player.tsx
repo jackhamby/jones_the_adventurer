@@ -293,9 +293,9 @@ export class Player extends Unit {
         const resp = window.confirm('sorry you suck. restart?')
         if (resp){
             this.currentStage.restart();
-            this.currentStage.player.setX(100);
-            this.currentStage.player.setY(100);
-            this.currentStage.player.revive();
+            this.setX(this.currentStage.spawnX);
+            this.setY(this.currentStage.spawnY);
+            this.revive();
         } else {
             window.location.reload();
         }

@@ -13,7 +13,6 @@ import { FastFire } from "./spells/buff_spell";
 import { Unit } from "./unit";
 
 
-
 // Initialize game data
 // Main game loop
 // Stage management
