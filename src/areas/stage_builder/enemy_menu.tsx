@@ -51,31 +51,7 @@ export class EnemyMenu extends React.Component<EnemyMenuProps, EnemyMenuState> {
     }
 
     addToStage = (x: number, y: number, enemyType: typeof Enemy) => {
-        const loader = this.props.controller.pixiApplication.loader;
-        const stage = this.props.controller.stage;
-        if (!loader || !stage){
-            return;
-        }
-        this.props.controller.lastClickedX = x;
-        this.props.controller.lastClickedY = y;
-    
-        const xTileIndex = Math.floor(x / GRID_WIDTH)
-        const yTileIndex = Math.floor(y / GRID_HEIGHT);
-        const tile = this.props.controller.tiles[yTileIndex][xTileIndex];
-        if (tile.occupiedWith){
-            console.log('occupied, skipping');
-            return;
-        }
-        const enemy = new enemyType(loader, stage, enemyType.baseAttributes, 15, 15, tile.x, tile.y);
-
-        tile.occupiedWith = enemy;
-
-        enemy.add();
-        stage.enemies.push(enemy);
-        console.log(`Stage:
-            Enemies: ${this.props.controller.stage.enemies.length}
-            Treasures: ${this.props.controller.stage.treasures.length}
-            Platforms: ${this.props.controller.stage.platforms.length}`);
+        this.props.controller.addEnemy(x, y, enemyType);
     }
     
     render(){

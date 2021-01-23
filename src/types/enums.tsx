@@ -6,12 +6,6 @@ export enum ScreenOptions {
     STAGE_BUILDER
 }
 
-export enum PlayerOptionNames {
-    KNIGHT = "knight",
-    KOBOLD = "kobold",
-    ORC = "orc"
-}
-
 export enum TabOptions {
     armor = "armor",
     spells = "spells",

@@ -1,4 +1,4 @@
-import { ClickEventData, Viewport } from "pixi-viewport";
+import { Viewport } from "pixi-viewport";
 import { Tile } from "../../areas/stage_builder/stage_builder_wrapper";
 import { Player } from "../players/player";
 import { Stage } from "../stages/stage";
@@ -7,6 +7,9 @@ import { GRID_HEIGHT, GRID_WIDTH, STAGE_BUILDER_WORLD_HEIGHT, STAGE_BUILDER_WORL
 import { Knight } from "../players/knight";
 import { UnitPartNames } from "../../types/enums";
 import { keyboard } from "../../components/control";
+import { StageTemplate } from "./stage_template";
+import { TemplateHelper } from "./template_helper";
+import { Platform } from "../platform";
 import { Enemy } from "../enemies/enemy";
 
 export class StageBuilderController {
@@ -25,10 +28,15 @@ export class StageBuilderController {
 
     isSelectingSpawn: boolean;
 
+    templateHelper: TemplateHelper;
+
     constructor(application: PIXI.Application){
         this.tiles = [];
         this.viewport = new Viewport();
         this.stage = new Stage(0, "", [], [], [], null, this.viewport, null);
+        this.templateHelper = new TemplateHelper();
+
+        // Create spawn/grid graphics
         this.spawnGraphics = new PIXI.Graphics();
         this.gridGraphics = new PIXI.Graphics();
         this.gridGraphics.zIndex = 1;
@@ -76,25 +84,16 @@ export class StageBuilderController {
         this.pixiApplication.ticker.add(this.update);
     }
 
-    update = (delta) => {
-        this.stage.update(keyboard);   
-    }
-
     stopPlayTest = () => {
         this.pixiApplication.ticker.remove(this.update);
+        this.stage.reset();
         this.viewport.plugins.remove("follow");
         this.player.hide();
-        this.stage.enemies.forEach((enemy: Enemy) => {
-            enemy.hide();
-        });
+        this.viewport.moveCenter(this.stage.spawnX, this.stage.spawnY);
+    }
 
-        // this.stage.clear();
-    
-
-        // this.stage.load();
-        
-        // this.drawGrid();
-        // this.drawSpawnIcon();
+    update = (delta) => {
+        this.stage.update(keyboard);   
     }
 
     drawSpawnIcon = () => {
@@ -128,4 +127,49 @@ export class StageBuilderController {
 
         this.viewport.addChild(this.gridGraphics);
     }
+
+    addPlatform = (x: number, y: number, platformType: typeof Platform) => {
+        this.lastClickedX = x;
+        this.lastClickedY = y;
+    
+        const xTileIndex = Math.floor(x / GRID_WIDTH)
+        const yTileIndex = Math.floor(y / GRID_HEIGHT);
+        const tile = this.tiles[yTileIndex][xTileIndex];
+        if (tile.occupiedWith){
+            console.log('occupied, skipping');
+            return;
+        }
+        const platform = new platformType(this.pixiApplication.loader, this.stage, tile.x, tile.y, 15, 15);
+        console.log(platform);
+        console.log(platformType)
+        tile.occupiedWith = platform;
+
+        platform.add();
+        this.stage.platforms.push(platform);
+        this.templateHelper.addPlatform(platform);
+    }
+
+    addEnemy = (x: number, y: number, enemyType: typeof Enemy) => {
+        this.lastClickedX = x;
+        this.lastClickedY = y;
+    
+        const xTileIndex = Math.floor(x / GRID_WIDTH)
+        const yTileIndex = Math.floor(y / GRID_HEIGHT);
+        const tile = this.tiles[yTileIndex][xTileIndex];
+        if (tile.occupiedWith){
+            console.log('occupied, skipping');
+            return;
+        }
+        
+        const enemyX = tile.x - enemyType.width / 2;
+        const enemyY = tile.y - enemyType.height / 2;
+
+        const enemy = new enemyType(this.pixiApplication.loader, this.stage, enemyType.baseAttributes, enemyType.width, enemyType.height, enemyX, enemyY);
+
+        tile.occupiedWith = enemy;
+
+        enemy.add();
+        this.stage.enemies.push(enemy);
+    }
+
 }

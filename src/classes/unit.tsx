@@ -206,6 +206,12 @@ export class Unit extends Sprite {
         })
     }
 
+    reset(){
+        this.setX(this.spawnX);
+        this.setY(this.spawnY);
+        this.currentStage.viewport.removeChild(this.hpBar);
+    }
+
     updateY(value: number){
         this.y += value;
         Object.keys(this.spriteParts).forEach((key) => {
@@ -223,8 +229,6 @@ export class Unit extends Sprite {
             sprite.x += value;
         })
     }
-
-    
 
     takeDamage(value: number): number{
         let damageTaken = 0;

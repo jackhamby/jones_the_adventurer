@@ -25,7 +25,6 @@ export class Enemy extends Unit {
         this.patrolRadius = 100;
     }
 
-
     remove(){
         super.remove()
         this.currentStage.enemies = this.currentStage.enemies.filter(enemy => enemy !== this);

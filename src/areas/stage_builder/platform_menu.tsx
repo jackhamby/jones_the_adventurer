@@ -47,32 +47,7 @@ export class PlatformMenu extends React.Component<PlatformMenuProps, PlatformMen
     }
 
     addToStage = (x: number, y: number, platformType: typeof Platform) => {
-        const loader = this.props.controller.pixiApplication.loader;
-        const stage = this.props.controller.stage;
-        if (!loader || !stage){
-            return;
-        }
-        this.props.controller.lastClickedX = x;
-        this.props.controller.lastClickedY = y;
-    
-        const xTileIndex = Math.floor(x / GRID_WIDTH)
-        const yTileIndex = Math.floor(y / GRID_HEIGHT);
-        const tile = this.props.controller.tiles[yTileIndex][xTileIndex];
-        if (tile.occupiedWith){
-            console.log('occupied, skipping');
-            return;
-        }
-        const platform = new platformType(loader, stage, tile.x, tile.y, 15, 15);
-        console.log(platform);
-        console.log(platformType)
-        tile.occupiedWith = platform;
-
-        platform.add();
-        stage.platforms.push(platform);
-        console.log(`Stage:
-            Enemies: ${this.props.controller.stage.enemies.length}
-            Treasures: ${this.props.controller.stage.treasures.length}
-            Platforms: ${this.props.controller.stage.platforms.length}`)
+        this.props.controller.addPlatform(x, y, platformType);
     }
     
     render(){
