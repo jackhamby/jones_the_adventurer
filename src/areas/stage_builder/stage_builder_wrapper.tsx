@@ -110,7 +110,6 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
             return (
                 <button className="btn-danger" onClick={
                     () => {
-                        console.log('stop');
                         this.controller.stopPlayTest();
                         this.setState({ isPlaying: false })
                     }

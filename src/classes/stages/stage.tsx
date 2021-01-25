@@ -45,9 +45,6 @@ export class Stage{
 
     constructor(level: number,
                 name: string,
-                enemies: Enemy[], 
-                platforms: Platform[], 
-                treasures: Treasure[], 
                 player: Player, 
                 viewport: Viewport, 
                 stageManager: StageManager){
@@ -55,12 +52,14 @@ export class Stage{
         this.spawnY = 100;
         this.level = level;
         this.name = name;
-        this.enemies = enemies;
-        this.platforms = platforms;
+
+        this.enemies = [];
+        this.platforms = [];
         this.projectiles = [];
-        this.currentKeys = {} as KeyOptions;
+        this.treasures = [];
         this.player = player;
-        this.treasures = treasures;
+
+        this.currentKeys = {} as KeyOptions;
         this.viewport = viewport;
         this.floatingTexts = [];
         this.timer = new Timer(this, 100, 100);
@@ -108,9 +107,12 @@ export class Stage{
         this.treasures.forEach((treasure: Treasure) => {
             // this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
             treasure.add();
-        })
+        });
 
         this.viewport.addChild(this.timer.displayObject);
+
+        this.player.setX (this.spawnX);
+        this.player.setY(this.spawnY);
         this.player.add();
     }
 

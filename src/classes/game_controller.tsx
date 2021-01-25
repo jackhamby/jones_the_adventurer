@@ -11,6 +11,9 @@ import { Spell } from "./spells/spell";
 import { FireBall, FireBallMedium } from "./spells/projectile_spell";
 import { FastFire } from "./spells/buff_spell";
 import { Unit } from "./unit";
+import { TemplateHelper } from "./stage_builder/template_helper";
+import { DirtPlatform } from "./platform";
+import { Kobold } from "./enemies/kobold";
 
 
 // Initialize game data
@@ -34,7 +37,7 @@ export class GameController {
     constructor(startGame: Function){
         this.pixiApplication = new PIXI.Application({ 
             width: Constants.SCREEN_WIDTH,
-            height: Constants.SCREEN_HEIGHT,               
+            height: Constants.SCREEN_HEIGHT,             
             antialias: true, 
             transparent: false, 
             resolution: 1
@@ -111,15 +114,33 @@ export class GameController {
 
         // Allow player to update the view
         this.player.updateView = this.updateView;
+        
+        // // Attempt
+        // const helper = new TemplateHelper();
+        // const stage1 = helper.loadTemplate(this.viewport, this.pixiApplication.loader, this.player, Constants.STAGE1);
+        // // this.viewport.moveCenter(stage1.spawnX, stage1.spawnY);
+        // // this.player.x = stage1.spawnX;
+        // // this.player.y = stage1.spawnY;
 
-        // Create stage manager
+        // this.player.currentStage = stage1;
+        // this.currentStage = stage1;
+        // this.currentStage.load();
+
+        // End attempt
+
+
+        
+        // Working attempt
         this.stageManager = new StageManager(this.pixiApplication.loader, this.player, this.viewport);
 
         // Create first stage
         const stageOne = this.stageManager.getStage(1);
+        console.log(stageOne);
         this.player.currentStage = stageOne;
         this.currentStage = stageOne;
         this.currentStage.load()
+        // End working attempt
+
 
         // Start game loop
         this.pixiApplication.ticker.add(delta => this.gameLoop(delta));
@@ -132,14 +153,14 @@ export class GameController {
             this.restartStage(this.currentStage.level);
         }
         this.currentStage.update(keyboard);
-        if (this.currentStage.isCleared && !this.keepPlaying){
-            const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
-            if (response){
-                this.advanceStage();
-            } else {
-                this.keepPlaying = true;
-            }
-        }
+        // if (this.currentStage.isCleared && !this.keepPlaying){
+        //     const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
+        //     if (response){
+        //         this.advanceStage();
+        //     } else {
+        //         this.keepPlaying = true;
+        //     }
+        // }
     }
 
     private gameLoop(delta: number): void {
@@ -150,7 +171,7 @@ export class GameController {
         const dimensions = getCanvasDimensions()
         const viewport = new Viewport({
             screenWidth: dimensions.width,
-            screenHeight: dimensions.height
+            screenHeight: dimensions.height,
         })
         viewport.sortableChildren = true;
         this.pixiApplication.renderer.backgroundColor = 0xadd8e6;  

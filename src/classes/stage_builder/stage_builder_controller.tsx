@@ -7,7 +7,6 @@ import { GRID_HEIGHT, GRID_WIDTH, STAGE_BUILDER_WORLD_HEIGHT, STAGE_BUILDER_WORL
 import { Knight } from "../players/knight";
 import { UnitPartNames } from "../../types/enums";
 import { keyboard } from "../../components/control";
-import { StageTemplate } from "./stage_template";
 import { TemplateHelper } from "./template_helper";
 import { Platform } from "../platform";
 import { Enemy } from "../enemies/enemy";
@@ -33,7 +32,7 @@ export class StageBuilderController {
     constructor(application: PIXI.Application){
         this.tiles = [];
         this.viewport = new Viewport();
-        this.stage = new Stage(0, "", [], [], [], null, this.viewport, null);
+        this.stage = new Stage(0, "", null, this.viewport, null);
         this.templateHelper = new TemplateHelper();
 
         // Create spawn/grid graphics
@@ -44,6 +43,7 @@ export class StageBuilderController {
         // Setup default spawn
         this.stage.spawnX = STAGE_BUILDER_WORLD_WIDTH / 2;
         this.stage.spawnY = STAGE_BUILDER_WORLD_HEIGHT / 2;
+        this.templateHelper.setSpawn(this.stage.spawnX, this.stage.spawnY);
 
         // Setup viewport
         this.viewport.sortableChildren = true;
@@ -64,6 +64,7 @@ export class StageBuilderController {
     setSpawn = (x: number, y: number) => {
         this.stage.spawnX = x;
         this.stage.spawnY = y;
+        this.templateHelper.setSpawn(x, y)
     }
 
     playTest = () => {
@@ -136,12 +137,9 @@ export class StageBuilderController {
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
         const tile = this.tiles[yTileIndex][xTileIndex];
         if (tile.occupiedWith){
-            console.log('occupied, skipping');
             return;
         }
         const platform = new platformType(this.pixiApplication.loader, this.stage, tile.x, tile.y, 15, 15);
-        console.log(platform);
-        console.log(platformType)
         tile.occupiedWith = platform;
 
         platform.add();
@@ -157,7 +155,6 @@ export class StageBuilderController {
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
         const tile = this.tiles[yTileIndex][xTileIndex];
         if (tile.occupiedWith){
-            console.log('occupied, skipping');
             return;
         }
         
@@ -170,6 +167,7 @@ export class StageBuilderController {
 
         enemy.add();
         this.stage.enemies.push(enemy);
+        this.templateHelper.addEnemy(enemy);
     }
 
 }

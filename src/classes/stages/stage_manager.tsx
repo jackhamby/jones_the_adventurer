@@ -53,9 +53,6 @@ export class StageManager {
         const stage = new Stage(
             level,
             name,
-            [], // enemies
-            [], // platforms
-            [], // treasure
             this.player,
             this.viewport,
             this,
@@ -83,13 +80,10 @@ export class StageManager {
         const stage =  new Stage(
             level,
             name,
-            [], // enemies,
-            [], // platforms
-            [], //treasure
             this.player,
             this.viewport,
-            this,
-        )
+            this
+        );
 
         stage.enemies.push(
             new Manticore(this.loader, stage, Manticore.baseAttributes, Manticore.width, Manticore.height, 462, 540),
@@ -103,8 +97,6 @@ export class StageManager {
         const treasures = this.generateTreasures(stage);
         stage.treasures = treasures;
 
-
-        
         return stage;
 
     }
