@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { Treasure } from './treasure';
 import { Player } from '../players/player';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 import { Spell } from '../spells/spell';
 import { FireBall, FireBallMedium } from '../spells/projectile_spell';
 import { FastFire } from '../spells/buff_spell';

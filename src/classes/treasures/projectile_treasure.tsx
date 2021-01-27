@@ -3,7 +3,7 @@ import { Treasure } from './treasure';
 import { Player } from '../players/player';
 import {Arrow } from '../projectiles/arrow';
 import { Projectile } from '../projectiles/projectile';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 
 export class ProjectileTreasure extends Treasure {
 

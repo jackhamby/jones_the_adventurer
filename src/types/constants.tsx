@@ -7,8 +7,8 @@ export const SCREEN_WIDTH = window.screen.height;
 export const PLAYER_STARTING_X = 120;
 export const PLAYER_STARTING_Y = 120;
 
-export const GRID_WIDTH = 15;
-export const GRID_HEIGHT = 15;
+export const GRID_WIDTH = 25;
+export const GRID_HEIGHT = 25;
 
 export const STAGE_BUILDER_WORLD_HEIGHT = 10000;
 export const STAGE_BUILDER_WORLD_WIDTH = 10000;
@@ -124,115 +124,6 @@ export const STAGE2_LAYOUT = `80 45
 00000000000000000000000000000000000000000000000000000000000000000000000000000000
 `;
 
-
-export const STAGE1 = {
-  "platforms": [
-    {
-      "x": 4800,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4815,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4830,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4845,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4860,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4875,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4890,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4785,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4905,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4950,
-      "y": 4845,
-      "type": "dirt"
-    },
-    {
-      "x": 4950,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4965,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4980,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5010,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5025,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4995,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5040,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5040,
-      "y": 4845,
-      "type": "dirt"
-    },
-    {
-      "x": 4770,
-      "y": 4935,
-      "type": "redgrass"
-    }
-  ],
-  "enemies": [
-    {
-      "x": 5000,
-      "y": 4785,
-      "type": "man"
-    }
-  ],
-  "spawnX": 4856.5,
-  "spawnY": 4898
-} as StageTemplate;
 
 // export { 
 //     // MAX_ATTRIBUTES,

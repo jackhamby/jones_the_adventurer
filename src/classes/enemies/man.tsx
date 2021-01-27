@@ -1,6 +1,6 @@
 import { Enemy } from "./enemy";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import { Arrow } from "../projectiles/arrow";
 import { Part } from "../part";
 

@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import { Stage } from "./stages/stage";
+import { Stage } from "./stage/stage";
 
 
 export class Timer {

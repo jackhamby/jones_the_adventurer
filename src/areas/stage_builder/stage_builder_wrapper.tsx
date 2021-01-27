@@ -2,7 +2,7 @@ import * as React from 'react';
 import * as PIXI from 'pixi.js';
 import { createRef } from 'react';
 import { DirtPlatform } from '../../classes/platform';
-import { Stage } from '../../classes/stages/stage';
+import { Stage } from '../../classes/stage/stage';
 import { getCanvasDimensions, loadTextures, mapStageBuilderKeys } from '../../helpers/util';
 import { ClickEventData, Viewport } from 'pixi-viewport';
 import { BuilderMenu } from './builder_menu';
@@ -17,20 +17,6 @@ const height = 800;
 export const stageBuilderKeyboard = {
 
 } as StageBuilderKeyOptions;
-
-// export interface GameBuilderContext {
-//     loader: PIXI.Loader;
-//     stage: Stage;
-//     lastClickedX: number;
-//     lastClickedY: number;
-// }
-
-// export const gameBuilderContext: GameBuilderContext  = {
-//     loader: null,
-//     stage: null,
-//     lastClickedX: 0,
-//     lastClickedY: 0,
-// }
 
 export class Tile {
     x: number;
@@ -140,6 +126,41 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
                 <div className="col-5">
                     <BuilderMenu controller={this.controller} />
                     <div className="col-12 pt-4">
+                        <button onClick={() => {
+                                const stageStr = JSON.stringify(this.controller.templateHelper.template);
+                                // document.execCommand("copy";)
+                                navigator.clipboard.writeText(stageStr);
+                                window.alert("copied to clipboard!")
+                                // this.controller.isSelectingSpawn = !this.state.isSelectingSpawn;
+                                // this.controller.viewport.off("clicked");
+                                // this.controller.viewport.on("clicked", (data: ClickEventData) => {
+                                //     this.controller.setSpawn(data.world.x, data.world.y)
+                                //     this.controller.drawSpawnIcon();
+                                //     this.setState({isSelectingSpawn: false})
+                                // });
+
+                                // this.setState({isSelectingSpawn: !this.state.isSelectingSpawn});
+                        }} >
+                            copy json
+                        </button>
+                            
+                    </div>
+                    <div className="col-12 pt-4">
+                        <label className="pr-1"> level</label>
+                        <input type="number" placeholder="1" onChange={(event) => {
+                            this.controller.setLevel(parseInt(event.target.value));
+                        }}>
+
+                        </input>
+                    </div>
+                    <div className="col-12 pt-4">
+                        <input type="text" placeholder="stage name" onChange={(event) => {
+                            this.controller.setName(event.target.value);
+                        }}>
+
+                        </input>
+                    </div>
+                    <div className="col-12 pt-4">
                         <button disabled={this.state.isSelectingSpawn} onClick={() => {
                             this.controller.isSelectingSpawn = !this.state.isSelectingSpawn;
                             this.controller.viewport.off("clicked");
@@ -160,9 +181,6 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
                     </div>
                     
 
-                    <div>
-
-                    </div>
                 </div>
 
             </div>

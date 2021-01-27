@@ -1,7 +1,7 @@
 
 import { Unit} from "../unit";
 import { KeyOptions } from "../../types/states";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import { UnitAttributes } from "../../types/types";
 import { UnitStateNames, UnitStatisticNames } from "../../types/enums";
 import { Treasure } from "../treasures/treasure";

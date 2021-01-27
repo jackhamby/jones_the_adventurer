@@ -5,15 +5,15 @@ import { Player } from "./players/player";
 import { UnitPartNames } from "../types/enums";
 import { keyboard } from "../components/control";
 import * as Constants from '../types/constants';
-import { StageManager } from "./stages/stage_manager";
-import { Stage } from "./stages/stage";
+import * as Stages from '../types/stages';
+import { Stage } from "./stage/stage";
 import { Spell } from "./spells/spell";
 import { FireBall, FireBallMedium } from "./spells/projectile_spell";
 import { FastFire } from "./spells/buff_spell";
 import { Unit } from "./unit";
-import { TemplateHelper } from "./stage_builder/template_helper";
 import { DirtPlatform } from "./platform";
 import { Kobold } from "./enemies/kobold";
+import { StageManager } from "./stage/stage_manager";
 
 
 // Initialize game data
@@ -24,8 +24,8 @@ export class GameController {
     pixiApplication: PIXI.Application;
     viewport: Viewport;
     player: Player;
-    stageManager: StageManager;
     currentStage: Stage;
+    stageManager: StageManager;
 
     // game_wrapper call backs
     startGame: Function;
@@ -44,7 +44,6 @@ export class GameController {
         });
         this.viewport = this.createViewport();
         this.player = {} as Player;
-        this.stageManager = {} as StageManager;
         this.currentStage = {} as Stage;
         this.keepPlaying = false;
         this.startGame = startGame;
@@ -66,7 +65,7 @@ export class GameController {
     }
 
     changeStage(level: number){
-        // Remove sprites from view port
+        // // Remove sprites from view port
         this.currentStage.clear();
 
         // Get next stage
@@ -80,6 +79,7 @@ export class GameController {
 
         // Load stage
         this.currentStage.load();
+        // window.alert('chamge stage')
     }
 
     advanceStage = () => {
@@ -88,7 +88,8 @@ export class GameController {
     }
 
     restartStage(level: number){
-        // Set stage with players current treasures
+        // window.alert('restarted stage')
+        // // Set stage with players current treasures
         const startingTreasures = this.player.currentStage.startingTreasures;
 
         // recreate restarted stage
@@ -114,33 +115,12 @@ export class GameController {
 
         // Allow player to update the view
         this.player.updateView = this.updateView;
-        
-        // // Attempt
-        // const helper = new TemplateHelper();
-        // const stage1 = helper.loadTemplate(this.viewport, this.pixiApplication.loader, this.player, Constants.STAGE1);
-        // // this.viewport.moveCenter(stage1.spawnX, stage1.spawnY);
-        // // this.player.x = stage1.spawnX;
-        // // this.player.y = stage1.spawnY;
 
-        // this.player.currentStage = stage1;
-        // this.currentStage = stage1;
-        // this.currentStage.load();
-
-        // End attempt
-
-
-        
-        // Working attempt
-        this.stageManager = new StageManager(this.pixiApplication.loader, this.player, this.viewport);
-
-        // Create first stage
-        const stageOne = this.stageManager.getStage(1);
-        console.log(stageOne);
-        this.player.currentStage = stageOne;
-        this.currentStage = stageOne;
-        this.currentStage.load()
-        // End working attempt
-
+        this.stageManager = new StageManager(this.viewport, this.player, this.pixiApplication.loader);
+        const stage1 = this.stageManager.getStage(1);
+        this.player.currentStage = stage1;
+        this.currentStage = stage1;
+        this.currentStage.load();
 
         // Start game loop
         this.pixiApplication.ticker.add(delta => this.gameLoop(delta));
@@ -153,14 +133,14 @@ export class GameController {
             this.restartStage(this.currentStage.level);
         }
         this.currentStage.update(keyboard);
-        // if (this.currentStage.isCleared && !this.keepPlaying){
-        //     const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
-        //     if (response){
-        //         this.advanceStage();
-        //     } else {
-        //         this.keepPlaying = true;
-        //     }
-        // }
+        if (this.currentStage.isCleared && !this.keepPlaying){
+            const response: boolean = window.confirm(`nice work cheeseman, you beat stage ${this.currentStage.level} in ${this.currentStage.timer.timerText}. continue to the next stage?`);
+            if (response){
+                this.advanceStage();
+            } else {
+                this.keepPlaying = true;
+            }
+        }
     }
 
     private gameLoop(delta: number): void {

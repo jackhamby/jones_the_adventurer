@@ -6,7 +6,7 @@ import { Man } from "../enemies/man";
 import { Manticore } from "../enemies/manticore";
 import { DefaultPlatform, DirtPlatform, GrassPlatform, Platform, RedGrassPlatform, SandRockPlatform } from "../platform";
 import { Player } from "../players/player";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 
 // Enemy
 export enum EnemyOptionNames {
@@ -61,6 +61,8 @@ export interface PlatformTemplate {
 export interface StageTemplate {
     spawnX: number;
     spawnY: number;
+    level: number;
+    name: string;
     enemies: EnemyTemplate[];
     platforms: PlatformTemplate[];
 }
@@ -141,8 +143,16 @@ export class TemplateHelper {
         this.template.spawnY = y;
     }
 
+    setName = (name: string) => {
+        this.template.name = name;
+    }
+
+    setLevel = (level: number) => {
+        this.template.level = level;
+    }
+
     loadTemplate = (viewport: Viewport, loader: PIXI.Loader, player: Player, template?: StageTemplate): Stage => {
-        const stage =  new Stage(0, "", player, viewport, null);
+        const stage =  new Stage(template.level, template.name , player, viewport, null);
         const _template = template ? template : this.template;
 
         // Load enemies

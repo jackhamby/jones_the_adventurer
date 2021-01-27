@@ -7,7 +7,7 @@ import { Man } from '../../classes/enemies/man';
 import { Manticore } from '../../classes/enemies/manticore';
 import { DefaultPlatform, DirtPlatform, GrassPlatform, Platform, RedGrassPlatform, SandRockPlatform } from '../../classes/platform';
 import { Sprite } from '../../classes/sprite';
-import { Stage } from '../../classes/stages/stage';
+import { Stage } from '../../classes/stage/stage';
 import { StageBuilderController } from '../../classes/stage_builder/stage_builder_controller';
 import { GRID_HEIGHT, GRID_WIDTH } from '../../types/constants';
 import { stageBuilderKeyboard } from './stage_builder_wrapper';

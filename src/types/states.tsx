@@ -1,7 +1,7 @@
 import * as PIXI from 'pixi.js';
 import { ScreenOptions } from '../types/enums';
 import { Player } from '../classes/players/player';
-import { Stage } from '../classes/stages/stage';
+import { Stage } from '../classes/stage/stage';
 
 export interface AppState {
     controlState: ControlState;

@@ -3,7 +3,7 @@
 // import * as PIXI from "pixi.js";
 // import { Stage } from "../game_classes";
 import { Player } from "./player";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Rock } from "../projectiles/rock";
 import { Part } from "../part";

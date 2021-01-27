@@ -6,7 +6,7 @@ import { UnitAttributes } from '../../types/types';
 import { SpritePart } from '../interfaces';
 import { KeyOptions } from '../../types/states';
 import { SmallCoins } from '../treasures/coin_treasure';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 
 
 

@@ -1,7 +1,7 @@
 import { Viewport } from 'pixi-viewport';
 import * as React from 'react';
 import { Sprite } from '../../classes/sprite';
-import { Stage } from '../../classes/stages/stage';
+import { Stage } from '../../classes/stage/stage';
 import { BuilderMenuOption } from './builder_menu_option';
 import { EnemyMenu } from './enemy_menu';
 import { PlatformMenu } from './platform_menu';

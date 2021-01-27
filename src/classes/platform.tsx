@@ -1,7 +1,7 @@
 
 import * as PIXI from 'pixi.js';
 import { Sprite } from './sprite';
-import { Stage } from './stages/stage';
+import { Stage } from './stage/stage';
 
 
 export interface PlatformTextures {

@@ -5,7 +5,7 @@ import { KeyOptions } from '../types/states';
 import { Projectile } from './projectiles/projectile';
 import { Rock } from './projectiles/rock';
 import { Treasure } from './treasures/treasure';
-import { Stage } from './stages/stage';
+import { Stage } from './stage/stage';
 import { SpritePart } from './interfaces';
 import { Part } from './part';
 import { SPRITE_DECAY_FADE_TIME } from '../types/constants';

@@ -1,7 +1,7 @@
 import { Viewport } from "pixi-viewport";
 import { Tile } from "../../areas/stage_builder/stage_builder_wrapper";
 import { Player } from "../players/player";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import * as PIXI from "pixi.js";
 import { GRID_HEIGHT, GRID_WIDTH, STAGE_BUILDER_WORLD_HEIGHT, STAGE_BUILDER_WORLD_WIDTH } from "../../types/constants";
 import { Knight } from "../players/knight";
@@ -65,6 +65,16 @@ export class StageBuilderController {
         this.stage.spawnX = x;
         this.stage.spawnY = y;
         this.templateHelper.setSpawn(x, y)
+    }
+
+    setName = (name: string) => {
+        this.stage.name = name;
+        this.templateHelper.setName(name);
+    }
+
+    setLevel = (level: number) => {
+        this.stage.level = level;
+        this.templateHelper.setLevel(level);
     }
 
     playTest = () => {
@@ -139,7 +149,7 @@ export class StageBuilderController {
         if (tile.occupiedWith){
             return;
         }
-        const platform = new platformType(this.pixiApplication.loader, this.stage, tile.x, tile.y, 15, 15);
+        const platform = new platformType(this.pixiApplication.loader, this.stage, tile.x, tile.y, 25, 25);
         tile.occupiedWith = platform;
 
         platform.add();

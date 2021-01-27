@@ -4,7 +4,7 @@ import { Sprite } from '../sprite';
 import { SpritePart } from '../interfaces';
 import { Player } from '../players/player';
 import { FloatingText } from '../floating_text';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 
 export class Treasure extends Sprite {
     treasureIconTexture: PIXI.Texture;

@@ -9,7 +9,7 @@
 
 import { Player } from "./player";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import { Part } from "../part";
 
 

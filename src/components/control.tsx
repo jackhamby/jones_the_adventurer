@@ -25,7 +25,7 @@ export class Control extends React.Component<{}, ControlState> {
     constructor(props){
         super(props);
         this.state = {
-            currentScreen: ScreenOptions.GAME,
+            currentScreen: ScreenOptions.MAIN_MENU,
             selectedPlayer: Kobold,
         }
     }

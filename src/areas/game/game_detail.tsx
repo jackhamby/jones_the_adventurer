@@ -6,7 +6,7 @@ import './game_detail.css'
 import { UnitStatistics } from '../../types/types';
 import { UnitStatisticNames, UnitAttributeNames } from '../../types/enums';
 import { GameController } from '../../classes/game_controller';
-import { Stage } from '../../classes/stages/stage';
+import { Stage } from '../../classes/stage/stage';
 import { Player } from '../../classes/players/player';
 import { DebuggerModal } from '../../components/modals/debugger_modal';
 

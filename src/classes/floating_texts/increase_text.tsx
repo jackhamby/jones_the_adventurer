@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { FloatingText } from '../floating_text';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 
 export class IncreaseText extends FloatingText {
 

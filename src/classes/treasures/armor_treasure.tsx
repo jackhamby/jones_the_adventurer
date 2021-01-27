@@ -17,7 +17,7 @@ import { Armor,
     OrcLegsArmor1, 
     OrcBodyArmor1 
 } from '../armor';
-import { Stage } from '../stages/stage';
+import { Stage } from '../stage/stage';
 export class ArmorTreasure extends Treasure {
 
     armor: Armor;
@@ -53,7 +53,6 @@ export class KnightHeadArmor1Treasure extends ArmorTreasure {
         this.initTextures();
         this.initSpriteParts();
     }
-
 }
 
 export class KnightHeadArmor2Treasure extends ArmorTreasure {

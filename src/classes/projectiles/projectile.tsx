@@ -2,7 +2,7 @@ import { Sprite } from "../sprite";
 import { ProjectileStateNames } from "../../types/enums";
 import { ProjectileAttributes } from "../../types/types";
 import { Unit } from "../unit";
-import { Stage } from "../stages/stage";
+import { Stage } from "../stage/stage";
 import { SPRITE_DECAY_FADE_TIME } from "../../types/constants";
 import * as PIXI from 'pixi.js'
 import { Buff } from "../buffs/buff";
