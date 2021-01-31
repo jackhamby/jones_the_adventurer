@@ -14,7 +14,6 @@ interface PlayerOptionButtonProps {
 
 export class PlayerOptionButton extends React.Component<PlayerOptionButtonProps, {}> {
 
-    // TODO: safely grab image
     onClick = (event: any) => {
         this.props.changePlayer(this.props.player);
     }
@@ -34,8 +33,6 @@ export class PlayerOptionButton extends React.Component<PlayerOptionButtonProps,
         }
         return <input type="image" src={src} alt="character icon"></input>;
     }
-
-    
     
     render(){
         return (

@@ -3,8 +3,6 @@ import { FireEffect } from "../effects/fire_effect";
 import { GlowEffect } from "../effects/glow_effect";
 import { Unit } from "../unit";
 
-
-
 export class Buff {
     unit: Unit;
     active: boolean;
@@ -12,7 +10,6 @@ export class Buff {
     currentActiveTime: number;
     effect?: Effect;
     name: string;
-    
 
     constructor(unit: Unit){
         this.unit = unit;
@@ -21,7 +18,6 @@ export class Buff {
         this.currentActiveTime = 0;
         this.name = "buff";
         this.effect = null;
-
     }
 
     update(){
@@ -77,7 +73,6 @@ export class AttackSpeed extends Buff {
         this.unit.currentAttributes.ATTACK_SPEED = this.unit.currentAttributes.ATTACK_SPEED / 2;
         this.unit.projectileCooldown = this.unit.currentAttributes.ATTACK_SPEED;
     }
-    
 }
 
 
@@ -92,26 +87,12 @@ export class FireDot extends Buff {
         this.name = "fire over time";
         this.activeTime = 200;
         this.effect = new FireEffect(this.unit);
-        // this.effect = new GlowEffect(this.unit, 0xFF0000);
-
-
     }
 
     update(){
         super.update();
-        // console.log(this.activeTime)
-        // console.log(this.activeTime % 25)
         if (this.currentActiveTime % 25 === 0){
             this.unit.takeDamage(5);
         }
-    }
-
-    // deactivate(){
-    //     super.deactivate();
-    //     // // this.effect.remove();
-    //     // this.unit.currentAttributes.ATTACK_SPEED = this.unit.attributes.ATTACK_SPEED;
-    //     // this.unit.projectileCooldown = this.unit.attributes.ATTACK_SPEED;  
-    // }
-
-    
+    }    
 }

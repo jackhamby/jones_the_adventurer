@@ -42,7 +42,5 @@ export class Cooldown extends React.Component<CooldownProps, CooldownState> {
                 </svg>
             </div>
         );
-
-
     }
 }

@@ -1,12 +1,14 @@
 import * as PIXI from 'pixi.js';
 import * as React from 'react';
 import { Sprite } from '../sprite';
-import { SpritePart } from '../interfaces';
 import { Player } from '../players/player';
 import { FloatingText } from '../floating_text';
 import { Stage } from '../stage/stage';
+import { SpritePart } from '../../types/interfaces';
 
 export class Treasure extends Sprite {
+    static imageUrl = '';
+    
     treasureIconTexture: PIXI.Texture;
     treasureBodyTexture?: PIXI.Texture;
     spriteParts: SpritePart[];
@@ -15,9 +17,8 @@ export class Treasure extends Sprite {
     iconOffsetY: number;
     currentStage: Stage;
 
-
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
-        // For now treasure sizes are hard coded to 15, 15
+        //TODO: For now treasure sizes are hard coded to 15, 15
         super(loader, x, y, 15, 15, 0, 0);
         this.treasureIconTexture = {} as PIXI.Texture;
         this.currentStage = stage;
@@ -67,8 +68,6 @@ export class Treasure extends Sprite {
             } as SpritePart;
             spriteParts.push(baseSpritePart);
         }
-
-
 
         const icon = new PIXI.Sprite(this.treasureIconTexture);
         const iconOffSetX = 0;

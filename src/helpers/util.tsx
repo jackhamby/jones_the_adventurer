@@ -1,4 +1,4 @@
-import { KeyOptions, StageBuilderKeyOptions } from "../types/states";
+import { KeyOptions, StageBuilderKeyOptions } from "../types/interfaces";
 
 export const getCanvasDimensions = () => {
     const element = document.getElementById('canvas-container')
@@ -19,7 +19,6 @@ export const toRadians = (degrees: number): number => {
     const radians = (degrees * Math.PI) / 180;
     return radians;
 }
-
 
 export const mapStageBuilderKeys = (key: string, prevKeyOptions: StageBuilderKeyOptions, toggle: boolean): StageBuilderKeyOptions => {
     switch(key){

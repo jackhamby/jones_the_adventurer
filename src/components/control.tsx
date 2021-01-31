@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { ScreenOptions } from '../types/enums';
-import { AppState, KeyOptions } from '../types/states';
-import { mapKeys, getCanvasDimensions } from '../helpers/util';
+import { mapKeys } from '../helpers/util';
 import './global.css';
 import { GameWrapper } from '../areas/game/game_wrapper';
 import { Player } from '../classes/players/player';
@@ -10,6 +9,7 @@ import { PlayerSelectWrapper } from '../areas/player_select/player_select_wrappe
 import { MainMenu } from '../areas/main_menu/main_menu';
 import { StageBuilderWrapper } from '../areas/stage_builder/stage_builder_wrapper';
 import { Kobold } from '../classes/players/kobold';
+import { KeyOptions } from '../types/interfaces';
 
 export const keyboard = {
 
@@ -25,7 +25,7 @@ export class Control extends React.Component<{}, ControlState> {
     constructor(props){
         super(props);
         this.state = {
-            currentScreen: ScreenOptions.MAIN_MENU,
+            currentScreen: ScreenOptions.GAME,
             selectedPlayer: Kobold,
         }
     }

@@ -1,17 +1,7 @@
-// export const x = 2;
-// import * as PIXI from "pixi.js";
-// import { PlayerAttributes } from "../../types/states";
-// import { Stage } from "../game_classes";
-// import { Player } from "./player";
-// import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
-// import { Part } from "../part";
-// import { Rock, Axe } from "../projectile";
-
 import { Player } from "./player";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Stage } from "../stage/stage";
 import { Part } from "../part";
-
 
 export class Knight extends Player{
     
@@ -34,9 +24,7 @@ export class Knight extends Player{
         super(loader, stage, initialAttributes, width, height, x, y);
         this.textures = this.initTextures();
         this.spriteParts = this.initSpriteParts();
-        // this.projectile = Axe;
     }
-
 
     initTextures(): UnitParts {  
         return {
@@ -63,7 +51,6 @@ export class Knight extends Player{
             }
         }
     }
-
 
     initSpriteParts(): SpriteParts {
         const headOffsetX = 0;

@@ -3,7 +3,6 @@ import { Unit } from "../unit";
 import * as PIXI from 'pixi.js'
 import { FireDot } from "../buffs/buff";
 
-
 export class FireBall extends Projectile {
 
     static baseAttributes = {

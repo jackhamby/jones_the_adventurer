@@ -2,17 +2,12 @@
 import React, { createRef } from 'react';
 import * as PIXI from 'pixi.js';
 import { Player } from '../../../classes/players/player';
-import { UnitPartNames, UnitStateNames } from '../../../types/enums';
-
+import { UnitPartNames } from '../../../types/enums';
+import { UnitSpriteParts } from '../../../types/types';
 
 interface CharacterIconProps {
     imagePath: string;
     player: Player;
-}
-
-
-type TOCHANGE = {
-    [key in UnitPartNames] : PIXI.Sprite;
 }
 
 export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
@@ -21,7 +16,7 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
     app: PIXI.Application;
     appWidth: number;
     appHeight: number;
-    spriteParts: TOCHANGE;
+    spriteParts: UnitSpriteParts;
 
     constructor(props: CharacterIconProps){
         super(props)
@@ -30,7 +25,7 @@ export class CharacterIcon extends React.Component<CharacterIconProps, {}>{
         })
         this.appWidth = 1;
         this.appHeight = 1;
-        this.spriteParts = {} as TOCHANGE;
+        this.spriteParts = {} as UnitSpriteParts;
     }
 
 

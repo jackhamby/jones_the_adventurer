@@ -10,8 +10,7 @@ export class SpellTreasure extends Treasure {
 
     spell: typeof Spell;
 
-    constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
-        
+    constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){   
         super(loader, stage, x, y);
         this.spell = FireBall;
     }
@@ -24,12 +23,9 @@ export class SpellTreasure extends Treasure {
     initTextures(){
         this.treasureBodyTexture = this.loader.resources['treasure-base'].texture;
     }
-
 }
 
-
 export class FireBallTreasure extends SpellTreasure {
-
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         super(loader, stage, x, y);
         this.initTextures();
@@ -44,9 +40,7 @@ export class FireBallTreasure extends SpellTreasure {
     }
 }
 
-
 export class FireBallMediumTreasure extends SpellTreasure {
-
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         super(loader, stage, x, y);
         this.initTextures();
@@ -62,7 +56,6 @@ export class FireBallMediumTreasure extends SpellTreasure {
 }
 
 export class FastFireTreasure extends SpellTreasure {
-
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         super(loader, stage, x, y);
         this.initTextures();

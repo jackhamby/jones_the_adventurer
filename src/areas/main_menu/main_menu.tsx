@@ -5,13 +5,10 @@ export interface MainMenuProps {
     updateScreen: (screenName: ScreenOptions) => void;
 }
 
-
 export class MainMenu extends React.Component<MainMenuProps, {}> {
 
     render(){
-        let x: number = 3;
         return(
-            // <div> main menu </div>
             <div>
                 <div className="row">
                     <div className='col-4'></div>
@@ -64,6 +61,6 @@ export class MainMenu extends React.Component<MainMenuProps, {}> {
                     <div className='col-4'></div>
                 </div> 
             </div>
-        )
+        );
     }
 }

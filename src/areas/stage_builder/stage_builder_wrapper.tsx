@@ -6,9 +6,9 @@ import { Stage } from '../../classes/stage/stage';
 import { getCanvasDimensions, loadTextures, mapStageBuilderKeys } from '../../helpers/util';
 import { ClickEventData, Viewport } from 'pixi-viewport';
 import { BuilderMenu } from './builder_menu';
-import { KeyOptions, StageBuilderKeyOptions } from '../../types/states';
 import { Sprite } from '../../classes/sprite';
 import { StageBuilderController } from '../../classes/stage_builder/stage_builder_controller';
+import { StageBuilderKeyOptions } from '../../types/interfaces';
 
 const width = 800;
 const height = 800;
@@ -125,39 +125,21 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
                 </div>
                 <div className="col-5">
                     <BuilderMenu controller={this.controller} />
-                    <div className="col-12 pt-4">
-                        <button onClick={() => {
-                                const stageStr = JSON.stringify(this.controller.templateHelper.template);
-                                // document.execCommand("copy";)
-                                navigator.clipboard.writeText(stageStr);
-                                window.alert("copied to clipboard!")
-                                // this.controller.isSelectingSpawn = !this.state.isSelectingSpawn;
-                                // this.controller.viewport.off("clicked");
-                                // this.controller.viewport.on("clicked", (data: ClickEventData) => {
-                                //     this.controller.setSpawn(data.world.x, data.world.y)
-                                //     this.controller.drawSpawnIcon();
-                                //     this.setState({isSelectingSpawn: false})
-                                // });
 
-                                // this.setState({isSelectingSpawn: !this.state.isSelectingSpawn});
-                        }} >
-                            copy json
-                        </button>
-                            
-                    </div>
+                    {/* TODO can we abstract these buttons out */}
                     <div className="col-12 pt-4">
-                        <label className="pr-1"> level</label>
-                        <input type="number" placeholder="1" onChange={(event) => {
+                        <label className="col-2 pr-1"> level</label>
+                        <input className="col-5" type="number" placeholder="1" onChange={(event) => {
                             this.controller.setLevel(parseInt(event.target.value));
                         }}>
 
                         </input>
                     </div>
                     <div className="col-12 pt-4">
-                        <input type="text" placeholder="stage name" onChange={(event) => {
+                        <label className="col-2 pr-1">name</label>
+                        <input className="col-5" type="text" placeholder="stage name" onChange={(event) => {
                             this.controller.setName(event.target.value);
                         }}>
-
                         </input>
                     </div>
                     <div className="col-12 pt-4">
@@ -178,6 +160,15 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
                     </div>
                     <div className="col-12 pt-4">
                         {this.renderPlayTest()}
+                    </div>
+                    <div className="col-12 pt-4">
+                        <button onClick={() => {
+                                const stageStr = JSON.stringify(this.controller.templateHelper.template);
+                                navigator.clipboard.writeText(stageStr);
+                                window.alert("copied to clipboard!")
+                        }} >
+                            copy json
+                        </button>
                     </div>
                     
 

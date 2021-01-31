@@ -1,8 +1,15 @@
-import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames } from "./enums";
+import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlatformOptionNames, EnemyOptionNames, TreasureArmorOptionNames, PlayerAttributeNames } from "./enums";
 import { Part } from "../classes/part";
 import { Projectile } from "../classes/projectiles/projectile";
 
 import { Armor } from "../classes/armor"
+import { Platform } from "../classes/platform";
+import { Enemy } from "../classes/enemies/enemy";
+import { ArmorTreasure } from "../classes/treasures/armor_treasure";
+
+export type PlayerAttributes = {
+    [key in PlayerAttributeNames]: any;
+}
 
 export type UnitStates = {
     [key in UnitStateNames]: any;
@@ -14,6 +21,10 @@ export type UnitArmors = {
 
 export type UnitParts = {
     [key in UnitPartNames]: UnitArmors;
+}
+
+export type UnitSpriteParts = {
+    [key in UnitPartNames] : PIXI.Sprite;
 }
 
 export type SpriteArmors = {
@@ -39,3 +50,16 @@ export type ProjectileAttributes = {
 export type ProjectileTypes = {
     [key in ProjectileNames] : Projectile;
 }
+
+export type PlatformOptionTypes = {
+    [key in PlatformOptionNames] : typeof Platform; 
+}
+
+export type EnemyOptionTypes = {
+    [key in EnemyOptionNames] : typeof Enemy; 
+}
+
+export type TreasureArmorOptionTypes = {
+    [key in TreasureArmorOptionNames] : typeof ArmorTreasure; 
+}   
+

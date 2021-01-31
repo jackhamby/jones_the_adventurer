@@ -15,7 +15,6 @@ export class Spell {
         this.currentCooldown = 0;
         this.onCooldown = false;
         this.name = "spell";
-        
     }
 
     update(){
@@ -41,9 +40,3 @@ export class Spell {
         this.currentCooldown = this.cooldown;
     }
 }
-
-
-
-
-
-

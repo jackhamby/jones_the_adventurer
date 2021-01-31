@@ -9,7 +9,6 @@ interface TreasureDetailProps {
 
 export class TreasureDetail extends React.Component<TreasureDetailProps, {}>{
 
-
     render(){
         // the original url for the image is stored here on the PIXI.BaseTexture
         const url: string = this.props.treasure.treasureIconTexture.textureCacheIds[1];
@@ -19,7 +18,7 @@ export class TreasureDetail extends React.Component<TreasureDetailProps, {}>{
                     {this.props.treasure.name} 
                 </span>
                 <div>
-                    <img src={url}/>
+                    <img alt={this.props.treasure.name} src={url}/>
                 </div>
                 
             </div>

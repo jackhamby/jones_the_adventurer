@@ -21,9 +21,7 @@ export class CoinTreasure extends Treasure {
     initTextures(){
         this.treasureBodyTexture = undefined;
     }
-
 }
-
 
 export class SmallCoins extends CoinTreasure {
 
@@ -40,5 +38,3 @@ export class SmallCoins extends CoinTreasure {
         this.treasureIconTexture = this.loader.resources['coins-small'].texture;
     }
 }
-
-

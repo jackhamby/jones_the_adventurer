@@ -22,5 +22,3 @@ export class Part {
         this.sprite.texture = newTexture;
     }
 }
-
-

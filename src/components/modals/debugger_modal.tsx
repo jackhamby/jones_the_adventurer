@@ -7,7 +7,6 @@ interface DebuggerModalProps {
     control: GameController;
 }
 
-
 export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
 
     getHeader = () => {
@@ -68,7 +67,6 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
         this.props.control.player.attributes.JUMP_COUNT = 99999999999999;
     }
 
-
     render(){
         return (
             <Modal
@@ -78,7 +76,6 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
                 onModalShow={this.props.control.stop}
                 onModalHide={this.props.control.start}
             />
-        )
-
+        );
     }
 }

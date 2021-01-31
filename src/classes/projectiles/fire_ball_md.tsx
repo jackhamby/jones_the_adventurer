@@ -2,7 +2,6 @@ import { Projectile } from "./projectile";
 import { Unit } from "../unit";
 import * as PIXI from 'pixi.js'
 
-
 export class FireBallMedium extends Projectile {
 
     static baseAttributes = {

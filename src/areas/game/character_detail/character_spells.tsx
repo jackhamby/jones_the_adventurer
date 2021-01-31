@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CharacterIcon } from './character_icon';
 import { Player } from '../../../classes/players/player';
 import { CustomizeModal } from '../../../components/modals/customize_modal/customize_modal';
 import { GameController } from '../../../classes/game_controller';
@@ -75,41 +74,32 @@ export class CharacterSpells extends React.Component<CharacterSpellsProps> {
                 break;
         }
         return null;
-
-    }   
-
+    }
 
     renderSpells = (): JSX.Element => {
         return (
             <div className="row">
                 <div className="p-1 font-size-sm text-align-center" style={{width: "28%", margin: "2%",  border: '1px solid black'}}> 
                     <span> 
-                        {/* {this.props.treasure.name}  */}
                         Q
                     </span>
                     {this.renderSpell(1)}
                 </div>
                 <div className="p-1 font-size-sm text-align-center" style={{width: "28%", margin: "2%",  border: '1px solid black'}}> 
                     <span> 
-                        {/* {this.props.treasure.name}  */}
                         E
                     </span>
                     <div>
-                    {this.renderSpell(2)}
-
-                        {/* <img src={url}/> */}
+                        {this.renderSpell(2)}
                     </div>
                 
                 </div>
                 <div className="p-1 font-size-sm text-align-center" style={{width: "28%", margin: "2%",  border: '1px solid black'}}> 
                     <span> 
-                        {/* {this.props.treasure.name}  */}
                         R
                     </span>
                     <div>
                     {this.renderSpell(3)}
-
-                        {/* <img src={url}/> */}
                     </div>
                 
                 </div>
@@ -120,19 +110,18 @@ export class CharacterSpells extends React.Component<CharacterSpellsProps> {
     render(){
         return (
             <div className="col-3 h-100" style={{fontSize: "10px", fontWeight: "bold"}}>
-            spell data
-            <div className="pt-1" >
-                <CustomizeModal 
-                    player={this.props.player} 
-                    control={this.props.controller} 
-                    selectedTab={TabOptions.spells}
-                    link={<button> spell select </button>}
-                />
+                spell data
+                <div className="pt-1" >
+                    <CustomizeModal 
+                        player={this.props.player} 
+                        control={this.props.controller} 
+                        selectedTab={TabOptions.spells}
+                        link={<button> spell select </button>}
+                    />
+                </div>
+                {this.renderSpells()}
             </div>
-            {this.renderSpells()}
-        </div>
-
-        )
+        );
     }
     
 }

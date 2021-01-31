@@ -2,7 +2,6 @@
 
 import { Enemy } from "../enemies/enemy";
 import { Platform } from "../platform";
-import { KeyOptions } from "../../types/states";
 import { Player } from "../players/player";
 import { Treasure } from "../treasures/treasure";
 import { Viewport } from "pixi-viewport";
@@ -11,6 +10,7 @@ import { FloatingText } from "../floating_text";
 import { Timer } from "../timer";
 import { StageManager } from "./stage_manager";
 import { CollisionHelper } from "./collision_helper";
+import { KeyOptions } from "../../types/interfaces";
 
 // Wrapper for all items on the screen
 // Handles sprite movement and collisions

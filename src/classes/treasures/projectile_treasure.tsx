@@ -12,24 +12,19 @@ export class ProjectileTreasure extends Treasure {
 
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         super(loader, stage, x, y);
-        // this.amount = 0;
         this.projectile = {} as typeof Projectile;
     }
 
     apply(player: Player){
         super.apply(player);
-        // player.currentGold += this.amount;
         player.projectile = this.projectile;
         player.projectiles.push(this.projectile);
     }
 
     initTextures(){
         this.treasureBodyTexture = this.loader.resources['treasure-base'].texture;
-        // this.treasureIconTexture = this.projectile.texture;
     }
-
 }
-
 
 export class ArrowTreasure extends ProjectileTreasure {
 
@@ -48,5 +43,4 @@ export class ArrowTreasure extends ProjectileTreasure {
         super.initTextures();
         this.treasureIconTexture = this.loader.resources['arrow'].texture;
     }
-
 }

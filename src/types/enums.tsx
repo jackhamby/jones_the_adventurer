@@ -17,6 +17,15 @@ export enum Attributes {
     SPEED = "speed",
 }
 
+export enum PlayerAttributeNames {
+    HEALTH = "health",
+    SPEED = "speed",
+    ARMOR = "armor",
+    ATTACK = "attack",
+    JUMP = "jump",
+    ATTACK_SPEED = "attack_speed"
+}
+
 export enum ProjectileStateNames {
     FLYING = "flying",
     FALLING = "falling",
@@ -79,4 +88,22 @@ export enum Directions {
     DOWN = 'down',
     RIGHT = 'right',
     LEFT = 'left'
+}
+
+export enum PlatformOptionNames {
+    DEFAULT = "default",
+    DIRT = "dirt",
+    GRASS = "grass",
+    SANDROCK = "sandrock",
+    REDGRASS = "redgrass"
+}
+
+export enum TreasureArmorOptionNames {
+    KNIGHT_HEAD_ARMOR1 = "knightHeadArmor1",
+}
+
+export enum EnemyOptionNames {
+    KOBOLD = "kobold",
+    MAN = "man",
+    MANTICORE = "manticore",
 }

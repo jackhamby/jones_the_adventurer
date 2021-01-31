@@ -1,4 +1,3 @@
-
 import React from 'react';
 import './player_select_wrapper.css';
 import { ScreenOptions } from '../../types/enums';
@@ -11,7 +10,6 @@ interface PlayerSelectWrapperProps {
     changePlayer: (player: typeof Player) => void;
     selectedPlayer: typeof Player;
 }
-
 
 export class PlayerSelectWrapper extends React.Component<PlayerSelectWrapperProps, {}> {
     render(){

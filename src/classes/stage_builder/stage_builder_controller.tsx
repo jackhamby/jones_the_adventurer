@@ -10,6 +10,7 @@ import { keyboard } from "../../components/control";
 import { TemplateHelper } from "./template_helper";
 import { Platform } from "../platform";
 import { Enemy } from "../enemies/enemy";
+import { Treasure } from "../treasures/treasure";
 
 export class StageBuilderController {
 
@@ -155,6 +156,24 @@ export class StageBuilderController {
         platform.add();
         this.stage.platforms.push(platform);
         this.templateHelper.addPlatform(platform);
+    }
+
+    addTreasure = (x: number, y: number, treasureType: typeof Treasure) => {
+        this.lastClickedX = x;
+        this.lastClickedY = y;
+    
+        const xTileIndex = Math.floor(x / GRID_WIDTH)
+        const yTileIndex = Math.floor(y / GRID_HEIGHT);
+        const tile = this.tiles[yTileIndex][xTileIndex];
+        if (tile.occupiedWith){
+            return;
+        }
+        const treasure = new treasureType(this.pixiApplication.loader, this.stage, tile.x, tile.y);
+        tile.occupiedWith = treasure;
+
+        treasure.add();
+        this.stage.treasures.push(treasure);
+        // this.templateHelper.addTreasure(treasure);
     }
 
     addEnemy = (x: number, y: number, enemyType: typeof Enemy) => {

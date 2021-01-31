@@ -2,7 +2,6 @@ import { TEXT_FADE_TIME } from "../types/constants";
 import * as PIXI from "pixi.js";
 import { Stage } from "./stage/stage";
 
-
 export class FloatingText {
     currentStage: Stage;
     x: number;
@@ -10,7 +9,6 @@ export class FloatingText {
     text: string;
     style?: PIXI.TextStyle;
     displayObject: PIXI.DisplayObject;
-
 
     constructor(currentStage: Stage, x: number, y: number, text: string, style?: PIXI.TextStyle){
         this.currentStage = currentStage;
@@ -53,5 +51,4 @@ export class FloatingText {
         displayObject.y = this.y;
         return displayObject;
     }
-
 }

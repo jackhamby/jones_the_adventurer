@@ -2,7 +2,6 @@ import { Enemy } from "./enemy";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Stinger } from "../projectiles/stinger";
 import { Stage } from "../stage/stage";
-import { KeyOptions } from "../../types/states";
 import { Part } from "../part";
 import { UnitPartNames } from "../../types/enums";
 import { Projectile } from "../projectiles/projectile";

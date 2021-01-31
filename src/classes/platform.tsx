@@ -3,7 +3,6 @@ import * as PIXI from 'pixi.js';
 import { Sprite } from './sprite';
 import { Stage } from './stage/stage';
 
-
 export interface PlatformTextures {
     [key: string]: PIXI.Texture;
 }
@@ -14,8 +13,6 @@ export class Platform extends Sprite{
     pixiSprite: PIXI.Sprite;
     textures: PlatformTextures;
     currentStage: Stage;
-
-
 
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y:number, width: number, height: number){
         super(loader ,x, y, width, height, 0, 0);

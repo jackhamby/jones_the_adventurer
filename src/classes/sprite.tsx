@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import { SPRITE_DECAY } from "../types/constants";
 
-
 export class Sprite {
     x: number;
     y: number;

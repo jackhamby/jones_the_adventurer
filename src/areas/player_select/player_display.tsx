@@ -47,7 +47,7 @@ export class PlayerDisplay extends React.Component<PlayerDisplayProps, {}> {
             default: 
                 break;
         }
-        return <input type="image" src={src} width={250} height={300} className="pt-1"></input>;
+        return <input type="image" alt={src} src={src} width={250} height={300} className="pt-1"></input>;
     }
 
     render(){

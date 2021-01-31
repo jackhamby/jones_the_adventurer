@@ -12,14 +12,10 @@ import { DebuggerModal } from '../../components/modals/debugger_modal';
 
 export interface GameDetailProps {
     player?: Player;
-    // stage: Stage;
-    // statistics: UnitStatistics;
     gameController: GameController;
-
 }
 
 export class GameDetail extends React.Component<GameDetailProps, {}> {
-
 
     renderStatistics(): JSX.Element {
         const tableRows: JSX.Element[] = [];

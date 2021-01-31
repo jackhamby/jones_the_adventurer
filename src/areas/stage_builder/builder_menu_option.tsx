@@ -21,7 +21,7 @@ export class BuilderMenuOption extends React.Component<BuilderMenuOptionProps, B
     renderContent = () => {
         if (this.state.selected){
             return (
-                <div className="p-3">
+                <div className="col-12 p-3">
                     {this.props.children}
                 </div>
             );

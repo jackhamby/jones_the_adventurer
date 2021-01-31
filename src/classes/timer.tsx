@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import { Stage } from "./stage/stage";
 
-
 export class Timer {
     currentStage: Stage;
     x: number;

@@ -1,6 +1,5 @@
 
 import { Unit} from "../unit";
-import { KeyOptions } from "../../types/states";
 import { Stage } from "../stage/stage";
 import { UnitAttributes } from "../../types/types";
 import { UnitStateNames, UnitStatisticNames } from "../../types/enums";
@@ -11,6 +10,7 @@ import { CoinTreasure } from "../treasures/coin_treasure";
 import { ProjectileTreasure } from "../treasures/projectile_treasure";
 import { IncreaseText } from "../floating_texts/increase_text";
 import { Projectile } from "../projectiles/projectile";
+import { KeyOptions } from "../../types/interfaces";
 
 export class Player extends Unit {
 
@@ -28,7 +28,6 @@ export class Player extends Unit {
 
     update(keyboard: KeyOptions){
         super.update(keyboard);
-        // console.log(this.temporaryBuffs)
     }
 
     takeDamage(value: number): number{
@@ -92,7 +91,6 @@ export class Player extends Unit {
         if (!this.canAttack()){
             return;
         }
-
 
         if (this.currentKeys.attackRight){
             const projectile = this.getProjectile();
@@ -243,7 +241,7 @@ export class Player extends Unit {
         }
 
         else {
-            this.state = UnitStateNames.STANDING
+            this.state = UnitStateNames.STANDING;
         }
         this.xVelocity = 0;
     }
@@ -290,7 +288,7 @@ export class Player extends Unit {
 
     protected dying(){
         super.dying();
-        const resp = window.confirm('sorry you suck. restart?')
+        const resp = window.confirm('sorry you suck. restart?');
         if (resp){
             this.currentStage.restart();
             this.setX(this.currentStage.spawnX);

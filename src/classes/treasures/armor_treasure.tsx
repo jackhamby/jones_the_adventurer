@@ -46,6 +46,8 @@ export class ArmorTreasure extends Treasure {
 
 export class KnightHeadArmor1Treasure extends ArmorTreasure {
 
+    static imageUrl = "/images/knight/head/head_armor1.png";
+
     constructor(loader: PIXI.Loader, stage: Stage, x: number, y: number){
         super(loader, stage, x, y);
         this.armor = new KnightHeadArmor1(loader);

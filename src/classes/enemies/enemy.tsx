@@ -3,12 +3,9 @@ import * as PIXI from 'pixi.js';
 import { UnitStateNames } from "../../types/enums";
 import { Unit } from '../unit';
 import { UnitAttributes } from '../../types/types';
-import { SpritePart } from '../interfaces';
-import { KeyOptions } from '../../types/states';
 import { SmallCoins } from '../treasures/coin_treasure';
 import { Stage } from '../stage/stage';
-
-
+import { SpritePart } from '../../types/interfaces';
 
 // Base class for all enemeis
 export class Enemy extends Unit {

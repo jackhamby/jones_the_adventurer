@@ -11,7 +11,7 @@ export class Effect {
     }
 
     draw(){ 
-   
+        
     }
 
     add(){

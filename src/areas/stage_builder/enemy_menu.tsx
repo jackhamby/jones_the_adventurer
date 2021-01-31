@@ -9,25 +9,26 @@ import { DefaultPlatform, DirtPlatform, GrassPlatform, Platform, RedGrassPlatfor
 import { Sprite } from '../../classes/sprite';
 import { Stage } from '../../classes/stage/stage';
 import { StageBuilderController } from '../../classes/stage_builder/stage_builder_controller';
-import { GRID_HEIGHT, GRID_WIDTH } from '../../types/constants';
+import { ENEMY_OPTIONS, GRID_HEIGHT, GRID_WIDTH } from '../../types/constants';
+import { EnemyOptionNames } from '../../types/enums';
 import { stageBuilderKeyboard } from './stage_builder_wrapper';
 
-export enum EnemyMenuOptionName {
-    kobold = "kobold",
-    man = "man",
-    manticore = "manticore",
-}
+// export enum EnemyMenuOptionName {
+//     kobold = "kobold",
+//     man = "man",
+//     manticore = "manticore",
+// }
 
-export type EnemyMenuOptionTypes = {
-    [key in EnemyMenuOptionName] : typeof Enemy; 
-}   
+// export type EnemyMenuOptionTypes = {
+//     [key in EnemyMenuOptionName] : typeof Enemy; 
+// }   
 
 export interface EnemyMenuProps {
     controller: StageBuilderController;
     // setAddCallback: ( callBack: (loader: PIXI.Loader, stage: Stage, viewport: Viewport, x: number, y: number) => Sprite) => void;
 }
 export interface EnemyMenuState {
-    selectedEnemy: EnemyMenuOptionName;
+    selectedEnemy: EnemyOptionNames;
 }
 
 
@@ -44,11 +45,11 @@ export class EnemyMenu extends React.Component<EnemyMenuProps, EnemyMenuState> {
         }
     }
 
-    private enemyMenuOptions: EnemyMenuOptionTypes = {
-        man: Man,
-        kobold: Kobold,
-        manticore: Manticore,
-    }
+    // private enemyMenuOptions: EnemyMenuOptionTypes = {
+    //     man: Man,
+    //     kobold: Kobold,
+    //     manticore: Manticore,
+    // }
 
     addToStage = (x: number, y: number, enemyType: typeof Enemy) => {
         this.props.controller.addEnemy(x, y, enemyType);
@@ -57,8 +58,8 @@ export class EnemyMenu extends React.Component<EnemyMenuProps, EnemyMenuState> {
     render(){
         return (
             <div>
-                {Object.keys(this.enemyMenuOptions).map((key: EnemyMenuOptionName) => {
-                    const enemyType = this.enemyMenuOptions[key];
+                {Object.keys(ENEMY_OPTIONS).map((key: EnemyOptionNames) => {
+                    const enemyType = ENEMY_OPTIONS[key];
                     const isSelected = this.state.selectedEnemy === key;
                     return (
                         <img width="30" height="30" alt="dirt" className={`p-1 ${isSelected ? "border" : ""}`} src={enemyType.imageUrl} onClick={() => {

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { CharacterIcon } from './character_icon';
 import { Player } from '../../../classes/players/player';
 import { CustomizeModal } from '../../../components/modals/customize_modal/customize_modal';
 import { GameController } from '../../../classes/game_controller';

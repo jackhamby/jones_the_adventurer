@@ -3,9 +3,6 @@ import { Armor } from '../../../classes/armor';
 import { UnitPartNames, UnitAttributeNames } from '../../../types/enums';
 import { Player } from '../../../classes/players/player';
 import { GameController } from '../../../classes/game_controller';
-import { ArmorTreasure } from '../../../classes/treasures/armor_treasure';
-import { Treasure } from '../../../classes/treasures/treasure';
-
 
 interface ArmorSelectProps {
     player: Player;
@@ -17,8 +14,7 @@ interface ArmorSelectState {
 }
 
 export class ArmorSelect extends React.Component<ArmorSelectProps, ArmorSelectState>{
-
-
+    
     constructor(props: ArmorSelectProps){
         super(props);
         this.state = {

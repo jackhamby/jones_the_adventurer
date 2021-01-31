@@ -103,12 +103,8 @@ export class GameController {
         this.currentStage.load();
     }
 
-
-
     // ================================== private methods ===========================================================
     // ===============================================================================================================  
-
-
     private setupGame(startingPlayer: typeof Player){
         // Create player
         this.setupPlayer(startingPlayer)

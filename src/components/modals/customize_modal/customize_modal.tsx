@@ -4,7 +4,7 @@ import { Player } from '../../../classes/players/player';
 import './customize_modal.css';
 import { GameController } from '../../../classes/game_controller';
 import { ArmorSelect } from './armor_select';
-import { TabOptions, ProjectileNames } from '../../../types/enums';
+import { TabOptions } from '../../../types/enums';
 import { ProjectileSelect } from './projectile_select';
 
 interface CustomizeModalProps {
@@ -98,7 +98,6 @@ export class CustomizeModal extends React.Component<CustomizeModalProps, Customi
             <Modal
                 content={this.getContent()}
                 header={this.getHeader()}
-                // link={<button> armor select </button>}
                 link={ this.props.link 
                     ? this.props.link
                     : <button> armor select </button>}

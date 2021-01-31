@@ -1,4 +1,0 @@
-
-
-1. Cleanup treasure/armor classes. see //TODO in armor_treasure.tsx
-2. define handlePlayerEnemyCollisionY in stage.tsx

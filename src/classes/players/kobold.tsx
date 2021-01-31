@@ -1,18 +1,8 @@
-// export const x = 2;
-
-// import * as PIXI from "pixi.js";
-// import { Stage } from "../game_classes";
 import { Player } from "./player";
 import { Stage } from "../stage/stage";
 import { UnitAttributes, UnitParts, SpriteParts } from "../../types/types";
 import { Rock } from "../projectiles/rock";
 import { Part } from "../part";
-// import { UnitParts, SpriteParts, UnitAttributes } from "../../types/types";
-// import { Part } from "../part";
-// import { UnitPartNames, UnitStateNames } from "../../types/enums";
-// import { Rock } from "../projectile";
-
-
 
 export class Kobold extends Player {
 
@@ -81,65 +71,4 @@ export class Kobold extends Player {
             legs
         };
     }
-
-    // flipSpriteParts(){
-    //     if (this.xVelocity > 0){
-    //         this.facingRight = false;
-    //     } else {
-    //         this.facingRight = true;
-    //     }
-    //     Object.keys(this.spriteParts).forEach((key) => {
-    //         const playerPartName = key as UnitPartNames;
-    //         const sprite = this.spriteParts[playerPartName].sprite;
-    //         if (this.facingRight){
-    //             sprite.anchor.x = 0;
-    //             sprite.scale.x = 1;
-    //         }
-    //         else{
-    //             sprite.anchor.x = 1;
-    //             sprite.scale.x = -1;
-    //         }
-    //     })
-
-
-    //     if (this.state === UnitStateNames.DEAD){
-    //         this.y = this.y + (this.height - this.width)
-    //         this.width = this.height;
-    //         this.height = this.width;
-    //         this.xVelocity = 0;
-    //         this.yVelocity = 0;
-    //         // this.setState(UnitStateNames.DEAD)
-    //         Object.keys(this.spriteParts).forEach((key: string) => {
-    //             const partName = key as UnitPartNames;
-    //             const spritePart = this.spriteParts[partName];
-    //             spritePart.sprite.rotation = -1.5708; // 90degress in rads
-    //         })
-
-    //         // TODO remove this fro here and in Kobold in enemy.tsx
-    //         const head = this.spriteParts.head;
-    //         const headOffsetX =  0
-    //         const headOffsetY = head.sprite.height/4;
-    //         head.offSetX = headOffsetX;
-    //         head.offSetY = headOffsetY;
-    //         head.sprite.x = this.x + headOffsetX;
-    //         head.sprite.y = (this.y + this.height) + headOffsetY;
-
-    //         const body = this.spriteParts.body;
-    //         const bodyOffsetX = head.sprite.height;;
-    //         const bodyOffsetY = 0;
-    //         body.offSetX = bodyOffsetX;
-    //         body.offSetY = bodyOffsetY;
-    //         body.sprite.x = this.x + bodyOffsetX;
-    //         body.sprite.y = (this.y + this.height) + bodyOffsetY;
-
-    //         const legs = this.spriteParts.legs;
-    //         const legsOffsetX = head.sprite.height + body.sprite.height;
-    //         const legsOffsetY = 0;
-    //         legs.offSetX = legsOffsetX;
-    //         legs.offSetY = legsOffsetY;
-    //         legs.sprite.x = this.x + legsOffsetX;
-    //         legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
-    //     }
-    // }
-
 }

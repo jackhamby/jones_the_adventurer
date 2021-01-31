@@ -6,6 +6,7 @@ import { BuilderMenuOption } from './builder_menu_option';
 import { EnemyMenu } from './enemy_menu';
 import { PlatformMenu } from './platform_menu';
 import './stage_builder.css';
+import { TreasureMenu } from './treasure_menu';
 
 export interface BuilderMenuProps {
     controller
@@ -29,7 +30,7 @@ export class BuilderMenu extends React.Component<BuilderMenuProps> {
                 </BuilderMenuOption>
                 <BuilderMenuOption 
                     title="treasures">
-                        todo
+                        <TreasureMenu controller={this.props.controller} />
                 </BuilderMenuOption>
                 <BuilderMenuOption
                     title="enemies">

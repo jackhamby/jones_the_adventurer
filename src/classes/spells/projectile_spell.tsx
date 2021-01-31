@@ -14,7 +14,6 @@ export class ProjectileSpell extends Spell {
     }
 
     fireCast(xVelocity: number, yVelocity: number){
-        // this.timeSinceLastProjectileFired = this.projectileCooldown;
         const projectile = new this.projectile(this.unit.loader, this.unit.x, this.unit.y, this.unit, xVelocity, yVelocity)
         projectile.add();
         this.unit.currentStage.projectiles.push(projectile);
@@ -29,9 +28,6 @@ export class ProjectileSpell extends Spell {
         })
     }
 }
-
-
-
 
 export class FireBall extends ProjectileSpell {
 
@@ -54,10 +50,7 @@ export class FireBall extends ProjectileSpell {
     update(){
         super.update();
     }
-
 }
-
-
 
 export class FireBallMedium extends ProjectileSpell {
 
@@ -80,9 +73,4 @@ export class FireBallMedium extends ProjectileSpell {
     update(){
         super.update();
     }
-
 }
-
-
-
-

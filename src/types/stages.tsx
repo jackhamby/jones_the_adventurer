@@ -1,4 +1,4 @@
-import { StageTemplate } from "../classes/stage_builder/template_helper";
+import { StageTemplate } from "./interfaces";
 
 export const STAGE_1 = {
   "platforms": [

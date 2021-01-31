@@ -1,12 +1,10 @@
 
 import * as PIXI from 'pixi.js';
 import { UnitArmorNames, UnitPartNames, UnitAttributeNames } from '../types/enums';
-import { Player } from './players/player';
 import { UnitAttributes } from '../types/types';
 import { Unit } from './unit';
 
 export class Armor {
-
     type: UnitArmorNames;
     part: UnitPartNames;
     name: string;
@@ -240,7 +238,6 @@ export class KoboldBodyArmor2 extends Armor {
         this.attributes.ARMOR = 14;
     }
 }
-
 
 export class KoboldLegsArmor1 extends Armor {
     constructor(loader: PIXI.Loader){

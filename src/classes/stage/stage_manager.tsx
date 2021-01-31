@@ -4,8 +4,6 @@ import { TemplateHelper } from "../stage_builder/template_helper";
 import { Stage } from "./stage";
 import * as Stages from '../../types/stages';
 
-
-
 export class StageManager {
     viewport: Viewport;
     player: Player;
@@ -40,12 +38,6 @@ export class StageManager {
                 throw new Error(`no stage found for level ${level}`);
         }
     }
-
-
-
-
-
-
 }
 
 

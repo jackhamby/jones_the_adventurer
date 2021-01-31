@@ -1,12 +1,10 @@
 import { Sprite } from './sprite';
 import { UnitStateNames, UnitPartNames, UnitArmorNames } from '../types/enums';
 import { UnitAttributes, UnitStatistics, UnitParts, SpriteParts, SpriteArmors } from '../types/types';
-import { KeyOptions } from '../types/states';
 import { Projectile } from './projectiles/projectile';
 import { Rock } from './projectiles/rock';
 import { Treasure } from './treasures/treasure';
 import { Stage } from './stage/stage';
-import { SpritePart } from './interfaces';
 import { Part } from './part';
 import { SPRITE_DECAY_FADE_TIME } from '../types/constants';
 import { FloatingText } from './floating_text';
@@ -17,6 +15,7 @@ import { Effect } from './effects/effect';
 import { FireBall, FireBallMedium, ProjectileSpell } from './spells/projectile_spell';
 import { FastFire } from './spells/buff_spell';
 import { Buff } from './buffs/buff';
+import { KeyOptions, SpritePart } from '../types/interfaces';
 
 export class Unit extends Sprite {
 
@@ -150,7 +149,6 @@ export class Unit extends Sprite {
         });
 
         this.effects.forEach((effect: Effect) => {
-            // this.currentStage.viewport.removeChild(effect);
             effect.hide();
         });
     }
@@ -160,9 +158,7 @@ export class Unit extends Sprite {
         this.hpBar.clear();
         this.hpBar.destroy();
         this.currentStage.viewport.removeChild(this.hpBar);
-        // this.currentStage.viewport.removeChild(this.effects);
         this.effects.forEach((effect: Effect) => {
-            // this.currentStage.viewport.removeChild(effect);
             effect.remove();
         })
         Object.keys(this.spriteParts).forEach((partName: string) => {
@@ -272,6 +268,7 @@ export class Unit extends Sprite {
         this.hpBar.beginFill(0x00FF00);
         let greenPercent = this.currentAttributes.HEALTH / this.attributes.HEALTH;
         let redPercent = 1.0 - greenPercent;
+
         // TODO: fix the underlying issue. Temp hack to fix neg percent
         if ((greenPercent) < 0){
             redPercent = 1.0;
@@ -302,7 +299,6 @@ export class Unit extends Sprite {
         const circleCenterX = this.x + (this.width / 2);
         const circleCenterY = this.y + (this.height / 2);
 
-        //  (x - center_x)^2 + (y - center_y)^2 < radius^2.
         if ( ( Math.pow((targetCenterX - circleCenterX), 2) + Math.pow((targetCenterY - circleCenterY), 2) )  < Math.pow(radius, 2) ){
             return true;
         }
@@ -324,7 +320,6 @@ export class Unit extends Sprite {
             return false
         }
 
-        //  (x - center_x)^2 + (y - center_y)^2 < radius^2.
         if ( ( Math.pow((targetCenterX - circleCenterX), 2) + Math.pow((targetCenterY - circleCenterY), 2) )  < Math.pow(radius, 2) ){
             return true;
         }
