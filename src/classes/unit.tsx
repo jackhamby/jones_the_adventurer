@@ -568,7 +568,7 @@ export class Unit extends Sprite {
     }
 
     protected falling(){
-
+        
     }
 
 }
