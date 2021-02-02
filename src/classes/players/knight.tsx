@@ -12,7 +12,7 @@ export class Knight extends Player{
         HEALTH: 100,
         SPEED: 3,
         ARMOR: 4,
-        ATTACK: 10,
+        ATTACK: 99999999, // TODO REMOVE THIS
         JUMP_HEIGHT: 10,
         JUMP_COUNT: 2,
         ATTACK_SPEED: 50,

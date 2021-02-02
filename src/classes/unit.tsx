@@ -34,6 +34,8 @@ export class Unit extends Sprite {
     static width: number = 0;
     static height: number = 0;
 
+    static deathAnimationFrames: number = 30;
+
     // Player attributes/data
     attributes: UnitAttributes;
     currentAttributes: UnitAttributes;
@@ -65,6 +67,7 @@ export class Unit extends Sprite {
     currentFadeIncrement: number;
     currentImmuneFadeInterval: number;
     fallingTimer: number;
+    deathAnimationTimer;
 
     // Textures/sprites
     textures: UnitParts;
@@ -121,6 +124,7 @@ export class Unit extends Sprite {
         this.currentFadeIncrement = 1
         this.currentImmuneFadeInterval = 0;
         this.fallingTimer = 0;
+        this.deathAnimationTimer = 0;
         
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
@@ -206,6 +210,8 @@ export class Unit extends Sprite {
         this.setX(this.spawnX);
         this.setY(this.spawnY);
         this.currentStage.viewport.removeChild(this.hpBar);
+        this.attributes = { ...this.baseAttributes };
+        this.currentAttributes = { ...this.baseAttributes };
     }
 
     updateY(value: number){
@@ -434,7 +440,6 @@ export class Unit extends Sprite {
             // fade for immunity
             sprite.alpha = alphaToSet;
 
-            
             // flip facing right/left
             if (this.facingRight){
                 sprite.anchor.x = 0;
@@ -446,45 +451,49 @@ export class Unit extends Sprite {
             }
         })
 
+
+        // TODO: figure out either animation or extra graphic
+        // to handle death
         // Flip parts 90 for death
         if (this.state === UnitStateNames.DEAD){
-            this.y = this.y + (this.height - this.width)
-            const oldWidth = this.width;
-            this.width = this.height;
-            this.height = oldWidth;
-            this.xVelocity = 0;
-            this.yVelocity = 0;
-            // this.setState(UnitStateNames.DEAD)
-            Object.keys(this.spriteParts).forEach((key: string) => {
-                const partName = key as UnitPartNames;
-                const spritePart = this.spriteParts[partName];
-                spritePart.sprite.rotation = -1.5708; // 90degress in rads
-            })
+            // this.spriteParts.head.sprite.y += 20;
+        //     this.y = this.y + (this.height - this.width)
+        //     const oldWidth = this.width;
+        //     this.width = this.height;
+        //     this.height = oldWidth;
+        //     this.xVelocity = 0;
+        //     this.yVelocity = 0;
+        //     // this.setState(UnitStateNames.DEAD)
+        //     Object.keys(this.spriteParts).forEach((key: string) => {
+        //         const partName = key as UnitPartNames;
+        //         const spritePart = this.spriteParts[partName];
+        //         spritePart.sprite.rotation = -1.5708; // 90degress in rads
+        //     })
 
-            // TODO remove this fro here and in Kobold in enemy.tsx
-            const head = this.spriteParts.head;
-            const headOffsetX =  0
-            const headOffsetY = head.sprite.height/4 + 10;
-            head.offSetX = headOffsetX;
-            head.offSetY = headOffsetY;
-            head.sprite.x = this.x + headOffsetX;
-            head.sprite.y = (this.y + this.height) + headOffsetY;
+        //     // TODO remove this fro here and in Kobold in enemy.tsx
+        //     const head = this.spriteParts.head;
+        //     const headOffsetX =  0
+        //     const headOffsetY = head.sprite.height/4 + 10;
+        //     head.offSetX = headOffsetX;
+        //     head.offSetY = headOffsetY;
+        //     head.sprite.x = this.x + headOffsetX;
+        //     head.sprite.y = (this.y + this.height) + headOffsetY;
 
-            const body = this.spriteParts.body;
-            const bodyOffsetX = head.sprite.height;;
-            const bodyOffsetY = 10;
-            body.offSetX = bodyOffsetX;
-            body.offSetY = bodyOffsetY;
-            body.sprite.x = this.x + bodyOffsetX;
-            body.sprite.y = (this.y + this.height) + bodyOffsetY;
+        //     const body = this.spriteParts.body;
+        //     const bodyOffsetX = head.sprite.height;;
+        //     const bodyOffsetY = 10;
+        //     body.offSetX = bodyOffsetX;
+        //     body.offSetY = bodyOffsetY;
+        //     body.sprite.x = this.x + bodyOffsetX;
+        //     body.sprite.y = (this.y + this.height) + bodyOffsetY;
 
-            const legs = this.spriteParts.legs;
-            const legsOffsetX = head.sprite.height + body.sprite.height;
-            const legsOffsetY = 10;
-            legs.offSetX = legsOffsetX;
-            legs.offSetY = legsOffsetY;
-            legs.sprite.x = this.x + legsOffsetX;
-            legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
+        //     const legs = this.spriteParts.legs;
+        //     const legsOffsetX = head.sprite.height + body.sprite.height;
+        //     const legsOffsetY = 10;
+        //     legs.offSetX = legsOffsetX;
+        //     legs.offSetY = legsOffsetY;
+        //     legs.sprite.x = this.x + legsOffsetX;
+        //     legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
         }
     }
 
@@ -532,6 +541,25 @@ export class Unit extends Sprite {
     protected dying(){
         this.xVelocity = 0;
         this.decay -= 1;
+        
+        // this.spriteParts.head.sprite.y += 1;
+        // this.spriteParts.head.sprite.x -= 1;
+        if (this.deathAnimationTimer < Unit.deathAnimationFrames){
+            if (this.deathAnimationTimer > 15){
+                this.spriteParts.body.sprite.x -= 1;
+                this.spriteParts.body.sprite.y += 1;
+            }
+            if (this.deathAnimationTimer < 15){
+                this.spriteParts.head.sprite.x += 1;
+                this.spriteParts.head.sprite.y += 1;
+            }
+            this.deathAnimationTimer += 1;
+        }
+
+
+        // this.spriteParts.legs
+
+
         if (this.decay < SPRITE_DECAY_FADE_TIME){
             Object.keys(this.spriteParts).forEach((partName: string) => {
                 const tempPartName: UnitPartNames = partName as UnitPartNames;
@@ -544,7 +572,45 @@ export class Unit extends Sprite {
 
     // These need to be overloaded
     protected revive(){
-    
+        this.attributes = { ...this.baseAttributes };
+        this.currentAttributes = { ...this.baseAttributes };
+        this.setState(UnitStateNames.STANDING);
+        this.fallingTimer = 0;
+        this.timeSinceLastProjectileFired = 0;
+            
+        this.remove();
+
+        this.spriteParts = this.initSpriteParts();
+        this.hpBar = new PIXI.Graphics();
+
+        this.attributes = { ...this.baseAttributes };
+        // this.currentAttributes = { ...this.baseAttributes };
+        // this.clearStats();
+
+        // TODO move this into method
+        // this.currentKeys.attackRight = false;
+        // this.currentKeys.attackLeft = false;
+        // this.currentKeys.attackUp = false;
+        // this.currentKeys.attackDown = false;
+        // this.currentKeys.moveRight = false;
+        // this.currentKeys.moveLeft = false;
+        // this.currentKeys.moveUp = false;
+        // this.currentKeys.moveDown = false;
+        // this.currentKeys.jump = false;
+
+        // we flipped the parts 90 degrees on death, lets flip them back
+        const oldWidth = this.width;
+        this.width = this.height;
+        this.treasures = [];
+        // this.currentStage.startingTreasures.forEach((treasure: Treasure) => {
+        //     // Treasure.apply(this, treasure);
+        //     treasure.apply(this);
+        // })
+
+        this.height = oldWidth;
+        // this.currentStage.viewport.addChild(...this.getSprites())
+        this.add();
+        // this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
 
     protected tryAttack(){

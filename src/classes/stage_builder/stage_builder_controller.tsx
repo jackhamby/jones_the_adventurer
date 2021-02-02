@@ -11,6 +11,7 @@ import { TemplateHelper } from "./template_helper";
 import { Platform } from "../platform";
 import { Enemy } from "../enemies/enemy";
 import { Treasure } from "../treasures/treasure";
+import { Sprite } from "../sprite";
 
 export class StageBuilderController {
 
@@ -25,6 +26,7 @@ export class StageBuilderController {
 
     spawnGraphics: PIXI.Graphics;
     gridGraphics: PIXI.Graphics;
+    highlightGraphics: PIXI.Graphics;
 
     isSelectingSpawn: boolean;
 
@@ -39,6 +41,8 @@ export class StageBuilderController {
         // Create spawn/grid graphics
         this.spawnGraphics = new PIXI.Graphics();
         this.gridGraphics = new PIXI.Graphics();
+        this.highlightGraphics = new PIXI.Graphics();
+        this.highlightGraphics.zIndex = 2;
         this.gridGraphics.zIndex = 1;
 
         // Setup default spawn
@@ -60,12 +64,14 @@ export class StageBuilderController {
         this.drawGrid();
         this.drawSpawnIcon();
         this.viewport.addChild(this.spawnGraphics);
+        this.viewport.addChild(this.gridGraphics);
+        this.viewport.addChild(this.highlightGraphics);
     }
 
     setSpawn = (x: number, y: number) => {
         this.stage.spawnX = x;
         this.stage.spawnY = y;
-        this.templateHelper.setSpawn(x, y)
+        this.templateHelper.setSpawn(x, y);
     }
 
     setName = (name: string) => {
@@ -114,6 +120,23 @@ export class StageBuilderController {
         this.spawnGraphics.drawCircle(this.stage.spawnX, this.stage.spawnY, 5);
     }
 
+    drawHighlight = (sprite: Sprite) => {
+        this.highlightGraphics.clear();
+        // // this.highlightGraphics.position.set(sprite.x, sprite.y);
+
+        // this.highlightGraphics.beginFill(0xFF0000);
+        // this.highlightGraphics.lineStyle(2, 0xFFFF00);
+        const margin = 2;
+
+        this.highlightGraphics.lineStyle(2, 0xFFFF00)
+            .moveTo(sprite.x, sprite.y + margin)
+            // .moveTo(0, 0)
+            .lineTo(sprite.x + sprite.width, sprite.y + margin)
+            .lineTo(sprite.x + sprite.width, sprite.y + sprite.height)
+            .lineTo(sprite.x, sprite.y + sprite.height)
+            .lineTo(sprite.x, sprite.y);
+    }
+
     drawGrid = () => {
         this.gridGraphics.position.set(0, 0);
 
@@ -136,8 +159,6 @@ export class StageBuilderController {
                 .moveTo(x, 0)
                 .lineTo(x, STAGE_BUILDER_WORLD_HEIGHT);
         }
-
-        this.viewport.addChild(this.gridGraphics);
     }
 
     addPlatform = (x: number, y: number, platformType: typeof Platform) => {
@@ -148,6 +169,7 @@ export class StageBuilderController {
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
         const tile = this.tiles[yTileIndex][xTileIndex];
         if (tile.occupiedWith){
+            this.drawHighlight(tile.occupiedWith);
             return;
         }
         const platform = new platformType(this.pixiApplication.loader, this.stage, tile.x, tile.y, 25, 25);
@@ -166,6 +188,8 @@ export class StageBuilderController {
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
         const tile = this.tiles[yTileIndex][xTileIndex];
         if (tile.occupiedWith){
+            this.drawHighlight(tile.occupiedWith);
+
             return;
         }
         const treasure = new treasureType(this.pixiApplication.loader, this.stage, tile.x, tile.y);
@@ -184,6 +208,7 @@ export class StageBuilderController {
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
         const tile = this.tiles[yTileIndex][xTileIndex];
         if (tile.occupiedWith){
+            this.drawHighlight(tile.occupiedWith);
             return;
         }
         

@@ -41,12 +41,8 @@ export class TreasureArmorMenu extends React.Component<TreasureArmorMenuProps, T
         }
     }
 
-    // private treasureMenuOptions: TreasureArmorMenuOptionTypes = {
-    //     knightHeadArmor1: KnightHeadArmor1Treasure
-    // }
-
-    addToStage = (x: number, y: number, enemyType: typeof Treasure) => {
-        // this.props.controller.(x, y, enemyType);
+    addToStage = (x: number, y: number, treasureType: typeof Treasure) => {
+        this.props.controller.addTreasure(x, y, treasureType);
     }
     
     render(){

@@ -247,18 +247,20 @@ export class Player extends Unit {
     }
 
     protected revive(){
-        this.attributes = { ...this.baseAttributes };
-        this.currentAttributes = { ...this.baseAttributes };
-        this.setState(UnitStateNames.STANDING);
-        this.fallingTimer = 0;
-        this.timeSinceLastProjectileFired = 0;
-            
-        this.remove();
-
-        this.spriteParts = this.initSpriteParts();
-        this.hpBar = new PIXI.Graphics();
-
+        super.revive();
         this.clearStats();
+        // this.attributes = { ...this.baseAttributes };
+        // this.currentAttributes = { ...this.baseAttributes };
+        // this.setState(UnitStateNames.STANDING);
+        // this.fallingTimer = 0;
+        // this.timeSinceLastProjectileFired = 0;
+            
+        // this.remove();
+
+        // this.spriteParts = this.initSpriteParts();
+        // this.hpBar = new PIXI.Graphics();
+
+        // this.clearStats();
 
         // TODO move this into method
         this.currentKeys.attackRight = false;
@@ -272,17 +274,17 @@ export class Player extends Unit {
         this.currentKeys.jump = false;
 
         // we flipped the parts 90 degrees on death, lets flip them back
-        const oldWidth = this.width;
-        this.width = this.height;
-        this.treasures = [];
+        // const oldWidth = this.width;
+        // this.width = this.height;
+        // this.treasures = [];
         this.currentStage.startingTreasures.forEach((treasure: Treasure) => {
             // Treasure.apply(this, treasure);
             treasure.apply(this);
         })
 
-        this.height = oldWidth;
+        // this.height = oldWidth;
         // this.currentStage.viewport.addChild(...this.getSprites())
-        this.add();
+        // this.add();
         this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
 
