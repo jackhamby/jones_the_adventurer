@@ -35,8 +35,8 @@ export class StageBuilderController {
     constructor(application: PIXI.Application){
         this.tiles = [];
         this.viewport = new Viewport();
-        this.stage = new Stage(0, "", null, this.viewport, null);
         this.templateHelper = new TemplateHelper();
+        this.stage = new Stage(0, "", null, this.viewport, null, this.templateHelper.template);
 
         // Create spawn/grid graphics
         this.spawnGraphics = new PIXI.Graphics();
@@ -85,6 +85,7 @@ export class StageBuilderController {
     }
 
     playTest = () => {
+        // Create player to test with
         this.player = new Knight(
             this.pixiApplication.loader,
             this.stage,
@@ -95,18 +96,39 @@ export class StageBuilderController {
             this.stage.spawnY
         );
         this.stage.player = this.player;
+
+        // Follow player
         this.viewport.follow(this.player.spriteParts[UnitPartNames.HEAD].sprite);
 
-        this.stage.player.currentStage = this.stage;
-        this.stage.load();
+        // Add player and start game loop
+        this.player.add();
         this.pixiApplication.ticker.add(this.update);
     }
 
     stopPlayTest = () => {
+        // Stop game loop
         this.pixiApplication.ticker.remove(this.update);
-        this.stage.reset();
+
+        // Clear and rebuild stage based on stage template
+        this.stage.clear();
+        this.stage = this.templateHelper.loadTemplate(
+            this.viewport,
+            this.pixiApplication.loader,
+            null,
+            this.stage.template);
+
+        // Load stage
+        this.stage.load();
+
+        // Remove the player and stop following
+        this.player.remove();
         this.viewport.plugins.remove("follow");
-        this.player.hide();
+
+        // Add grid and spawn point back in
+        this.viewport.addChild(this.spawnGraphics);
+        this.viewport.addChild(this.gridGraphics);
+
+        // Center camera
         this.viewport.moveCenter(this.stage.spawnX, this.stage.spawnY);
     }
 
@@ -122,10 +144,6 @@ export class StageBuilderController {
 
     drawHighlight = (sprite: Sprite) => {
         this.highlightGraphics.clear();
-        // // this.highlightGraphics.position.set(sprite.x, sprite.y);
-
-        // this.highlightGraphics.beginFill(0xFF0000);
-        // this.highlightGraphics.lineStyle(2, 0xFFFF00);
         const margin = 2;
 
         this.highlightGraphics.lineStyle(2, 0xFFFF00)

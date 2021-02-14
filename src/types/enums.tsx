@@ -12,6 +12,12 @@ export enum TabOptions {
     projectiles = "projectiles"
 }
 
+export enum PlayerNames {
+    KNIIGHT = "knight",
+    KOBOLD = "kobold",
+    ORC = "orc"
+}
+
 export enum Attributes {
     HEALTH = "health",
     SPEED = "speed",
@@ -98,9 +104,9 @@ export enum PlatformOptionNames {
     REDGRASS = "redgrass"
 }
 
-export enum TreasureArmorOptionNames {
-    KNIGHT_HEAD_ARMOR1 = "knightHeadArmor1",
-}
+// export enum TreasureArmorOptionNames {
+//     KNIGHT_HEAD_ARMOR1 = "knightHeadArmor1",
+// }
 
 export enum EnemyOptionNames {
     KOBOLD = "kobold",

@@ -10,7 +10,7 @@ import { FloatingText } from "../floating_text";
 import { Timer } from "../timer";
 import { StageManager } from "./stage_manager";
 import { CollisionHelper } from "./collision_helper";
-import { KeyOptions } from "../../types/interfaces";
+import { KeyOptions, StageTemplate } from "../../types/interfaces";
 
 // Wrapper for all items on the screen
 // Handles sprite movement and collisions
@@ -30,7 +30,6 @@ export class Stage{
     spawnX: number;
     spawnY: number;
 
-    // TODO: main references
     viewport: Viewport;
     player: Player;
     stageManager: StageManager;
@@ -39,19 +38,21 @@ export class Stage{
     // on a given stage. will be used in player.revive()
     startingTreasures: Treasure[]
 
-    needsRestart: boolean;
-
+    // needsRestart: boolean;
     collisionHelper: CollisionHelper;
+    template: StageTemplate;
 
     constructor(level: number,
                 name: string,
                 player: Player, 
                 viewport: Viewport, 
-                stageManager: StageManager){
+                stageManager: StageManager,
+                template: StageTemplate){
         this.spawnX = 100;
         this.spawnY = 100;
         this.level = level;
         this.name = name;
+        this.template = template;
 
         this.enemies = [];
         this.platforms = [];
@@ -66,28 +67,43 @@ export class Stage{
         this.isCleared = false;
         this.stageManager = stageManager;
         this.startingTreasures = [];
-        this.needsRestart = false;
         this.collisionHelper = new CollisionHelper(this);
     }
 
     restart(){
-        this.needsRestart = true;
+        // // Set stage with players current treasures
+        const startingTreasures = this.player.currentStage.startingTreasures;
+
+        // recreate restarted stage
+        this.player.currentStage = this;
+        this.startingTreasures = startingTreasures;
+
+        // clear and load stage
+        this.clear();
+        this.load();
     }
 
-    reset(){
+    // Load all game components into the viewport
+    load(){
         this.enemies.forEach((enemy: Enemy) => {
-            enemy.reset();
+            enemy.add();
         });
 
-        this.platforms.forEach((platform: Platform) => platform.reset());
+        this.platforms.forEach((platform: Platform) => platform.add());
 
         this.treasures.forEach((treasure: Treasure) => {
-            // this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-            treasure.reset();
-        })
+            treasure.add();
+        });
 
-        this.player.reset();
+        this.viewport.addChild(this.timer.displayObject);
+
+        // Player will NOT exist in stage for when
+        // we are loading in stage builder
+        this.player?.setX (this.spawnX);
+        this.player?.setY(this.spawnY);
+        this.player?.add();
     }
+
 
     update(keys: KeyOptions){
         this.currentKeys = keys;
@@ -97,30 +113,9 @@ export class Stage{
         this.timer.update();
     }
 
-    load(){
-        this.enemies.forEach((enemy: Enemy) => {
-            enemy.add();
-        });
-
-        this.platforms.forEach((platform: Platform) => platform.add());
-
-        this.treasures.forEach((treasure: Treasure) => {
-            // this.viewport.addChild(...treasure.spriteParts.map((spritePart: SpritePart) => spritePart.sprite));
-            treasure.add();
-        });
-
-        this.viewport.addChild(this.timer.displayObject);
-
-        this.player.setX (this.spawnX);
-        this.player.setY(this.spawnY);
-        this.player.add();
-    }
-
     clear(){
         this.viewport.removeChildren(0, this.viewport.children.length);
     }
-
-
 
     // ================================== private methods ===========================================================
     // ===============================================================================================================  

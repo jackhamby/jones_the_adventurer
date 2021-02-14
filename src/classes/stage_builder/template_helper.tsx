@@ -133,7 +133,7 @@ export class TemplateHelper {
             type: this.getPlatformType(platform)
         };
         this.template.platforms.push(platformTemplate);
-        console.log(this.template);
+        // console.log(this.template);
     }
 
     addEnemy = (enemy: Enemy) => {
@@ -143,7 +143,7 @@ export class TemplateHelper {
             type: this.getEnemyType(enemy)
         }
         this.template.enemies.push(enemyTemplate);
-        console.log(this.template);
+        // console.log(this.template);
     }
 
     setSpawn = (x: number, y: number) => {
@@ -160,8 +160,8 @@ export class TemplateHelper {
     }
 
     loadTemplate = (viewport: Viewport, loader: PIXI.Loader, player: Player, template?: StageTemplate): Stage => {
-        const stage =  new Stage(template.level, template.name , player, viewport, null);
         const _template = template ? template : this.template;
+        const stage =  new Stage(template.level, template.name , player, viewport, null, _template);
 
         // Load enemies
         _template.enemies.forEach((enemyTemplate: EnemyTemplate) => {

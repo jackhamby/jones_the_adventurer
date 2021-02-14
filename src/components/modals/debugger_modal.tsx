@@ -60,7 +60,7 @@ export class DebuggerModal extends React.Component<DebuggerModalProps, {}> {
 
     completeImmunity = () => {
         this.props.control.player.isImmune = true;
-        this.props.control.player.maxImmuneTime = 9999999999999999;
+        // this.props.control.player.maxImmuneTime = 9999999999999999;
     }
 
     infiniteJumps = () => {

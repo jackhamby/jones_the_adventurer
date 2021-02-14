@@ -1,3 +1,4 @@
+import { UnitPartNames } from "../../types/enums";
 import { Effect } from "../effects/effect";
 import { FireEffect } from "../effects/fire_effect";
 import { GlowEffect } from "../effects/glow_effect";
@@ -46,9 +47,7 @@ export class Buff {
         });
         if (this.effect) this.effect.remove();
     }
-
 }
-
 
 export class AttackSpeed extends Buff {
     constructor(unit: Unit){
@@ -75,12 +74,6 @@ export class AttackSpeed extends Buff {
     }
 }
 
-
-
-
-
-
-
 export class FireDot extends Buff {
     constructor(unit: Unit){
         super(unit);
@@ -95,4 +88,49 @@ export class FireDot extends Buff {
             this.unit.takeDamage(5);
         }
     }    
+}
+
+export class Immunity extends Buff {
+
+    reverseAlphaFlag: boolean = false;
+
+    constructor(unit: Unit, duration: number){
+        super(unit);
+        this.name = "immunity";
+        this.activeTime = duration;
+    }
+
+    update(){
+        // debugger;
+        let alphaToSet = 1;
+        // Reverse alpha for flashing effect
+        if (this.reverseAlphaFlag){
+            alphaToSet = 0.5
+        } 
+        this.reverseAlphaFlag = !this.reverseAlphaFlag;
+        
+        Object.keys(this.unit.spriteParts).forEach((key) => {
+            const playerPartName = key as UnitPartNames;
+            const sprite = this.unit.spriteParts[playerPartName].sprite;
+            sprite.alpha = alphaToSet;
+        });
+        super.update();
+
+    }
+
+    deactivate(){
+        super.deactivate();
+        this.unit.isImmune = false;
+        // debugger;
+        Object.keys(this.unit.spriteParts).forEach((key) => {
+            const playerPartName = key as UnitPartNames;
+            const sprite = this.unit.spriteParts[playerPartName].sprite;
+            sprite.alpha = 1;
+        });
+    }
+
+    apply(){
+        super.apply();
+        this.unit.isImmune = true;
+    }
 }

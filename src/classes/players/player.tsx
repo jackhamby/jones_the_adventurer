@@ -11,6 +11,7 @@ import { ProjectileTreasure } from "../treasures/projectile_treasure";
 import { IncreaseText } from "../floating_texts/increase_text";
 import { Projectile } from "../projectiles/projectile";
 import { KeyOptions } from "../../types/interfaces";
+import { Buff, Immunity } from "../buffs/buff";
 
 export class Player extends Unit {
 
@@ -32,7 +33,15 @@ export class Player extends Unit {
 
     takeDamage(value: number): number{
         const damageTaken = super.takeDamage(value);
-        this.isImmune = true;
+        const isImmune = this.temporaryBuffs.some((buff: Buff) => {
+            return buff instanceof Immunity;
+        });
+        if (!isImmune){
+            const immunity = new Immunity(this, 40);
+            immunity.apply();
+        }
+
+        // this.isImmune = true;
         return damageTaken;
     }
 

@@ -29,10 +29,10 @@ export class Enemy extends Unit {
         this.xVelocity = 0;
         this.yVelocity = 0;
 
-        // 
-        this.setState(UnitStateNames.STANDING);
-        this.fallingTimer = 0;
-        this.timeSinceLastProjectileFired = 0;
+        // // 
+        // this.setState(UnitStateNames.STANDING);
+        // this.fallingTimer = 0;
+        // this.timeSinceLastProjectileFired = 0;
     }
 
     remove(){

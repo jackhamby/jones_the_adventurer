@@ -12,7 +12,8 @@ import { StageBuilderController } from '../../classes/stage_builder/stage_builde
 import { ArmorTreasure, KnightHeadArmor1Treasure } from '../../classes/treasures/armor_treasure';
 import { Treasure } from '../../classes/treasures/treasure';
 import { GRID_HEIGHT, GRID_WIDTH, TREASURE_ARMOR_OPTIONS } from '../../types/constants';
-import { TreasureArmorOptionNames } from '../../types/enums';
+import { UnitArmorNames, UnitPartNames } from '../../types/enums';
+// import { TreasureArmorOptionNames } from '../../types/enums';
 import { stageBuilderKeyboard } from './stage_builder_wrapper';
 
 
@@ -25,19 +26,31 @@ import { stageBuilderKeyboard } from './stage_builder_wrapper';
 // }   
 
 export interface TreasureArmorMenuState {
-    selectedTreasure: TreasureArmorOptionNames;
+    // selectedTreasure: TreasureArmorOptionNames;
 }
 
 export interface TreasureArmorMenuProps {
     controller: StageBuilderController;
 }
 
+interface TreasureOption {
+    armorName: UnitArmorNames;
+    part: UnitPartNames;
+}
+
+const options = {
+    
+}
+
+// UnitArmorNames.ARMOR2;
+// UnitPartNames.HEAD;
+
 export class TreasureArmorMenu extends React.Component<TreasureArmorMenuProps, TreasureArmorMenuState > {
 
     constructor(props){
         super(props);
         this.state = {
-            selectedTreasure: null,
+            // selectedTreasure: null,
         }
     }
 
@@ -51,7 +64,7 @@ export class TreasureArmorMenu extends React.Component<TreasureArmorMenuProps, T
                 <label style={{fontSize: '12px'}}> armor treasures</label>
                 <hr className="mt-0"/>
                 <div>
-                    {Object.keys(TREASURE_ARMOR_OPTIONS).map((key: TreasureArmorOptionNames) => {
+                    {/* {Object.keys(TREASURE_ARMOR_OPTIONS).map((key: TreasureArmorOptionNames) => {
                         const treasureType = TREASURE_ARMOR_OPTIONS[key];
                         const isSelected = this.state.selectedTreasure === key;
                         return (
@@ -63,7 +76,7 @@ export class TreasureArmorMenu extends React.Component<TreasureArmorMenuProps, T
                                 });
                             }}/>
                         )
-                    })} 
+                    })}  */}
                 </div>
             </>   
         );

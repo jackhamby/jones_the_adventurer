@@ -1,4 +1,4 @@
-import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlatformOptionNames, EnemyOptionNames, TreasureArmorOptionNames, PlayerAttributeNames } from "./enums";
+import { UnitStateNames, UnitArmorNames, UnitPartNames, UnitStatisticNames, UnitAttributeNames, ProjectileAttributeNames, ProjectileNames, PlatformOptionNames, EnemyOptionNames, PlayerAttributeNames, PlayerNames } from "./enums";
 import { Part } from "../classes/part";
 import { Projectile } from "../classes/projectiles/projectile";
 
@@ -60,6 +60,17 @@ export type EnemyOptionTypes = {
 }
 
 export type TreasureArmorOptionTypes = {
-    [key in TreasureArmorOptionNames] : typeof ArmorTreasure; 
+    // [key in TreasureArmorOptionNames] : typeof ArmorTreasure; 
 }   
 
+export type ArmorTreasures = {
+    [key in UnitArmorNames]: typeof ArmorTreasure;
+}
+
+export type PartTreasure = {
+    [key in UnitPartNames]: ArmorTreasures;
+}
+
+export type PlayerArmorTreasures = {
+    [key in PlayerNames]: PartTreasure; 
+}

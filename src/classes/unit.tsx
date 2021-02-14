@@ -61,13 +61,8 @@ export class Unit extends Sprite {
     projectileCooldown: number;
     distinctJump: boolean; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
     isImmune: boolean;
-    immuneTime: number;
-    maxImmuneTime: number;
-    immuneFadeInterval: number;
-    currentFadeIncrement: number;
-    currentImmuneFadeInterval: number;
     fallingTimer: number;
-    deathAnimationTimer;
+    deathAnimationTimer: number;
 
     // Textures/sprites
     textures: UnitParts;
@@ -118,13 +113,14 @@ export class Unit extends Sprite {
         this.projectileCooldown = this.attributes.ATTACK_SPEED;
         this.distinctJump = true; // This is a hack to fix key delay spending too many jumps, jump only happen after keyup and keyrelease
         this.isImmune = false;
-        this.immuneTime = 0;
-        this.maxImmuneTime = 50;
-        this.immuneFadeInterval = 5;
-        this.currentFadeIncrement = 1
-        this.currentImmuneFadeInterval = 0;
+        // this.immuneTime = 0;
+        // this.maxImmuneTime = 50;
+        // this.immuneFadeInterval = 5;
+        // this.currentFadeIncrement = 1
+        // this.currentImmuneFadeInterval = 0;
         this.fallingTimer = 0;
         this.deathAnimationTimer = 0;
+        // this.decay = SPRITE_DECAY_FADE_TIME;
         
         this.textures = {} as UnitParts;
         this.spriteParts = {} as SpriteParts;
@@ -392,15 +388,6 @@ export class Unit extends Sprite {
             this.remove();
         };
 
-        // immunity
-        if (this.isImmune){
-            this.immuneTime += 1;
-            if (this.immuneTime >= this.maxImmuneTime){
-                this.isImmune = false;
-                this.immuneTime = 0;
-            }
-        }
-
         //  falling
         if (this.fallingTimer === 150){
             this.setState(UnitStateNames.DEAD);
@@ -418,27 +405,10 @@ export class Unit extends Sprite {
         } else {
             this.facingRight = false;
         }
-        let alphaToSet = 1;
-        if (this.isImmune){
-            this.currentImmuneFadeInterval += this.currentFadeIncrement;
-            // Reverse alpha
-            if (this.currentImmuneFadeInterval === 0 || this.currentImmuneFadeInterval === this.immuneFadeInterval){
-                this.currentFadeIncrement *= -1;
-                this.currentImmuneFadeInterval += this.currentFadeIncrement;
-            }
-            if (this.currentFadeIncrement === -1){
-                alphaToSet = 0.5
-            } else {
-                alphaToSet = 1;
-            }
-        }
 
         Object.keys(this.spriteParts).forEach((key) => {
             const playerPartName = key as UnitPartNames;
             const sprite = this.spriteParts[playerPartName].sprite;
-
-            // fade for immunity
-            sprite.alpha = alphaToSet;
 
             // flip facing right/left
             if (this.facingRight){
@@ -449,52 +419,8 @@ export class Unit extends Sprite {
                 sprite.anchor.x = 1;
                 sprite.scale.x = -1;
             }
-        })
+        });
 
-
-        // TODO: figure out either animation or extra graphic
-        // to handle death
-        // Flip parts 90 for death
-        if (this.state === UnitStateNames.DEAD){
-            // this.spriteParts.head.sprite.y += 20;
-        //     this.y = this.y + (this.height - this.width)
-        //     const oldWidth = this.width;
-        //     this.width = this.height;
-        //     this.height = oldWidth;
-        //     this.xVelocity = 0;
-        //     this.yVelocity = 0;
-        //     // this.setState(UnitStateNames.DEAD)
-        //     Object.keys(this.spriteParts).forEach((key: string) => {
-        //         const partName = key as UnitPartNames;
-        //         const spritePart = this.spriteParts[partName];
-        //         spritePart.sprite.rotation = -1.5708; // 90degress in rads
-        //     })
-
-        //     // TODO remove this fro here and in Kobold in enemy.tsx
-        //     const head = this.spriteParts.head;
-        //     const headOffsetX =  0
-        //     const headOffsetY = head.sprite.height/4 + 10;
-        //     head.offSetX = headOffsetX;
-        //     head.offSetY = headOffsetY;
-        //     head.sprite.x = this.x + headOffsetX;
-        //     head.sprite.y = (this.y + this.height) + headOffsetY;
-
-        //     const body = this.spriteParts.body;
-        //     const bodyOffsetX = head.sprite.height;;
-        //     const bodyOffsetY = 10;
-        //     body.offSetX = bodyOffsetX;
-        //     body.offSetY = bodyOffsetY;
-        //     body.sprite.x = this.x + bodyOffsetX;
-        //     body.sprite.y = (this.y + this.height) + bodyOffsetY;
-
-        //     const legs = this.spriteParts.legs;
-        //     const legsOffsetX = head.sprite.height + body.sprite.height;
-        //     const legsOffsetY = 10;
-        //     legs.offSetX = legsOffsetX;
-        //     legs.offSetY = legsOffsetY;
-        //     legs.sprite.x = this.x + legsOffsetX;
-        //     legs.sprite.y = ( this.y + this.height)  + legsOffsetY;
-        }
     }
 
     protected initSpriteParts(): SpriteParts {
@@ -541,31 +467,33 @@ export class Unit extends Sprite {
     protected dying(){
         this.xVelocity = 0;
         this.decay -= 1;
-        
-        // this.spriteParts.head.sprite.y += 1;
-        // this.spriteParts.head.sprite.x -= 1;
+
         if (this.deathAnimationTimer < Unit.deathAnimationFrames){
             if (this.deathAnimationTimer > 15){
                 this.spriteParts.body.sprite.x -= 1;
                 this.spriteParts.body.sprite.y += 1;
             }
-            if (this.deathAnimationTimer < 15){
+            if (this.deathAnimationTimer < 20){
                 this.spriteParts.head.sprite.x += 1;
                 this.spriteParts.head.sprite.y += 1;
             }
             this.deathAnimationTimer += 1;
         }
 
-
-        // this.spriteParts.legs
-
-
         if (this.decay < SPRITE_DECAY_FADE_TIME){
+            // console.log('================================================')
             Object.keys(this.spriteParts).forEach((partName: string) => {
                 const tempPartName: UnitPartNames = partName as UnitPartNames;
                 const part: SpritePart = this.spriteParts[tempPartName];
-                part.sprite.alpha -= 1 / SPRITE_DECAY_FADE_TIME;    
-            })
+                // console.log(`alpha before: ${part.sprite.alpha}`);
+                part.sprite.alpha -= (1 / SPRITE_DECAY_FADE_TIME);  
+                // console.log(partName)  
+                // console.log(`alpha after: ${part.sprite.alpha}`);
+                // console.log(`decay: ${this.decay}`)
+                // console.log('decaying');
+            });
+            // console.log('================================================')
+
         }
     }
 

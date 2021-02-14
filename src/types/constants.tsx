@@ -2,8 +2,8 @@ import { Kobold } from "../classes/enemies/kobold";
 import { Man } from "../classes/enemies/man";
 import { Manticore } from "../classes/enemies/manticore";
 import { DefaultPlatform, DirtPlatform, GrassPlatform, RedGrassPlatform, SandRockPlatform } from "../classes/platform";
-import { KnightHeadArmor1Treasure } from "../classes/treasures/armor_treasure";
-import { EnemyOptionTypes, PlatformOptionTypes, TreasureArmorOptionTypes, UnitAttributes } from "./types";
+import { KnightBodyArmor1Treasure, KnightHeadArmor1Treasure, KnightHeadArmor2Treasure, KnightLegsArmor1Treasure, KoboldBodyArmor1Treasure, KoboldBodyArmor2Treasure, KoboldHeadArmor1Treasure, KoboldHeadArmor2Treasure, KoboldHeadArmor3Treasure, KoboldLegsArmor1Treasure, OrcBodyArmor1Treasure, OrcHeadArmor1Treasure, OrcHeadArmor2Treasure, OrcLegsArmor1Treasure } from "../classes/treasures/armor_treasure";
+import { ArmorTreasures, EnemyOptionTypes, PlatformOptionTypes, PlayerArmorTreasures, TreasureArmorOptionTypes, UnitAttributes } from "./types";
 
 export const SCREEN_HEIGHT = window.screen.width * .4;
 export const SCREEN_WIDTH = window.screen.height;
@@ -46,6 +46,56 @@ export const ENEMY_OPTIONS: EnemyOptionTypes = {
     manticore: Manticore,
 }
 
-export const TREASURE_ARMOR_OPTIONS: TreasureArmorOptionTypes = {
-    knightHeadArmor1: KnightHeadArmor1Treasure
-}
+export const TREASURE_ARMOR_OPTIONS: PlayerArmorTreasures = {
+    knight: {
+        head: {
+            armor1: KnightHeadArmor1Treasure,
+            armor2: KnightHeadArmor2Treasure,
+            armor3: null,
+        } as ArmorTreasures,
+        body: {
+            armor1: KnightBodyArmor1Treasure,
+            armor2: null,
+            armor3: null,
+        } as ArmorTreasures,
+        legs: {
+            armor1: KnightLegsArmor1Treasure,
+            armor2: null,
+            armor3: null,
+        } as ArmorTreasures
+    },
+    kobold: {
+        head: {
+            armor1: KoboldHeadArmor1Treasure,
+            armor2: KoboldHeadArmor2Treasure,
+            armor3: KoboldHeadArmor3Treasure,
+        } as ArmorTreasures,
+        body: {
+            armor1: KoboldBodyArmor1Treasure,
+            armor2: KoboldBodyArmor2Treasure,
+            armor3: null,
+        } as ArmorTreasures,
+        legs: {
+            armor1: KoboldLegsArmor1Treasure,
+            armor2: null,
+            armor3: null,
+        } as ArmorTreasures
+    },
+    orc: {
+        head: {
+            armor1: OrcHeadArmor1Treasure,
+            armor2: OrcHeadArmor2Treasure,
+            armor3: null,
+        } as ArmorTreasures,
+        body: {
+            armor1: OrcBodyArmor1Treasure,
+            armor2: null,
+            armor3: null,
+        } as ArmorTreasures,
+        legs: {
+            armor1: OrcLegsArmor1Treasure,
+            armor2: null,
+            armor3: null,
+        } as ArmorTreasures
+    }
+} as PlayerArmorTreasures;
