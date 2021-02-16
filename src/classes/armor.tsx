@@ -84,6 +84,18 @@ export class KnightHeadArmor2 extends Armor {
     }
 }
 
+export class KnightHeadArmor3 extends Armor {
+    constructor(loader: PIXI.Loader){
+        super(loader);
+        this.loader = loader;
+        this.name = "a 70s style";
+        this.type = UnitArmorNames.ARMOR2;
+        this.part = UnitPartNames.HEAD;
+        this.texture = this.loader.resources['knight-head-armor3'].texture;
+        this.attributes.ARMOR = 20;
+    }
+}
+
 export class KnightBodyArmor1 extends Armor {
     constructor(loader: PIXI.Loader){
         super(loader);
@@ -97,6 +109,32 @@ export class KnightBodyArmor1 extends Armor {
     }
 }
 
+export class KnightBodyArmor2 extends Armor {
+    constructor(loader: PIXI.Loader){
+        super(loader);
+        this.loader = loader;
+        this.name = "chainmail";
+        this.type = UnitArmorNames.ARMOR2;
+        this.part = UnitPartNames.BODY;
+        this.texture = this.loader.resources['knight-body-armor2'].texture;
+        this.attributes.ARMOR = 10;
+
+    }
+}
+
+export class KnightBodyArmor3 extends Armor {
+    constructor(loader: PIXI.Loader){
+        super(loader);
+        this.loader = loader;
+        this.name = "reinforced breast plate";
+        this.type = UnitArmorNames.ARMOR3;
+        this.part = UnitPartNames.BODY;
+        this.texture = this.loader.resources['knight-body-armor3'].texture;
+        this.attributes.ARMOR = 15;
+
+    }
+}
+
 export class KnightLegsArmor1 extends Armor {
     constructor(loader: PIXI.Loader){
         super(loader);
@@ -106,6 +144,30 @@ export class KnightLegsArmor1 extends Armor {
         this.part = UnitPartNames.LEGS;
         this.texture = this.loader.resources['knight-legs-armor1'].texture;
         this.attributes.ARMOR = 6;
+    }
+}
+
+export class KnightLegsArmor2 extends Armor {
+    constructor(loader: PIXI.Loader){
+        super(loader);
+        this.loader = loader;
+        this.name = "enforced plate legs";
+        this.type = UnitArmorNames.ARMOR2;
+        this.part = UnitPartNames.LEGS;
+        this.texture = this.loader.resources['knight-legs-armor2'].texture;
+        this.attributes.ARMOR = 8;
+    }
+}
+
+export class KnightLegsArmor3 extends Armor {
+    constructor(loader: PIXI.Loader){
+        super(loader);
+        this.loader = loader;
+        this.name = "gold legs";
+        this.type = UnitArmorNames.ARMOR3;
+        this.part = UnitPartNames.LEGS;
+        this.texture = this.loader.resources['knight-legs-armor3'].texture;
+        this.attributes.ARMOR = 12;
     }
 }
 

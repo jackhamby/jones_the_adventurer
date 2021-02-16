@@ -1,6 +1,6 @@
 import { Player } from "../classes/players/player";
 import { Stage } from "../classes/stage/stage";
-import { EnemyOptionNames, PlatformOptionNames, ScreenOptions } from "./enums";
+import { EnemyOptionNames, PlatformOptionNames, ScreenOptions, UnitArmorNames, UnitPartNames } from "./enums";
 
 export interface EnemyTemplate {
     type: EnemyOptionNames;
@@ -21,6 +21,14 @@ export interface StageTemplate {
     name: string;
     enemies: EnemyTemplate[];
     platforms: PlatformTemplate[];
+    armorTreasures: ArmorTreasureTemplate[];
+}
+
+export interface ArmorTreasureTemplate {
+    x: number;
+    y: number;
+    part: UnitPartNames;
+    armorName: UnitArmorNames;
 }
 
 export interface SpritePart {

@@ -12,6 +12,7 @@ import { Platform } from "../platform";
 import { Enemy } from "../enemies/enemy";
 import { Treasure } from "../treasures/treasure";
 import { Sprite } from "../sprite";
+import { ArmorTreasure } from "../treasures/armor_treasure";
 
 export class StageBuilderController {
 
@@ -114,7 +115,7 @@ export class StageBuilderController {
         this.stage = this.templateHelper.loadTemplate(
             this.viewport,
             this.pixiApplication.loader,
-            null,
+            this.player,
             this.stage.template);
 
         // Load stage
@@ -198,9 +199,10 @@ export class StageBuilderController {
         this.templateHelper.addPlatform(platform);
     }
 
-    addTreasure = (x: number, y: number, treasureType: typeof Treasure) => {
+    addTreasure = (x: number, y: number, treasureType: typeof ArmorTreasure) => {
         this.lastClickedX = x;
         this.lastClickedY = y;
+        // console.log(`add treasure at ${x}, ${y}`);
     
         const xTileIndex = Math.floor(x / GRID_WIDTH)
         const yTileIndex = Math.floor(y / GRID_HEIGHT);
@@ -215,7 +217,7 @@ export class StageBuilderController {
 
         treasure.add();
         this.stage.treasures.push(treasure);
-        // this.templateHelper.addTreasure(treasure);
+        this.templateHelper.addArmorTreasure(treasure);
     }
 
     addEnemy = (x: number, y: number, enemyType: typeof Enemy) => {

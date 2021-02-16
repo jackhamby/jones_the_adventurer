@@ -101,7 +101,6 @@ export class Immunity extends Buff {
     }
 
     update(){
-        // debugger;
         let alphaToSet = 1;
         // Reverse alpha for flashing effect
         if (this.reverseAlphaFlag){
@@ -121,7 +120,6 @@ export class Immunity extends Buff {
     deactivate(){
         super.deactivate();
         this.unit.isImmune = false;
-        // debugger;
         Object.keys(this.unit.spriteParts).forEach((key) => {
             const playerPartName = key as UnitPartNames;
             const sprite = this.unit.spriteParts[playerPartName].sprite;

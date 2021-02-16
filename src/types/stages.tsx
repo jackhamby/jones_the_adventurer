@@ -1,114 +1,207 @@
 import { StageTemplate } from "./interfaces";
-
 export const STAGE_1 = {
   "platforms": [
-    {
-      "x": 4800,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4815,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4830,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4845,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4860,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4875,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4890,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4785,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4905,
-      "y": 4935,
-      "type": "grass"
-    },
-    {
-      "x": 4950,
-      "y": 4845,
-      "type": "dirt"
-    },
-    {
-      "x": 4950,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4965,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4980,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5010,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5025,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 4995,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5040,
-      "y": 4860,
-      "type": "dirt"
-    },
-    {
-      "x": 5040,
-      "y": 4845,
-      "type": "dirt"
-    },
-    {
-      "x": 4770,
-      "y": 4935,
-      "type": "redgrass"
-    }
+      {
+          "x": 4950,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 4975,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 5000,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 5025,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 4925,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 4900,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 5050,
+          "y": 5075,
+          "type": "grass"
+      },
+      {
+          "x": 5150,
+          "y": 5050,
+          "type": "grass"
+      },
+      {
+          "x": 5175,
+          "y": 5050,
+          "type": "grass"
+      },
+      {
+          "x": 5200,
+          "y": 5050,
+          "type": "grass"
+      },
+      {
+          "x": 5225,
+          "y": 5050,
+          "type": "grass"
+      },
+      {
+          "x": 5250,
+          "y": 5050,
+          "type": "grass"
+      },
+      {
+          "x": 5150,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5175,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5200,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5225,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5250,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5275,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5125,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5125,
+          "y": 5150,
+          "type": "grass"
+      },
+      {
+          "x": 5125,
+          "y": 5125,
+          "type": "grass"
+      },
+      {
+          "x": 5300,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5325,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5350,
+          "y": 5175,
+          "type": "grass"
+      },
+      {
+          "x": 5350,
+          "y": 5150,
+          "type": "grass"
+      },
+      {
+          "x": 4975,
+          "y": 5225,
+          "type": "grass"
+      },
+      {
+          "x": 5000,
+          "y": 5225,
+          "type": "grass"
+      },
+      {
+          "x": 5025,
+          "y": 5225,
+          "type": "grass"
+      },
+      {
+          "x": 4775,
+          "y": 5200,
+          "type": "grass"
+      },
+      {
+          "x": 4800,
+          "y": 5200,
+          "type": "grass"
+      },
+      {
+          "x": 4825,
+          "y": 5200,
+          "type": "grass"
+      },
+      {
+          "x": 5500,
+          "y": 5150,
+          "type": "dirt"
+      },
+      {
+          "x": 5525,
+          "y": 5150,
+          "type": "dirt"
+      },
+      {
+          "x": 5725,
+          "y": 5150,
+          "type": "dirt"
+      },
+      {
+          "x": 5750,
+          "y": 5150,
+          "type": "dirt"
+      }
   ],
   "enemies": [
-    {
-      "x": 5000,
-      "y": 4785,
-      "type": "man"
-    }
+      {
+          "x": 5215,
+          "y": 5085,
+          "type": "man"
+      }
   ],
-  "spawnX": 4856.5,
-  "spawnY": 4898,
-  "level": 1,
-  "name" : "template level 1"
+  "armorTreasures": [
+      {
+          "x": 5000,
+          "y": 5175,
+          "armorName": "armor1",
+          "part": "body"
+      },
+      {
+          "x": 5750,
+          "y": 5100,
+          "armorName": "armor1",
+          "part": "head"
+      }
+  ],
+  "spawnX": 5000,
+  "spawnY": 5000,
+  "level" : 1,
+  "name": "jack was here"
 } as StageTemplate;
 
 export const STAGE_2 = {

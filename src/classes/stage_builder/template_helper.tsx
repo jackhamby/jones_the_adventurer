@@ -1,83 +1,19 @@
 
 import { Viewport } from "pixi-viewport";
-import { ENEMY_OPTIONS, PLATFORM_OPTIONS } from "../../types/constants";
-import { EnemyOptionNames, PlatformOptionNames } from "../../types/enums";
-import { EnemyTemplate, PlatformTemplate, StageTemplate } from "../../types/interfaces";
+import { ENEMY_OPTIONS, PLATFORM_OPTIONS, TREASURE_ARMOR_OPTIONS } from "../../types/constants";
+import { EnemyOptionNames, PlatformOptionNames, PlayerNames } from "../../types/enums";
+import { ArmorTreasureTemplate, EnemyTemplate, PlatformTemplate, StageTemplate } from "../../types/interfaces";
 import { Enemy } from "../enemies/enemy";
-import { Kobold } from "../enemies/kobold";
 import { Man } from "../enemies/man";
 import { Manticore } from "../enemies/manticore";
 import { DefaultPlatform, DirtPlatform, GrassPlatform, Platform, RedGrassPlatform, SandRockPlatform } from "../platform";
+import { Knight } from "../players/knight";
+import { Kobold } from "../players/kobold";
+import { Orc } from "../players/orc";
 import { Player } from "../players/player";
 import { Stage } from "../stage/stage";
-
-// Enemy
-// export enum EnemyOptionNames {
-//     KOBOLD = "kobold",
-//     MAN = "man",
-//     MANTICORE = "manticore"
-// }
-
-// export type EnemyTypes = {
-//     [key in EnemyOptionNames]: typeof Enemy
-// }
-
-// export const EnemyOptions: EnemyTypes = {
-//     kobold: Kobold,
-//     man: Man,
-//     manticore: Manticore,
-// }
-
-// export interface EnemyTemplate {
-//     type: EnemyOptionNames;
-//     x: number;
-//     y: number;
-// }
-
-// Platforms
-// export enum PlatformOptionNames {
-//     DEFAULT = "default",
-//     DIRT = "dirt",
-//     GRASS = "grass",
-//     SANDROCK = "sandrock",
-//     REDGRASS = "redgrass"
-// }
-
-// export type PlatformTypes = {
-//     [key in PlatformOptionNames]: typeof Platform
-// }
-
-// export const PlatformOptions: PlatformTypes = {
-//     default: DefaultPlatform,
-//     dirt: DirtPlatform,
-//     grass: GrassPlatform,
-//     sandrock: SandRockPlatform,
-//     redgrass: RedGrassPlatform,
-// }
-
-// Armor treasure
-// export enum ArmorTreasureNames {
-
-// }
-
-// export interface PlatformTemplate {
-//     type: PlatformOptionNames;
-//     x: number;
-//     y: number;
-// }
-
-// export interface StageTemplate {
-//     spawnX: number;
-//     spawnY: number;
-//     level: number;
-//     name: string;
-//     enemies: EnemyTemplate[];
-//     platforms: PlatformTemplate[];
-// }
-
-
-
-
+import { ArmorTreasure } from "../treasures/armor_treasure";
+import { Treasure } from "../treasures/treasure";
 
 export class TemplateHelper {
 
@@ -88,7 +24,8 @@ export class TemplateHelper {
             ? template 
             : {
                 platforms: [],
-                enemies: []
+                enemies: [],
+                armorTreasures: [],
             } as StageTemplate;
     }
 
@@ -126,6 +63,18 @@ export class TemplateHelper {
         return EnemyOptionNames.KOBOLD;
     }
 
+    getPlayerType = (player: Player) => {
+        if (player instanceof Knight){
+            return PlayerNames.KNIGHT;
+        }
+        if (player instanceof Kobold){
+            return PlayerNames.KOBOLD;
+        }
+        if (player instanceof Orc){
+            return PlayerNames.ORC;
+        }
+    }
+
     addPlatform = (platform: Platform) => {
         const platformTemplate: PlatformTemplate = {
             x: platform.x,
@@ -133,7 +82,6 @@ export class TemplateHelper {
             type: this.getPlatformType(platform)
         };
         this.template.platforms.push(platformTemplate);
-        // console.log(this.template);
     }
 
     addEnemy = (enemy: Enemy) => {
@@ -143,7 +91,16 @@ export class TemplateHelper {
             type: this.getEnemyType(enemy)
         }
         this.template.enemies.push(enemyTemplate);
-        // console.log(this.template);
+    }
+
+    addArmorTreasure = (treasure: ArmorTreasure) => {
+        const armorTreasureTemplate: ArmorTreasureTemplate = {
+            x: treasure.x,
+            y: treasure.y,
+            armorName: treasure.armor.type,
+            part: treasure.armor.part,
+        }
+        this.template.armorTreasures.push(armorTreasureTemplate);
     }
 
     setSpawn = (x: number, y: number) => {
@@ -183,6 +140,19 @@ export class TemplateHelper {
             const platform = new platformType(loader, stage, platformTemplate.x, platformTemplate.y, 25, 25);
             stage.platforms.push(platform);
         });
+
+
+        const playerName: PlayerNames = this.getPlayerType(player);
+        // Load armor treasures
+        _template.armorTreasures.forEach((armorTemplate: ArmorTreasureTemplate) => {
+            const treasureType = TREASURE_ARMOR_OPTIONS[playerName][armorTemplate.part][armorTemplate.armorName];
+            if (!treasureType){
+                console.warn(`no ${armorTemplate.armorName} for ${playerName} ${armorTemplate.part}`);
+                return;
+            }
+            const armorTreasure = new treasureType(loader, stage, armorTemplate.x, armorTemplate.y);
+            stage.treasures.push(armorTreasure);
+        })
 
         stage.spawnX = _template.spawnX;
         stage.spawnY = _template.spawnY;

@@ -13,7 +13,7 @@ export enum TabOptions {
 }
 
 export enum PlayerNames {
-    KNIIGHT = "knight",
+    KNIGHT = "knight",
     KOBOLD = "kobold",
     ORC = "orc"
 }

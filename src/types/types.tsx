@@ -59,9 +59,9 @@ export type EnemyOptionTypes = {
     [key in EnemyOptionNames] : typeof Enemy; 
 }
 
-export type TreasureArmorOptionTypes = {
-    // [key in TreasureArmorOptionNames] : typeof ArmorTreasure; 
-}   
+// export type TreasureArmorOptionTypes = {
+//     // [key in TreasureArmorOptionNames] : typeof ArmorTreasure; 
+// }   
 
 export type ArmorTreasures = {
     [key in UnitArmorNames]: typeof ArmorTreasure;

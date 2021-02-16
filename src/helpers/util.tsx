@@ -106,14 +106,20 @@ export const loadTextures = (pixiApplication: PIXI.Application, callBack: Functi
         .add('knight-head-default', "images/knight/head/head_default.png")
         .add('knight-head-armor1', "images/knight/head/head_armor1.png")
         .add('knight-head-armor2', "images/knight/head/head_armor2.png")
+        .add('knight-head-armor3', "images/knight/head/head_armor3.png")
 
         // Add body textures
         .add('knight-body-default', "images/knight/body/body_default.png")
         .add('knight-body-armor1', "images/knight/body/body_armor1.png")
+        .add('knight-body-armor2', "images/knight/body/body_armor2.png")
+        .add('knight-body-armor3', "images/knight/body/body_armor3.png")
+
 
         // Add leg textures
         .add('knight-legs-default', "images/knight/legs/legs_default.png")
         .add('knight-legs-armor1', "images/knight/legs/legs_armor1.png")
+        .add('knight-legs-armor2', "images/knight/legs/legs_armor2.png")
+        .add('knight-legs-armor3', "images/knight/legs/legs_armor3.png")
 
         // Add treasures images
         .add('treasure-base', "images/treasures/treasure_base.png")

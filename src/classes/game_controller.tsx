@@ -91,25 +91,6 @@ export class GameController {
     // TODO: can we move this to stage.tsx
     restartStage(level: number){
         this.currentStage.restart();
-
-
-
-
-
-        // window.alert('restarted stage')
-        // // // Set stage with players current treasures
-        // const startingTreasures = this.player.currentStage.startingTreasures;
-
-        // // recreate restarted stage
-        // const restartedStage = this.stageManager.getStage(level);
-        // this.player.currentStage = restartedStage;
-        // restartedStage.startingTreasures = startingTreasures;
-        // this.currentStage = restartedStage;
-
-        // // clear and load stage
-        // this.currentStage.clear();
-        // this.currentStage.load();
-        // throw( new Error("jack you drunk ass read this. cleanup stage to have restart method."))
     }
 
     // ================================== private methods ===========================================================
