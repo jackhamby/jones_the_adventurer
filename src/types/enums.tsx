@@ -1,11 +1,3 @@
-
-export enum ScreenOptions {
-    MAIN_MENU,
-    CHARACTER_SELECT,
-    GAME,
-    STAGE_BUILDER
-}
-
 export enum TabOptions {
     armor = "armor",
     spells = "spells",

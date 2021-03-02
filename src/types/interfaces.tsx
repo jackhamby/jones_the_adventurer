@@ -1,6 +1,6 @@
 import { Player } from "../classes/players/player";
 import { Stage } from "../classes/stage/stage";
-import { EnemyOptionNames, PlatformOptionNames, ScreenOptions, UnitArmorNames, UnitPartNames } from "./enums";
+import { EnemyOptionNames, PlatformOptionNames, UnitArmorNames, UnitPartNames } from "./enums";
 
 export interface EnemyTemplate {
     type: EnemyOptionNames;
@@ -82,7 +82,6 @@ export interface GameState {
 }
 
 export interface ControlState {
-    currentScreen:  ScreenOptions;
     texturesLoaded: boolean;
     currentKeys: KeyOptions;
 }

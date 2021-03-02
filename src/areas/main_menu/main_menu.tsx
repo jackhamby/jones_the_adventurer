@@ -1,11 +1,7 @@
 import React from 'react';
-import { ScreenOptions } from '../../types/enums';
+import { Link } from 'react-router-dom'
 
-export interface MainMenuProps {
-    updateScreen: (screenName: ScreenOptions) => void;
-}
-
-export class MainMenu extends React.Component<MainMenuProps, {}> {
+export class MainMenu extends React.Component {
 
     render(){
         return(
@@ -31,30 +27,32 @@ export class MainMenu extends React.Component<MainMenuProps, {}> {
                     <div className='col-4'>
                         <div className="row mt-5 justify-content-md-center">
                             <div className="col-12 text-center">
+                            <Link to="/player-select">
+
                                 <button 
                                     className="btn-block"
-                                    onClick={() => {
-                                        this.props.updateScreen(ScreenOptions.CHARACTER_SELECT)
-                                    }}
                                     >
                                 1 player
                                 </button>
+                            </Link>
                             </div>
                             <div className="col-12 mt-3 text-center">
-                                <button 
-                                    className="btn-block"
-                                    onClick={() => {
-                                        this.props.updateScreen(ScreenOptions.STAGE_BUILDER)
-                                    }}
-                                    >
-                                stage builder
-                                </button>
+                                <Link to="/stages">
+                                    <button 
+                                        className="btn-block"
+                                        >
+                                    play test stages
+                                    </button>
+                                </Link>
                             </div>
                             <div className="col-12 mt-3 text-center">
-                                <button className="btn-block" disabled> 2 player</button>
-                            </div>
-                            <div className="col-12 mt-3 text-center">
-                                <button className="btn-block" disabled> online </button>
+                                <Link to="/stage-builder">
+                                    <button 
+                                        className="btn-block"
+                                        >
+                                    stage builder
+                                    </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

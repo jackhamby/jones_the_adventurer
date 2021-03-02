@@ -13,6 +13,7 @@ import { Enemy } from "../enemies/enemy";
 import { Treasure } from "../treasures/treasure";
 import { Sprite } from "../sprite";
 import { ArmorTreasure } from "../treasures/armor_treasure";
+import { getStages } from "../../api/stages";
 
 export class StageBuilderController {
 
@@ -67,6 +68,8 @@ export class StageBuilderController {
         this.viewport.addChild(this.spawnGraphics);
         this.viewport.addChild(this.gridGraphics);
         this.viewport.addChild(this.highlightGraphics);
+
+        getStages();
     }
 
     setSpawn = (x: number, y: number) => {

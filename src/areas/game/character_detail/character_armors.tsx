@@ -4,6 +4,7 @@ import { CustomizeModal } from '../../../components/modals/customize_modal/custo
 import { GameController } from '../../../classes/game_controller';
 import { TabOptions } from '../../../types/enums';
 import { TreasureDetail } from '../../../components/modals/customize_modal/treasure_detail';
+import { makeid } from '../../../helpers/util';
 
 interface CharacterArmorProps {
     player: Player;
@@ -25,7 +26,7 @@ export class CharacterArmors extends React.Component<CharacterArmorProps> {
                />
            </div>
            <div className="row">
-               {this.props.player.treasures.map(treasure => <TreasureDetail treasure={treasure}/>)}
+               {this.props.player.treasures.map(treasure => <TreasureDetail key={makeid()} treasure={treasure}/>)}
            </div>
        </div>
         );

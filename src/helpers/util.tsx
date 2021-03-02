@@ -1,5 +1,15 @@
 import { KeyOptions, StageBuilderKeyOptions } from "../types/interfaces";
 
+export const makeid = (length = 8) => {
+    var result           = '';
+    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    var charactersLength = characters.length;
+    for ( var i = 0; i < length; i++ ) {
+       result += characters.charAt(Math.floor(Math.random() * charactersLength));
+    }
+    return result;
+ }
+ 
 export const getCanvasDimensions = () => {
     const element = document.getElementById('canvas-container')
     const width = element ? element.clientWidth : 500;

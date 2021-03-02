@@ -1,12 +1,11 @@
 import React from 'react';
 import './player_select_wrapper.css';
-import { ScreenOptions } from '../../types/enums';
 import { PlayerSelect } from './player_select';
 import { PlayerDisplay } from './player_display';
 import { Player } from '../../classes/players/player';
+import { Link } from 'react-router-dom';
 
 interface PlayerSelectWrapperProps {
-    updateScreen: (screenName: ScreenOptions) => void;
     changePlayer: (player: typeof Player) => void;
     selectedPlayer: typeof Player;
 }
@@ -35,7 +34,9 @@ export class PlayerSelectWrapper extends React.Component<PlayerSelectWrapperProp
                 <div className="row bottom-container">
                     <div className="col-10"></div>
                     <div className="col-2 mt-2 mb-1">
-                        <button className="btn-block float-right" onClick={() => { this.props.updateScreen(ScreenOptions.GAME) }}>Start</button>
+                        <Link to="/game">
+                            <button className="btn-block float-right">Start</button>
+                        </Link>
                     </div>
                 </div>  
             </div>

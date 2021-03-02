@@ -1,6 +1,10 @@
 
 import React from 'react';
-import { ScreenOptions } from '../types/enums';
+import {
+    BrowserRouter as Router,
+    Route,
+    RouteComponentProps
+  } from "react-router-dom";
 import { mapKeys } from '../helpers/util';
 import './global.css';
 import { GameWrapper } from '../areas/game/game_wrapper';
@@ -10,28 +14,23 @@ import { MainMenu } from '../areas/main_menu/main_menu';
 import { StageBuilderWrapper } from '../areas/stage_builder/stage_builder_wrapper';
 import { Kobold } from '../classes/players/kobold';
 import { KeyOptions } from '../types/interfaces';
+import { StageList } from '../areas/stage_select/stage_list';
 
 export const keyboard = {
 
 } as KeyOptions;
 
 interface ControlState {
-    currentScreen: ScreenOptions;
     selectedPlayer: typeof Player;
 }
 
-export class Control extends React.Component<{}, ControlState> {
+export class Control extends React.Component<RouteComponentProps, ControlState> {
 
     constructor(props){
         super(props);
         this.state = {
-            currentScreen: ScreenOptions.GAME,
             selectedPlayer: Kobold,
         }
-    }
-
-    updateScreen = (screen: ScreenOptions) => {
-        this.setState({currentScreen: screen})
     }
 
     changePlayer = (player: typeof Player) => {
@@ -43,24 +42,31 @@ export class Control extends React.Component<{}, ControlState> {
     }
 
     renderState = () => {
-        switch(this.state.currentScreen){
-            case(ScreenOptions.MAIN_MENU):
-                return <MainMenu updateScreen={this.updateScreen}/>;
-            case(ScreenOptions.CHARACTER_SELECT):
-                return <PlayerSelectWrapper
-                            updateScreen={this.updateScreen} 
-                            changePlayer={this.changePlayer}
-                            selectedPlayer={this.state.selectedPlayer}
-                        />
-            case(ScreenOptions.GAME):
-                return <GameWrapper
-                            selectedPlayer={this.state.selectedPlayer}
-                        />
-            case(ScreenOptions.STAGE_BUILDER):
-                return <StageBuilderWrapper />
-            default:
-                return (<div> There was an error </div>);
-        }
+        return (
+            <Router>
+                <Route exact path="/">
+                    <MainMenu />
+                </Route>
+                <Route path="/player-select">
+                    <PlayerSelectWrapper
+                        // updateScreen={this.updateScreen} 
+                        changePlayer={this.changePlayer}
+                        selectedPlayer={this.state.selectedPlayer}
+                    />
+                </Route>
+                <Route path="/game">
+                    <GameWrapper
+                        selectedPlayer={this.state.selectedPlayer}
+                    />
+                </Route>
+                <Route path="/stage-builder">
+                    <StageBuilderWrapper />
+                </Route>
+                <Route path="/stages">
+                    <StageList />
+                </Route>
+            </Router>
+        );
     }
 
     handleKeyEvents = () => {

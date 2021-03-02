@@ -282,18 +282,11 @@ export class Player extends Unit {
         this.currentKeys.moveDown = false;
         this.currentKeys.jump = false;
 
-        // we flipped the parts 90 degrees on death, lets flip them back
-        // const oldWidth = this.width;
-        // this.width = this.height;
-        // this.treasures = [];
         this.currentStage.startingTreasures.forEach((treasure: Treasure) => {
             // Treasure.apply(this, treasure);
             treasure.apply(this);
         })
 
-        // this.height = oldWidth;
-        // this.currentStage.viewport.addChild(...this.getSprites())
-        // this.add();
         this.currentStage.viewport.follow(this.spriteParts.head.sprite);
     }
 
