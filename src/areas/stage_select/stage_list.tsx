@@ -1,10 +1,17 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { getStages } from '../../api/stages';
+import { Player } from '../../classes/players/player';
 import { StageTemplate } from '../../types/interfaces';
 import { StageListLink } from './stage_list_link';
 
-export const StageList = () => {
+interface StageListProps {
+    // changePlayer: (player: typeof Player) => void;
+    changeStage: (stage: StageTemplate) => void;
+    // selectedPlayer: typeof Player;
+}
+
+export const StageList = (props: StageListProps) => {
 
     const [stages, setStages] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -45,7 +52,13 @@ export const StageList = () => {
             <hr/>
             <div className="row">
                 <div className="col-3">
-                    stage name
+                    <label htmlFor="search">search</label>
+                    <input name="search" type="text" placeholder="stage name"></input>
+                </div>
+            </div>
+            <div className="row pt-4">
+                <div className="col-3">
+                    <b>stage name</b>
                 </div>
                 <div className="col-3">
                 </div>
@@ -53,7 +66,12 @@ export const StageList = () => {
             </div>
             {stages.map((stage: StageTemplate) => {
                 return (
-                    <StageListLink template={stage} />
+                    <StageListLink
+                        template={stage}
+                        // selectedPlayer={props.selectedPlayer} 
+                        changeStage={props.changeStage}
+                        // changePlayer={props.changePlayer}  
+                    />
                 )
             })}
        

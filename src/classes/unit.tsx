@@ -237,6 +237,7 @@ export class Unit extends Sprite {
             floatingText.add()
             if (this.currentAttributes.HEALTH <= 0){
                 this.hpBar.visible = false;
+                debugger;
                 this.setState(UnitStateNames.DEAD);
             }        
         }
@@ -390,6 +391,7 @@ export class Unit extends Sprite {
 
         //  falling
         if (this.fallingTimer === 150){
+            debugger;
             this.setState(UnitStateNames.DEAD);
         } else if (this.state === UnitStateNames.FALLING){
             this.fallingTimer += 1;

@@ -121,7 +121,7 @@ export class TemplateHelper {
         const stage =  new Stage(template.level, template.name , player, viewport, null, _template);
 
         // Load enemies
-        _template.enemies.forEach((enemyTemplate: EnemyTemplate) => {
+        _template.enemies?.forEach((enemyTemplate: EnemyTemplate) => {
             const enemyType = ENEMY_OPTIONS[enemyTemplate.type];
             const enemy = new enemyType(
                 loader, 
@@ -135,7 +135,7 @@ export class TemplateHelper {
         });
 
         // Load platforms
-        _template.platforms.forEach((platformTemplate: PlatformTemplate) => {
+        _template.platforms?.forEach((platformTemplate: PlatformTemplate) => {
             const platformType = PLATFORM_OPTIONS[platformTemplate.type];
             const platform = new platformType(loader, stage, platformTemplate.x, platformTemplate.y, 25, 25);
             stage.platforms.push(platform);
@@ -144,7 +144,7 @@ export class TemplateHelper {
 
         const playerName: PlayerNames = this.getPlayerType(player);
         // Load armor treasures
-        _template.armorTreasures.forEach((armorTemplate: ArmorTreasureTemplate) => {
+        _template.armorTreasures?.forEach((armorTemplate: ArmorTreasureTemplate) => {
             const treasureType = TREASURE_ARMOR_OPTIONS[playerName][armorTemplate.part][armorTemplate.armorName];
             if (!treasureType){
                 console.warn(`no ${armorTemplate.armorName} for ${playerName} ${armorTemplate.part}`);

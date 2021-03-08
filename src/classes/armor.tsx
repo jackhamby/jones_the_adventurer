@@ -67,7 +67,7 @@ export class KnightHeadArmor1 extends Armor {
         this.name = "iron helmet";
         this.type = UnitArmorNames.ARMOR1;
         this.part = UnitPartNames.HEAD;
-        this.texture = this.loader.resources['knight-head-armor1'].texture;
+        this.texture = this.loader.resources['knight-head-armor1'].texture
         this.attributes.ARMOR = 5;
     }
 }

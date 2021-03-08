@@ -14,6 +14,7 @@ import { Unit } from "./unit";
 import { DirtPlatform } from "./platform";
 import { Kobold } from "./enemies/kobold";
 import { StageManager } from "./stage/stage_manager";
+import { StageTemplate } from "../types/interfaces";
 
 
 // Initialize game data
@@ -34,7 +35,10 @@ export class GameController {
     // User actions
     keepPlaying: boolean;
 
-    constructor(startGame: Function){
+    // play testing stages
+    stageTemplate: StageTemplate;
+
+    constructor(startGame: Function, stageTemplate: StageTemplate = null){
         this.pixiApplication = new PIXI.Application({ 
             width: Constants.SCREEN_WIDTH,
             height: Constants.SCREEN_HEIGHT,             
@@ -50,6 +54,7 @@ export class GameController {
         this.updateView = () => {
             console.warn('updateView has not been defined')
         }
+        this.stageTemplate = stageTemplate;
     }
 
     start = () => {
@@ -103,7 +108,14 @@ export class GameController {
         this.player.updateView = this.updateView;
 
         this.stageManager = new StageManager(this.viewport, this.player, this.pixiApplication.loader);
-        const stage1 = this.stageManager.getStage(1);
+        // debugger;
+        let stage1: Stage;
+        if (this.stageTemplate){
+            stage1 = this.stageManager.getStageFromTemplate(this.stageTemplate);
+        } else{
+            stage1 = this.stageManager.getStage(1);
+        }
+        
         this.player.currentStage = stage1;
         this.currentStage = stage1;
         this.currentStage.load();

@@ -6,9 +6,12 @@ import { UnitAttributes, UnitStatistics } from "../../types/types";
 import { CharacterDetail } from "./character_detail/character_detail";
 import './game_wrapper.css';
 import { GameDetail } from "./game_detail";
+import { StageTemplate } from "../../types/interfaces";
 
 interface GameWrapperProps {
     selectedPlayer: typeof Player;
+    stageTemplate?: StageTemplate;
+    // stageTemplate?: StageTemplate;
 }
 
 interface GameWrapperState {
@@ -20,9 +23,9 @@ interface GameWrapperState {
 export class GameWrapper extends React.Component<GameWrapperProps, GameWrapperState> {
     private controller: GameController;
 
-    constructor(props: any){
+    constructor(props: GameWrapperProps){
         super(props);
-        this.controller = new GameController(this.startGame);
+        this.controller = new GameController(this.startGame, this.props.stageTemplate);
         this.state = {
             player: undefined,
             playerAttributes: this.props.selectedPlayer.baseAttributes,

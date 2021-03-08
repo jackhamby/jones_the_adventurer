@@ -3,6 +3,7 @@ import { Player } from "../players/player";
 import { TemplateHelper } from "../stage_builder/template_helper";
 import { Stage } from "./stage";
 import * as Stages from '../../types/stages';
+import { StageTemplate } from "../../types/interfaces";
 
 export class StageManager {
     viewport: Viewport;
@@ -16,6 +17,10 @@ export class StageManager {
         this.player = player;
         this.loader = loader;
         this.templateHelper = new TemplateHelper();
+    }
+
+    getStageFromTemplate = (template: StageTemplate): Stage => {
+        return this.templateHelper.loadTemplate(this.viewport, this.loader, this.player, template)
     }
 
     getStage = (level: number): Stage => {
