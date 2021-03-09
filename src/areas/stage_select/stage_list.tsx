@@ -35,9 +35,9 @@ export const StageList = (props: StageListProps) => {
     }, [])
 
     if (loading){
-        return <div>
+        return (<div>
             Loading stages...
-        </div>
+        </div>);
     }
     else if (error){
         return <div>
