@@ -292,7 +292,6 @@ export class Player extends Unit {
 
     protected dying(){
         super.dying();
-        debugger;
         const resp = window.confirm('sorry you suck. restart?');
         if (resp){
             this.currentStage.restart();

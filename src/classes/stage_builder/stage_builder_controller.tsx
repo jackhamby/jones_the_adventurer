@@ -205,7 +205,6 @@ export class StageBuilderController {
     addTreasure = (x: number, y: number, treasureType: typeof ArmorTreasure) => {
         this.lastClickedX = x;
         this.lastClickedY = y;
-        // console.log(`add treasure at ${x}, ${y}`);
     
         const xTileIndex = Math.floor(x / GRID_WIDTH)
         const yTileIndex = Math.floor(y / GRID_HEIGHT);

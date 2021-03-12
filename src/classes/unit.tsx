@@ -237,7 +237,6 @@ export class Unit extends Sprite {
             floatingText.add()
             if (this.currentAttributes.HEALTH <= 0){
                 this.hpBar.visible = false;
-                debugger;
                 this.setState(UnitStateNames.DEAD);
             }        
         }
@@ -391,7 +390,6 @@ export class Unit extends Sprite {
 
         //  falling
         if (this.fallingTimer === 150){
-            debugger;
             this.setState(UnitStateNames.DEAD);
         } else if (this.state === UnitStateNames.FALLING){
             this.fallingTimer += 1;
@@ -483,18 +481,11 @@ export class Unit extends Sprite {
         }
 
         if (this.decay < SPRITE_DECAY_FADE_TIME){
-            // console.log('================================================')
             Object.keys(this.spriteParts).forEach((partName: string) => {
                 const tempPartName: UnitPartNames = partName as UnitPartNames;
                 const part: SpritePart = this.spriteParts[tempPartName];
-                // console.log(`alpha before: ${part.sprite.alpha}`);
                 part.sprite.alpha -= (1 / SPRITE_DECAY_FADE_TIME);  
-                // console.log(partName)  
-                // console.log(`alpha after: ${part.sprite.alpha}`);
-                // console.log(`decay: ${this.decay}`)
-                // console.log('decaying');
             });
-            // console.log('================================================')
 
         }
     }

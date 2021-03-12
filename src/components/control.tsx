@@ -56,8 +56,6 @@ export class Control extends React.Component<{}, ControlState>{
     }
 
     renderState = () => {
-        var t = this.state;
-        debugger;
         return (
             <Router>
                 <Route exact path="/">

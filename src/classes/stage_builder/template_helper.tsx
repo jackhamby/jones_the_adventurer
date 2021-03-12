@@ -156,6 +156,8 @@ export class TemplateHelper {
 
         stage.spawnX = _template.spawnX;
         stage.spawnY = _template.spawnY;
+        stage.name = _template.name;
+        stage.level = _template.level;
 
         return stage;
     }

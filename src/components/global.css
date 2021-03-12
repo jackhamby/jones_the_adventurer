@@ -16,3 +16,7 @@
 .font-size-sm {
   font-size: 10px;
 }
+
+.disabled {
+  opacity: 0.6;
+}

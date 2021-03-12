@@ -108,7 +108,7 @@ export class GameController {
         this.player.updateView = this.updateView;
 
         this.stageManager = new StageManager(this.viewport, this.player, this.pixiApplication.loader);
-        // debugger;
+        
         let stage1: Stage;
         if (this.stageTemplate){
             stage1 = this.stageManager.getStageFromTemplate(this.stageTemplate);

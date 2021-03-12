@@ -7,6 +7,7 @@ import { BuilderMenuButton } from './builder_menu_button';
 
 export interface EnemyMenuProps {
     controller: StageBuilderController;
+    validate: () => void;
 }
 export interface EnemyMenuState {
     selectedEnemy: EnemyOptionNames;
@@ -19,10 +20,6 @@ export class EnemyMenu extends React.Component<EnemyMenuProps, EnemyMenuState> {
         this.state = {
             selectedEnemy: null,
         }
-    }
-
-    addToStage = (x: number, y: number, enemyType: typeof Enemy) => {
-        this.props.controller.addEnemy(x, y, enemyType);
     }
     
     render(){
@@ -41,6 +38,8 @@ export class EnemyMenu extends React.Component<EnemyMenuProps, EnemyMenuState> {
                             width={30}
                             addToStage={(x: number, y: number) => {
                                 this.props.controller.addEnemy(x, y, enemyType);
+                                this.props.validate();
+
                             }}
                             onSelect={() => {
                                 this.setState({selectedEnemy: key})
