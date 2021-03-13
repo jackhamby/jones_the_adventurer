@@ -2,14 +2,10 @@ import * as React from 'react';
 import { useState } from 'react';
 import { StageTemplate } from '../../types/interfaces';
 import { Redirect } from 'react-router-dom';
-import { PlayerSelectWrapper } from '../player_select/player_select_wrapper';
-import { Player } from '../../classes/players/player';
 
 interface StageListLinkProps {
     template: StageTemplate;
-    // changePlayer: (player: typeof Player) => void;
     changeStage: (stage: StageTemplate) => void;
-    // selectedPlayer: typeof Player;
 }
 
 export const StageListLink = (props: StageListLinkProps) => {

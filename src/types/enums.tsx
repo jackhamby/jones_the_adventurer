@@ -96,10 +96,6 @@ export enum PlatformOptionNames {
     REDGRASS = "redgrass"
 }
 
-// export enum TreasureArmorOptionNames {
-//     KNIGHT_HEAD_ARMOR1 = "knightHeadArmor1",
-// }
-
 export enum EnemyOptionNames {
     KOBOLD = "kobold",
     MAN = "man",

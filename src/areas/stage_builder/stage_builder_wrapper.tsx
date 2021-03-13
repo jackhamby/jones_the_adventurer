@@ -227,7 +227,6 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
 
                             this.setState({isSelectingSpawn: !this.state.isSelectingSpawn});
                         }} >
-                            
                             select spawn
                         </button>
                     </div>
@@ -236,23 +235,10 @@ export class StageBuilderWrapper extends React.Component<{}, StageBuilderWrapper
                     </div>
                     <div className="col-12 pt-4" >
                         {this.renderSave()}
-                        {/* <button style={{minWidth: "40%"}} className="btn-success" onClick={() => {
-                                // this.setState({isSaving: true})
-                                // var result = saveStage(this.controller.templateHelper.template);
-                                // const stageStr = JSON.stringify(this.controller.templateHelper.template);
-                                // navigator.clipboard.writeText(stageStr);
-                                // window.alert("saving!")
-                                saveStage();
-                        }} >
-                            save
-                        </button> */}
                     </div>
                     <div className="col-12 pt-4">
                         {this.renderError()}
                     </div>
-
-                    
-
                 </div>
 
             </div>

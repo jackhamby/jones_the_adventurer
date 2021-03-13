@@ -1,9 +1,8 @@
 
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     BrowserRouter as Router,
     Route,
-    RouteComponentProps
   } from "react-router-dom";
 import { mapKeys } from '../helpers/util';
 import './global.css';
@@ -26,9 +25,6 @@ interface ControlState {
 }
 
 export class Control extends React.Component<{}, ControlState>{
-    // const [selectedPlayer, setSelectedPlayer] = useState<typeof Player>(Kobold);
-    // const [selectedStage, setSelectedStage] = useState<StageTemplate>();
-
     constructor(props){
         super(props);
         this.state = {
@@ -37,17 +33,11 @@ export class Control extends React.Component<{}, ControlState>{
         }
     }
 
-
-    // useEffect(() => {
-    //     handleKeyEvents();
-    // }, []);
-
     changeStage = (stage: StageTemplate) => {
         this.setState({ selectedStage: stage });
     }
 
      changePlayer = (player: typeof Player) => {
-        // setSelectedPlayer(player)
         this.setState({ selectedPlayer: player });
     }
 
@@ -63,7 +53,6 @@ export class Control extends React.Component<{}, ControlState>{
                 </Route>
                 <Route path="/player-select">
                     <PlayerSelectWrapper
-                        // updateScreen={this.updateScreen} 
                         changePlayer={this.changePlayer}
                         selectedPlayer={this.state.selectedPlayer}
                     />
@@ -72,7 +61,6 @@ export class Control extends React.Component<{}, ControlState>{
                     <GameWrapper
                         selectedPlayer={this.state.selectedPlayer}
                         stageTemplate={this.state.selectedStage}
-                        // stageTemplate={this.state.stageTemplate}
                     />
                 </Route>
                 <Route path="/stage-builder">
@@ -80,10 +68,7 @@ export class Control extends React.Component<{}, ControlState>{
                 </Route>
                 <Route path="/stages">
                     <StageList 
-
-                        // changePlayer={this.changePlayer}
                         changeStage={this.changeStage}
-                        // selectedPlayer={this.state.selectedPlayer}
                     />
                 </Route>
             </Router>

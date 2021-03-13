@@ -1,8 +1,11 @@
 import { JONES_API_URL } from "../types/constants";
 import { StageTemplate } from "../types/interfaces";
 
-export const getStages = async (): Promise<StageTemplate[]> => {
-    const response = await fetch(`${JONES_API_URL}/stages`)
+export const getStages = async (stageName: string = null): Promise<StageTemplate[]> => {
+    const query = stageName 
+        ? `?name=${stageName}`
+        : "";
+    const response = await fetch(`${JONES_API_URL}/stages${query}`)
     const stages = await response.json()
     return stages;
 }

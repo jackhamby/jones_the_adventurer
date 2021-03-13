@@ -15,7 +15,6 @@ interface CustomizeModalProps {
 }
 
 interface CustomizeModalState {
-    // selectedArmor?: Armor;
     selectedTab: TabOptions;
 }
 export class CustomizeModal extends React.Component<CustomizeModalProps, CustomizeModalState> {
@@ -23,7 +22,6 @@ export class CustomizeModal extends React.Component<CustomizeModalProps, Customi
     constructor(props: CustomizeModalProps){
         super(props);
         this.state = {
-            // selectedArmor: null,
             selectedTab: props.selectedTab 
                 ? props.selectedTab
                 : TabOptions.armor,

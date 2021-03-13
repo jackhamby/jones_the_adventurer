@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { getStages } from '../../api/stages';
-import { Player } from '../../classes/players/player';
 import { StageTemplate } from '../../types/interfaces';
 import { StageListLink } from './stage_list_link';
 
 interface StageListProps {
-    // changePlayer: (player: typeof Player) => void;
     changeStage: (stage: StageTemplate) => void;
-    // selectedPlayer: typeof Player;
 }
 
 export const StageList = (props: StageListProps) => {
@@ -16,11 +13,12 @@ export const StageList = (props: StageListProps) => {
     const [stages, setStages] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string>();
+    const [searchText, setSearchText] = useState<string>();
 
-    const fetchStages = async () => {
+    const fetchStages = async (stageName: string = null) => {
         setLoading(true);
         try {
-            const response = await getStages();
+            const response = await getStages(stageName);
             setStages(response);
             setLoading(false);
         }
@@ -30,16 +28,20 @@ export const StageList = (props: StageListProps) => {
         }
     }
 
+    const renderLoading = () => {
+        if (loading){
+            return (<div>
+                Loading stages...
+            </div>);
+        }
+    }
+
     useEffect(() => {
         fetchStages()
     }, [])
 
-    if (loading){
-        return (<div>
-            Loading stages...
-        </div>);
-    }
-    else if (error){
+
+    if (error){
         return <div>
             {error}
         </div>
@@ -53,7 +55,10 @@ export const StageList = (props: StageListProps) => {
             <div className="row">
                 <div className="col-3">
                     <label htmlFor="search">search</label>
-                    <input name="search" type="text" placeholder="stage name"></input>
+                    <input name="search" type="text" placeholder="stage name" value={searchText} onChange={(event) => {
+                        setSearchText(event.target.value)
+                        fetchStages(event.target.value);
+                    }}></input>
                 </div>
             </div>
             <div className="row pt-4">
@@ -64,13 +69,12 @@ export const StageList = (props: StageListProps) => {
                 </div>
                 <div className="col-6"></div>
             </div>
-            {stages.map((stage: StageTemplate) => {
+            {renderLoading()}
+            {stages?.map((stage: StageTemplate) => {
                 return (
                     <StageListLink
                         template={stage}
-                        // selectedPlayer={props.selectedPlayer} 
                         changeStage={props.changeStage}
-                        // changePlayer={props.changePlayer}  
                     />
                 )
             })}
