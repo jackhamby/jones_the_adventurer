@@ -22,7 +22,7 @@ export const SPRITE_DECAY_FADE_TIME =  150;
 
 export const TEXT_FADE_TIME = 100;
 
-export const JONES_API_URL = "http://128.199.51.196:8081"
+export const JONES_API_URL = "https://api.jones.jackhamby.com";
 
 export const MAX_ATTRIBUTES = {
     HEALTH: 140,
